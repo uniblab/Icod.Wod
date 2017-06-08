@@ -437,7 +437,7 @@ namespace Icod.Wod.Data {
 			foreach ( var ac in addedCol ) {
 				a = new System.Data.DataColumn( ac.ColumnName, typeof( System.String ) );
 				a.AllowDBNull = true;
-				a.DefaultValue = null;
+				a.DefaultValue = ac.DefaultValue;
 				a.ReadOnly = true;
 				source.Columns.Add( a );
 			}
