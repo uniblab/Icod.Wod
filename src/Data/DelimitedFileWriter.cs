@@ -25,6 +25,12 @@ namespace Icod.Wod.Data {
 			myQuoteChar = '\"';
 			myEscapeChar = null;
 		}
+		public DelimitedFileWriter( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
+			myFieldSeparator = '\t';
+			myFieldSeparatorString = myFieldSeparator.ToString();
+			myQuoteChar = '\"';
+			myEscapeChar = null;
+		}
 		#endregion .ctor
 
 
@@ -183,7 +189,7 @@ namespace Icod.Wod.Data {
 			if ( null == stream ) {
 				throw new System.ArgumentNullException( "stream" );
 			}
-			var handler = this.GetFileHandler();
+			var handler = this.GetFileHandler( this.WorkOrder );
 			var dfpn = handler.PathCombine( this.ExpandedPath, this.ExpandedName );
 			stream.Seek( 0, System.IO.SeekOrigin.Begin );
 			if ( this.Append ) {

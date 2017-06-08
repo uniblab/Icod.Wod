@@ -18,6 +18,8 @@ namespace Icod.Wod.File {
 		#region .ctor
 		public RenameFile() : base() {
 		}
+		public RenameFile( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
+		}
 		#endregion .ctor
 
 
@@ -43,8 +45,10 @@ namespace Icod.Wod.File {
 			if ( null == order ) {
 				throw new System.ArgumentNullException( "order" );
 			}
-			var dest = this.Destination.GetFileHandler();
-			var source = this.GetFileHandler();
+			this.WorkOrder = order;
+			this.Destination.WorkOrder = order;
+			var dest = this.Destination.GetFileHandler( order );
+			var source = this.GetFileHandler( order );
 			if ( ( source is LocalFileHandler ) && ( dest is LocalFileHandler ) ) {
 				this.DoWork( order, source as LocalFileHandler, dest as LocalFileHandler );
 			} else {

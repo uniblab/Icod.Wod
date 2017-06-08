@@ -13,6 +13,8 @@ namespace Icod.Wod.Data {
 		#region .ctor
 		public DbTable() : base() {
 		}
+		public DbTable( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
+		}
 		#endregion .ctor
 
 	}

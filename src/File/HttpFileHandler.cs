@@ -6,9 +6,9 @@ namespace Icod.Wod.File {
 	public class HttpFileHandler : RemoteFileHandlerBase {
 
 		#region .ctor
-		public HttpFileHandler() : base() {
+		public HttpFileHandler( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
 		}
-		public HttpFileHandler( FileDescriptor descriptor ) : base( descriptor ) {
+		public HttpFileHandler( Icod.Wod.WorkOrder workOrder, FileDescriptor descriptor ) : base( workOrder, descriptor ) {
 		}
 		#endregion .ctor
 

@@ -6,9 +6,9 @@ namespace Icod.Wod.File {
 	public class FtpFileHandler : RemoteFileHandlerBase {
 
 		#region .ctor
-		public FtpFileHandler() : base() {
+		public FtpFileHandler( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
 		}
-		public FtpFileHandler( FileDescriptor descriptor ) : base( descriptor ) {
+		public FtpFileHandler( Icod.Wod.WorkOrder workOrder, FileDescriptor descriptor ) : base( workOrder, descriptor ) {
 		}
 		#endregion .ctor
 

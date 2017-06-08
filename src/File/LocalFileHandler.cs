@@ -6,9 +6,9 @@ namespace Icod.Wod.File {
 	public class LocalFileHandler : FileHandlerBase {
 
 		#region .ctor
-		public LocalFileHandler() : base() {
+		public LocalFileHandler( Icod.Wod.WorkOrder workOrder ) : base( workOrder) {
 		}
-		public LocalFileHandler( FileDescriptor descriptor ) : base( descriptor ) { 
+		public LocalFileHandler( Icod.Wod.WorkOrder workOrder, FileDescriptor descriptor ) : base( workOrder, descriptor ) { 
 		}
 		#endregion .ctor
 

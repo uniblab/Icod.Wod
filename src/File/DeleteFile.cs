@@ -13,12 +13,15 @@ namespace Icod.Wod.File {
 		#region .ctor
 		public DeleteFile() : base() {
 		}
+		public DeleteFile( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
+		}
 		#endregion .ctor
 
 
 		#region methods
 		public sealed override void DoWork( WorkOrder order ) {
-			this.GetFileHandler().DeleteFile();
+			this.WorkOrder = order;
+			this.GetFileHandler( order ).DeleteFile();
 		}
 		#endregion methods
 

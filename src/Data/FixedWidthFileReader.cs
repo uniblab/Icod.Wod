@@ -19,6 +19,9 @@ namespace Icod.Wod.Data {
 		public FixedWidthFileReader() : base() {
 			myRecordSeparator = "\r\n";
 		}
+		public FixedWidthFileReader( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
+			myRecordSeparator = "\r\n";
+		}
 		#endregion .ctor
 
 

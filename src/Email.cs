@@ -20,6 +20,8 @@ namespace Icod.Wod {
 		private Icod.Wod.File.FileDescriptor[] myAttachments;
 		private System.Boolean mySendIfEmpty;
 		private System.String myBody;
+		[System.NonSerialized]
+		private Icod.Wod.WorkOrder myWorkOrder;
 		#endregion fields
 
 
@@ -71,7 +73,7 @@ namespace Icod.Wod {
 			}
 		}
 		[System.Xml.Serialization.XmlAttribute(
-			"Subject",
+			"subject",
 			Namespace = "http://Icod.Wod"
 		)]
 		public System.String Subject {
@@ -121,25 +123,6 @@ namespace Icod.Wod {
 				myBodyIsHtml = value;
 			}
 		}
-		[System.Xml.Serialization.XmlArray(
-			IsNullable = false,
-			Namespace = "http://Icod.Wod",
-			ElementName = "attachments"
-		)]
-		[System.Xml.Serialization.XmlArrayItem(
-			"attach",
-			typeof( Icod.Wod.File.FileDescriptor ),
-			Namespace = "http://Icod.Wod"
-		)]
-		[System.ComponentModel.DefaultValue( null )]
-		public Icod.Wod.File.FileDescriptor[] Attachments {
-			get { 
-				return myAttachments;
-			}
-			set {
-				myAttachments = value;
-			}
-		}
 		[System.Xml.Serialization.XmlAttribute(
 			"sendIfEmpty",
 			Namespace = "http://Icod.Wod"
@@ -167,17 +150,49 @@ namespace Icod.Wod {
 				myBody = value;
 			}
 		}
+
+		[System.Xml.Serialization.XmlIgnore]
+		public Icod.Wod.WorkOrder WorkOrder {
+			get {
+				return myWorkOrder;
+			}
+			set {
+				myWorkOrder = value;
+			}
+		}
+
+		[System.Xml.Serialization.XmlArray(
+			IsNullable = false,
+			Namespace = "http://Icod.Wod",
+			ElementName = "attachments"
+		)]
+		[System.Xml.Serialization.XmlArrayItem(
+			ElementName = "attach",
+			Type = typeof( Icod.Wod.File.FileDescriptor ),
+			IsNullable = false,
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.ComponentModel.DefaultValue( null )]
+		public Icod.Wod.File.FileDescriptor[] Attachments {
+			get {
+				return myAttachments;
+			}
+			set {
+				myAttachments = value;
+			}
+		}
 		#endregion properties
 
 
 		#region methods
 		public void DoWork( Icod.Wod.WorkOrder order ) {
+			this.WorkOrder = order;
 			using ( var msg = new System.Net.Mail.MailMessage() ) {
 				msg.IsBodyHtml = this.BodyIsHtml;
-				msg.Body = this.Body;
+				msg.Body = order.ExpandVariables( this.Body );
 				File.FileHandlerBase handler;
 				foreach ( var a in ( this.Attachments ?? new Icod.Wod.File.FileDescriptor[ 0 ] ) ) {
-					handler = a.GetFileHandler();
+					handler = a.GetFileHandler( order );
 					System.String filePathName;
 					foreach ( var fe in handler.ListFiles() ) {
 						filePathName = fe.File;
@@ -195,19 +210,18 @@ namespace Icod.Wod {
 					return;
 				}
 
-				msg.Subject = this.Subject;
-				msg.To.Add( this.To );
+				msg.Subject = order.ExpandVariables( this.Subject );
+				msg.To.Add( order.ExpandVariables( this.To ) );
 				if ( !System.String.IsNullOrEmpty( this.CC ) ) {
-					msg.CC.Add( this.CC );
+					msg.CC.Add( order.ExpandVariables( this.CC ) );
 				}
 				if ( !System.String.IsNullOrEmpty( this.Bcc ) ) {
-					msg.Bcc.Add( this.Bcc );
+					msg.Bcc.Add( order.ExpandVariables( this.Bcc ) );
 				}
 				using ( var client = new System.Net.Mail.SmtpClient() ) {
 					client.Send( msg );
 				}
 			}
-			throw new System.NotImplementedException();
 		}
 		#endregion methods
 

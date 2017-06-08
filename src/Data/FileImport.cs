@@ -17,6 +17,8 @@ namespace Icod.Wod.Data {
 		#region .ctor
 		public FileImport() : base() {
 		}
+		public FileImport( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
+		}
 		#endregion .ctor
 
 

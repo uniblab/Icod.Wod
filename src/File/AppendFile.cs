@@ -17,8 +17,9 @@ namespace Icod.Wod.File {
 
 
 		#region .ctor
-		public AppendFile()
-			: base() {
+		public AppendFile() : base() {
+		}
+		public AppendFile( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
 		}
 		#endregion .ctor
 
@@ -59,9 +60,11 @@ namespace Icod.Wod.File {
 			if ( null == order ) {
 				throw new System.ArgumentNullException( "order" );
 			}
-			var dest = this.Destination.GetFileHandler();
+			this.WorkOrder = order;
+			this.Destination.WorkOrder = order;
+			var dest = this.Destination.GetFileHandler( order );
 			var dfd = dest.FileDescriptor;
-			var source = this.GetFileHandler();
+			var source = this.GetFileHandler( order );
 			System.String file = source.ListFiles().First().File;
 			using ( var reader = source.OpenReader( file ) ) {
 				dest.Append( reader, dest.PathCombine( dfd.ExpandedPath, dfd.ExpandedName ) );

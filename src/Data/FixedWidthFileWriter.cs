@@ -26,6 +26,9 @@ namespace Icod.Wod.Data {
 		public FixedWidthFileWriter() : base() {
 			myRecordSeparator = "\r\n";
 		}
+		public FixedWidthFileWriter( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
+			myRecordSeparator = "\r\n";
+		}
 		#endregion .ctor
 
 
@@ -132,7 +135,7 @@ namespace Icod.Wod.Data {
 			if ( null == stream ) {
 				throw new System.ArgumentNullException( "stream" );
 			}
-			var handler = this.GetFileHandler();
+			var handler = this.GetFileHandler( this.WorkOrder );
 			var dfpn = handler.PathCombine( this.ExpandedPath, this.ExpandedName );
 			stream.Seek( 0, System.IO.SeekOrigin.Begin );
 			if ( this.Append ) {

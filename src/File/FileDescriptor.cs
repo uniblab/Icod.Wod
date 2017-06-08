@@ -8,23 +8,24 @@ namespace Icod.Wod.File {
 
 		#region fields
 		private System.String myPath;
-		[System.NonSerialized]
-		private System.String myExpandedPath;
 		private System.String myName;
-		[System.NonSerialized]
-		private System.String myExpandedName;
 		private System.String myRegexPattern;
 		private System.IO.SearchOption mySearchOption;
 		private System.Boolean myRecurse;
 		private System.String myUsername;
 		private System.String myPassword;
 		private System.Boolean myUsePassive;
+		[System.NonSerialized]
+		private Icod.Wod.WorkOrder myWorkOrder;
 		#endregion fields
 
 
 		#region .ctor
 		public FileDescriptor() : base() {
 			myUsePassive = true;
+		}
+		public FileDescriptor( Icod.Wod.WorkOrder workOrder ) : this() {
+			myWorkOrder = workOrder;
 		}
 		#endregion .ctor
 
@@ -40,13 +41,12 @@ namespace Icod.Wod.File {
 			}
 			set {
 				myPath = value;
-				myExpandedPath = this.ExpandVariables( value );
 			}
 		}
 		[System.Xml.Serialization.XmlIgnore]
 		public virtual System.String ExpandedPath {
 			get {
-				return myExpandedPath;
+				return this.WorkOrder.ExpandVariables( myPath );
 			}
 		}
 
@@ -60,13 +60,12 @@ namespace Icod.Wod.File {
 			}
 			set {
 				myName = value;
-				myExpandedName = this.ExpandVariables( value );
 			}
 		}
 		[System.Xml.Serialization.XmlIgnore]
 		public virtual System.String ExpandedName {
 			get {
-				return myExpandedName;
+				return this.WorkOrder.ExpandVariables( myName );
 			}
 		}
 
@@ -152,65 +151,45 @@ namespace Icod.Wod.File {
 				myUsePassive = value;
 			}
 		}
+
+		[System.Xml.Serialization.XmlIgnore]
+		public Icod.Wod.WorkOrder WorkOrder {
+			get {
+				return myWorkOrder;
+			}
+			set {
+				myWorkOrder = value;
+			}
+		}
 		#endregion properties
 
 
 		#region methods
-		public FileHandlerBase GetFileHandler() {
+		public FileHandlerBase GetFileHandler( Icod.Wod.WorkOrder workOrder ) {
 			FileHandlerBase output = null;
 
+			this.WorkOrder = workOrder;
 			var uri = new System.Uri( this.ExpandedPath );
 			switch ( uri.Scheme.ToLower() ) {
 				case "file" :
-					output = new LocalFileHandler( this );
+					output = new LocalFileHandler( workOrder, this );
 					break;
 				case "ftp" :
 				case "ftps" :
-					output = new FtpFileHandler( this );
+					output = new FtpFileHandler( workOrder, this );
 					break;
 				case "http":
 				case "https":
-					output = new FtpFileHandler( this );
+					output = new FtpFileHandler( workOrder, this );
 					break;
 				case "sftp":
-					output = new SftpFileHandler( this );
+					output = new SftpFileHandler( workOrder, this );
 					break;
 				default :
 					throw new System.NotSupportedException();
 			}
 
 			return output;
-		}
-
-		protected System.String ExpandVariables( System.String path ) {
-			path = path.TrimToNull();
-			if ( System.String.IsNullOrEmpty( path ) ) {
-				return path;
-			}
-			var now = System.DateTime.Now;
-			if ( path.Contains( "%wod:DateTime-" ) ) {
-				var yy = now.ToString( "yy" );
-				while ( path.Contains( "%wod:DateTime-yy%" ) ) {
-					path = path.Replace( "%wod:DateTime-yy%", yy );
-				}
-				var yyyy = now.ToString( "yyyy" );
-				while ( path.Contains( "%wod:DateTime-yyyy%" ) ) {
-					path = path.Replace( "%wod:DateTime-yyyy%", yyyy );
-				}
-				var MM = now.ToString( "MM" );
-				while ( path.Contains( "%wod:DateTime-MM%" ) ) {
-					path = path.Replace( "%wod:DateTime-MM%", MM );
-				}
-				var dd = now.ToString( "dd" );
-				while ( path.Contains( "%wod:DateTime-dd%" ) ) {
-					path = path.Replace( "%wod:DateTime-dd%", dd );
-				}
-				var yyyyMMdd = now.ToString( "yyyyMMdd" );
-				while ( path.Contains( "%wod:DateTime-yyyyMMdd%" ) ) {
-					path = path.Replace( "%wod:DateTime-yyyyMMdd%", yyyyMMdd );
-				}
-			}
-			return path;
 		}
 		#endregion methods
 

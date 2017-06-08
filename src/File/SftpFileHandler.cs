@@ -6,9 +6,9 @@ namespace Icod.Wod.File {
 	public class SftpFileHandler : RemoteFileHandlerBase {
 
 		#region .ctor
-		public SftpFileHandler() : base() {
+		public SftpFileHandler( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
 		}
-		public SftpFileHandler( FileDescriptor descriptor ) : base( descriptor ) { 
+		public SftpFileHandler( Icod.Wod.WorkOrder workOrder, FileDescriptor descriptor ) : base( workOrder, descriptor ) { 
 		}
 		#endregion .ctor
 

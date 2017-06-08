@@ -7,15 +7,18 @@ namespace Icod.Wod.File {
 		#region fields
 		private System.Int32 myBufferLength;
 		private FileDescriptor myFileDescriptor;
+		[System.NonSerialized]
+		private readonly Icod.Wod.WorkOrder myWorkOrder;
 		#endregion fields
 
 
 		#region .ctor
-		protected FileHandlerBase() : base() {
+		protected FileHandlerBase( Icod.Wod.WorkOrder workOrder ) : base() {
 			myFileDescriptor = null;
 			myBufferLength = 16384;
+			myWorkOrder = workOrder;
 		}
-		protected FileHandlerBase( FileDescriptor descriptor ) : this() {
+		protected FileHandlerBase( Icod.Wod.WorkOrder workOrder, FileDescriptor descriptor ) : this( workOrder ) {
 			myFileDescriptor = descriptor;
 		}
 		#endregion .ctor
@@ -41,6 +44,13 @@ namespace Icod.Wod.File {
 			}
 			set {
 				myBufferLength = value;
+			}
+		}
+
+		[System.Xml.Serialization.XmlIgnore]
+		public Icod.Wod.WorkOrder WorkOrder {
+			get {
+				return myWorkOrder;
 			}
 		}
 		#endregion properties

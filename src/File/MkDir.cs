@@ -12,12 +12,15 @@ namespace Icod.Wod.File {
 		#region .ctor
 		public MkDir() : base() {
 		}
+		public MkDir( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
+		}
 		#endregion .ctor
 
 
 		#region methods
 		public sealed override void DoWork( WorkOrder order ) {
-			this.GetFileHandler().MkDir();
+			this.WorkOrder = order;
+			this.GetFileHandler( order ).MkDir();
 		}
 		#endregion methods
 

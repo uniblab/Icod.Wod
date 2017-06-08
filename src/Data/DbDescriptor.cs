@@ -17,6 +17,8 @@ namespace Icod.Wod.Data {
 		private ColumnMap[] myColumnMapping;
 		private System.String myTableName;
 		private System.String mySchemaQuery;
+		[System.NonSerialized]
+		private Icod.Wod.WorkOrder myWorkOrder;
 		#endregion fields
 
 
@@ -27,6 +29,9 @@ namespace Icod.Wod.Data {
 			myUpdateBatchSize = 1;
 			myMissingSchemaAction = System.Data.MissingSchemaAction.Add;
 			myMissingMappingAction = System.Data.MissingMappingAction.Passthrough;
+		}
+		public DbDescriptor( Icod.Wod.WorkOrder workOrder ) : this() {
+			myWorkOrder = workOrder;
 		}
 		#endregion .ctor
 
@@ -196,6 +201,16 @@ namespace Icod.Wod.Data {
 					? ns + "." + this.TableName
 					: this.TableName
 				;
+			}
+		}
+
+		[System.Xml.Serialization.XmlIgnore]
+		public Icod.Wod.WorkOrder WorkOrder {
+			get {
+				return myWorkOrder;
+			}
+			set {
+				myWorkOrder = value;
 			}
 		}
 		#endregion properties

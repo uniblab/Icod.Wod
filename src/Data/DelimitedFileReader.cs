@@ -23,6 +23,11 @@ namespace Icod.Wod.Data {
 			myQuoteChar = '\"';
 			myEscapeChar = null;
 		}
+		public DelimitedFileReader( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
+			myFieldSeparator = '\t';
+			myQuoteChar = '\"';
+			myEscapeChar = null;
+		}
 		#endregion .ctor
 
 

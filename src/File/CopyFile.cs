@@ -31,6 +31,8 @@ namespace Icod.Wod.File {
 
 		public CopyFile() : base() {
 		}
+		public CopyFile( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
+		}
 		#endregion .ctor
 
 
@@ -70,8 +72,10 @@ namespace Icod.Wod.File {
 			if ( null == order ) {
 				throw new System.ArgumentNullException( "order" );
 			}
-			var dest = this.Destination.GetFileHandler();
-			var source = this.GetFileHandler();
+			this.WorkOrder = order;
+			this.Destination.WorkOrder = order;
+			var dest = this.Destination.GetFileHandler( order );
+			var source = this.GetFileHandler( order );
 			if ( null == dest ) {
 				throw new System.ArgumentNullException( "dest" );
 			} else if ( null == source ) {

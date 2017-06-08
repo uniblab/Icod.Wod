@@ -17,6 +17,8 @@ namespace Icod.Wod.Data {
 		#region .ctor
 		public FileExport() : base() {
 		}
+		public FileExport( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
+		}
 		#endregion .ctor
 
 
@@ -35,6 +37,8 @@ namespace Icod.Wod.Data {
 
 		#region methods
 		public void DoWork( Icod.Wod.WorkOrder order ) {
+			this.WorkOrder = order;
+			this.Destination.WorkOrder = order;
 			this.Destination.WriteRecords( order, this );
 		}
 		#endregion methods

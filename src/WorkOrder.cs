@@ -15,11 +15,19 @@ namespace Icod.Wod {
 		private System.Object[] mySteps;
 		private System.String myJobName;
 		private System.String myEmailTo;
+		[System.NonSerialized]
+		private readonly System.Collections.Generic.IDictionary<System.String,System.String> myDict;
 		#endregion fields
 
 
 		#region .ctor
 		public WorkOrder() : base() {
+			myDict = new System.Collections.Generic.Dictionary<System.String,System.String>( System.StringComparer.OrdinalIgnoreCase );
+
+			myDict.Add( "%wod:File-PathName%", System.String.Empty );
+			myDict.Add( "%wod:File-Path%", System.String.Empty );
+			myDict.Add( "%wod:File-Name%", System.String.Empty );
+			myDict.Add( "%wod:File-NameWithoutExtension%", System.String.Empty );
 		}
 		#endregion .ctor
 
@@ -113,6 +121,25 @@ namespace Icod.Wod {
 				mySteps = value;
 			}
 		}
+
+		[System.Xml.Serialization.XmlIgnore]
+		public System.Collections.Generic.IDictionary<System.String,System.String> VarDictionary {
+			get {
+				if ( !myDict.ContainsKey( "%wod:File-PathName%" ) ) {
+					myDict.Add( "%wod:File-PathName%", System.String.Empty );
+				}
+				if ( !myDict.ContainsKey( "%wod:File-Path%" ) ) {
+					myDict.Add( "%wod:File-Path%", System.String.Empty );
+				}
+				if ( !myDict.ContainsKey( "%wod:File-Name%" ) ) {
+					myDict.Add( "%wod:File-Name%", System.String.Empty );
+				}
+				if ( !myDict.ContainsKey( "%wod:File-NameWithoutExtension%" ) ) {
+					myDict.Add( "%wod:File-NameWithoutExtension%", System.String.Empty );
+				}
+				return myDict;
+			}
+		}
 		#endregion properties
 
 
@@ -130,6 +157,58 @@ namespace Icod.Wod {
 			} catch ( System.Exception e ) {
 				throw new Icod.Wod.Exception( e.Message, e, i, this, step );
 			}
+		}
+
+		public System.String ExpandVariables( System.String @string ) {
+			@string = @string.TrimToNull();
+			if ( System.String.IsNullOrEmpty( @string ) ) {
+				return null;
+			}
+			if ( @string.Contains( "%wod:DateTime-" ) ) {
+				var now = System.DateTime.Now;
+				var yy = now.ToString( "yy" );
+				while ( @string.Contains( "%wod:DateTime-yy%" ) ) {
+					@string = @string.Replace( "%wod:DateTime-yy%", yy );
+				}
+				var yyyy = now.ToString( "yyyy" );
+				while ( @string.Contains( "%wod:DateTime-yyyy%" ) ) {
+					@string = @string.Replace( "%wod:DateTime-yyyy%", yyyy );
+				}
+				var MM = now.ToString( "MM" );
+				while ( @string.Contains( "%wod:DateTime-MM%" ) ) {
+					@string = @string.Replace( "%wod:DateTime-MM%", MM );
+				}
+				var dd = now.ToString( "dd" );
+				while ( @string.Contains( "%wod:DateTime-dd%" ) ) {
+					@string = @string.Replace( "%wod:DateTime-dd%", dd );
+				}
+				var yyyyMMdd = now.ToString( "yyyyMMdd" );
+				while ( @string.Contains( "%wod:DateTime-yyyyMMdd%" ) ) {
+					@string = @string.Replace( "%wod:DateTime-yyyyMMdd%", yyyyMMdd );
+				}
+			}
+			if ( @string.Contains( "%wod:File-" ) ) {
+				var v = this.VarDictionary;
+				if ( !v.ContainsKey( "%wod:File-PathName%" ) ) {
+					v.Add( "%wod:File-PathName%", System.String.Empty );
+				}
+				if ( !v.ContainsKey( "%wod:File-Path%" ) ) {
+					v.Add( "%wod:File-Path%", System.String.Empty );
+				}
+				if ( !v.ContainsKey( "%wod:File-Name%" ) ) {
+					v.Add( "%wod:File-Name%", System.String.Empty );
+				}
+				if ( !v.ContainsKey( "%wod:File-NameWithoutExtension%" ) ) {
+					v.Add( "%wod:File-NameWithoutExtension%", System.String.Empty );
+				}
+				@string = @string.Replace( "%wod:File-PathName%", v[ "%wod:File-PathName%" ] );
+				@string = @string.Replace( "%wod:File-Path%", v[ "%wod:File-Path%" ] );
+				@string = @string.Replace( "%wod:File-Name%", v[ "%wod:File-Name%" ] );
+				@string = @string.Replace( "%wod:File-NameWithoutExtension%", v[ "%wod:File-NameWithoutExtension%" ] );
+			}
+			@string = @string.Replace( "%wod:EmailTo%", this.EmailTo );
+			@string = @string.Replace( "%wod:JobName%", this.JobName );
+			return @string;
 		}
 		#endregion methods
 

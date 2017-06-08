@@ -6,7 +6,7 @@ namespace Icod.Wod.Data {
 	[System.Xml.Serialization.XmlInclude( typeof( DelimitedFileReader ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( DelimitedFileWriter ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( FixedWidthFileReader ) )]
-	[System.Xml.Serialization.XmlInclude( typeof( DbTable ) )]
+	[System.Xml.Serialization.XmlInclude( typeof( FixedWidthFileWriter ) )]
 	public abstract class FileBase : Icod.Wod.File.FileDescriptor, ITableDestination, ITableSource {
 
 		#region fields
@@ -21,6 +21,14 @@ namespace Icod.Wod.Data {
 
 		#region .ctor
 		protected FileBase() : base() {
+			myCodePage = "windows-1252";
+			myHasHeader = true;
+			myColumns = null;
+			myBufferLength = 16384;
+			myAppend = false;
+			mySkip = 0;
+		}
+		protected FileBase( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
 			myCodePage = "windows-1252";
 			myHasHeader = true;
 			myColumns = null;
@@ -141,6 +149,7 @@ namespace Icod.Wod.Data {
 		public abstract void WriteRecords( Icod.Wod.WorkOrder order, ITableSource source );
 
 		public virtual System.Collections.Generic.IEnumerable<System.Data.DataTable> ReadTables( Icod.Wod.WorkOrder order ) {
+			this.WorkOrder = order;
 			System.String fileName;
 			foreach ( var file in this.GetFiles() ) {
 				fileName = System.IO.Path.GetFileName( file.File );
@@ -151,7 +160,7 @@ namespace Icod.Wod.Data {
 		}
 
 		protected virtual System.Collections.Generic.IEnumerable<Icod.Wod.File.FileEntry> GetFiles() {
-			return this.GetFileHandler().ListFiles();
+			return this.GetFileHandler( this.WorkOrder ).ListFiles();
 		}
 		protected virtual System.IO.StreamReader OpenReader( Icod.Wod.File.FileEntry file ) {
 			if ( null == file ) {
@@ -159,7 +168,7 @@ namespace Icod.Wod.Data {
 			} else if ( Icod.Wod.File.FileType.Directory == file.FileType ) {
 				throw new System.InvalidOperationException();
 			}
-			return new System.IO.StreamReader( this.GetFileHandler().OpenReader( file.File ), this.GetEncoding(), true, this.BufferLength );
+			return new System.IO.StreamReader( this.GetFileHandler( this.WorkOrder ).OpenReader( file.File ), this.GetEncoding(), true, this.BufferLength );
 		}
 
 		protected abstract System.Data.DataTable BuildTable( System.String fileName, System.IO.StreamReader file );

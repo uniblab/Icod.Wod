@@ -20,6 +20,9 @@ namespace Icod.Wod.File {
 		public GZipFile() : base() {
 			myCompressionMode = System.IO.Compression.CompressionMode.Decompress;
 		}
+		public GZipFile( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
+			myCompressionMode = System.IO.Compression.CompressionMode.Decompress;
+		}
 		#endregion .ctor
 
 
@@ -70,6 +73,8 @@ namespace Icod.Wod.File {
 
 		#region methods
 		public sealed override void DoWork( Icod.Wod.WorkOrder order ) {
+			this.WorkOrder = order;
+			this.Destination.WorkOrder = order;
 			System.Action<Icod.Wod.File.FileHandlerBase, System.String, Icod.Wod.File.FileHandlerBase> action = null;
 			switch ( this.CompressionMode ) {
 				case System.IO.Compression.CompressionMode.Decompress :
@@ -82,8 +87,8 @@ namespace Icod.Wod.File {
 					throw new System.InvalidOperationException();
 			}
 
-			var dest = this.Destination.GetFileHandler();
-			var source = this.GetFileHandler();
+			var dest = this.Destination.GetFileHandler( order );
+			var source = this.GetFileHandler( order );
 			System.String file;
 			var files = source.ListFiles();
 			foreach ( var fe in files ) {
