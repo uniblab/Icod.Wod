@@ -1,0 +1,19 @@
+Deployment Packages/*
+Documents/*
+bin/*
+obj/*
+packages/*
+_bin_deployableAssemblies/*
+.vs/*
+/Deployment Packages/*
+/Documents/*
+/bin/*
+/obj/*
+/packages/*
+/_bin_deployableAssemblies/*
+/.vs/*
+*.user
+*.suo
+*.vssscc
+*.vspscc
+app.config
