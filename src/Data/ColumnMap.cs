@@ -7,8 +7,6 @@ namespace Icod.Wod.Data {
 
 		#region fields
 		private System.Boolean mySkip;
-		private System.String myFromName;
-		private System.String myToName;
 		#endregion fields
 
 
@@ -38,25 +36,19 @@ namespace Icod.Wod.Data {
 			"from",
 			Namespace = "http://Icod.Wod"
 		)]
+		[System.ComponentModel.DefaultValue( null )]
 		public System.String FromName {
-			get {
-				return myFromName;
-			}
-			set {
-				myFromName = value;
-			}
+			get;
+			set;
 		}
 		[System.Xml.Serialization.XmlAttribute(
 			"to",
 			Namespace = "http://Icod.Wod"
 		)]
+		[System.ComponentModel.DefaultValue( null )]
 		public System.String ToName {
-			get {
-				return myToName;
-			}
-			set {
-				myToName = value;
-			}
+			get;
+			set;
 		}
 		#endregion properties
 

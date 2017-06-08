@@ -13,8 +13,6 @@ namespace Icod.Wod {
 		#region fields
 		private ConnectionStringEntry[] myConnectionStrings;
 		private System.Object[] mySteps;
-		private System.String myJobName;
-		private System.String myEmailTo;
 		[System.NonSerialized]
 		private readonly System.Collections.Generic.IDictionary<System.String,System.String> myDict;
 		#endregion fields
@@ -37,26 +35,20 @@ namespace Icod.Wod {
 			"jobName",
 			Namespace = "http://Icod.Wod"
 		)]
+		[System.ComponentModel.DefaultValue( null )]
 		public System.String JobName {
-			get {
-				return myJobName;
-			}
-			set {
-				myJobName = value;
-			}
+			get;
+			set;
 		}
 
 		[System.Xml.Serialization.XmlAttribute(
 			"emailTo",
 			Namespace = "http://Icod.Wod"
 		)]
+		[System.ComponentModel.DefaultValue( null )]
 		public System.String EmailTo {
-			get {
-				return myEmailTo;
-			}
-			set {
-				myEmailTo = value;
-			}
+			get;
+			set;
 		}
 
 		[System.Xml.Serialization.XmlArray(
@@ -69,6 +61,7 @@ namespace Icod.Wod {
 			IsNullable = false,
 			Namespace = "http://Icod.Wod"
 		)]
+		[System.ComponentModel.DefaultValue( null )]
 		public ConnectionStringEntry[] ConnectionStrings {
 			get {
 				return myConnectionStrings;
