@@ -17,7 +17,7 @@ namespace Icod.Wod {
 		private System.String myBodyCodePage;
 		private System.String mySubjectCodePage;
 		private System.Boolean myBodyIsHtml;
-		private Icod.Wod.File.FileDescriptor myAttachments;
+		private Icod.Wod.File.FileDescriptor[] myAttachments;
 		private System.Boolean mySendIfEmpty;
 		private System.String myBody;
 		#endregion fields
@@ -121,13 +121,18 @@ namespace Icod.Wod {
 				myBodyIsHtml = value;
 			}
 		}
-		[System.Xml.Serialization.XmlElement(
+		[System.Xml.Serialization.XmlArray(
+			IsNullable = false,
+			Namespace = "http://Icod.Wod",
+			ElementName = "attachments"
+		)]
+		[System.Xml.Serialization.XmlArrayItem(
 			"attach",
 			typeof( Icod.Wod.File.FileDescriptor ),
 			Namespace = "http://Icod.Wod"
 		)]
 		[System.ComponentModel.DefaultValue( null )]
-		public Icod.Wod.File.FileDescriptor Attachments {
+		public Icod.Wod.File.FileDescriptor[] Attachments {
 			get { 
 				return myAttachments;
 			}
@@ -170,11 +175,14 @@ namespace Icod.Wod {
 			using ( var msg = new System.Net.Mail.MailMessage() ) {
 				msg.IsBodyHtml = this.BodyIsHtml;
 				msg.Body = this.Body;
-				var handler = this.Attachments.GetFileHandler();
-				System.String filePathName;
-				foreach ( var fe in handler.ListFiles() ) {
-					filePathName = fe.File;
-					msg.Attachments.Add( new System.Net.Mail.Attachment( handler.OpenReader( filePathName ), System.IO.Path.GetFileName( filePathName ) ) );
+				File.FileHandlerBase handler;
+				foreach ( var a in ( this.Attachments ?? new Icod.Wod.File.FileDescriptor[ 0 ] ) ) {
+					handler = a.GetFileHandler();
+					System.String filePathName;
+					foreach ( var fe in handler.ListFiles() ) {
+						filePathName = fe.File;
+						msg.Attachments.Add( new System.Net.Mail.Attachment( handler.OpenReader( filePathName ), System.IO.Path.GetFileName( filePathName ) ) );
+					}
 				}
 				if ( !SendIfEmpty && System.String.IsNullOrEmpty( msg.Body ) && ( 0 == msg.Attachments.Count ) ) {
 					foreach ( var stream in msg.Attachments.OfType<System.Net.Mail.Attachment>().Select(

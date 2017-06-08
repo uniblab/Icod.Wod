@@ -76,6 +76,11 @@ namespace Icod.Wod {
 			ElementName = "steps"
 		)]
 		[System.Xml.Serialization.XmlArrayItem(
+			typeof( Email ),
+			IsNullable = false,
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.Xml.Serialization.XmlArrayItem(
 			typeof( File.FileOperationBase ),
 			IsNullable = false,
 			Namespace = "http://Icod.Wod"
