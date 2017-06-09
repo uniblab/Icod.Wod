@@ -446,6 +446,56 @@ namespace Icod.Wod.Data {
 			) );
 			return output;
 		}
+
+		private System.Collections.Generic.IEnumerable<System.Data.Common.DataColumnMapping> Foo( System.Data.DataTable source, System.Data.DataTable dest ) {
+			if ( null == dest ) {
+				throw new System.ArgumentNullException( "dest" );
+			} else if ( null == source ) {
+				throw new System.ArgumentNullException( "source" );
+			}
+
+			var destCol = dest.Columns.OfType<System.Data.DataColumn>();
+			var sourceCol = source.Columns.OfType<System.Data.DataColumn>();
+			var columnMapping = ( this.ColumnMapping ?? new ColumnMap[ 0 ] ).Where(
+				x => !x.Skip
+			);
+
+			System.Collections.Generic.IEnumerable<ColumnMap> mapping;
+
+			var perfectMatch = ( this.ColumnMapping ?? new ColumnMap[ 0 ] ).Where(
+				x => !x.Skip
+			).Join(
+				sourceCol,
+				m => m.FromName,
+				s => s.ColumnName,
+				( m, s ) => m
+			).Join(
+				destCol,
+				m => m.ToName,
+				d => d.ColumnName,
+				( m, d ) => m
+			);
+			mapping = mapping.Union( perfectMatch );
+
+			var impliedMatch = destCol.Join(
+				sourceCol,
+				d => d.ColumnName,
+				s => s.ColumnName,
+				( d, s ) => d
+			).Where(
+				x => !mapping.Select(
+					y => y.FromName
+				).Contains( x.ColumnName, System.StringComparer.OrdinalIgnoreCase )
+			).Where(
+				x => !mapping.Select(
+					y => y.ToName
+				).Contains( x.ColumnName, System.StringComparer.OrdinalIgnoreCase )
+			);
+
+			return perfectMatch.Select(
+				x => new System.Data.Common.DataColumnMapping( x.ToName, x.FromName )
+			);
+		}
 		#endregion methods
 
 	}
