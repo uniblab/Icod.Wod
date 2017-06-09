@@ -399,6 +399,7 @@ namespace Icod.Wod.Data {
 		}
 
 		protected virtual System.Collections.Generic.IEnumerable<System.Data.Common.DataColumnMapping> CreateDataColumnMapping( System.Data.DataTable source, System.Data.DataTable dest ) {
+			//return this.Foo( source, dest );
 			if ( null == dest ) {
 				throw new System.ArgumentNullException( "dest" );
 			} else if ( null == source ) {
@@ -460,9 +461,28 @@ namespace Icod.Wod.Data {
 				x => !x.Skip
 			);
 
-			System.Collections.Generic.IEnumerable<ColumnMap> mapping;
+			System.Collections.Generic.IEnumerable<ColumnMap> mapping = new ColumnMap[ 0 ];
 
-			var perfectMatch = ( this.ColumnMapping ?? new ColumnMap[ 0 ] ).Where(
+			var shadowMatch = sourceCol.Where(
+				x => !columnMapping.Select(
+					y => y.FromName
+				).Contains( x.ColumnName, System.StringComparer.OrdinalIgnoreCase )
+			).Join(
+				destCol.Where(
+					x => !columnMapping.Select(
+						y => y.ToName
+					).Contains( x.ColumnName, System.StringComparer.OrdinalIgnoreCase )
+				),
+				s => s.ColumnName,
+				d => d.ColumnName,
+				( s, d ) => new ColumnMap {
+					FromName = s.ColumnName,
+					ToName = d.ColumnName,
+					Skip = false,
+				}
+			);
+ 
+			var perfectMatch = columnMapping.Where(
 				x => !x.Skip
 			).Join(
 				sourceCol,
@@ -475,24 +495,15 @@ namespace Icod.Wod.Data {
 				d => d.ColumnName,
 				( m, d ) => m
 			);
-			mapping = mapping.Union( perfectMatch );
+			mapping = mapping.Union( shadowMatch ).Union( perfectMatch ).Distinct( ColumnMap.ValueComparer );
 
-			var impliedMatch = destCol.Join(
-				sourceCol,
-				d => d.ColumnName,
-				s => s.ColumnName,
-				( d, s ) => d
-			).Where(
-				x => !mapping.Select(
-					y => y.FromName
-				).Contains( x.ColumnName, System.StringComparer.OrdinalIgnoreCase )
-			).Where(
-				x => !mapping.Select(
-					y => y.ToName
-				).Contains( x.ColumnName, System.StringComparer.OrdinalIgnoreCase )
-			);
 
-			return perfectMatch.Select(
+			foreach ( var map in mapping ) {
+				System.Console.Out.WriteLine( "{0} : {1}", map.FromName, map.ToName );
+			}
+			System.Console.Out.WriteLine( System.String.Empty );
+
+			return mapping.Select(
 				x => new System.Data.Common.DataColumnMapping( x.ToName, x.FromName )
 			);
 		}
