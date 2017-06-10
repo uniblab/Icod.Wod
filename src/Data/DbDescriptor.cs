@@ -399,6 +399,7 @@ namespace Icod.Wod.Data {
 		}
 
 		protected virtual System.Collections.Generic.IEnumerable<System.Data.Common.DataColumnMapping> CreateDataColumnMapping( System.Data.DataTable source, System.Data.DataTable dest ) {
+			//return this.Foo( source, dest );
 			if ( null == dest ) {
 				throw new System.ArgumentNullException( "dest" );
 			} else if ( null == source ) {
@@ -445,6 +446,66 @@ namespace Icod.Wod.Data {
 				x => new System.Data.Common.DataColumnMapping( x.ColumnName, x.ColumnName )
 			) );
 			return output;
+		}
+
+		private System.Collections.Generic.IEnumerable<System.Data.Common.DataColumnMapping> Foo( System.Data.DataTable source, System.Data.DataTable dest ) {
+			if ( null == dest ) {
+				throw new System.ArgumentNullException( "dest" );
+			} else if ( null == source ) {
+				throw new System.ArgumentNullException( "source" );
+			}
+
+			var destCol = dest.Columns.OfType<System.Data.DataColumn>();
+			var sourceCol = source.Columns.OfType<System.Data.DataColumn>();
+			var columnMapping = ( this.ColumnMapping ?? new ColumnMap[ 0 ] ).Where(
+				x => !x.Skip
+			);
+
+			System.Collections.Generic.IEnumerable<ColumnMap> mapping = new ColumnMap[ 0 ];
+
+			var shadowMatch = sourceCol.Where(
+				x => !columnMapping.Select(
+					y => y.FromName
+				).Contains( x.ColumnName, System.StringComparer.OrdinalIgnoreCase )
+			).Join(
+				destCol.Where(
+					x => !columnMapping.Select(
+						y => y.ToName
+					).Contains( x.ColumnName, System.StringComparer.OrdinalIgnoreCase )
+				),
+				s => s.ColumnName,
+				d => d.ColumnName,
+				( s, d ) => new ColumnMap {
+					FromName = s.ColumnName,
+					ToName = d.ColumnName,
+					Skip = false,
+				}
+			);
+ 
+			var perfectMatch = columnMapping.Where(
+				x => !x.Skip
+			).Join(
+				sourceCol,
+				m => m.FromName,
+				s => s.ColumnName,
+				( m, s ) => m
+			).Join(
+				destCol,
+				m => m.ToName,
+				d => d.ColumnName,
+				( m, d ) => m
+			);
+			mapping = mapping.Union( shadowMatch ).Union( perfectMatch ).Distinct( ColumnMap.ValueComparer );
+
+
+			foreach ( var map in mapping ) {
+				System.Console.Out.WriteLine( "{0} : {1}", map.FromName, map.ToName );
+			}
+			System.Console.Out.WriteLine( System.String.Empty );
+
+			return mapping.Select(
+				x => new System.Data.Common.DataColumnMapping( x.ToName, x.FromName )
+			);
 		}
 		#endregion methods
 

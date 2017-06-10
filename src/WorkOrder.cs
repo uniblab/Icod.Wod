@@ -118,18 +118,6 @@ namespace Icod.Wod {
 		[System.Xml.Serialization.XmlIgnore]
 		public System.Collections.Generic.IDictionary<System.String,System.String> VarDictionary {
 			get {
-				if ( !myDict.ContainsKey( "%wod:File-PathName%" ) ) {
-					myDict.Add( "%wod:File-PathName%", System.String.Empty );
-				}
-				if ( !myDict.ContainsKey( "%wod:File-Path%" ) ) {
-					myDict.Add( "%wod:File-Path%", System.String.Empty );
-				}
-				if ( !myDict.ContainsKey( "%wod:File-Name%" ) ) {
-					myDict.Add( "%wod:File-Name%", System.String.Empty );
-				}
-				if ( !myDict.ContainsKey( "%wod:File-NameWithoutExtension%" ) ) {
-					myDict.Add( "%wod:File-NameWithoutExtension%", System.String.Empty );
-				}
 				return myDict;
 			}
 		}
@@ -179,25 +167,6 @@ namespace Icod.Wod {
 				while ( @string.Contains( "%wod:DateTime-yyyyMMdd%" ) ) {
 					@string = @string.Replace( "%wod:DateTime-yyyyMMdd%", yyyyMMdd );
 				}
-			}
-			if ( @string.Contains( "%wod:File-" ) ) {
-				var v = this.VarDictionary;
-				if ( !v.ContainsKey( "%wod:File-PathName%" ) ) {
-					v.Add( "%wod:File-PathName%", System.String.Empty );
-				}
-				if ( !v.ContainsKey( "%wod:File-Path%" ) ) {
-					v.Add( "%wod:File-Path%", System.String.Empty );
-				}
-				if ( !v.ContainsKey( "%wod:File-Name%" ) ) {
-					v.Add( "%wod:File-Name%", System.String.Empty );
-				}
-				if ( !v.ContainsKey( "%wod:File-NameWithoutExtension%" ) ) {
-					v.Add( "%wod:File-NameWithoutExtension%", System.String.Empty );
-				}
-				@string = @string.Replace( "%wod:File-PathName%", v[ "%wod:File-PathName%" ] );
-				@string = @string.Replace( "%wod:File-Path%", v[ "%wod:File-Path%" ] );
-				@string = @string.Replace( "%wod:File-Name%", v[ "%wod:File-Name%" ] );
-				@string = @string.Replace( "%wod:File-NameWithoutExtension%", v[ "%wod:File-NameWithoutExtension%" ] );
 			}
 			@string = @string.Replace( "%wod:EmailTo%", this.EmailTo );
 			@string = @string.Replace( "%wod:JobName%", this.JobName );
