@@ -33,6 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="src\ConnectionStringEntry.cs" />
+    <Compile Include="src\Data\ColumnMapValueComparer.cs" />
     <Compile Include="src\Data\DbCommand.cs" />
     <Compile Include="src\Data\DbDescriptor.cs" />
     <Compile Include="src\Data\DbHelper.cs" />
