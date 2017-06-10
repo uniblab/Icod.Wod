@@ -9,12 +9,28 @@ Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+		Release-net35|Any CPU = Release-net35|Any CPU
+		Release-net35client|Any CPU = Release-net35client|Any CPU
+		Release-net40|Any CPU = Release-net40|Any CPU
+		Release-net40client|Any CPU = Release-net40client|Any CPU
+		Staging|Any CPU = Staging|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{EB964B27-BE3E-48BB-9E2D-E22134EEC738}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EB964B27-BE3E-48BB-9E2D-E22134EEC738}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB964B27-BE3E-48BB-9E2D-E22134EEC738}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB964B27-BE3E-48BB-9E2D-E22134EEC738}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB964B27-BE3E-48BB-9E2D-E22134EEC738}.Release-net35|Any CPU.ActiveCfg = Release-net35|Any CPU
+		{EB964B27-BE3E-48BB-9E2D-E22134EEC738}.Release-net35|Any CPU.Build.0 = Release-net35|Any CPU
+		{EB964B27-BE3E-48BB-9E2D-E22134EEC738}.Release-net35client|Any CPU.ActiveCfg = Release-net35client|Any CPU
+		{EB964B27-BE3E-48BB-9E2D-E22134EEC738}.Release-net35client|Any CPU.Build.0 = Release-net35client|Any CPU
+		{EB964B27-BE3E-48BB-9E2D-E22134EEC738}.Release-net40|Any CPU.ActiveCfg = Release-net40|Any CPU
+		{EB964B27-BE3E-48BB-9E2D-E22134EEC738}.Release-net40|Any CPU.Build.0 = Release-net40|Any CPU
+		{EB964B27-BE3E-48BB-9E2D-E22134EEC738}.Release-net40client|Any CPU.ActiveCfg = Release-net40client|Any CPU
+		{EB964B27-BE3E-48BB-9E2D-E22134EEC738}.Release-net40client|Any CPU.Build.0 = Release-net40client|Any CPU
+		{EB964B27-BE3E-48BB-9E2D-E22134EEC738}.Staging|Any CPU.ActiveCfg = Staging|Any CPU
+		{EB964B27-BE3E-48BB-9E2D-E22134EEC738}.Staging|Any CPU.Build.0 = Staging|Any CPU
+
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
