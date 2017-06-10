@@ -5,10 +5,6 @@
 		<RootNamespace>Icod.Wod</RootNamespace>
 		<AssemblyName>Icod.Wod</AssemblyName>
 		<ProjectGuid>{EB964B27-BE3E-48BB-9E2D-E22134EEC738}</ProjectGuid>
-		<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-		<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-	</PropertyGroup>
-	<PropertyGroup>
 		<OutputPath>bin\$(Configuration)\</OutputPath>
 		<DocumentationFile>bin\$(Configuration)\$(AssemblyName).XML</DocumentationFile>
 		<StartupObject />
@@ -17,6 +13,8 @@
 		<TargetFrameworkProfile></TargetFrameworkProfile>
 		<FileAlignment>512</FileAlignment>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+		<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+		<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	</PropertyGroup>
 	<PropertyGroup>
 		<Configuration Condition=" '$(Configuration)' == '' ">Release-net45</Configuration>
@@ -59,7 +57,7 @@
 		<SignAssembly>false</SignAssembly>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration.Contains( &quot;Release&quot; ))' ">
-		<AssemblyKeyContainerName>Oits</AssemblyKeyContainerName>
+		<AssemblyKeyContainerName>Icod</AssemblyKeyContainerName>
 		<AssemblyOriginatorKeyFile>..\STRONG_NAME_KEY\Icod.snk</AssemblyOriginatorKeyFile>
 		<SignAssembly>true</SignAssembly>
 		<DelaySign>false</DelaySign>
