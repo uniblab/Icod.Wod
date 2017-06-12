@@ -399,56 +399,6 @@ namespace Icod.Wod.Data {
 		}
 
 		protected virtual System.Collections.Generic.IEnumerable<System.Data.Common.DataColumnMapping> CreateDataColumnMapping( System.Data.DataTable source, System.Data.DataTable dest ) {
-			//return this.Foo( source, dest );
-			if ( null == dest ) {
-				throw new System.ArgumentNullException( "dest" );
-			} else if ( null == source ) {
-				throw new System.ArgumentNullException( "source" );
-			}
-
-			var destCol = dest.Columns.OfType<System.Data.DataColumn>();
-			var sourceCol = source.Columns.OfType<System.Data.DataColumn>();
-			var columnMapping = ( this.ColumnMapping ?? new ColumnMap[ 0 ] ).Where(
-				x => !x.Skip
-			).Where(
-				x => sourceCol.Select(
-					y => y.ColumnName
-				).Contains( x.FromName, System.StringComparer.OrdinalIgnoreCase )
-			);
-			var output = columnMapping.Select(
-				x => new System.Data.Common.DataColumnMapping( x.ToName, x.FromName )
-			).Union( sourceCol.Where(
-				x => !columnMapping.Select(
-					y => y.FromName
-				).Contains( x.ColumnName, System.StringComparer.OrdinalIgnoreCase )
-			).Select(
-				x => new System.Data.Common.DataColumnMapping( x.ColumnName, x.ColumnName )
-			) ).Where(
-				x => destCol.Select(
-					y => y.ColumnName
-				).Contains( x.SourceColumn, System.StringComparer.OrdinalIgnoreCase )
-			);
-
-			var addedCol = destCol.Where(
-				x => !output.Select(
-					y => y.SourceColumn
-				).Contains( x.ColumnName, System.StringComparer.OrdinalIgnoreCase )
-			);
-			System.Data.DataColumn a;
-			foreach ( var ac in addedCol ) {
-				a = new System.Data.DataColumn( ac.ColumnName, typeof( System.String ) );
-				a.AllowDBNull = true;
-				a.DefaultValue = ac.DefaultValue;
-				a.ReadOnly = true;
-				source.Columns.Add( a );
-			}
-			output = output.Union( addedCol.Select(
-				x => new System.Data.Common.DataColumnMapping( x.ColumnName, x.ColumnName )
-			) );
-			return output;
-		}
-
-		private System.Collections.Generic.IEnumerable<System.Data.Common.DataColumnMapping> Foo( System.Data.DataTable source, System.Data.DataTable dest ) {
 			if ( null == dest ) {
 				throw new System.ArgumentNullException( "dest" );
 			} else if ( null == source ) {
@@ -463,7 +413,7 @@ namespace Icod.Wod.Data {
 
 			System.Collections.Generic.IEnumerable<ColumnMap> mapping = new ColumnMap[ 0 ];
 
-			var shadowMatch = sourceCol.Where(
+			var impliedMatch = sourceCol.Where(
 				x => !columnMapping.Select(
 					y => y.FromName
 				).Contains( x.ColumnName, System.StringComparer.OrdinalIgnoreCase )
@@ -481,10 +431,8 @@ namespace Icod.Wod.Data {
 					Skip = false,
 				}
 			);
- 
-			var perfectMatch = columnMapping.Where(
-				x => !x.Skip
-			).Join(
+
+			var perfectMatch = columnMapping.Join(
 				sourceCol,
 				m => m.FromName,
 				s => s.ColumnName,
@@ -495,14 +443,36 @@ namespace Icod.Wod.Data {
 				d => d.ColumnName,
 				( m, d ) => m
 			);
-			mapping = mapping.Union( shadowMatch ).Union( perfectMatch ).Distinct( ColumnMap.ValueComparer );
 
-
-			foreach ( var map in mapping ) {
-				System.Console.Out.WriteLine( "{0} : {1}", map.FromName, map.ToName );
+			var missingSourceMatch = columnMapping.Where(
+				x => !sourceCol.Select(
+					y => y.ColumnName
+				).Contains( x.FromName, System.StringComparer.OrdinalIgnoreCase )
+			).Where(
+				x => destCol.Select(
+					y => y.ColumnName
+				).Contains( x.ToName, System.StringComparer.OrdinalIgnoreCase )
+			).Select(
+				x => x.ToName
+			).Distinct().Select(
+				x => new ColumnMap {
+					FromName = x,
+					ToName = x,
+					Skip = false,
+				}
+			);
+			System.Data.DataColumn a;
+			foreach ( var ac in missingSourceMatch ) {
+				a = new System.Data.DataColumn( ac.FromName, typeof( System.String ) );
+				a.AllowDBNull = true;
+				a.DefaultValue = destCol.First(
+					x => System.String.Equals( ac.ToName, x.ColumnName, System.StringComparison.OrdinalIgnoreCase )
+				).DefaultValue;
+				a.ReadOnly = true;
+				source.Columns.Add( a );
 			}
-			System.Console.Out.WriteLine( System.String.Empty );
 
+			mapping = mapping.Union( impliedMatch ).Union( perfectMatch ).Union( missingSourceMatch ).Distinct( ColumnMap.ValueComparer );
 			return mapping.Select(
 				x => new System.Data.Common.DataColumnMapping( x.ToName, x.FromName )
 			);
