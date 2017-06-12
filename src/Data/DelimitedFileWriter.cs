@@ -8,7 +8,7 @@ namespace Icod.Wod.Data {
 		Namespace = "http://Icod.Wod",
 		IncludeInSchema = true
 	)]
-	public class DelimitedFileWriter : FileBase {
+	public sealed class DelimitedFileWriter : FileBase {
 
 		#region fields
 		private System.Char myFieldSeparator;

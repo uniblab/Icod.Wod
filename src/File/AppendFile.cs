@@ -8,7 +8,7 @@ namespace Icod.Wod.File {
 		Namespace = "http://Icod.Wod",
 		IncludeInSchema = true
 	)]
-	public class AppendFile : FileOperationBase {
+	public sealed class AppendFile : FileOperationBase {
 
 		#region fields
 		private FileDescriptor myDestination;
@@ -30,7 +30,7 @@ namespace Icod.Wod.File {
 			Namespace = "http://Icod.Wod",
 			IsNullable = false
 		)]
-		public virtual FileDescriptor Destination {
+		public FileDescriptor Destination {
 			get {
 				return myDestination;
 			}
@@ -44,7 +44,7 @@ namespace Icod.Wod.File {
 			Namespace = "http://Icod.Wod"
 		)]
 		[System.ComponentModel.DefaultValue( false )]
-		public virtual System.Boolean Move {
+		public System.Boolean Move {
 			get {
 				return myMove;
 			}

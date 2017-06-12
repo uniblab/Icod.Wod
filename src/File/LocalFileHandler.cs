@@ -3,7 +3,7 @@ using System.Linq;
 namespace Icod.Wod.File {
 
 	[System.Serializable]
-	public class LocalFileHandler : FileHandlerBase {
+	public sealed class LocalFileHandler : FileHandlerBase {
 
 		#region .ctor
 		public LocalFileHandler( Icod.Wod.WorkOrder workOrder ) : base( workOrder) {

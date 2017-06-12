@@ -10,7 +10,8 @@
 		<StartupObject />
 		<OutputType>Library</OutputType>
 		<TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-		<TargetFrameworkProfile></TargetFrameworkProfile>
+		<TargetFrameworkProfile>
+		</TargetFrameworkProfile>
 		<FileAlignment>512</FileAlignment>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
 		<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -22,9 +23,6 @@
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
 		<PlatformTarget>AnyCPU</PlatformTarget>
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration.Contains( &quot;net35&quot; ))' ">
-		<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration.Contains( &quot;net40&quot; ))' ">
 		<TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
@@ -71,10 +69,6 @@
 	<PropertyGroup Condition=" '$(Configuration)' == 'Staging' ">
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)' == 'Release-net35client' ">
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)' == 'Release-net35' ">
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)' == 'Release-net40' ">
 	</PropertyGroup>
@@ -135,9 +129,11 @@
 	<ItemGroup>
 		<Reference Include="Renci.SshNet, Version=2016.0.0.0, Culture=neutral, PublicKeyToken=1cee9f8bde3db106, processorArchitecture=MSIL">
 			<HintPath>packages\SSH.NET.2016.0.0\lib\net40\Renci.SshNet.dll</HintPath>
+			<Private>True</Private>
 		</Reference>
 		<Reference Include="System" />
-		<Reference Include="System.configuration" />
+		<Reference Include="System.configuration">
+		</Reference>
 		<Reference Include="System.Data" />
 		<Reference Include="System.XML" />
 	</ItemGroup>

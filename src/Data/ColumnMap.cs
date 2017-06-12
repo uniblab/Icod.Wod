@@ -3,7 +3,7 @@ using System.Linq;
 namespace Icod.Wod.Data {
 
 	[System.Serializable]
-	public class ColumnMap : System.IEquatable<ColumnMap> {
+	public sealed class ColumnMap : System.IEquatable<ColumnMap> {
 
 		#region fields
 		private static readonly System.Collections.Generic.IEqualityComparer<ColumnMap> theValueComparer;
@@ -66,11 +66,11 @@ namespace Icod.Wod.Data {
 
 
 		#region methods
-		public override System.Int32 GetHashCode() {
+		public sealed override System.Int32 GetHashCode() {
 			return base.GetHashCode();
 		}
 
-		public override System.Boolean Equals( System.Object obj ) {
+		public sealed override System.Boolean Equals( System.Object obj ) {
 			if ( System.Object.ReferenceEquals( this, obj ) ) {
 				return true;
 			} else if ( null == (System.Object)obj ) {
@@ -78,7 +78,7 @@ namespace Icod.Wod.Data {
 			}
 			return this.Equals( obj as ColumnMap );
 		}
-		public virtual System.Boolean Equals( ColumnMap other ) {
+		public System.Boolean Equals( ColumnMap other ) {
 			if ( System.Object.ReferenceEquals( this, other ) ) {
 				return true;
 			} else if ( null == other ) {

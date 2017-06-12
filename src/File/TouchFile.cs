@@ -7,7 +7,7 @@ namespace Icod.Wod.File {
 		"touchFile",
 		Namespace = "http://Icod.Wod"
 	)]
-	public class TouchFile : FileOperationBase {
+	public sealed class TouchFile : FileOperationBase {
 
 		#region .ctor
 		public TouchFile() : base() {

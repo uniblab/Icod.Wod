@@ -2,7 +2,7 @@ using System.Linq;
 
 namespace Icod.Wod.Data {
 
-	public class ColumnMapValueComparer : System.Collections.Generic.IEqualityComparer<ColumnMap> {
+	public sealed class ColumnMapValueComparer : System.Collections.Generic.IEqualityComparer<ColumnMap> {
 
 		#region fields
 		private static readonly System.Collections.Generic.IEqualityComparer<ColumnMap> theValueComparer;

@@ -3,7 +3,7 @@ using System.Linq;
 namespace Icod.Wod.Data {
 
 	[System.Serializable]
-	public class TextFileColumn {
+	public sealed class TextFileColumn {
 
 		#region fields
 		private System.Int32 myLength;

@@ -3,7 +3,7 @@ using System.Linq;
 namespace Icod.Wod.File {
 
 	[System.Serializable]
-	public class HttpFileHandler : RemoteFileHandlerBase {
+	public sealed class HttpFileHandler : RemoteFileHandlerBase {
 
 		#region .ctor
 		public HttpFileHandler( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {

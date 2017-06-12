@@ -8,7 +8,7 @@ namespace Icod.Wod.File {
 		Namespace = "http://Icod.Wod",
 		IncludeInSchema = true
 	)]
-	public class DeleteFile : FileOperationBase {
+	public sealed class DeleteFile : FileOperationBase {
 
 		#region .ctor
 		public DeleteFile() : base() {

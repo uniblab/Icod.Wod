@@ -1,7 +1,7 @@
 namespace Icod.Wod.File {
 
 	[System.Serializable]
-	public class FileEntry {
+	public sealed class FileEntry {
 
 		#region .ctor
 		public FileEntry() : base() {

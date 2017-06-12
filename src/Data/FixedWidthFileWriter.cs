@@ -8,7 +8,7 @@ namespace Icod.Wod.Data {
 		Namespace = "http://Icod.Wod",
 		IncludeInSchema = true
 	)]
-	public class FixedWidthFileWriter : FileBase {
+	public sealed class FixedWidthFileWriter : FileBase {
 
 		#region fields
 		private static readonly System.Action<System.IO.StreamWriter> theEmptyEolWriter;

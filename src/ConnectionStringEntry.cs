@@ -1,7 +1,7 @@
 namespace Icod.Wod {
 
 	[System.Serializable]
-	public class ConnectionStringEntry {
+	public sealed class ConnectionStringEntry {
 
 		#region fields
 		private System.String myName;

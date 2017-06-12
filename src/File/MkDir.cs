@@ -7,7 +7,7 @@ namespace Icod.Wod.File {
 		"mkDir",
 		Namespace = "http://Icod.Wod"
 	)]
-	public class MkDir : FileOperationBase {
+	public sealed class MkDir : FileOperationBase {
 
 		#region .ctor
 		public MkDir() : base() {

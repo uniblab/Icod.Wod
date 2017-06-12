@@ -7,7 +7,7 @@ namespace Icod.Wod.Data {
 		"fileExport",
 		Namespace = "http://Icod.Wod"
 	)]
-	public class FileExport : DbDescriptor, IStep {
+	public sealed class FileExport : DbDescriptor, IStep {
 
 		#region fields
 		private FileBase myDestination;

@@ -3,7 +3,7 @@ using System.Linq;
 namespace Icod.Wod.File {
 
 	[System.Serializable]
-	public class FtpFileHandler : RemoteFileHandlerBase {
+	public sealed class FtpFileHandler : RemoteFileHandlerBase {
 
 		#region .ctor
 		public FtpFileHandler( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
@@ -38,7 +38,7 @@ namespace Icod.Wod.File {
 			using ( var dummy = ftp.GetRequestStream() ) {
 				dummy.Flush();
 			}
-			ftp.GetResponse().Dispose();
+			ftp.GetResponse().Close();
 		}
 		public sealed override void DeleteFile() {
 			var fd = this.FileDescriptor;
@@ -49,7 +49,7 @@ namespace Icod.Wod.File {
 			var uri = new System.Uri( filePathName );
 			var ftp = (System.Net.FtpWebRequest)System.Net.FtpWebRequest.Create( uri );
 			this.SetFtpClient( ftp, System.Net.WebRequestMethods.Ftp.DeleteFile );
-			ftp.GetResponse().Dispose();
+			ftp.GetResponse().Close();
 		}
 
 		public override System.IO.Stream OpenReader( System.String filePathName ) {
@@ -64,14 +64,14 @@ namespace Icod.Wod.File {
 			var ftp = (System.Net.FtpWebRequest)System.Net.FtpWebRequest.Create( uri );
 			this.SetFtpClient( ftp, System.Net.WebRequestMethods.Ftp.UploadFile );
 			this.Write( source, ftp );
-			ftp.GetResponse().Dispose();
+			ftp.GetResponse().Close();
 		}
 		public sealed override void Append( System.IO.Stream source, System.String filePathName ) {
 			var uri = new System.Uri( filePathName );
 			var ftp = (System.Net.FtpWebRequest)System.Net.FtpWebRequest.Create( uri );
 			this.SetFtpClient( ftp, System.Net.WebRequestMethods.Ftp.AppendFile );
 			this.Write( source, ftp );
-			ftp.GetResponse().Dispose();
+			ftp.GetResponse().Close();
 		}
 
 		private void Write( System.IO.Stream source, System.Net.FtpWebRequest client ) {
@@ -86,7 +86,7 @@ namespace Icod.Wod.File {
 			var uri = new System.Uri( filePathName );
 			var ftp = (System.Net.FtpWebRequest)System.Net.FtpWebRequest.Create( uri );
 			this.SetFtpClient( ftp, System.Net.WebRequestMethods.Ftp.MakeDirectory );
-			ftp.GetResponse().Dispose();
+			ftp.GetResponse().Close();
 		}
 		public sealed override void RmDir() {
 			var fd = this.FileDescriptor;
@@ -94,7 +94,7 @@ namespace Icod.Wod.File {
 			var uri = new System.Uri( filePathName );
 			var ftp = (System.Net.FtpWebRequest)System.Net.FtpWebRequest.Create( uri );
 			this.SetFtpClient( ftp, System.Net.WebRequestMethods.Ftp.RemoveDirectory );
-			ftp.GetResponse().Dispose();
+			ftp.GetResponse().Close();
 		}
 
 		public sealed override System.Collections.Generic.IEnumerable<FileEntry> List() {

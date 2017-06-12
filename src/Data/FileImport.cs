@@ -7,7 +7,7 @@ namespace Icod.Wod.Data {
 		"fileImport",
 		Namespace = "http://Icod.Wod"
 	)]
-	public class FileImport : DbDescriptor, IStep {
+	public sealed class FileImport : DbDescriptor, IStep {
 
 		#region fields
 		private FileBase mySource;

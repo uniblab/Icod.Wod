@@ -7,7 +7,7 @@ namespace Icod.Wod {
 		"email",
 		Namespace = "http://Icod.Wod"
 	)]
-	public class Email : IStep {
+	public sealed class Email : IStep {
 
 		#region fields
 		private System.String myTo;

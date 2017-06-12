@@ -2,7 +2,7 @@ using System.Linq;
 
 namespace Icod.Wod.File {
 
-	public class ClientStream : System.IO.Stream {
+	public sealed class ClientStream : System.IO.Stream {
 
 		#region fields
 		private System.IO.Stream myStream;

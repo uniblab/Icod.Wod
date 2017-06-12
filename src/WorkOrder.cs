@@ -8,7 +8,7 @@ namespace Icod.Wod {
 		Namespace = "http://Icod.Wod",
 		IsNullable = false
 	)]
-	public class WorkOrder {
+	public sealed class WorkOrder {
 
 		#region fields
 		private ConnectionStringEntry[] myConnectionStrings;

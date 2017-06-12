@@ -7,7 +7,7 @@ namespace Icod.Wod.File {
 		"gzipFile",
 		Namespace = "http://Icod.Wod"
 	)]
-	public class GZipFile : FileOperationBase {
+	public sealed class GZipFile : FileOperationBase {
 
 		#region fields
 		private FileDescriptor myDestination;
@@ -32,7 +32,7 @@ namespace Icod.Wod.File {
 			Namespace = "http://Icod.Wod",
 			IsNullable = false 
 		)]
-		public virtual FileDescriptor Destination {
+		public FileDescriptor Destination {
 			get {
 				return myDestination;
 			}
@@ -46,7 +46,7 @@ namespace Icod.Wod.File {
 			Namespace = "http://Icod.Wod"
 		)]
 		[System.ComponentModel.DefaultValue( false )]
-		public virtual System.Boolean Delete {
+		public System.Boolean Delete {
 			get {
 				return myDelete;
 			}
@@ -60,7 +60,7 @@ namespace Icod.Wod.File {
 			Namespace = "http://Icod.Wod"
 		)]
 		[System.ComponentModel.DefaultValue( System.IO.Compression.CompressionMode.Decompress )]
-		public virtual System.IO.Compression.CompressionMode CompressionMode {
+		public System.IO.Compression.CompressionMode CompressionMode {
 			get {
 				return myCompressionMode;
 			}
