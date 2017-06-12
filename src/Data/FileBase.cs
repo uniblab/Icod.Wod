@@ -146,7 +146,55 @@ namespace Icod.Wod.Data {
 			}
 		}
 
-		public abstract void WriteRecords( Icod.Wod.WorkOrder order, ITableSource source );
+		public virtual void WriteRecords( Icod.Wod.WorkOrder order, ITableSource source ) {
+			if ( null == source ) {
+				throw new System.ArgumentNullException( "source" );
+			} else if ( null == order ) {
+				throw new System.ArgumentNullException( "order" );
+			}
+
+			using ( var buffer = new System.IO.MemoryStream() ) {
+				using ( var writer = new System.IO.StreamWriter( buffer, this.GetEncoding(), this.BufferLength ) ) {
+					var table = source.ReadTables( order ).FirstOrDefault();
+					var dbColumns = table.Columns.OfType<System.Data.DataColumn>();
+					if ( this.HasHeader ) {
+						this.WriteHeader( writer, dbColumns, this.Columns );
+					}
+					var formatMap = this.BuildFormatMap( dbColumns );
+					foreach ( var row in table.Rows.OfType<System.Data.DataRow>() ) {
+						this.WriteRow( writer, dbColumns, this.Columns, formatMap, row );
+					}
+					writer.Flush();
+					this.WriteFile( buffer );
+				}
+			}
+		}
+		protected virtual System.Collections.Generic.IDictionary<System.Data.DataColumn, TextFileColumn> BuildFormatMap( System.Collections.Generic.IEnumerable<System.Data.DataColumn> dbColumns ) {
+			if ( ( null == dbColumns ) || !dbColumns.Any() ) {
+				throw new System.ArgumentNullException( "dbColumns" );
+			}
+			var output = new System.Collections.Generic.Dictionary<System.Data.DataColumn, TextFileColumn>();
+			var cols = this.Columns;
+
+			foreach ( var dbCol in dbColumns ) {
+				output.Add( dbCol, cols.FirstOrDefault(
+					x => x.Name.Equals( dbCol.ColumnName, System.StringComparison.OrdinalIgnoreCase )
+				) ?? new TextFileColumn( dbCol.ColumnName ) );
+			}
+			return output;
+		}
+		protected virtual void WriteHeader( System.IO.StreamWriter writer, System.Data.DataTable table ) {
+			if ( null == table ) {
+				throw new System.ArgumentNullException( "table" );
+			} else if ( null == writer ) {
+				throw new System.ArgumentNullException( "writer" );
+			}
+
+			this.WriteHeader( writer, table.Columns.OfType<System.Data.DataColumn>(), this.Columns );
+		}
+		protected abstract void WriteHeader( System.IO.StreamWriter writer, System.Collections.Generic.IEnumerable<System.Data.DataColumn> dbColumns, System.Collections.Generic.IEnumerable<TextFileColumn> fileColumns );
+		protected abstract void WriteRow( System.IO.StreamWriter writer, System.Collections.Generic.IEnumerable<System.Data.DataColumn> dbColumns, System.Collections.Generic.IEnumerable<TextFileColumn> fileColumns, System.Collections.Generic.IDictionary<System.Data.DataColumn, TextFileColumn> formatMap, System.Data.DataRow row );
+		protected abstract void WriteFile( System.IO.Stream stream );
 
 		public virtual System.Collections.Generic.IEnumerable<System.Data.DataTable> ReadTables( Icod.Wod.WorkOrder order ) {
 			this.WorkOrder = order;

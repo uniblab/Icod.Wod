@@ -46,6 +46,18 @@ namespace Icod.Wod.Data {
 		public sealed override void WriteRecords( Icod.Wod.WorkOrder order, ITableSource source ) {
 			throw new System.NotImplementedException();
 		}
+		protected sealed override void WriteHeader( System.IO.StreamWriter writer, System.Data.DataTable table ) {
+			throw new System.NotImplementedException();
+		}
+		protected sealed override void WriteHeader( System.IO.StreamWriter writer, System.Collections.Generic.IEnumerable<System.Data.DataColumn> dbColumns, System.Collections.Generic.IEnumerable<TextFileColumn> fileColumns ) {
+			throw new System.NotImplementedException();
+		}
+		protected sealed override void WriteRow( System.IO.StreamWriter writer, System.Collections.Generic.IEnumerable<System.Data.DataColumn> dbColumns, System.Collections.Generic.IEnumerable<TextFileColumn> fileColumns, System.Collections.Generic.IDictionary<System.Data.DataColumn, TextFileColumn> formatMap, System.Data.DataRow row ) {
+			throw new System.NotImplementedException();
+		}
+		protected sealed override void WriteFile( System.IO.Stream stream ) {
+			throw new System.NotImplementedException();
+		}
 
 		protected sealed override System.Data.DataTable BuildTable( System.String fileName, System.IO.StreamReader file ) {
 			if ( null == file ) {

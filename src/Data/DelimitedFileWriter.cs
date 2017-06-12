@@ -129,63 +129,32 @@ namespace Icod.Wod.Data {
 
 
 		#region methods
-		public sealed override void WriteRecords( Icod.Wod.WorkOrder order, ITableSource source ) {
-			if ( null == source ) {
-				throw new System.ArgumentNullException( "source" );
-			} else if ( null == order ) {
-				throw new System.ArgumentNullException( "order" );
-			}
-
-			using ( var buffer = new System.IO.MemoryStream() ) {
-				using ( var writer = new System.IO.StreamWriter( buffer, this.GetEncoding(), this.BufferLength) ) {
-					var table = source.ReadTables( order ).FirstOrDefault();
-					var columns = table.Columns.OfType<System.Data.DataColumn>();
-					if ( this.HasHeader ) {
-						this.WriteHeader( writer, columns );
-					}
-					foreach ( var row in table.Rows.OfType<System.Data.DataRow>() ) {
-						this.WriteRow( writer, columns, row );
-					}
-					writer.Flush();
-					this.WriteFile( buffer );
-				}
-			}
-		}
-		private void WriteHeader( System.IO.StreamWriter writer, System.Data.DataTable table ) {
-			if ( null == table ) {
-				throw new System.ArgumentNullException( "table" );
+		protected sealed override void WriteHeader( System.IO.StreamWriter writer, System.Collections.Generic.IEnumerable<System.Data.DataColumn> dbColumns, System.Collections.Generic.IEnumerable<TextFileColumn> fileColumns ) {
+			if ( ( null == dbColumns ) || !dbColumns.Any() ) {
+				throw new System.ArgumentNullException( "dbColumns" );
 			} else if ( null == writer ) {
 				throw new System.ArgumentNullException( "writer" );
 			}
-
-			this.WriteHeader( writer, table.Columns.OfType<System.Data.DataColumn>() );
-		}
-		private void WriteHeader( System.IO.StreamWriter writer, System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns ) {
-			if ( ( null == columns ) || !columns.Any() ) {
-				throw new System.ArgumentNullException( "columns" );
-			} else if ( null == writer ) {
-				throw new System.ArgumentNullException( "writer" );
-			}
-			writer.WriteLine( System.String.Join( this.FieldSeparatorString, columns.Select(
+			writer.WriteLine( System.String.Join( this.FieldSeparatorString, dbColumns.Select(
 				x => x.ColumnName
 			).ToArray() ) );
 		}
-		private void WriteRow( System.IO.StreamWriter writer, System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Data.DataRow row ) {
+		protected sealed override void WriteRow( System.IO.StreamWriter writer, System.Collections.Generic.IEnumerable<System.Data.DataColumn> dbColumns, System.Collections.Generic.IEnumerable<TextFileColumn> fileColumns, System.Collections.Generic.IDictionary<System.Data.DataColumn, TextFileColumn> formatMap, System.Data.DataRow row ) {
 			if ( null == row ) {
 				throw new System.ArgumentNullException( "row" );
-			} else if ( ( null == columns ) || !columns.Any() ) {
-				throw new System.ArgumentNullException( "columns" );
+			} else if ( ( null == formatMap ) || !formatMap.Any() ) {
+				throw new System.ArgumentNullException( "formatMap" );
+			} else if ( ( null == dbColumns ) || !dbColumns.Any() ) {
+				throw new System.ArgumentNullException( "dbColumns" );
 			} else if ( null == writer ) {
 				throw new System.ArgumentNullException( "writer" );
 			}
 
-			writer.WriteLine( System.String.Join( this.FieldSeparatorString, columns.Select(
-				x => row[ x ]
-			).Select(
-				x => ( x ?? System.String.Empty ).ToString()
+			writer.WriteLine( System.String.Join( this.FieldSeparatorString, dbColumns.Select(
+				x => System.String.Format( formatMap[ x ].FormatString ?? "{0}", row[ x ] ?? System.String.Empty )
 			) ) );
 		}
-		private void WriteFile( System.IO.Stream stream ) {
+		protected sealed override void WriteFile( System.IO.Stream stream ) {
 			if ( null == stream ) {
 				throw new System.ArgumentNullException( "stream" );
 			}

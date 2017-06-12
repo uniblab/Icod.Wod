@@ -7,12 +7,17 @@ namespace Icod.Wod.Data {
 
 		#region fields
 		private System.Int32 myLength;
+		private System.String myFormatString;
 		#endregion fields
 
 
 		#region .ctor
 		public TextFileColumn() : base() {
 			myLength = -1;
+			myFormatString = "{0}";
+		}
+		public TextFileColumn( System.String name ) : this() {
+			this.Name = name;
 		}
 		#endregion .ctor
 
@@ -46,10 +51,14 @@ namespace Icod.Wod.Data {
 			"formatString",
 			Namespace = "http://Icod.Wod"
 		)]
-		[System.ComponentModel.DefaultValue( null )]
+		[System.ComponentModel.DefaultValue( "{0}" )]
 		public System.String FormatString {
-			get;
-			set;
+			get {
+				return myFormatString;
+			}
+			set {
+				myFormatString = value;
+			}
 		}
 		#endregion properties
 
