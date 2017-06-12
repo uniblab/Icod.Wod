@@ -9,16 +9,11 @@
 		<DocumentationFile>bin\$(Configuration)\$(AssemblyName).XML</DocumentationFile>
 		<StartupObject />
 		<OutputType>Library</OutputType>
-		<TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-		<TargetFrameworkProfile>
-		</TargetFrameworkProfile>
+		<TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+		<TargetFrameworkProfile></TargetFrameworkProfile>
 		<FileAlignment>512</FileAlignment>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
 		<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-		<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-	</PropertyGroup>
-	<PropertyGroup>
-		<Configuration Condition=" '$(Configuration)' == '' ">Release-net45</Configuration>
 		<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
@@ -29,6 +24,24 @@
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration.Contains( &quot;net45&quot; ))' ">
 		<TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration.Contains( &quot;net451&quot; ))' ">
+		<TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration.Contains( &quot;net452&quot; ))' ">
+		<TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration.Contains( &quot;net46&quot; ))' ">
+		<TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration.Contains( &quot;net461&quot; ))' ">
+		<TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration.Contains( &quot;net462&quot; ))' ">
+		<TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration.Contains( &quot;net47&quot; ))' ">
+		<TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration.Contains( &quot;client&quot; ))' ">
 		<TargetFrameworkProfile>Client</TargetFrameworkProfile>
@@ -75,6 +88,18 @@
 	<PropertyGroup Condition=" '$(Configuration)' == 'Release-net40client' ">
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)' == 'Release-net45' ">
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)' == 'Release-net451' ">
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)' == 'Release-net452' ">
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)' == 'Release-net46' ">
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)' == 'Release-net461' ">
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)' == 'Release-net462' ">
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)' == 'Release-net47' ">
 	</PropertyGroup>
 	<ItemGroup>
 		<Compile Include="src\ConnectionStringEntry.cs" />
