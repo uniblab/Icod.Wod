@@ -174,7 +174,7 @@ namespace Icod.Wod.Data {
 				throw new System.ArgumentNullException( "dbColumns" );
 			}
 			var output = new System.Collections.Generic.Dictionary<System.Data.DataColumn, TextFileColumn>();
-			var cols = this.Columns;
+			var cols = this.Columns ?? new TextFileColumn[ 0 ];
 
 			foreach ( var dbCol in dbColumns ) {
 				output.Add( dbCol, cols.FirstOrDefault(

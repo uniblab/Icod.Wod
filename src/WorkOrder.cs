@@ -136,7 +136,7 @@ namespace Icod.Wod {
 					i++;
 				}
 			} catch ( System.Exception e ) {
-				throw new Icod.Wod.Exception( e.Message, e, i, this, step );
+				throw new Icod.Wod.WodException( e.Message, e, i, this, step );
 			}
 		}
 

@@ -105,7 +105,7 @@
   <ItemGroup>
     <Compile Include="src\ConnectionStringEntry.cs" />
     <Compile Include="src\Email.cs" />
-    <Compile Include="src\Exception.cs" />
+    <Compile Include="src\WodException.cs" />
     <Compile Include="src\StringHelper.cs" />
     <Compile Include="src\WorkOrder.cs" />
     <Compile Include="src\Interfaces\IStep.cs" />
