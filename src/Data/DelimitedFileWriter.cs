@@ -14,6 +14,7 @@ namespace Icod.Wod.Data {
 		private System.Char myFieldSeparator;
 		private System.String myFieldSeparatorString;
 		private System.Char myQuoteChar;
+		private System.String myQuoteCharString;
 		private System.Nullable<System.Char> myEscapeChar;
 		#endregion fields
 
@@ -23,12 +24,14 @@ namespace Icod.Wod.Data {
 			myFieldSeparator = '\t';
 			myFieldSeparatorString = myFieldSeparator.ToString();
 			myQuoteChar = '\"';
+			myQuoteCharString = myQuoteChar.ToString();
 			myEscapeChar = null;
 		}
 		public DelimitedFileWriter( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
 			myFieldSeparator = '\t';
 			myFieldSeparatorString = myFieldSeparator.ToString();
 			myQuoteChar = '\"';
+			myQuoteCharString = myQuoteChar.ToString();
 			myEscapeChar = null;
 		}
 		#endregion .ctor
@@ -46,8 +49,28 @@ namespace Icod.Wod.Data {
 			}
 			set {
 				myFieldSeparator = System.Convert.ToChar( value );
+				myFieldSeparatorString = myFieldSeparator.ToString();
 			}
 		}
+		[System.ComponentModel.DefaultValue( '\t' )]
+		[System.Xml.Serialization.XmlIgnore]
+		public System.Char FieldSeparator {
+			get {
+				return myFieldSeparator;
+			}
+			set {
+				myFieldSeparator = value;
+				myFieldSeparatorString = value.ToString();
+			}
+		}
+		[System.Xml.Serialization.XmlIgnore]
+		[System.ComponentModel.DefaultValue( "\t" )]
+		public System.String FieldSeparatorString {
+			get {
+				return myFieldSeparatorString;
+			}
+		}
+
 		[System.Xml.Serialization.XmlAttribute(
 			"quoteChar",
 			Namespace = "http://Icod.Wod"
@@ -59,8 +82,28 @@ namespace Icod.Wod.Data {
 			}
 			set {
 				myQuoteChar = System.Convert.ToChar( value );
+				myQuoteCharString = myQuoteChar.ToString();
 			}
 		}
+		[System.ComponentModel.DefaultValue( '\"' )]
+		[System.Xml.Serialization.XmlIgnore]
+		public System.Char QuoteChar {
+			get {
+				return myQuoteChar;
+			}
+			set {
+				myQuoteChar = value;
+				myQuoteCharString = myQuoteChar.ToString();
+			}
+		}
+		[System.ComponentModel.DefaultValue( '\"' )]
+		[System.Xml.Serialization.XmlIgnore]
+		public System.String QuoteCharString {
+			get {
+				return myQuoteCharString;
+			}
+		}
+
 		[System.Xml.Serialization.XmlAttribute(
 			"escapeChar",
 			Namespace = "http://Icod.Wod"
@@ -84,38 +127,6 @@ namespace Icod.Wod.Data {
 				}
 			}
 		}
-
-		[System.ComponentModel.DefaultValue( '\t' )]
-		[System.Xml.Serialization.XmlIgnore]
-		public System.Char FieldSeparator {
-			get {
-				return myFieldSeparator;
-			}
-			set {
-				myFieldSeparator = value;
-				myFieldSeparatorString = value.ToString();
-			}
-		}
-
-		[System.Xml.Serialization.XmlIgnore]
-		[System.ComponentModel.DefaultValue( "\t" )]
-		public System.String FieldSeparatorString {
-			get {
-				return myFieldSeparatorString;
-			}
-		}
-
-		[System.ComponentModel.DefaultValue( '\"' )]
-		[System.Xml.Serialization.XmlIgnore]
-		public System.Char QuoteChar {
-			get {
-				return myQuoteChar;
-			}
-			set {
-				myQuoteChar = value;
-			}
-		}
-
 		[System.Xml.Serialization.XmlIgnore]
 		public System.Nullable<System.Char> EscapeChar {
 			get {
@@ -150,9 +161,29 @@ namespace Icod.Wod.Data {
 				throw new System.ArgumentNullException( "writer" );
 			}
 
-			writer.WriteLine( System.String.Join( this.FieldSeparatorString, dbColumns.Select(
-				x => System.String.Format( formatMap[ x ].FormatString ?? "{0}", row[ x ] ?? System.String.Empty )
-			) ) );
+
+			var s = this.FieldSeparatorString;
+			System.String q = this.QuoteCharString;
+			System.Collections.Generic.IList<System.String> line = new System.Collections.Generic.List<System.String>();
+			System.String c = null;
+			System.Text.StringBuilder cb = null;
+			foreach ( var col in dbColumns ) {
+				c = System.String.Format( formatMap[ col ].FormatString ?? "{0}", row[ col ] ?? System.String.Empty );
+				if ( c.Contains( s ) ) {
+					cb = new System.Text.StringBuilder();
+					if ( !c.StartsWith( q ) ) {
+						cb.Append( q );
+					}
+					cb.Append( c );
+					if ( !c.EndsWith( q ) ) {
+						cb.Append( q );
+					}
+					line.Add( cb.ToString() );
+				} else {
+					line.Add( c );
+				}
+			}
+			writer.WriteLine( System.String.Join( s, line ) );
 		}
 		protected sealed override void WriteFile( System.IO.Stream stream ) {
 			if ( null == stream ) {
