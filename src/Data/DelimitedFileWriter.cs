@@ -111,9 +111,9 @@ namespace Icod.Wod.Data {
 		[System.ComponentModel.DefaultValue( -1 )]
 		public System.Int32 EscapeCharNumber {
 			get {
-				var ec = EscapeChar;
+				var ec = this.EscapeChar;
 				return ec.HasValue
-					? System.Convert.ToInt32( myEscapeChar )
+					? System.Convert.ToInt32( ec.Value )
 					: -1
 				;
 			}
