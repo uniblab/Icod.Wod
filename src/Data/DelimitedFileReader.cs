@@ -176,7 +176,9 @@ namespace Icod.Wod.Data {
 				throw new System.ArgumentNullException( "table" );
 			}
 
-			return table.Rows.Add( this.ReadRecord( file ).ToArray() );
+			var row = this.ReadRecord( file );
+			var rowList = row.ToArray();
+			return table.Rows.Add( rowList );
 		}
 		private System.Collections.Generic.IEnumerable<System.String> ReadHeaderLine( System.IO.StreamReader file ) {
  			if ( null == file ) {

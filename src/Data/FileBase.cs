@@ -250,16 +250,26 @@ namespace Icod.Wod.Data {
 				throw new System.ArgumentNullException( "fileName" );
 			}
 
-			var table = this.BuildTable( fileName, file );
-			if ( !file.EndOfStream ) {
-				System.Int32 s = 0;
-				var skip = this.Skip;
-				while ( ( ++s < skip ) && !file.EndOfStream ) {
-					this.ReadRecord( file );
+			System.Data.DataTable table = null;
+			try {
+				table = this.BuildTable( fileName, file );
+				if ( !file.EndOfStream ) {
+					System.Int32 s = 0;
+					var skip = this.Skip;
+					while ( ( ++s < skip ) && !file.EndOfStream ) {
+						this.ReadRecord( file );
+					}
+					while ( !file.EndOfStream ) {
+						this.ReadRecord( table, file );
+					}
 				}
-				while ( !file.EndOfStream ) {
-					this.ReadRecord( table, file );
+			} catch ( System.Exception e ) {
+				if ( !e.Data.Contains( "%wod:FileName%" ) ) {
+					e.Data.Add( "%wod:FileName%", fileName );
+				} else {
+					e.Data[ "%wod:FileName%" ] = fileName;
 				}
+				throw;
 			}
 			return table;
 		}
