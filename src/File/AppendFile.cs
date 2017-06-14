@@ -11,15 +11,16 @@ namespace Icod.Wod.File {
 	public sealed class AppendFile : FileOperationBase {
 
 		#region fields
-		private FileDescriptor myDestination;
 		private System.Boolean myMove;
 		#endregion fields
 
 
 		#region .ctor
 		public AppendFile() : base() {
+			myMove = false;
 		}
 		public AppendFile( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
+			myMove = false;
 		}
 		#endregion .ctor
 
@@ -31,12 +32,8 @@ namespace Icod.Wod.File {
 			IsNullable = false
 		)]
 		public FileDescriptor Destination {
-			get {
-				return myDestination;
-			}
-			set {
-				myDestination = value;
-			}
+			get;
+			set;
 		}
 
 		[System.Xml.Serialization.XmlAttribute(
