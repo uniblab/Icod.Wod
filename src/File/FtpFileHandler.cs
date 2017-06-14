@@ -16,7 +16,7 @@ namespace Icod.Wod.File {
 
 
 		#region methods
-		protected void SetFtpClient( System.Net.FtpWebRequest client, System.String method ) {
+		private void SetFtpClient( System.Net.FtpWebRequest client, System.String method ) {
 			if ( null == client ) {
 				throw new System.ArgumentNullException( "client" );
 			}

@@ -29,7 +29,7 @@ namespace Icod.Wod.File {
 			this.Dispose( true );
 			System.GC.SuppressFinalize( this );
 		}
-		protected void Dispose( System.Boolean disposing ) {
+		private void Dispose( System.Boolean disposing ) {
 			if ( disposing ) {
 				if ( null != mySecond ) {
 					mySecond.Dispose();

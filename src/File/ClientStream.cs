@@ -12,7 +12,7 @@ namespace Icod.Wod.File {
 
 
 		#region .ctor
-		protected ClientStream() : base() {
+		private ClientStream() : base() {
 		}
 		public ClientStream( System.IO.Stream stream, System.IDisposable client, System.Boolean disposeClient ) : this() {
 			if ( null == client ) {

@@ -16,7 +16,7 @@ namespace Icod.Wod.File {
 
 
 		#region methods
-		protected void SetClient( System.Net.HttpWebRequest client, System.String method ) {
+		private void SetClient( System.Net.HttpWebRequest client, System.String method ) {
 			if ( null == client ) {
 				throw new System.ArgumentNullException( "client" );
 			}
