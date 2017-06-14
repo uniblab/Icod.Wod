@@ -87,11 +87,6 @@ namespace Icod.Wod {
 			Namespace = "http://Icod.Wod"
 		)]
 		[System.Xml.Serialization.XmlArrayItem(
-			typeof( Data.DbOperationBase ),
-			IsNullable = false,
-			Namespace = "http://Icod.Wod"
-		)]
-		[System.Xml.Serialization.XmlArrayItem(
 			typeof( Data.FileExport ),
 			IsNullable = false,
 			Namespace = "http://Icod.Wod"
@@ -136,7 +131,11 @@ namespace Icod.Wod {
 					i++;
 				}
 			} catch ( System.Exception e ) {
-				throw new Icod.Wod.WodException( e.Message, e, i, this, step );
+				var w = new System.ApplicationException( e.Message, e );
+				w.Data.Add( "StepNumber", i );
+				w.Data.Add( "WorkOrder", this );
+				w.Data.Add( "Step", step );
+				throw w;
 			}
 		}
 

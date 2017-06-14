@@ -117,8 +117,7 @@ namespace Icod.Wod.Data {
 		}
 
 		[System.Xml.Serialization.XmlAttribute(
-			"skip",
-			Namespace = "http://Icod.Wod"
+			"skip"
 		)]
 		[System.ComponentModel.DefaultValue( 0 )]
 		public System.Int32 Skip {

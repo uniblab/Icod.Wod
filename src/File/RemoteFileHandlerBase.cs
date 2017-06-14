@@ -6,6 +6,8 @@ namespace Icod.Wod.File {
 	public abstract class RemoteFileHandlerBase : FileHandlerBase {
 
 		#region .ctor
+		protected RemoteFileHandlerBase() : base() {
+		}
 		protected RemoteFileHandlerBase( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
 		}
 		protected RemoteFileHandlerBase( Icod.Wod.WorkOrder workOrder, FileDescriptor descriptor ) : base( workOrder, descriptor ) { 

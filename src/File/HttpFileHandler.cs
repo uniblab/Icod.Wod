@@ -6,6 +6,8 @@ namespace Icod.Wod.File {
 	public sealed class HttpFileHandler : RemoteFileHandlerBase {
 
 		#region .ctor
+		public HttpFileHandler() : base() {
+		}
 		public HttpFileHandler( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
 		}
 		public HttpFileHandler( Icod.Wod.WorkOrder workOrder, FileDescriptor descriptor ) : base( workOrder, descriptor ) {

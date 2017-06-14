@@ -6,6 +6,8 @@ namespace Icod.Wod.File {
 	public sealed class LocalFileHandler : FileHandlerBase {
 
 		#region .ctor
+		public LocalFileHandler() : base() {
+		}
 		public LocalFileHandler( Icod.Wod.WorkOrder workOrder ) : base( workOrder) {
 		}
 		public LocalFileHandler( Icod.Wod.WorkOrder workOrder, FileDescriptor descriptor ) : base( workOrder, descriptor ) { 

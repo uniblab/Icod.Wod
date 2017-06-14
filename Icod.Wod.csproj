@@ -105,7 +105,6 @@
   <ItemGroup>
     <Compile Include="src\ConnectionStringEntry.cs" />
     <Compile Include="src\Email.cs" />
-    <Compile Include="src\WodException.cs" />
     <Compile Include="src\StringHelper.cs" />
     <Compile Include="src\WorkOrder.cs" />
     <Compile Include="src\Interfaces\IStep.cs" />
@@ -139,7 +138,6 @@
     <Compile Include="src\Data\DbCommand.cs" />
     <Compile Include="src\Data\DbDescriptor.cs" />
     <Compile Include="src\Data\DbHelper.cs" />
-    <Compile Include="src\Data\DbOperationBase.cs" />
     <Compile Include="src\Data\DbTable.cs" />
     <Compile Include="src\Data\DelimitedFileReader.cs" />
     <Compile Include="src\Data\DelimitedFileWriter.cs" />

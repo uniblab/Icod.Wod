@@ -13,7 +13,9 @@ namespace Icod.Wod.File {
 
 
 		#region .ctor
-		protected FileHandlerBase( Icod.Wod.WorkOrder workOrder ) : base() {
+		protected FileHandlerBase() : base() {
+		}
+		protected FileHandlerBase( Icod.Wod.WorkOrder workOrder ) : this() {
 			myFileDescriptor = null;
 			myBufferLength = 16384;
 			myWorkOrder = workOrder;
