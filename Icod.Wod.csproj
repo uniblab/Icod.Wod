@@ -104,7 +104,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="src\ConnectionStringEntry.cs" />
-    <Compile Include="src\Data\DelimitedFileBase.cs" />
+    <Compile Include="src\Data\DelimitedFile.cs" />
+    <Compile Include="src\Data\FixedWidthFile.cs" />
     <Compile Include="src\Email.cs" />
     <Compile Include="src\StringHelper.cs" />
     <Compile Include="src\WorkOrder.cs" />
@@ -140,13 +141,9 @@
     <Compile Include="src\Data\DbDescriptor.cs" />
     <Compile Include="src\Data\DbHelper.cs" />
     <Compile Include="src\Data\DbTable.cs" />
-    <Compile Include="src\Data\DelimitedFileReader.cs" />
-    <Compile Include="src\Data\DelimitedFileWriter.cs" />
     <Compile Include="src\Data\FileBase.cs" />
     <Compile Include="src\Data\FileExport.cs" />
     <Compile Include="src\Data\FileImport.cs" />
-    <Compile Include="src\Data\FixedWidthFileReader.cs" />
-    <Compile Include="src\Data\FixedWidthFileWriter.cs" />
     <Compile Include="src\Data\TextFileColumn.cs" />
     <Compile Include="src\Data\Interfaces\ITableSource.cs" />
     <Compile Include="src\Data\Interfaces\ITableDestination.cs" />
