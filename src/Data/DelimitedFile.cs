@@ -207,7 +207,7 @@ namespace Icod.Wod.Data {
 			}
 			using ( var reader = new System.IO.StringReader( line ) ) {
 				System.Int32 i;
-				System.Boolean reading = true;
+				var reading = true;
 				System.Char c;
 				System.String column;
 				var ec = this.EscapeChar;
