@@ -16,6 +16,7 @@ namespace Icod.Wod.Data {
 		private System.Int32 myBufferLength;
 		private System.Boolean myAppend;
 		private System.Int32 mySkip;
+		private System.Boolean myWriteIfEmpty;
 		#endregion fields
 
 
@@ -27,6 +28,7 @@ namespace Icod.Wod.Data {
 			myBufferLength = 16384;
 			myAppend = false;
 			mySkip = 0;
+			myWriteIfEmpty = false;
 		}
 		protected FileBase( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
 			myCodePage = "windows-1252";
@@ -35,6 +37,7 @@ namespace Icod.Wod.Data {
 			myBufferLength = 16384;
 			myAppend = false;
 			mySkip = 0;
+			myWriteIfEmpty = false;
 		}
 		#endregion .ctor
 
@@ -132,6 +135,20 @@ namespace Icod.Wod.Data {
 				mySkip = value;
 			}
 		}
+
+		[System.Xml.Serialization.XmlAttribute(
+			"writeIfEmpty",
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.ComponentModel.DefaultValue( false )]
+		public System.Boolean WriteIfEmpty {
+			get {
+				return myWriteIfEmpty;
+			}
+			set {
+				myWriteIfEmpty = value;
+			}
+		}
 		#endregion properties
 
 
@@ -153,19 +170,24 @@ namespace Icod.Wod.Data {
 				throw new System.ArgumentNullException( "order" );
 			}
 
-			using ( var buffer = new System.IO.MemoryStream() ) {
-				using ( var writer = new System.IO.StreamWriter( buffer, this.GetEncoding(), this.BufferLength ) ) {
-					var table = source.ReadTables( order ).FirstOrDefault();
-					var dbColumns = table.Columns.OfType<System.Data.DataColumn>();
-					if ( this.HasHeader ) {
-						this.WriteHeader( writer, dbColumns, this.Columns );
+			using ( var table = source.ReadTables( order ).FirstOrDefault() ) {
+				var rows = table.Rows.OfType<System.Data.DataRow>();
+				if ( !rows.Any() && !this.WriteIfEmpty ) {
+					return;
+				}
+				using ( var buffer = new System.IO.MemoryStream() ) {
+					using ( var writer = new System.IO.StreamWriter( buffer, this.GetEncoding(), this.BufferLength ) ) {
+						var dbColumns = table.Columns.OfType<System.Data.DataColumn>();
+						if ( this.HasHeader ) {
+							this.WriteHeader( writer, dbColumns, this.Columns );
+						}
+						var formatMap = this.BuildFormatMap( dbColumns );
+						foreach ( var row in rows ) {
+							this.WriteRow( writer, dbColumns, this.Columns, formatMap, row );
+						}
+						writer.Flush();
+						this.WriteFile( buffer );
 					}
-					var formatMap = this.BuildFormatMap( dbColumns );
-					foreach ( var row in table.Rows.OfType<System.Data.DataRow>() ) {
-						this.WriteRow( writer, dbColumns, this.Columns, formatMap, row );
-					}
-					writer.Flush();
-					this.WriteFile( buffer );
 				}
 			}
 		}
