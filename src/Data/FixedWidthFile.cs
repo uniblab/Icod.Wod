@@ -26,9 +26,11 @@ namespace Icod.Wod.Data {
 
 		public FixedWidthFile() : base() {
 			myRecordSeparator = "\r\n";
+			myEolWriter = theEmptyEolWriter;
 		}
 		public FixedWidthFile( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
 			myRecordSeparator = "\r\n";
+			myEolWriter = theEmptyEolWriter;
 		}
 		#endregion .ctor
 
@@ -54,7 +56,7 @@ namespace Icod.Wod.Data {
 		[System.Xml.Serialization.XmlIgnore]
 		protected System.Action<System.IO.StreamWriter> EolWriter {
 			get {
-				return myEolWriter;
+				return myEolWriter ?? theEmptyEolWriter;
 			}
 		}
 		#endregion properties
