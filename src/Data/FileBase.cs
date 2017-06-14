@@ -3,9 +3,8 @@ using System.Linq;
 namespace Icod.Wod.Data {
 
 	[System.Serializable]
-	[System.Xml.Serialization.XmlInclude( typeof( DelimitedFileBase ) )]
-	[System.Xml.Serialization.XmlInclude( typeof( FixedWidthFileReader ) )]
-	[System.Xml.Serialization.XmlInclude( typeof( FixedWidthFileWriter ) )]
+	[System.Xml.Serialization.XmlInclude( typeof( DelimitedFile ) )]
+	[System.Xml.Serialization.XmlInclude( typeof( FixedWidthFile ) )]
 	public abstract class FileBase : Icod.Wod.File.FileDescriptor, ITableDestination, ITableSource {
 
 		#region fields
