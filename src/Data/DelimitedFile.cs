@@ -140,41 +140,22 @@ namespace Icod.Wod.Data {
 
 
 		#region methods
-		protected sealed override System.Data.DataTable BuildTable( System.String fileName, System.IO.StreamReader file ) {
+		protected sealed override System.Collections.Generic.IEnumerable<System.Data.DataColumn> BuildColumns( System.IO.StreamReader file ) {
 			if ( null == file ) {
 				throw new System.ArgumentNullException( "file" );
-			} else if ( System.String.IsNullOrEmpty( fileName ) ) {
-				throw new System.ArgumentNullException( "fileName" );
 			}
-
-			var output = new System.Data.DataTable();
 			if ( !this.HasHeader ) {
 				if ( !( this.Columns ?? new TextFileColumn[ 0 ] ).Any() ) {
 					throw new System.InvalidOperationException();
 				}
-				System.Data.DataColumn col;
-				System.Int32 l;
-				foreach ( var c in this.Columns ) {
-					col = new System.Data.DataColumn( c.Name );
-					l = c.Length;
-					if ( -1 != l ) {
-						col.MaxLength = l;
-					}
-					output.Columns.Add( col );
-				}
+				return this.Columns.Select(
+					x => new System.Data.DataColumn( x.Name, typeof( System.String ) )
+				);
 			} else {
-				foreach ( var c in this.ReadHeaderLine( file ) ) {
-					output.Columns.Add( new System.Data.DataColumn( c ) );
-				}
+				return this.ReadHeaderLine( file ).Select(
+					x => new System.Data.DataColumn( x, typeof( System.String ) )
+				);
 			}
-			var fileNameColumn = new System.Data.DataColumn( "%wod:FilePathName%", typeof( System.String ) );
-			fileNameColumn.AllowDBNull = false;
-			fileNameColumn.ReadOnly = true;
-			fileNameColumn.DefaultValue = fileName;
-			output.Columns.Add( fileNameColumn );
-			output.TableName = fileName;
-
-			return output;
 		}
 		protected sealed override System.Data.DataRow ReadRecord( System.Data.DataTable table, System.IO.StreamReader file ) {
 			if ( null == file ) {
