@@ -8,11 +8,10 @@ namespace Icod.Wod {
 		Namespace = "http://Icod.Wod",
 		IsNullable = false
 	)]
-	public sealed class WorkOrder {
+	public sealed class WorkOrder : StepContainerBase {
 
 		#region fields
 		private ConnectionStringEntry[] myConnectionStrings;
-		private System.Object[] mySteps;
 		[System.NonSerialized]
 		private readonly System.Collections.Generic.IDictionary<System.String,System.String> myDict;
 		#endregion fields
@@ -68,45 +67,6 @@ namespace Icod.Wod {
 			}
 			set {
 				myConnectionStrings = value;
-			}
-		}
-
-		[System.Xml.Serialization.XmlArray(
-			IsNullable = false,
-			Namespace = "http://Icod.Wod",
-			ElementName = "steps"
-		)]
-		[System.Xml.Serialization.XmlArrayItem(
-			typeof( Email ),
-			IsNullable = false,
-			Namespace = "http://Icod.Wod"
-		)]
-		[System.Xml.Serialization.XmlArrayItem(
-			typeof( File.FileOperationBase ),
-			IsNullable = false,
-			Namespace = "http://Icod.Wod"
-		)]
-		[System.Xml.Serialization.XmlArrayItem(
-			typeof( Data.FileExport ),
-			IsNullable = false,
-			Namespace = "http://Icod.Wod"
-		)]
-		[System.Xml.Serialization.XmlArrayItem(
-			typeof( Data.FileImport ),
-			IsNullable = false,
-			Namespace = "http://Icod.Wod"
-		)]
-		[System.Xml.Serialization.XmlArrayItem(
-			typeof( Data.DbCommand ),
-			IsNullable = false,
-			Namespace = "http://Icod.Wod"
-		)]
-		public System.Object[] Steps {
-			get {
-				return mySteps;
-			}
-			set {
-				mySteps = value;
 			}
 		}
 
