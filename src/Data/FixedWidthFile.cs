@@ -85,7 +85,7 @@ namespace Icod.Wod.Data {
 				col.MaxLength = l;
 				output.Columns.Add( col );
 			}
-			var fileNameColumn = new System.Data.DataColumn( "%wod:FileName%", typeof( System.String ) );
+			var fileNameColumn = new System.Data.DataColumn( "%wod:FilePathName%", typeof( System.String ) );
 			fileNameColumn.AllowDBNull = false;
 			fileNameColumn.ReadOnly = true;
 			fileNameColumn.DefaultValue = fileName;

@@ -167,7 +167,7 @@ namespace Icod.Wod.Data {
 					output.Columns.Add( new System.Data.DataColumn( c ) );
 				}
 			}
-			var fileNameColumn = new System.Data.DataColumn( "%wod:FileName%", typeof( System.String ) );
+			var fileNameColumn = new System.Data.DataColumn( "%wod:FilePathName%", typeof( System.String ) );
 			fileNameColumn.AllowDBNull = false;
 			fileNameColumn.ReadOnly = true;
 			fileNameColumn.DefaultValue = fileName;
