@@ -21,10 +21,16 @@ namespace Icod.Wod.File {
 				throw new System.ArgumentNullException( "client" );
 			}
 			var fd = this.FileDescriptor;
+			var uri = new System.Uri( fd.ExpandedPath );
+			var ub = new System.UriBuilder( fd.ExpandedPath );
+			var username = uri.UserInfo.TrimToNull() ?? ub.UserName.TrimToNull() ?? fd.Username.TrimToNull();
+			var passwd = ub.Password.TrimToNull() ?? fd.Password.TrimToNull();
+			var host = uri.Host;
+			System.Int32 port = uri.Port;
 			var credential = (System.Net.NetworkCredential)client.Credentials;
 			client.Credentials = new System.Net.NetworkCredential(
-				fd.Username.TrimToNull() ?? credential.UserName,
-				fd.Password.TrimToNull() ?? credential.Password
+				username,
+				passwd
 			);
 			client.Method = method;
 		}

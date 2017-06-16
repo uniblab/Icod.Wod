@@ -18,9 +18,10 @@ namespace Icod.Wod.File {
 		#region methods
 		private Renci.SshNet.SftpClient GetClient() {
 			var fd = this.FileDescriptor;
-			var passwd = fd.Password;
 			var uri = new System.Uri( fd.ExpandedPath );
-			var username = uri.UserInfo ?? fd.Username;
+			var ub = new System.UriBuilder( fd.ExpandedPath );
+			var username = uri.UserInfo.TrimToNull() ?? ub.UserName.TrimToNull() ?? fd.Username.TrimToNull();
+			var passwd = ub.Password.TrimToNull() ?? fd.Password.TrimToNull();
 			var host = uri.Host;
 			System.Int32 port = uri.Port;
 			return ( -1 == port )
