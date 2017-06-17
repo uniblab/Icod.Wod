@@ -8,6 +8,8 @@ namespace Icod.Wod.Data {
 	public abstract class FileBase : Icod.Wod.File.FileDescriptor, ITableDestination, ITableSource {
 
 		#region fields
+		private const System.Char SpaceChar = ' ';
+
 		private System.String myCodePage;
 		private System.Boolean myHasHeader;
 		private TextFileColumn[] myColumns;
@@ -181,7 +183,7 @@ namespace Icod.Wod.Data {
 						}
 						var formatMap = this.BuildFormatMap( dbColumns );
 						foreach ( var row in rows ) {
-							this.WriteRow( writer, dbColumns, this.Columns, formatMap, row );
+							this.WriteRow( writer, formatMap, dbColumns, row );
 						}
 						writer.Flush();
 						this.WriteFile( buffer );
@@ -213,8 +215,92 @@ namespace Icod.Wod.Data {
 			this.WriteHeader( writer, table.Columns.OfType<System.Data.DataColumn>(), this.Columns );
 		}
 		protected abstract void WriteHeader( System.IO.StreamWriter writer, System.Collections.Generic.IEnumerable<System.Data.DataColumn> dbColumns, System.Collections.Generic.IEnumerable<TextFileColumn> fileColumns );
-		protected abstract void WriteRow( System.IO.StreamWriter writer, System.Collections.Generic.IEnumerable<System.Data.DataColumn> dbColumns, System.Collections.Generic.IEnumerable<TextFileColumn> fileColumns, System.Collections.Generic.IDictionary<System.Data.DataColumn, TextFileColumn> formatMap, System.Data.DataRow row );
-		protected abstract void WriteFile( System.IO.Stream stream );
+		protected virtual void WriteFile( System.IO.Stream stream ) {
+			if ( null == stream ) {
+				throw new System.ArgumentNullException( "stream" );
+			}
+			var handler = this.GetFileHandler( this.WorkOrder );
+			var dfpn = handler.PathCombine( this.ExpandedPath, this.ExpandedName );
+			stream.Seek( 0, System.IO.SeekOrigin.Begin );
+			if ( this.Append ) {
+				handler.Append( stream, dfpn );
+			} else {
+				handler.Overwrite( stream, dfpn );
+			}
+		}
+
+		protected virtual void WriteRow( System.IO.StreamWriter writer, System.Collections.Generic.IDictionary<System.Data.DataColumn, TextFileColumn> formatMap, System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Data.DataRow row ) {
+			if ( null == row ) {
+				throw new System.ArgumentNullException( "row" );
+			} else if ( ( null == columns ) || !columns.Any() ) {
+				throw new System.ArgumentNullException( "columns" );
+			} else if ( ( null == formatMap ) || !formatMap.Any() ) {
+				throw new System.ArgumentNullException( "formatMap" );
+			} else if ( null == writer ) {
+				throw new System.ArgumentNullException( "writer" );
+			}
+
+			writer.WriteLine( GetRow( formatMap, columns, row ) );
+		}
+		protected virtual System.String GetRow( System.Collections.Generic.IDictionary<System.Data.DataColumn, TextFileColumn> formatMap, System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Data.DataRow row ) {
+			if ( null == row ) {
+				throw new System.ArgumentNullException( "row" );
+			} else if ( ( null == columns ) || !columns.Any() ) {
+				throw new System.ArgumentNullException( "columns" );
+			} else if ( ( null == formatMap ) || !formatMap.Any() ) {
+				throw new System.ArgumentNullException( "formatMap" );
+			}
+
+			return System.String.Join( System.String.Empty, columns.Select(
+				x => this.GetColumn( 
+					formatMap.ContainsKey( x )
+						? formatMap[ x ] ?? new TextFileColumn( x.ColumnName )
+						: new TextFileColumn( x.ColumnName )
+					,
+					x,
+					row
+				)
+			) );
+		}
+		protected virtual System.Collections.Generic.IEnumerable<System.String> GetColumns( System.Collections.Generic.IDictionary<System.Data.DataColumn, TextFileColumn> formatMap, System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Data.DataRow row ) {
+			if ( null == row ) {
+				throw new System.ArgumentNullException( "row" );
+			} else if ( ( null == columns ) || !columns.Any() ) {
+				throw new System.ArgumentNullException( "columns" );
+			} else if ( ( null == formatMap ) || !formatMap.Any() ) {
+				throw new System.ArgumentNullException( "formatMap" );
+			}
+
+			return columns.Select(
+				x => this.GetColumn( 
+					formatMap.ContainsKey( x )
+						? formatMap[ x ] ?? new TextFileColumn( x.ColumnName )
+						: new TextFileColumn( x.ColumnName )
+					,
+					x,
+					row
+				)
+			);
+		}
+		protected virtual System.String GetColumn( TextFileColumn format, System.Data.DataColumn column, System.Data.DataRow row ) {
+			if ( null == row ) {
+				throw new System.ArgumentNullException( "row" );
+			} else if ( null == column ) {
+				throw new System.ArgumentNullException( "column" );
+			}
+
+
+			if ( null == format ) {
+				format = new TextFileColumn( column.ColumnName );
+			}
+			var s = System.String.Format( format.FormatString ?? "{0}", row[ column ] ?? System.String.Empty );
+			if ( 0 < format.Length ) {
+				var l = format.Length;
+				var w = l - s.Length;
+				s = s.PadLeft( w, SpaceChar );
+			}
+			return s;
+		}
 
 		public virtual System.Collections.Generic.IEnumerable<System.Data.DataTable> ReadTables( Icod.Wod.WorkOrder order ) {
 			this.WorkOrder = order;
@@ -239,7 +325,6 @@ namespace Icod.Wod.Data {
 			return new System.IO.StreamReader( this.GetFileHandler( this.WorkOrder ).OpenReader( file.File ), this.GetEncoding(), true, this.BufferLength );
 		}
 
-		protected abstract System.Collections.Generic.IEnumerable<System.Data.DataColumn> BuildColumns( System.IO.StreamReader file );
 		protected virtual System.Data.DataTable BuildTable( System.String fileName, System.IO.StreamReader file ) {
 			if ( null == file ) {
 				throw new System.ArgumentNullException( "file" );
@@ -260,7 +345,9 @@ namespace Icod.Wod.Data {
 
 			return output;
 		}
+		protected abstract System.Collections.Generic.IEnumerable<System.Data.DataColumn> BuildColumns( System.IO.StreamReader file );
 		protected abstract System.Data.DataRow ReadRecord( System.Data.DataTable table, System.IO.StreamReader file );
+		protected abstract System.Collections.Generic.IEnumerable<System.String> ReadRecord( System.IO.StreamReader file );
 		protected virtual System.Data.DataTable ReadFile( System.String fileName, System.IO.StreamReader file ) {
 			if ( null == file ) {
 				throw new System.ArgumentNullException( "file" );
@@ -291,8 +378,6 @@ namespace Icod.Wod.Data {
 			}
 			return table;
 		}
-
-		protected abstract System.Collections.Generic.IEnumerable<System.String> ReadRecord( System.IO.StreamReader file );
 		#endregion methods
 
 	}

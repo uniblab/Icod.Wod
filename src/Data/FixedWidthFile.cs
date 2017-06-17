@@ -140,37 +140,6 @@ namespace Icod.Wod.Data {
 			writer.Write( line );
 			this.EolWriter( writer );
 		}
-		protected sealed override void WriteRow( System.IO.StreamWriter writer, System.Collections.Generic.IEnumerable<System.Data.DataColumn> dbColumns, System.Collections.Generic.IEnumerable<TextFileColumn> fileColumns, System.Collections.Generic.IDictionary<System.Data.DataColumn, TextFileColumn> formatMap, System.Data.DataRow row ) {
-			if ( null == row ) {
-				throw new System.ArgumentNullException( "row" );
-			} else if ( ( null == formatMap ) || !formatMap.Any() ) {
-				throw new System.ArgumentNullException( "formatMap" );
-			} else if ( ( null == dbColumns ) || !dbColumns.Any() ) {
-				throw new System.ArgumentNullException( "columns" );
-			} else if ( null == writer ) {
-				throw new System.ArgumentNullException( "writer" );
-			}
-
-			TextFileColumn tfc = null;
-			foreach ( var dbCol in dbColumns ) {
-				tfc = formatMap[ dbCol ];
-				writer.Write( System.String.Format( tfc.FormatString ?? "{0}", row[ dbCol ] ?? System.String.Empty ).PadRight( tfc.Length ).Substring( 0, tfc.Length ) );
-			}
-			this.EolWriter( writer );
-		}
-		protected sealed override void WriteFile( System.IO.Stream stream ) {
-			if ( null == stream ) {
-				throw new System.ArgumentNullException( "stream" );
-			}
-			var handler = this.GetFileHandler( this.WorkOrder );
-			var dfpn = handler.PathCombine( this.ExpandedPath, this.ExpandedName );
-			stream.Seek( 0, System.IO.SeekOrigin.Begin );
-			if ( this.Append ) {
-				handler.Append( stream, dfpn );
-			} else {
-				handler.Overwrite( stream, dfpn );
-			}
-		}
 		#endregion  methods
 
 	}

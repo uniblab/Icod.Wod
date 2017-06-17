@@ -264,53 +264,25 @@ namespace Icod.Wod.Data {
 				x => x.ColumnName
 			).ToArray() ) );
 		}
-		protected sealed override void WriteRow( System.IO.StreamWriter writer, System.Collections.Generic.IEnumerable<System.Data.DataColumn> dbColumns, System.Collections.Generic.IEnumerable<TextFileColumn> fileColumns, System.Collections.Generic.IDictionary<System.Data.DataColumn, TextFileColumn> formatMap, System.Data.DataRow row ) {
+		protected sealed override System.String GetRow( System.Collections.Generic.IDictionary<System.Data.DataColumn, TextFileColumn> formatMap, System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Data.DataRow row ) {
 			if ( null == row ) {
 				throw new System.ArgumentNullException( "row" );
+			} else if ( ( null == columns ) || !columns.Any() ) {
+				throw new System.ArgumentNullException( "columns" );
 			} else if ( ( null == formatMap ) || !formatMap.Any() ) {
 				throw new System.ArgumentNullException( "formatMap" );
-			} else if ( ( null == dbColumns ) || !dbColumns.Any() ) {
-				throw new System.ArgumentNullException( "dbColumns" );
-			} else if ( null == writer ) {
-				throw new System.ArgumentNullException( "writer" );
 			}
 
-
-			var s = this.FieldSeparatorString;
-			System.String q = this.QuoteCharString;
-			System.Collections.Generic.IList<System.String> line = new System.Collections.Generic.List<System.String>();
-			System.String c = null;
-			System.Text.StringBuilder cb = null;
-			foreach ( var col in dbColumns ) {
-				c = System.String.Format( formatMap[ col ].FormatString ?? "{0}", row[ col ] ?? System.String.Empty );
-				if ( c.Contains( s ) ) {
-					cb = new System.Text.StringBuilder();
-					if ( !c.StartsWith( q ) ) {
-						cb.Append( q );
-					}
-					cb.Append( c );
-					if ( !c.EndsWith( q ) ) {
-						cb.Append( q );
-					}
-					line.Add( cb.ToString() );
-				} else {
-					line.Add( c );
-				}
-			}
-			writer.WriteLine( System.String.Join( s, line ) );
-		}
-		protected sealed override void WriteFile( System.IO.Stream stream ) {
-			if ( null == stream ) {
-				throw new System.ArgumentNullException( "stream" );
-			}
-			var handler = this.GetFileHandler( this.WorkOrder );
-			var dfpn = handler.PathCombine( this.ExpandedPath, this.ExpandedName );
-			stream.Seek( 0, System.IO.SeekOrigin.Begin );
-			if ( this.Append ) {
-				handler.Append( stream, dfpn );
-			} else {
-				handler.Overwrite( stream, dfpn );
-			}
+			return System.String.Join( this.FieldSeparatorString, columns.Select(
+				x => this.GetColumn( 
+					formatMap.ContainsKey( x )
+						? formatMap[ x ] ?? new TextFileColumn( x.ColumnName )
+						: new TextFileColumn( x.ColumnName )
+					,
+					x,
+					row
+				)
+			) );
 		}
 		#endregion methods
 
