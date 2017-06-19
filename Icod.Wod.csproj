@@ -107,6 +107,8 @@
     <Compile Include="src\Data\DelimitedFile.cs" />
     <Compile Include="src\Data\FixedWidthFile.cs" />
     <Compile Include="src\Email.cs" />
+    <Compile Include="src\File\ListBase.cs" />
+    <Compile Include="src\File\ListFileNames.cs" />
     <Compile Include="src\Parallel.cs" />
     <Compile Include="src\StepContainerBase.cs" />
     <Compile Include="src\StringHelper.cs" />

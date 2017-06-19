@@ -4,6 +4,7 @@ namespace Icod.Wod.File {
 	[System.Xml.Serialization.XmlInclude( typeof( CopyFile ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( DeleteFile ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( GZipFile ) )]
+	[System.Xml.Serialization.XmlInclude( typeof( ListFileNames ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( MkDir ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( RenameFile ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( RmDir ) )]

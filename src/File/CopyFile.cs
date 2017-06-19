@@ -11,7 +11,6 @@ namespace Icod.Wod.File {
 	public sealed class CopyFile : FileOperationBase {
 
 		#region fields
-		private FileDescriptor myDestination;
 		private System.Boolean myMove;
 
 		private static readonly System.Action<System.String, System.String> theMoveFile;
@@ -43,12 +42,8 @@ namespace Icod.Wod.File {
 			IsNullable = false 
 		)]
 		public FileDescriptor Destination {
-			get {
-				return myDestination;
-			}
-			set {
-				myDestination = value;
-			}
+			get;
+			set;
 		}
 
 		[System.Xml.Serialization.XmlAttribute(
