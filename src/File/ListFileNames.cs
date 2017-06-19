@@ -8,7 +8,7 @@ namespace Icod.Wod.File {
 		Namespace = "http://Icod.Wod",
 		IncludeInSchema = true
 	)]
-	public sealed class ListFileNames : ListBase {
+	internal sealed class ListFileNames : ListBase {
 
 		#region .ctor
 		public ListFileNames() : base() {

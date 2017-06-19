@@ -2,7 +2,7 @@
 
 namespace Icod.Wod.File {
 
-	public abstract class ListBase : FileOperationBase {
+	internal abstract class ListBase : FileOperationBase {
 
 		#region fields
 		private System.String myCodePage;
