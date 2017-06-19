@@ -104,6 +104,7 @@ namespace Icod.Wod {
 			if ( System.String.IsNullOrEmpty( @string ) ) {
 				return null;
 			}
+			@string = System.Environment.ExpandEnvironmentVariables( @string );
 			if ( @string.Contains( "%wod:DateTime-" ) ) {
 				var now = System.DateTime.Now;
 				var yy = now.ToString( "yy" );
@@ -129,6 +130,7 @@ namespace Icod.Wod {
 			}
 			@string = @string.Replace( "%wod:EmailTo%", this.EmailTo );
 			@string = @string.Replace( "%wod:JobName%", this.JobName );
+			@string = System.Environment.ExpandEnvironmentVariables( @string );
 			return @string;
 		}
 		#endregion methods
