@@ -42,16 +42,6 @@ namespace Icod.Wod.File {
 
 
 		#region properties
-		[System.Xml.Serialization.XmlElement(
-			"destination",
-			Namespace = "http://Icod.Wod",
-			IsNullable = false
-		)]
-		public FileDescriptor Destination {
-			get;
-			set;
-		}
-
 		[System.Xml.Serialization.XmlAttribute(
 			"codePage",
 			Namespace = "http://Icod.Wod"
@@ -122,16 +112,11 @@ namespace Icod.Wod.File {
 				throw new System.ArgumentNullException( "order" );
 			}
 			this.WorkOrder = order;
-			this.Destination.WorkOrder = order;
-			var dest = this.Destination.GetFileHandler( order );
 			var source = this.GetFileHandler( order );
-			if ( null == dest ) {
-				throw new System.ArgumentNullException( "dest" );
-			} else if ( null == source ) {
+			if ( null == source ) {
 				throw new System.ArgumentNullException( "source" );
 			}
 
-			var fd = dest.FileDescriptor;
 			var sd = source.FileDescriptor;
 			var enc = this.GetEncoding();
 			System.Collections.Generic.IList<System.String> lines;
@@ -163,7 +148,7 @@ namespace Icod.Wod.File {
 						}
 					}
 					buffer.Seek( 0, System.IO.SeekOrigin.Begin );
-					dest.Overwrite( buffer, dest.PathCombine( fd.ExpandedPath, fd.ExpandedName ?? System.IO.Path.GetFileName( filePathName ) ) );
+					source.Overwrite( buffer, filePathName );
 				}
 			}
 		}

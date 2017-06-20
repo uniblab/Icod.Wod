@@ -254,7 +254,7 @@ namespace Icod.Wod.Data {
 				}
 			} while ( reading );
 			var output = sb.ToString().TrimToNull();
-			yield return ( this.ConvertEmptyStringToNull ) ? output : output ?? System.String.Empty;
+			return ( this.ConvertEmptyStringToNull ) ? output : output ?? System.String.Empty;
 		}
  
 
