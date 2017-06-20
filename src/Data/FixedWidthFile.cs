@@ -10,56 +10,12 @@ namespace Icod.Wod.Data {
 	)]
 	public class FixedWidthFile : FileBase {
 
-		#region fields
-		private static readonly System.Action<System.IO.StreamWriter> theEmptyEolWriter;
-
-		private System.String myRecordSeparator;
-		private System.Action<System.IO.StreamWriter> myEolWriter;
-		#endregion fields
-
-
 		#region .ctor
-		static FixedWidthFile() {
-			theEmptyEolWriter = x => {
-			};
-		}
-
 		public FixedWidthFile() : base() {
-			myRecordSeparator = "\r\n";
-			myEolWriter = theEmptyEolWriter;
 		}
 		public FixedWidthFile( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
-			myRecordSeparator = "\r\n";
-			myEolWriter = theEmptyEolWriter;
 		}
 		#endregion .ctor
-
-
-		#region properties
-		[System.Xml.Serialization.XmlAttribute(
-			"recordSeparator",
-			Namespace = "http://Icod.Wod"
-		)]
-		[System.ComponentModel.DefaultValue( "\r\n" )]
-		public System.String RecordSeparator {
-			get {
-				return myRecordSeparator;
-			}
-			set {
-				myRecordSeparator = value;
-				myEolWriter = System.String.IsNullOrEmpty( value )
-					? theEmptyEolWriter
-					: x => x.Write( myRecordSeparator )
-				;
-			}
-		}
-		[System.Xml.Serialization.XmlIgnore]
-		protected System.Action<System.IO.StreamWriter> EolWriter {
-			get {
-				return myEolWriter ?? theEmptyEolWriter;
-			}
-		}
-		#endregion properties
 
 
 		#region methods
