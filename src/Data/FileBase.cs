@@ -372,7 +372,7 @@ namespace Icod.Wod.Data {
 			foreach ( var column in this.BuildColumns( file ) ) {
 				output.Columns.Add( column );
 			}
-			var fileNameColumn = new System.Data.DataColumn( "%wod:FilePathName%", typeof( System.String ) );
+			var fileNameColumn = new System.Data.DataColumn( "%wod:FileName%", typeof( System.String ) );
 			fileNameColumn.AllowDBNull = false;
 			fileNameColumn.ReadOnly = true;
 			fileNameColumn.DefaultValue = fileName;
