@@ -20,6 +20,7 @@ namespace Icod.Wod.Data {
 		private System.Boolean myWriteIfEmpty;
 		private System.String myRecordSeparator;
 		private System.Action<System.IO.StreamWriter> myEolWriter;
+		private System.Boolean myConvertEmptyStringToNull;
 		#endregion fields
 
 
@@ -38,6 +39,7 @@ namespace Icod.Wod.Data {
 			myWriteIfEmpty = false;
 			myRecordSeparator = "\r\n";
 			myEolWriter = theEmptyEolWriter;
+			myConvertEmptyStringToNull = true;
 		}
 		protected FileBase( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
 			myCodePage = "windows-1252";
@@ -49,6 +51,7 @@ namespace Icod.Wod.Data {
 			myWriteIfEmpty = false;
 			myRecordSeparator = "\r\n";
 			myEolWriter = theEmptyEolWriter;
+			myConvertEmptyStringToNull = true;
 		}
 		#endregion .ctor
 
@@ -183,6 +186,20 @@ namespace Icod.Wod.Data {
 					? theEmptyEolWriter
 					: x => x.Write( myRecordSeparator )
 				;
+			}
+		}
+
+		[System.Xml.Serialization.XmlAttribute(
+			"convertEmptyStringToNull",
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.ComponentModel.DefaultValue( true )]
+		public System.Boolean ConvertEmptyStringToNull {
+			get {
+				return myConvertEmptyStringToNull;
+			}
+			set {
+				myConvertEmptyStringToNull = value;
 			}
 		}
 		#endregion properties

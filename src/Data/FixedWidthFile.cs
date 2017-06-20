@@ -64,9 +64,11 @@ namespace Icod.Wod.Data {
 			var record = new System.String( buffer, 0, r );
 			System.Int32 l;
 			System.Int32 i = 0;
+			System.String output;
 			foreach ( var c in cols ) {
 				l = c.MaxLength;
-				yield return record.Substring( i, l ).TrimToNull();
+				output = record.Substring( i, l ).TrimToNull();
+				yield return ( this.ConvertEmptyStringToNull ) ? output : output ?? System.String.Empty;
 				i += l;
 			}
 		}

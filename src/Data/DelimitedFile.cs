@@ -253,9 +253,10 @@ namespace Icod.Wod.Data {
 					sb.Append( c );
 				}
 			} while ( reading );
-			return sb.ToString().TrimToNull();
+			var output = sb.ToString().TrimToNull();
+			yield return ( this.ConvertEmptyStringToNull ) ? output : output ?? System.String.Empty;
 		}
-
+ 
 
 		protected sealed override void WriteHeader( System.IO.StreamWriter writer, System.Collections.Generic.IEnumerable<System.Data.DataColumn> dbColumns, System.Collections.Generic.IEnumerable<TextFileColumn> fileColumns ) {
 			if ( ( null == dbColumns ) || !dbColumns.Any() ) {
