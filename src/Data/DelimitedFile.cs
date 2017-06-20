@@ -210,6 +210,7 @@ namespace Icod.Wod.Data {
 				}
 				j++;
 			} while ( isReading );
+			line.Remove( line.Length - maxI, maxI );
 			return line.ToString();
 		}
 		protected sealed override System.Collections.Generic.IEnumerable<System.String> ReadRecord( System.IO.StreamReader file ) {
@@ -239,13 +240,13 @@ namespace Icod.Wod.Data {
 						break;
 					}
 					c = System.Convert.ToChar( i );
-					if ( ec.HasValue && ( ec.Value == c ) ) {
+					if ( ec.HasValue && ( ec.Value.Equals( c ) ) ) {
 						reader.Read();
 						column = this.ReadNormalColumn( reader, System.Convert.ToChar( reader.Read() ) );
 						yield return column;
-					} else if ( qc == c ) {
+					} else if ( qc.Equals( c ) ) {
 						reader.Read();
-						column = this.ReadQuotedColumn( reader, System.Convert.ToChar( reader.Read() ) );
+						column = this.ReadQuotedColumn( reader, null );
 						yield return column;
 					} else {
 						column = this.ReadNormalColumn( reader, null );
