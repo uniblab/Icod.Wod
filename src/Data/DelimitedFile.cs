@@ -176,13 +176,52 @@ namespace Icod.Wod.Data {
 			return output;
 		}
 
+		private System.String ReadLine( System.IO.StreamReader file ) {
+			if ( null == file ) {
+				throw new System.ArgumentNullException( "file" );
+			} else if ( file.EndOfStream ) {
+				return null;
+			} else if ( System.String.IsNullOrEmpty( this.RecordSeparator ) ) {
+				throw new System.InvalidOperationException();
+			}
+
+			System.Boolean isReading = true;
+			var rs = this.RecordSeparator.ToCharArray();
+			System.Int32 i = 0;
+			var maxI = rs.Length;
+			var line = new System.Text.StringBuilder();
+			System.Int32 j = 0;
+			System.Int32 c;
+			do {
+				c = file.Read();
+				if ( -1 == c ) {
+					isReading = false;
+					break;
+				}
+				line.Append( System.Convert.ToChar( c ) );
+				if ( line[ j ].Equals( rs[ i ] ) ) {
+					i++;
+				} else {
+					i = 0;
+				}
+				if ( i == maxI ) {
+					isReading = false;
+					break;
+				}
+				j++;
+			} while ( isReading );
+			return line.ToString();
+		}
 		protected sealed override System.Collections.Generic.IEnumerable<System.String> ReadRecord( System.IO.StreamReader file ) {
 			if ( null == file ) {
 				throw new System.ArgumentNullException( "file" );
 			} else if ( file.EndOfStream ) {
 				yield break;
+			} else if ( System.String.IsNullOrEmpty( this.RecordSeparator ) ) {
+				throw new System.InvalidOperationException();
 			}
-			var line = file.ReadLine();
+
+			var line = this.ReadLine( file );
 			if ( null == line ) {
 				yield break;
 			}

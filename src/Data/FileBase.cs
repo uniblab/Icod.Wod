@@ -8,6 +8,7 @@ namespace Icod.Wod.Data {
 	public abstract class FileBase : Icod.Wod.File.FileDescriptor, ITableDestination, ITableSource {
 
 		#region fields
+		private static readonly System.Action<System.IO.StreamWriter> theEmptyEolWriter;
 		private const System.Char SpaceChar = ' ';
 
 		private System.String myCodePage;
@@ -17,10 +18,16 @@ namespace Icod.Wod.Data {
 		private System.Boolean myAppend;
 		private System.Int32 mySkip;
 		private System.Boolean myWriteIfEmpty;
+		private System.String myRecordSeparator;
+		private System.Action<System.IO.StreamWriter> myEolWriter;
 		#endregion fields
 
 
 		#region .ctor
+		static FileBase() {
+			theEmptyEolWriter = x => {};
+		}
+
 		protected FileBase() : base() {
 			myCodePage = "windows-1252";
 			myHasHeader = true;
@@ -29,6 +36,8 @@ namespace Icod.Wod.Data {
 			myAppend = false;
 			mySkip = 0;
 			myWriteIfEmpty = false;
+			myRecordSeparator = "\r\n";
+			myEolWriter = theEmptyEolWriter;
 		}
 		protected FileBase( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
 			myCodePage = "windows-1252";
@@ -38,6 +47,8 @@ namespace Icod.Wod.Data {
 			myAppend = false;
 			mySkip = 0;
 			myWriteIfEmpty = false;
+			myRecordSeparator = "\r\n";
+			myEolWriter = theEmptyEolWriter;
 		}
 		#endregion .ctor
 
@@ -147,6 +158,31 @@ namespace Icod.Wod.Data {
 			}
 			set {
 				myWriteIfEmpty = value;
+			}
+		}
+
+		[System.Xml.Serialization.XmlIgnore]
+		protected System.Action<System.IO.StreamWriter> EolWriter {
+			get {
+				return myEolWriter ?? theEmptyEolWriter;
+			}
+		}
+
+		[System.Xml.Serialization.XmlAttribute(
+			"recordSeparator",
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.ComponentModel.DefaultValue( "\r\n" )]
+		public System.String RecordSeparator {
+			get {
+				return myRecordSeparator;
+			}
+			set {
+				myRecordSeparator = value;
+				myEolWriter = System.String.IsNullOrEmpty( value )
+					? theEmptyEolWriter
+					: x => x.Write( myRecordSeparator )
+				;
 			}
 		}
 		#endregion properties
