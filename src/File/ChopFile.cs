@@ -59,7 +59,7 @@ namespace Icod.Wod.File {
 			"lines",
 			Namespace = "http://Icod.Wod"
 		)]
-		[System.ComponentModel.DefaultValue( "\r\n" )]
+		[System.ComponentModel.DefaultValue( 0 )]
 		public System.Int32 Lines {
 			get {
 				return myLines;
@@ -115,6 +115,9 @@ namespace Icod.Wod.File {
 			var source = this.GetFileHandler( order );
 			if ( null == source ) {
 				throw new System.ArgumentNullException( "source" );
+			}
+			if ( 0 == this.Lines ) {
+				return;
 			}
 
 			var sd = source.FileDescriptor;
