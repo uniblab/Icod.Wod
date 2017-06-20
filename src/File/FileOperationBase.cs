@@ -1,6 +1,7 @@
 namespace Icod.Wod.File {
 
 	[System.Xml.Serialization.XmlInclude( typeof( AppendFile ) )]
+	[System.Xml.Serialization.XmlInclude( typeof( ChopFile ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( CopyFile ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( DeleteFile ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( GZipFile ) )]

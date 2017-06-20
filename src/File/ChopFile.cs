@@ -107,7 +107,7 @@ namespace Icod.Wod.File {
 
 
 		#region methods
-		public virtual System.Text.Encoding GetEncoding() {
+		public System.Text.Encoding GetEncoding() {
 			var cp = this.CodePage;
 			System.Int32 cpNumber;
 			if ( System.Int32.TryParse( cp, out cpNumber ) ) {
