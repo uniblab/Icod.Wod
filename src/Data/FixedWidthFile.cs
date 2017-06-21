@@ -69,11 +69,10 @@ namespace Icod.Wod.Data {
 				? ( a, b, c ) => w( a, b, c ).TrimToNull()
 				: w
 			;
-			System.Func<System.String, System.Int32, System.Int32, System.String> e = ( this.ConvertEmptyStringToNull )
+			var getColValue = = ( this.ConvertEmptyStringToNull )
 				? ( a, b, c ) => q( a, b, c ) ?? System.String.Empty
 				: q
 			;
-			var getColValue = e;
 			foreach ( var c in cols ) {
 				l = c.MaxLength;
 				yield return getColValue( record, i, l );

@@ -239,11 +239,10 @@ namespace Icod.Wod.Data {
 				? a => w( a ).TrimToNull()
 				: w
 			;
-			System.Func<System.Text.StringBuilder, System.String> e = ( this.ConvertEmptyStringToNull )
+			var getColValue = ( this.ConvertEmptyStringToNull )
 				? a => q( a ) ?? System.String.Empty
 				: q
 			;
-			var getColValue = e;
 			do {
 				i = reader.Read();
 				if ( -1 == i ) {
