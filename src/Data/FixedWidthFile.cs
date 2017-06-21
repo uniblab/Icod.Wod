@@ -64,11 +64,19 @@ namespace Icod.Wod.Data {
 			var record = new System.String( buffer, 0, r );
 			System.Int32 l;
 			System.Int32 i = 0;
-			System.String output;
+			System.Func<System.String, System.Int32, System.Int32, System.String> w = ( a, b, c ) => a.Substring( b, c );
+			System.Func<System.String, System.Int32, System.Int32, System.String> q = ( this.TrimValues )
+				? ( a, b, c ) => w( a, b, c ).TrimToNull()
+				: w
+			;
+			System.Func<System.String, System.Int32, System.Int32, System.String> e = ( this.ConvertEmptyStringToNull )
+				? ( a, b, c ) => q( a, b, c ) ?? System.String.Empty
+				: q
+			;
+			var getColValue = e;
 			foreach ( var c in cols ) {
 				l = c.MaxLength;
-				output = record.Substring( i, l ).TrimToNull();
-				yield return ( this.ConvertEmptyStringToNull ) ? output : output ?? System.String.Empty;
+				yield return getColValue( record, i, l );
 				i += l;
 			}
 		}

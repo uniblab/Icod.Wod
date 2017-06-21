@@ -21,6 +21,7 @@ namespace Icod.Wod.Data {
 		private System.String myRecordSeparator;
 		private System.Action<System.IO.StreamWriter> myEolWriter;
 		private System.Boolean myConvertEmptyStringToNull;
+		private System.Boolean myTrimValues;
 		#endregion fields
 
 
@@ -40,6 +41,7 @@ namespace Icod.Wod.Data {
 			myRecordSeparator = "\r\n";
 			myEolWriter = theEmptyEolWriter;
 			myConvertEmptyStringToNull = true;
+			myTrimValues = true;
 		}
 		protected FileBase( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
 			myCodePage = "windows-1252";
@@ -52,6 +54,7 @@ namespace Icod.Wod.Data {
 			myRecordSeparator = "\r\n";
 			myEolWriter = theEmptyEolWriter;
 			myConvertEmptyStringToNull = true;
+			myTrimValues = true;
 		}
 		#endregion .ctor
 
@@ -200,6 +203,20 @@ namespace Icod.Wod.Data {
 			}
 			set {
 				myConvertEmptyStringToNull = value;
+			}
+		}
+
+		[System.Xml.Serialization.XmlAttribute(
+			"trimValues",
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.ComponentModel.DefaultValue( true )]
+		public System.Boolean TrimValues {
+			get {
+				return myTrimValues;
+			}
+			set {
+				myTrimValues = value;
 			}
 		}
 		#endregion properties

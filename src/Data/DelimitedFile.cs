@@ -230,31 +230,40 @@ namespace Icod.Wod.Data {
 			if ( first.HasValue ) {
 				sb.Append( first.Value );
 			}
-			System.Char c;
+			System.Char ch;
 			System.Int32 i;
 			System.Boolean reading = true;
 			var ec = this.EscapeChar;
+			System.Func<System.Text.StringBuilder, System.String> w = a => a.ToString();
+			System.Func<System.Text.StringBuilder, System.String> q = ( this.TrimValues )
+				? a => w( a ).TrimToNull()
+				: w
+			;
+			System.Func<System.Text.StringBuilder, System.String> e = ( this.ConvertEmptyStringToNull )
+				? a => q( a ) ?? System.String.Empty
+				: q
+			;
+			var getColValue = e;
 			do {
 				i = reader.Read();
 				if ( -1 == i ) {
 					reading = false;
 					break;
 				}
-				c = System.Convert.ToChar( i );
-				if ( ec.HasValue && ( ec.Value == c ) ) {
-					c = System.Convert.ToChar( reader.Read() );
-				} else if ( @break == c ) {
+				ch = System.Convert.ToChar( i );
+				if ( ec.HasValue && ( ec.Value == ch ) ) {
+					ch = System.Convert.ToChar( reader.Read() );
+				} else if ( @break == ch ) {
 					if ( readNextOnBreak ) {
 						reader.Read();
 					}
 					reading = false;
 				}
 				if ( reading ) {
-					sb.Append( c );
+					sb.Append( ch );
 				}
 			} while ( reading );
-			var output = sb.ToString().TrimToNull();
-			return ( this.ConvertEmptyStringToNull ) ? output : output ?? System.String.Empty;
+			return getColValue( sb );
 		}
  
 
