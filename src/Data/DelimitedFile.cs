@@ -16,6 +16,7 @@ namespace Icod.Wod.Data {
 		private System.Char myQuoteChar;
 		private System.String myQuoteCharString;
 		private System.Nullable<System.Char> myEscapeChar;
+		private System.Func<System.Text.StringBuilder, System.String> myColumnReader;
 		#endregion fields
 
 
@@ -26,6 +27,7 @@ namespace Icod.Wod.Data {
 			myQuoteChar = '\"';
 			myQuoteCharString = myQuoteChar.ToString();
 			myEscapeChar = null;
+			myColumnReader = x => x.ToString().TrimToNull();
 		}
 		public DelimitedFile( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
 			myFieldSeparator = '\t';
@@ -33,6 +35,7 @@ namespace Icod.Wod.Data {
 			myQuoteChar = '\"';
 			myQuoteCharString = myQuoteChar.ToString();
 			myEscapeChar = null;
+			myColumnReader = x => x.ToString().TrimToNull();
 		}
 		#endregion .ctor
 
@@ -134,6 +137,51 @@ namespace Icod.Wod.Data {
 			}
 			set {
 				myEscapeChar = value;
+			}
+		}
+
+		public sealed override System.Boolean ConvertEmptyStringToNull {
+			get {
+				return base.ConvertEmptyStringToNull;
+			}
+			set {
+				base.ConvertEmptyStringToNull = value;
+				System.Func<System.Text.StringBuilder, System.String> w = a => a.ToString();
+				var q = ( this.TrimValues )
+					? a => w( a ).TrimToNull()
+					: w
+				;
+				this.ColumnReader = ( value )
+					? a => q( a ) ?? System.String.Empty
+					: q
+				;
+			}
+		}
+
+		public sealed override System.Boolean TrimValues {
+			get {
+				return base.TrimValues;
+			}
+			set {
+				base.TrimValues = value;
+				System.Func<System.Text.StringBuilder, System.String> w = a => a.ToString();
+				var q = ( value )
+					? a => w( a ).TrimToNull()
+					: w
+				;
+				this.ColumnReader = ( this.ConvertEmptyStringToNull ) 
+					? a => q( a ) ?? System.String.Empty 
+					: q
+				;
+			}
+		}
+
+		protected System.Func<System.Text.StringBuilder, System.String> ColumnReader {
+			get {
+				return myColumnReader;
+			}
+			set {
+				myColumnReader = value;
 			}
 		}
 		#endregion properties
@@ -253,12 +301,7 @@ namespace Icod.Wod.Data {
 					sb.Append( ch );
 				}
 			} while ( reading );
-			System.Func<System.Text.StringBuilder, System.String> w = a => a.ToString();
-			var q = ( this.TrimValues )
-				? a => w( a ).TrimToNull()
-				: w
-			;
-			return ( this.ConvertEmptyStringToNull ) ? q( sb ) ?? System.String.Empty : q( sb );
+			return this.ColumnReader( sb );
 		}
  
 

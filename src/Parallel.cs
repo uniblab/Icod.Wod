@@ -7,12 +7,50 @@ namespace Icod.Wod {
 		"parallel",
 		Namespace = "http://Icod.Wod"
 	)]
-	public sealed class Parallel : StepContainerBase, IStep {
+	public sealed class Parallel : IStep {
 
 		#region .ctor
 		public Parallel() : base() {
 		}
 		#endregion .ctor
+
+
+		#region properties
+		[System.Xml.Serialization.XmlArray(
+			IsNullable = false,
+			Namespace = "http://Icod.Wod",
+			ElementName = "steps"
+		)]
+		[System.Xml.Serialization.XmlArrayItem(
+			typeof( Email ),
+			IsNullable = false,
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.Xml.Serialization.XmlArrayItem(
+			typeof( File.FileOperationBase ),
+			IsNullable = false,
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.Xml.Serialization.XmlArrayItem(
+			typeof( Data.FileExport ),
+			IsNullable = false,
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.Xml.Serialization.XmlArrayItem(
+			typeof( Data.FileImport ),
+			IsNullable = false,
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.Xml.Serialization.XmlArrayItem(
+			typeof( Data.DbCommand ),
+			IsNullable = false,
+			Namespace = "http://Icod.Wod"
+		)]
+		public System.Object[] Steps {
+			get;
+			set;
+		}
+		#endregion properties
 
 
 		#region methods

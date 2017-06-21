@@ -10,12 +10,67 @@ namespace Icod.Wod.Data {
 	)]
 	public class FixedWidthFile : FileBase {
 
+		#region fields
+		private System.Func<System.String, System.Int32, System.Int32, System.String> myColumnReader;
+		#endregion fields
+
+
 		#region .ctor
 		public FixedWidthFile() : base() {
+			myColumnReader = ( a, b, c ) => a.Substring( b, c ).TrimToNull();
 		}
 		public FixedWidthFile( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
+			myColumnReader = ( a, b, c ) => a.Substring( b, c ).TrimToNull();
 		}
 		#endregion .ctor
+
+
+		#region properties
+		public sealed override System.Boolean ConvertEmptyStringToNull {
+			get {
+				return base.ConvertEmptyStringToNull;
+			}
+			set {
+				base.ConvertEmptyStringToNull = value;
+				System.Func<System.String, System.Int32, System.Int32, System.String> w = ( a, b, c ) => a.Substring( b, c );
+				var q = ( this.TrimValues )
+					? ( a, b, c ) => w( a, b, c ).TrimToNull()
+					: w
+				;
+				this.ColumnReader = ( value )
+					? ( a, b, c ) => q( a, b, c ) ?? System.String.Empty
+					: q
+				;
+			}
+		}
+
+		public sealed override System.Boolean TrimValues {
+			get {
+				return base.TrimValues;
+			}
+			set {
+				base.TrimValues = value;
+				System.Func<System.String, System.Int32, System.Int32, System.String> w = ( a, b, c ) => a.Substring( b, c );
+				var q = ( value )
+					? ( a, b, c ) => w( a, b, c ).TrimToNull()
+					: w
+				;
+				this.ColumnReader = ( this.ConvertEmptyStringToNull )
+					? ( a, b, c ) => q( a, b, c ) ?? System.String.Empty
+					: q
+				;
+			}
+		}
+
+		protected System.Func<System.String, System.Int32, System.Int32, System.String> ColumnReader {
+			get {
+				return myColumnReader;
+			}
+			set {
+				myColumnReader = value;
+			}
+		}
+		#endregion properties
 
 
 		#region methods
@@ -64,18 +119,10 @@ namespace Icod.Wod.Data {
 			var record = new System.String( buffer, 0, r );
 			System.Int32 l;
 			System.Int32 i = 0;
-			System.Func<System.String, System.Int32, System.Int32, System.String> w = ( a, b, c ) => a.Substring( b, c );
-			var q = ( this.TrimValues )
-				? ( a, b, c ) => w( a, b, c ).TrimToNull()
-				: w
-			;
-			var getColValue = ( this.ConvertEmptyStringToNull )
-				? ( a, b, c ) => q( a, b, c ) ?? System.String.Empty
-				: q
-			;
+			var colReader = this.ColumnReader;
 			foreach ( var c in cols ) {
 				l = c.MaxLength;
-				yield return getColValue( record, i, l );
+				yield return colReader( record, i, l );
 				i += l;
 			}
 		}

@@ -197,7 +197,7 @@ namespace Icod.Wod.Data {
 			Namespace = "http://Icod.Wod"
 		)]
 		[System.ComponentModel.DefaultValue( true )]
-		public System.Boolean ConvertEmptyStringToNull {
+		public virtual System.Boolean ConvertEmptyStringToNull {
 			get {
 				return myConvertEmptyStringToNull;
 			}
@@ -211,7 +211,7 @@ namespace Icod.Wod.Data {
 			Namespace = "http://Icod.Wod"
 		)]
 		[System.ComponentModel.DefaultValue( true )]
-		public System.Boolean TrimValues {
+		public virtual System.Boolean TrimValues {
 			get {
 				return myTrimValues;
 			}
