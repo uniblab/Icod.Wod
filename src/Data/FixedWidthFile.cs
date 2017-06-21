@@ -65,11 +65,11 @@ namespace Icod.Wod.Data {
 			System.Int32 l;
 			System.Int32 i = 0;
 			System.Func<System.String, System.Int32, System.Int32, System.String> w = ( a, b, c ) => a.Substring( b, c );
-			System.Func<System.String, System.Int32, System.Int32, System.String> q = ( this.TrimValues )
+			var q = ( this.TrimValues )
 				? ( a, b, c ) => w( a, b, c ).TrimToNull()
 				: w
 			;
-			var getColValue = = ( this.ConvertEmptyStringToNull )
+			var getColValue = ( this.ConvertEmptyStringToNull )
 				? ( a, b, c ) => q( a, b, c ) ?? System.String.Empty
 				: q
 			;

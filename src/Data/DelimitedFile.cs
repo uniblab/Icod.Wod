@@ -234,15 +234,6 @@ namespace Icod.Wod.Data {
 			System.Int32 i;
 			System.Boolean reading = true;
 			var ec = this.EscapeChar;
-			System.Func<System.Text.StringBuilder, System.String> w = a => a.ToString();
-			System.Func<System.Text.StringBuilder, System.String> q = ( this.TrimValues )
-				? a => w( a ).TrimToNull()
-				: w
-			;
-			var getColValue = ( this.ConvertEmptyStringToNull )
-				? a => q( a ) ?? System.String.Empty
-				: q
-			;
 			do {
 				i = reader.Read();
 				if ( -1 == i ) {
@@ -262,7 +253,12 @@ namespace Icod.Wod.Data {
 					sb.Append( ch );
 				}
 			} while ( reading );
-			return getColValue( sb );
+			System.Func<System.Text.StringBuilder, System.String> w = a => a.ToString();
+			var q = ( this.TrimValues )
+				? a => w( a ).TrimToNull()
+				: w
+			;
+			return ( this.ConvertEmptyStringToNull ) ? q( sb ) ?? System.String.Empty : q( sb );
 		}
  
 
