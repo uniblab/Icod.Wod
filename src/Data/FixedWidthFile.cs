@@ -26,6 +26,11 @@ namespace Icod.Wod.Data {
 
 
 		#region properties
+		[System.Xml.Serialization.XmlAttribute(
+			"convertEmptyStringToNull",
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.ComponentModel.DefaultValue( true )]
 		public sealed override System.Boolean ConvertEmptyStringToNull {
 			get {
 				return base.ConvertEmptyStringToNull;
@@ -44,6 +49,11 @@ namespace Icod.Wod.Data {
 			}
 		}
 
+		[System.Xml.Serialization.XmlAttribute(
+			"trimValues",
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.ComponentModel.DefaultValue( true )]
 		public sealed override System.Boolean TrimValues {
 			get {
 				return base.TrimValues;
@@ -62,6 +72,7 @@ namespace Icod.Wod.Data {
 			}
 		}
 
+		[System.Xml.Serialization.XmlIgnore]
 		protected System.Func<System.String, System.Int32, System.Int32, System.String> ColumnReader {
 			get {
 				return myColumnReader;
