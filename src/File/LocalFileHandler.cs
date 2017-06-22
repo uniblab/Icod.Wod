@@ -52,14 +52,15 @@ namespace Icod.Wod.File {
 		}
 		private void Write( System.IO.Stream source, System.String filePathName, System.IO.FileMode fileMode ) {
 			using ( var dest = System.IO.File.Open( filePathName, fileMode, System.IO.FileAccess.ReadWrite, System.IO.FileShare.Read ) ) {
-				this.Write( source, dest );
+				source.CopyTo( dest, this.BufferLength );
 				dest.Flush();
 				dest.SetLength( dest.Position );
 			}
 		}
 
 		public sealed override void MkDir() {
-			System.IO.Directory.CreateDirectory( this.FileDescriptor.ExpandedPath );
+			var dirPath = this.FileDescriptor.ExpandedPath;
+			System.IO.Directory.CreateDirectory( dirPath );
 		}
 		public sealed override void RmDir() {
 			System.IO.Directory.Delete( this.FileDescriptor.ExpandedPath, this.FileDescriptor.Recurse );

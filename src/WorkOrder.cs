@@ -86,6 +86,11 @@ namespace Icod.Wod {
 			Namespace = "http://Icod.Wod"
 		)]
 		[System.Xml.Serialization.XmlArrayItem(
+			typeof( List ),
+			IsNullable = false,
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.Xml.Serialization.XmlArrayItem(
 			typeof( File.FileOperationBase ),
 			IsNullable = false,
 			Namespace = "http://Icod.Wod"

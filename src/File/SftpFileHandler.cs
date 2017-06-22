@@ -60,7 +60,8 @@ namespace Icod.Wod.File {
 		private void Write( System.IO.Stream source, System.String filePathName, System.IO.FileMode fileMode ) {
 			using ( var client = this.GetClient() ) {
 				using ( var dest = client.Open( filePathName, fileMode, System.IO.FileAccess.ReadWrite ) ) {
-					this.Write( source, dest );
+					source.CopyTo( dest, this.BufferLength );
+					dest.Flush();
 					dest.SetLength( dest.Position );
 				}
 			}
