@@ -11,16 +11,22 @@ namespace Icod.Wod.Data {
 	public class FixedWidthFile : FileBase {
 
 		#region fields
+		private static readonly System.Func<System.String, System.Int32, System.Int32, System.String> theDefaultColumnReader;
+
 		private System.Func<System.String, System.Int32, System.Int32, System.String> myColumnReader;
 		#endregion fields
 
 
 		#region .ctor
+		static FixedWidthFile() {
+			theDefaultColumnReader = ( a, b, c ) => a.Substring( b, c ).TrimToNull();
+		}
+
 		public FixedWidthFile() : base() {
-			myColumnReader = ( a, b, c ) => a.Substring( b, c ).TrimToNull();
+			myColumnReader = theDefaultColumnReader;
 		}
 		public FixedWidthFile( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
-			myColumnReader = ( a, b, c ) => a.Substring( b, c ).TrimToNull();
+			myColumnReader = theDefaultColumnReader;
 		}
 		#endregion .ctor
 
@@ -75,7 +81,7 @@ namespace Icod.Wod.Data {
 		[System.Xml.Serialization.XmlIgnore]
 		protected System.Func<System.String, System.Int32, System.Int32, System.String> ColumnReader {
 			get {
-				return myColumnReader;
+				return myColumnReader ?? theDefaultColumnReader;
 			}
 			set {
 				myColumnReader = value;

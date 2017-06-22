@@ -11,6 +11,8 @@ namespace Icod.Wod.Data {
 	public class DelimitedFile : FileBase {
 
 		#region fields
+		private static readonly System.Func<System.Text.StringBuilder, System.String> theDefaultColumnReader;
+
 		private System.Char myFieldSeparator;
 		private System.String myFieldSeparatorString;
 		private System.Char myQuoteChar;
@@ -21,13 +23,17 @@ namespace Icod.Wod.Data {
 
 
 		#region .ctor
+		static DelimitedFile() {
+			theDefaultColumnReader = x => x.ToString().TrimToNull();
+		}
+
 		public DelimitedFile() : base() {
 			myFieldSeparator = '\t';
 			myFieldSeparatorString = myFieldSeparator.ToString();
 			myQuoteChar = '\"';
 			myQuoteCharString = myQuoteChar.ToString();
 			myEscapeChar = null;
-			myColumnReader = x => x.ToString().TrimToNull();
+			myColumnReader = theDefaultColumnReader;
 		}
 		public DelimitedFile( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
 			myFieldSeparator = '\t';
@@ -35,7 +41,7 @@ namespace Icod.Wod.Data {
 			myQuoteChar = '\"';
 			myQuoteCharString = myQuoteChar.ToString();
 			myEscapeChar = null;
-			myColumnReader = x => x.ToString().TrimToNull();
+			myColumnReader = theDefaultColumnReader;
 		}
 		#endregion .ctor
 
@@ -189,7 +195,7 @@ namespace Icod.Wod.Data {
 		[System.Xml.Serialization.XmlIgnore]
 		protected System.Func<System.Text.StringBuilder, System.String> ColumnReader {
 			get {
-				return myColumnReader;
+				return myColumnReader ?? theDefaultColumnReader;
 			}
 			set {
 				myColumnReader = value;
