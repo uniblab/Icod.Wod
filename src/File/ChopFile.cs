@@ -108,10 +108,7 @@ namespace Icod.Wod.File {
 		}
 
 		public sealed override void DoWork( WorkOrder order ) {
-			if ( null == order ) {
-				throw new System.ArgumentNullException( "order" );
-			}
-			this.WorkOrder = order;
+			this.WorkOrder = order ?? throw new System.ArgumentNullException( "order" );
 			var source = this.GetFileHandler( order );
 			if ( null == source ) {
 				throw new System.ArgumentNullException( "source" );
@@ -140,11 +137,12 @@ namespace Icod.Wod.File {
 							} while ( null != line );
 						}
 					}
+					for ( System.Int32 i = this.Lines; i < 0; i++ ) {
+						lines.RemoveAt( lines.Count - 1 );
+					}
 					using ( var bw = new System.IO.StreamWriter( buffer, enc ) ) {
-						for ( System.Int32 i = this.Lines; i < 0; i++ ) {
-							lines.RemoveAt( lines.Count - 1 );
-						}
-						for ( System.Int32 i = System.Math.Max( this.Lines, 0 ); i < lines.Count; i++ ) {
+						var count = lines.Count;
+						for ( System.Int32 i = System.Math.Max( this.Lines, 0 ); i < count; i++ ) {
 							bw.Write( lines[ i ] );
 							this.EolWriter( bw );
 						}
