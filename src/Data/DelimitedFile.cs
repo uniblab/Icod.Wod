@@ -158,7 +158,7 @@ namespace Icod.Wod.Data {
 				;
 				this.ColumnReader = ( value )
 					? q
-					: a => q( a ) ?? System.String.Empty 
+					: a => q( a ) ?? System.String.Empty
 				;
 			}
 		}
@@ -179,9 +179,9 @@ namespace Icod.Wod.Data {
 					? a => w( a ).TrimToNull()
 					: w
 				;
-				this.ColumnReader = ( this.ConvertEmptyStringToNull ) 
+				this.ColumnReader = ( this.ConvertEmptyStringToNull )
 					? q
-					: a => q( a ) ?? System.String.Empty 
+					: a => q( a ) ?? System.String.Empty
 				;
 			}
 		}
@@ -314,7 +314,7 @@ namespace Icod.Wod.Data {
 			} while ( reading );
 			return this.ColumnReader( sb );
 		}
- 
+
 
 		protected sealed override void WriteHeader( System.IO.StreamWriter writer, System.Collections.Generic.IEnumerable<System.Data.DataColumn> dbColumns, System.Collections.Generic.IEnumerable<TextFileColumn> fileColumns ) {
 			if ( ( null == dbColumns ) || !dbColumns.Any() ) {
@@ -336,7 +336,7 @@ namespace Icod.Wod.Data {
 			}
 
 			return System.String.Join( this.FieldSeparatorString, columns.Select(
-				x => this.GetColumn( 
+				x => this.GetColumn(
 					formatMap.ContainsKey( x )
 						? formatMap[ x ] ?? new TextFileColumn( x.ColumnName )
 						: new TextFileColumn( x.ColumnName )
