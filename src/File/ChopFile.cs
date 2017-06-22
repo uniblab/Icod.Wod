@@ -16,7 +16,8 @@ namespace Icod.Wod.File {
 
 		private System.String myCodePage;
 		private System.String myRecordSeparator;
-		private System.Int32 myLines;
+		private System.Int32 myHead;
+		private System.Int32 myTail;
 		private System.Action<System.IO.StreamWriter> myEolWriter;
 		#endregion fields
 
@@ -29,13 +30,15 @@ namespace Icod.Wod.File {
 		public ChopFile() : base() {
 			myCodePage = "windows-1252";
 			myRecordSeparator = "\r\n";
-			myLines = 0;
+			myHead = 0;
+			myTail = 0;
 			myEolWriter = theEmptyEolWriter;
 		}
 		public ChopFile( WorkOrder workOrder ) : base( workOrder ) {
 			myCodePage = "windows-1252";
 			myRecordSeparator = "\r\n";
-			myLines = 0;
+			myHead = 0;
+			myTail = 0;
 			myEolWriter = theEmptyEolWriter;
 		}
 		#endregion .ctor
@@ -55,17 +58,37 @@ namespace Icod.Wod.File {
 				myCodePage = value;
 			}
 		}
+
 		[System.Xml.Serialization.XmlAttribute(
-			"lines",
+			"head",
 			Namespace = "http://Icod.Wod"
 		)]
 		[System.ComponentModel.DefaultValue( 0 )]
-		public System.Int32 Lines {
+		public System.Int32 Head {
 			get {
-				return myLines;
+				return myHead;
 			}
 			set {
-				myLines = value;
+				if ( value < 0 ) {
+					throw new System.InvalidOperationException();
+				}
+				myHead = value;
+			}
+		}
+		[System.Xml.Serialization.XmlAttribute(
+			"tail",
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.ComponentModel.DefaultValue( 0 )]
+		public System.Int32 Tail {
+			get {
+				return myTail;
+			}
+			set {
+				if ( value < 0 ) {
+					throw new System.InvalidOperationException();
+				}
+				myTail = value;
 			}
 		}
 
@@ -112,7 +135,7 @@ namespace Icod.Wod.File {
 			var source = this.GetFileHandler( order );
 			if ( null == source ) {
 				throw new System.ArgumentNullException( "source" );
-			} else if ( 0 == this.Lines ) {
+			} else if ( 0 == this.Head ) {
 				return;
 			}
 
@@ -120,6 +143,9 @@ namespace Icod.Wod.File {
 			var enc = this.GetEncoding();
 			System.Collections.Generic.IList<System.String> lines;
 			System.String line;
+			System.Int32 count;
+			var head = this.Head;
+			System.Int32 tail;
 			foreach ( var filePathName in source.ListFiles().Where(
 				x => x.FileType.Equals( FileType.File )
 			).Select(
@@ -128,6 +154,9 @@ namespace Icod.Wod.File {
 				using ( var buffer = new System.IO.MemoryStream() ) {
 					using ( var s = source.OpenReader( filePathName ) ) {
 						using ( var sr = new System.IO.StreamReader( s, enc ) ) {
+							for ( System.Int32 i = 0; i < head; i++ ) {
+								sr.ReadLine( this.RecordSeparator );
+							}
 							lines = new System.Collections.Generic.List<System.String>();
 							do {
 								line = sr.ReadLine( this.RecordSeparator );
@@ -137,12 +166,14 @@ namespace Icod.Wod.File {
 							} while ( null != line );
 						}
 					}
-					for ( System.Int32 i = this.Lines; i < 0; i++ ) {
-						lines.RemoveAt( lines.Count - 1 );
+					count = lines.Count - 1;
+					tail = count - this.Tail;
+					for ( System.Int32 i = count; tail < i; i-- ) {
+						lines.RemoveAt( i );
 					}
 					using ( var bw = new System.IO.StreamWriter( buffer, enc ) ) {
-						var count = lines.Count;
-						for ( System.Int32 i = System.Math.Max( this.Lines, 0 ); i < count; i++ ) {
+						count = lines.Count;
+						for ( System.Int32 i = 0; i < count; i++ ) {
 							bw.Write( lines[ i ] );
 							this.EolWriter( bw );
 						}
