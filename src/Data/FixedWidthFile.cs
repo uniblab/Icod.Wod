@@ -43,8 +43,8 @@ namespace Icod.Wod.Data {
 					: w
 				;
 				this.ColumnReader = ( value )
-					? ( a, b, c ) => q( a, b, c ) ?? System.String.Empty
-					: q
+					? q
+					: ( a, b, c ) => q( a, b, c ) ?? System.String.Empty
 				;
 			}
 		}
@@ -66,8 +66,8 @@ namespace Icod.Wod.Data {
 					: w
 				;
 				this.ColumnReader = ( this.ConvertEmptyStringToNull )
-					? ( a, b, c ) => q( a, b, c ) ?? System.String.Empty
-					: q
+					? q
+					: ( a, b, c ) => q( a, b, c ) ?? System.String.Empty
 				;
 			}
 		}

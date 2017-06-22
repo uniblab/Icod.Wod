@@ -157,8 +157,8 @@ namespace Icod.Wod.Data {
 					: w
 				;
 				this.ColumnReader = ( value )
-					? a => q( a ) ?? System.String.Empty
-					: q
+					? q
+					: a => q( a ) ?? System.String.Empty 
 				;
 			}
 		}
@@ -180,8 +180,8 @@ namespace Icod.Wod.Data {
 					: w
 				;
 				this.ColumnReader = ( this.ConvertEmptyStringToNull ) 
-					? a => q( a ) ?? System.String.Empty 
-					: q
+					? q
+					: a => q( a ) ?? System.String.Empty 
 				;
 			}
 		}

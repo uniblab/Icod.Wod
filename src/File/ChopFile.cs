@@ -139,7 +139,6 @@ namespace Icod.Wod.File {
 				return;
 			}
 
-			var sd = source.FileDescriptor;
 			var enc = this.GetEncoding();
 			System.Collections.Generic.IList<System.String> lines;
 			System.String line;
@@ -177,6 +176,7 @@ namespace Icod.Wod.File {
 							bw.Write( lines[ i ] );
 							this.EolWriter( bw );
 						}
+						lines.Clear();
 					}
 					buffer.Seek( 0, System.IO.SeekOrigin.Begin );
 					source.Overwrite( buffer, filePathName );
