@@ -123,7 +123,7 @@ namespace Icod.Wod.Data {
 			}
 
 			var cols = this.Columns.OfType<System.Data.DataColumn>().Where(
-				x => x.ColumnName.StartsWith( "%wod:", System.StringComparison.OrdinalIgnoreCase ) && x.ColumnName.EndsWith( "%", System.StringComparison.OrdinalIgnoreCase )
+				x => !x.ColumnName.Equals( "%wod:FileName%", System.StringComparison.OrdinalIgnoreCase )
 			);
 			var bufferLen = cols.Select(
 				x => x.MaxLength
