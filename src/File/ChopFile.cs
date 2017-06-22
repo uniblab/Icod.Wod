@@ -115,8 +115,7 @@ namespace Icod.Wod.File {
 			var source = this.GetFileHandler( order );
 			if ( null == source ) {
 				throw new System.ArgumentNullException( "source" );
-			}
-			if ( 0 == this.Lines ) {
+			} else if ( 0 == this.Lines ) {
 				return;
 			}
 

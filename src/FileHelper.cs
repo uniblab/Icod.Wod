@@ -12,7 +12,7 @@ namespace Icod.Wod {
 			} else if ( file.EndOfStream ) {
 				return null;
 			} else if ( System.String.IsNullOrEmpty( recordSeparator ) ) {
-				throw new System.InvalidOperationException();
+				throw new System.ArgumentNullException( "recordSeparator" );
 			}
 
 			System.Boolean isReading = true;
