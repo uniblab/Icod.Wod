@@ -4,13 +4,13 @@ namespace Icod.Wod {
 
 	[System.Serializable]
 	[System.Xml.Serialization.XmlType(
-		"list",
+		"serial",
 		Namespace = "http://Icod.Wod"
 	)]
-	public sealed class List : IStep {
+	public sealed class Serial : IStep {
 
 		#region .ctor
-		public List() : base() {
+		public Serial() : base() {
 		}
 		#endregion .ctor
 
@@ -23,11 +23,6 @@ namespace Icod.Wod {
 		)]
 		[System.Xml.Serialization.XmlArrayItem(
 			typeof( Email ),
-			IsNullable = false,
-			Namespace = "http://Icod.Wod"
-		)]
-		[System.Xml.Serialization.XmlArrayItem(
-			typeof( Parallel ),
 			IsNullable = false,
 			Namespace = "http://Icod.Wod"
 		)]
