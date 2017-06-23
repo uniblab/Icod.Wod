@@ -18,6 +18,7 @@ namespace Icod.Wod.File {
 			get;
 			set;
 		}
+		[System.Xml.Serialization.XmlIgnore]
 		public FileHandlerBase Handler {
 			get;
 			set;
