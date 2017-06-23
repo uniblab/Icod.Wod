@@ -2,6 +2,7 @@ using System.Linq;
 
 namespace Icod.Wod.Data {
 
+	[System.Xml.Serialization.XmlType( IncludeInSchema = false )]
 	public sealed class ColumnMapValueComparer : System.Collections.Generic.IEqualityComparer<ColumnMap> {
 
 		#region fields

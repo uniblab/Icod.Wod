@@ -2,6 +2,7 @@ using System.Linq;
 
 namespace Icod.Wod.File {
 
+	[System.Xml.Serialization.XmlType( IncludeInSchema = false )]
 	public sealed class ClientStream : System.IO.Stream {
 
 		#region fields

@@ -2,6 +2,7 @@ using System.Linq;
 
 namespace Icod.Wod.Data {
 
+	[System.Xml.Serialization.XmlType( IncludeInSchema = false )]
 	public static class DbHelper {
 
 		public static System.Data.Common.DbCommandBuilder CreateCommandBuilder( this System.Configuration.ConnectionStringSettings connectionString, System.Data.Common.DbDataAdapter adapter ) {

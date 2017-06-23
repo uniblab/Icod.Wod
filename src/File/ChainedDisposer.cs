@@ -2,7 +2,8 @@ using System.Linq;
 
 namespace Icod.Wod.File {
 
-	internal sealed class ChainedDisposer : System.IDisposable {
+	[System.Xml.Serialization.XmlType( IncludeInSchema = false )]
+	public sealed class ChainedDisposer : System.IDisposable {
 
 		#region fields
 		private System.IDisposable myFirst;

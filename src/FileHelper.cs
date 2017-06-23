@@ -2,6 +2,7 @@
 
 namespace Icod.Wod {
 
+	[System.Xml.Serialization.XmlType( IncludeInSchema = false )]
 	public static class FileHelper {
 
 		public static System.String ReadLine( this System.IO.StreamReader file, System.String recordSeparator ) {
