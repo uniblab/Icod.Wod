@@ -110,6 +110,7 @@
     <Compile Include="src\FileHelper.cs" />
     <Compile Include="src\File\ChopFile.cs" />
     <Compile Include="src\File\FromZip.cs" />
+    <Compile Include="src\File\RmZip.cs" />
     <Compile Include="src\File\ZipOperationBase.cs" />
     <Compile Include="src\Serial.cs" />
     <Compile Include="src\Parallel.cs" />

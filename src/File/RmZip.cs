@@ -22,10 +22,7 @@ namespace Icod.Wod.File {
 		#region methods
 		public sealed override void DoWork( WorkOrder workOrder ) {
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
-			var sourceD = this.Source;
-			sourceD.WorkOrder = workOrder;
-			var source = sourceD.GetFileHandler( workOrder );
-
+			var source = this.Source;
 			var handler = this.GetFileHandler( workOrder );
 			System.String file;
 			System.IO.Stream buffer;
@@ -40,7 +37,7 @@ namespace Icod.Wod.File {
 				}
 				buffer.Seek( 0, System.IO.SeekOrigin.Begin );
 				using ( var zipArchive = this.GetZipArchive( buffer, System.IO.Compression.ZipArchiveMode.Update ) ) {
-					entries = this.ListEntries( zipArchive, sourceD ).Reverse();
+					entries = this.ListEntries( zipArchive, source ).Reverse();
 					foreach ( var e in entries ) {
 						e.Delete();
 					}
