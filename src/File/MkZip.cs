@@ -26,10 +26,12 @@ namespace Icod.Wod.File {
 			sourceD.WorkOrder = workOrder;
 			var source = sourceD.GetFileHandler( workOrder );
 			var handler = this.GetFileHandler( workOrder );
-			System.Func<FileEntry, System.String> getFileName = x => this.TruncateEntryName
-				? System.IO.Path.GetFileName( x.File )
-				: x.File
-			;
+			System.Func<FileEntry, System.String> getFileName = null;
+			if ( this.TruncateEntryName ) {
+				getFileName = x => System.IO.Path.GetFileName( x.File );
+			} else {
+				getFileName = x => x.File;
+			}
 			System.String fileName;
 			System.IO.Compression.ZipArchiveEntry entry;
 			using ( System.IO.Stream buffer = new System.IO.MemoryStream() ) {
@@ -49,8 +51,6 @@ namespace Icod.Wod.File {
 				buffer.Seek( 0, System.IO.SeekOrigin.Begin );
 				handler.Overwrite( buffer, handler.PathCombine( this.ExpandedPath, this.ExpandedName ) );
 			}
-
-			throw new System.NotImplementedException();
 		}
 		#endregion methods
 
