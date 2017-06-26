@@ -6,17 +6,17 @@ namespace Icod.Wod.File {
 	public sealed class ChainedDisposer : System.IDisposable {
 
 		#region fields
-		private System.IDisposable myFirst;
-		private System.IDisposable mySecond;
+		private System.IDisposable myOuter;
+		private System.IDisposable myInner;
 		#endregion fields
 
 
 		#region .ctor
 		private ChainedDisposer() : base() {
 		}
-		public ChainedDisposer( System.IDisposable first, System.IDisposable second ) : this() {
-			mySecond = second;
-			myFirst = first;
+		public ChainedDisposer( System.IDisposable outer, System.IDisposable inner ) : this() {
+			myInner = inner;
+			myOuter = outer;
 		}
 
 		~ChainedDisposer() {
@@ -32,13 +32,13 @@ namespace Icod.Wod.File {
 		}
 		private void Dispose( System.Boolean disposing ) {
 			if ( disposing ) {
-				if ( null != mySecond ) {
-					mySecond.Dispose();
-					mySecond = null;
+				if ( null != myInner ) {
+					myInner.Dispose();
+					myInner = null;
 				}
-				if ( null != myFirst ) {
-					myFirst.Dispose();
-					myFirst = null;
+				if ( null != myOuter ) {
+					myOuter.Dispose();
+					myOuter = null;
 				}
 			}
 		}
