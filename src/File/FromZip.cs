@@ -58,9 +58,9 @@ namespace Icod.Wod.File {
 						using ( var entryStream = entry.Open() ) {
 							eDir = System.IO.Path.GetDirectoryName( entry.FullName );
 							if ( System.String.IsNullOrEmpty( eDir ) ) {
-								eDir = dest.PathCombine( destD.ExpandedPath, eDir );
-							} else {
 								eDir = destD.ExpandedPath;
+							} else {
+								eDir = dest.PathCombine( destD.ExpandedPath, eDir );
 							}
 							dest.Overwrite( entryStream, dest.PathCombine( eDir, entry.Name ) );
 						}
