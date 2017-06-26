@@ -4,7 +4,7 @@ namespace Icod.Wod.Data {
 
 	public interface ITableDestination {
 
-		void WriteRecords( Icod.Wod.WorkOrder order, ITableSource source );
+		void WriteRecords( Icod.Wod.WorkOrder workOrder, ITableSource source );
 
 	}
 

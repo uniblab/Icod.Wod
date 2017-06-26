@@ -233,14 +233,14 @@ namespace Icod.Wod.Data {
 			}
 		}
 
-		public virtual void WriteRecords( Icod.Wod.WorkOrder order, ITableSource source ) {
+		public virtual void WriteRecords( Icod.Wod.WorkOrder workOrder, ITableSource source ) {
 			if ( null == source ) {
 				throw new System.ArgumentNullException( "source" );
-			} else if ( null == order ) {
-				throw new System.ArgumentNullException( "order" );
+			} else if ( null == workOrder ) {
+				throw new System.ArgumentNullException( "workOrder" );
 			}
 
-			using ( var table = source.ReadTables( order ).FirstOrDefault() ) {
+			using ( var table = source.ReadTables( workOrder ).FirstOrDefault() ) {
 				var rows = table.Rows.OfType<System.Data.DataRow>();
 				if ( !rows.Any() && !this.WriteIfEmpty ) {
 					return;
@@ -372,8 +372,8 @@ namespace Icod.Wod.Data {
 			return s;
 		}
 
-		public virtual System.Collections.Generic.IEnumerable<System.Data.DataTable> ReadTables( Icod.Wod.WorkOrder order ) {
-			this.WorkOrder = order;
+		public virtual System.Collections.Generic.IEnumerable<System.Data.DataTable> ReadTables( Icod.Wod.WorkOrder workOrder ) {
+			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			System.String fileName;
 			foreach ( var file in this.GetFiles() ) {
 				fileName = System.IO.Path.GetFileName( file.File );

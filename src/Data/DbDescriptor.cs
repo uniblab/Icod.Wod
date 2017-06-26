@@ -217,12 +217,12 @@ namespace Icod.Wod.Data {
 
 
 		#region methods
-		public virtual System.Data.Common.DbConnection CreateConnection( Icod.Wod.WorkOrder order ) {
-			if ( null == order ) {
-				throw new System.ArgumentNullException( "order" );
+		public virtual System.Data.Common.DbConnection CreateConnection( Icod.Wod.WorkOrder workOrder ) {
+			if ( null == workOrder ) {
+				throw new System.ArgumentNullException( "workOrder" );
 			}
 			var cn = this.ConnectionStringName;
-			var here = ( order.ConnectionStrings ?? new Icod.Wod.ConnectionStringEntry[ 0 ] ).FirstOrDefault(
+			var here = ( workOrder.ConnectionStrings ?? new Icod.Wod.ConnectionStringEntry[ 0 ] ).FirstOrDefault(
 				x => x.Name.Equals( cn, System.StringComparison.OrdinalIgnoreCase )
 			);
 			var there = System.Configuration.ConfigurationManager.ConnectionStrings[ cn ];
@@ -241,14 +241,14 @@ namespace Icod.Wod.Data {
 			return connection.CreateCommand( null, this.CommandText, this.CommandType, ( -2 == timeout ) ? connection.ConnectionTimeout : timeout );
 		}
 
-		public virtual System.Collections.Generic.IEnumerable<System.Data.DataTable> ReadTables( Icod.Wod.WorkOrder order ) {
-			if ( null == order ) {
-				throw new System.ArgumentNullException( "order" );
+		public virtual System.Collections.Generic.IEnumerable<System.Data.DataTable> ReadTables( Icod.Wod.WorkOrder workOrder ) {
+			if ( null == workOrder ) {
+				throw new System.ArgumentNullException( "workOrder" );
 			}
 
-			using ( var connection = this.CreateConnection( order ) ) {
+			using ( var connection = this.CreateConnection( workOrder ) ) {
 				using ( var command = this.CreateCommand( connection ) ) {
-					using ( var adapter = this.CreateDataAdapter( connection, order, command ) ) {
+					using ( var adapter = this.CreateDataAdapter( connection, workOrder, command ) ) {
 						using ( var set = new System.Data.DataSet() ) {
 							adapter.Fill( set );
 							foreach ( var table in set.Tables.OfType<System.Data.DataTable>() ) {
@@ -261,24 +261,24 @@ namespace Icod.Wod.Data {
 				}
 			}
 		}
-		public virtual void WriteRecords( Icod.Wod.WorkOrder order, ITableSource source ) {
+		public virtual void WriteRecords( Icod.Wod.WorkOrder workOrder, ITableSource source ) {
 			if ( null == source ) {
 				throw new System.ArgumentNullException( "source" );
-			} else if ( null == order ) {
-				throw new System.ArgumentNullException( "order" );
+			} else if ( null == workOrder ) {
+				throw new System.ArgumentNullException( "workOrder" );
 			}
 
-			using ( var cnxn = this.CreateConnection( order ) ) {
-				using ( var adapter = this.CreateDataAdapter( cnxn, order ) ) {
+			using ( var cnxn = this.CreateConnection( workOrder ) ) {
+				using ( var adapter = this.CreateDataAdapter( cnxn, workOrder ) ) {
 					var amap = adapter.TableMappings;
-					using ( var cb = this.CreateCommandBuilder( order, adapter ) ) {
+					using ( var cb = this.CreateCommandBuilder( workOrder, adapter ) ) {
 						System.Data.Common.DataTableMapping tmap;
 						System.Data.DataTable dest;
 						using ( var set = new System.Data.DataSet() ) {
 							this.FillSchema( adapter, set );
 							System.String tableName = this.TableName;
 							dest = set.Tables[ tableName ];
-							foreach ( var t in source.ReadTables( order ) ) {
+							foreach ( var t in source.ReadTables( workOrder ) ) {
 								amap.Clear();
 								tmap = amap.Add( tableName, t.TableName );
 								foreach ( var cmap in this.CreateDataColumnMapping( t, dest ) ) {
@@ -304,18 +304,18 @@ namespace Icod.Wod.Data {
 					: "select top 0 " + System.String.Join( ", ", map.Select( x => x.ToName ) ) + " from " + this.NamespaceTableName
 			;
 		}
-		protected virtual System.Data.Common.DbDataAdapter CreateDataAdapter( System.Data.Common.DbConnection connection, Icod.Wod.WorkOrder order ) {
-			if ( null == order ) {
-				throw new System.ArgumentNullException( "order" );
+		protected virtual System.Data.Common.DbDataAdapter CreateDataAdapter( System.Data.Common.DbConnection connection, Icod.Wod.WorkOrder workOrder ) {
+			if ( null == workOrder ) {
+				throw new System.ArgumentNullException( "workOrder" );
 			} else if ( null == connection ) {
 				throw new System.ArgumentNullException( "connection" );
 			}
 
-			return this.CreateDataAdapter( connection, order, this.GenerateSchemaQuery() );
+			return this.CreateDataAdapter( connection, workOrder, this.GenerateSchemaQuery() );
 		}
-		protected virtual System.Data.Common.DbDataAdapter CreateDataAdapter( System.Data.Common.DbConnection connection, Icod.Wod.WorkOrder order, System.String schemaQuery ) {
-			if ( null == order ) {
-				throw new System.ArgumentNullException( "order" );
+		protected virtual System.Data.Common.DbDataAdapter CreateDataAdapter( System.Data.Common.DbConnection connection, Icod.Wod.WorkOrder workOrder, System.String schemaQuery ) {
+			if ( null == workOrder ) {
+				throw new System.ArgumentNullException( "workOrder" );
 			} else if ( null == connection ) {
 				throw new System.ArgumentNullException( "connection" );
 			}
@@ -325,7 +325,7 @@ namespace Icod.Wod.Data {
 				schemaQuery = this.GenerateSchemaQuery();
 			}
 			var cn = this.ConnectionStringName;
-			var here = ( order.ConnectionStrings ?? new Icod.Wod.ConnectionStringEntry[ 0 ] ).FirstOrDefault(
+			var here = ( workOrder.ConnectionStrings ?? new Icod.Wod.ConnectionStringEntry[ 0 ] ).FirstOrDefault(
 				x => x.Name.Equals( cn, System.StringComparison.OrdinalIgnoreCase )
 			);
 			var there = System.Configuration.ConfigurationManager.ConnectionStrings[ cn ];
@@ -338,17 +338,17 @@ namespace Icod.Wod.Data {
 			output.MissingSchemaAction = this.MissingSchemaAction;
 			return output;
 		}
-		protected virtual System.Data.Common.DbDataAdapter CreateDataAdapter( System.Data.Common.DbConnection connection, Icod.Wod.WorkOrder order, System.Data.Common.DbCommand command ) {
+		protected virtual System.Data.Common.DbDataAdapter CreateDataAdapter( System.Data.Common.DbConnection connection, Icod.Wod.WorkOrder workOrder, System.Data.Common.DbCommand command ) {
 			if ( null == command ) {
 				throw new System.ArgumentNullException( "command" );
-			} else if ( null == order ) {
-				throw new System.ArgumentNullException( "order" );
+			} else if ( null == workOrder ) {
+				throw new System.ArgumentNullException( "workOrder" );
 			} else if ( null == connection ) {
 				throw new System.ArgumentNullException( "connection" );
 			}
 
 			var cn = this.ConnectionStringName;
-			var here = ( order.ConnectionStrings ?? new Icod.Wod.ConnectionStringEntry[ 0 ] ).FirstOrDefault(
+			var here = ( workOrder.ConnectionStrings ?? new Icod.Wod.ConnectionStringEntry[ 0 ] ).FirstOrDefault(
 				x => x.Name.Equals( cn, System.StringComparison.OrdinalIgnoreCase )
 			);
 			var there = System.Configuration.ConfigurationManager.ConnectionStrings[ cn ];
@@ -361,15 +361,15 @@ namespace Icod.Wod.Data {
 			output.MissingSchemaAction = this.MissingSchemaAction;
 			return output;
 		}
-		protected virtual System.Data.Common.DbCommandBuilder CreateCommandBuilder( Icod.Wod.WorkOrder order, System.Data.Common.DbDataAdapter adapter ) {
+		protected virtual System.Data.Common.DbCommandBuilder CreateCommandBuilder( Icod.Wod.WorkOrder workOrder, System.Data.Common.DbDataAdapter adapter ) {
 			if ( null == adapter ) {
 				throw new System.ArgumentNullException( "adapter" );
-			} else if ( null == order ) {
-				throw new System.ArgumentNullException( "order" );
+			} else if ( null == workOrder ) {
+				throw new System.ArgumentNullException( "workOrder" );
 			}
 
 			var cn = this.ConnectionStringName;
-			var here = ( order.ConnectionStrings ?? new Icod.Wod.ConnectionStringEntry[ 0 ] ).FirstOrDefault(
+			var here = ( workOrder.ConnectionStrings ?? new Icod.Wod.ConnectionStringEntry[ 0 ] ).FirstOrDefault(
 				x => x.Name.Equals( cn, System.StringComparison.OrdinalIgnoreCase )
 			);
 			var there = System.Configuration.ConfigurationManager.ConnectionStrings[ cn ];

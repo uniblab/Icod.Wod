@@ -178,14 +178,14 @@ namespace Icod.Wod.File {
 				case "ftps" :
 					output = new FtpFileHandler( workOrder, this );
 					break;
-				case "http":
-				case "https":
+				case "http" :
+				case "https" :
 					output = new FtpFileHandler( workOrder, this );
 					break;
-				case "sftp":
+				case "sftp" :
 					output = new SftpFileHandler( workOrder, this );
 					break;
-				default :
+				default:
 					throw new System.NotSupportedException();
 			}
 

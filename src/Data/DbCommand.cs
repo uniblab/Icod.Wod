@@ -16,8 +16,8 @@ namespace Icod.Wod.Data {
 
 
 		#region methods
-		public void DoWork( Icod.Wod.WorkOrder order ) {
-			using ( var cnxn = this.CreateConnection( order ) ) {
+		public void DoWork( Icod.Wod.WorkOrder workOrder ) {
+			using ( var cnxn = this.CreateConnection( workOrder ) ) {
 				if ( System.Data.ConnectionState.Open != cnxn.State ) {
 					cnxn.Open();
 				}

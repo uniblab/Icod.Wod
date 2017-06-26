@@ -53,15 +53,12 @@ namespace Icod.Wod.File {
 
 
 		#region methods
-		public sealed override void DoWork( WorkOrder order ) {
-			if ( null == order ) {
-				throw new System.ArgumentNullException( "order" );
-			}
-			this.WorkOrder = order;
-			this.Destination.WorkOrder = order;
-			var dest = this.Destination.GetFileHandler( order );
+		public sealed override void DoWork( WorkOrder workOrder ) {
+			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
+			this.Destination.WorkOrder = workOrder;
+			var dest = this.Destination.GetFileHandler( workOrder );
 			var dfd = dest.FileDescriptor;
-			var source = this.GetFileHandler( order );
+			var source = this.GetFileHandler( workOrder );
 			System.String file = source.ListFiles().First().File;
 			using ( var reader = source.OpenReader( file ) ) {
 				dest.Append( reader, dest.PathCombine( dfd.ExpandedPath, dfd.ExpandedName ) );

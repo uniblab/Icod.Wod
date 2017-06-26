@@ -36,10 +36,10 @@ namespace Icod.Wod.Data {
 
 
 		#region methods
-		public void DoWork( Icod.Wod.WorkOrder order ) {
-			this.WorkOrder = order;
-			this.Destination.WorkOrder = order;
-			this.Destination.WriteRecords( order, this );
+		public void DoWork( Icod.Wod.WorkOrder workOrder ) {
+			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
+			this.Destination.WorkOrder = workOrder;
+			this.Destination.WriteRecords( workOrder, this );
 		}
 		#endregion methods
 

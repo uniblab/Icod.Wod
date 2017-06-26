@@ -130,9 +130,9 @@ namespace Icod.Wod.File {
 			}
 		}
 
-		public sealed override void DoWork( WorkOrder order ) {
-			this.WorkOrder = order ?? throw new System.ArgumentNullException( "order" );
-			var source = this.GetFileHandler( order );
+		public sealed override void DoWork( WorkOrder workOrder ) {
+			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
+			var source = this.GetFileHandler( workOrder );
 			if ( null == source ) {
 				throw new System.ArgumentNullException( "source" );
 			} else if ( 0 == this.Head ) {

@@ -63,22 +63,17 @@ namespace Icod.Wod.File {
 
 
 		#region methods
-		public sealed override void DoWork( WorkOrder order ) {
-			if ( null == order ) {
-				throw new System.ArgumentNullException( "order" );
-			}
-			this.WorkOrder = order;
-			this.Destination.WorkOrder = order;
-			var dest = this.Destination.GetFileHandler( order );
-			var source = this.GetFileHandler( order );
+		public sealed override void DoWork( WorkOrder workOrder ) {
+			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
+			this.Destination.WorkOrder = workOrder;
+			var dest = this.Destination.GetFileHandler( workOrder );
+			var source = this.GetFileHandler( workOrder );
 			if ( null == dest ) {
 				throw new System.ArgumentNullException( "dest" );
 			} else if ( null == source ) {
 				throw new System.ArgumentNullException( "source" );
-			} else if ( null == order ) {
-				throw new System.ArgumentNullException( "order" );
 			} else if ( ( source is LocalFileHandler ) && ( dest is LocalFileHandler ) ) {
-				this.DoWork( order, source as LocalFileHandler, dest as LocalFileHandler );
+				this.DoWork( source as LocalFileHandler, dest as LocalFileHandler );
 				return;
 			}
 			var files = source.ListFiles();
@@ -96,13 +91,11 @@ namespace Icod.Wod.File {
 			}
 		}
 
-		private void DoWork( WorkOrder order, LocalFileHandler source, LocalFileHandler dest ) {
+		private void DoWork( LocalFileHandler source, LocalFileHandler dest ) {
 			if ( null == dest ) {
 				throw new System.ArgumentNullException( "dest" );
 			} else if ( null == source ) {
 				throw new System.ArgumentNullException( "source" );
-			} else if ( null == order ) {
-				throw new System.ArgumentNullException( "order" );
 			}
 			System.String file;
 			var files = source.ListFiles();

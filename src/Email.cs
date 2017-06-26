@@ -185,21 +185,21 @@ namespace Icod.Wod {
 
 
 		#region methods
-		public void DoWork( Icod.Wod.WorkOrder order ) {
-			this.WorkOrder = order;
+		public void DoWork( Icod.Wod.WorkOrder workOrder ) {
+			this.WorkOrder = workOrder;
 			using ( var msg = new System.Net.Mail.MailMessage() ) {
 				msg.IsBodyHtml = this.BodyIsHtml;
-				msg.Body = order.ExpandVariables( this.Body );
+				msg.Body = workOrder.ExpandVariables( this.Body );
 				File.FileHandlerBase handler;
 				foreach ( var a in ( this.Attachments ?? new Icod.Wod.File.FileDescriptor[ 0 ] ) ) {
-					handler = a.GetFileHandler( order );
+					handler = a.GetFileHandler( workOrder );
 					System.String filePathName;
 					foreach ( var fe in handler.ListFiles() ) {
 						filePathName = fe.File;
 						msg.Attachments.Add( new System.Net.Mail.Attachment( handler.OpenReader( filePathName ), System.IO.Path.GetFileName( filePathName ) ) );
 					}
 				}
-				if ( !SendIfEmpty && System.String.IsNullOrEmpty( msg.Body ) && ( 0 == msg.Attachments.Count ) ) {
+				if ( !this.SendIfEmpty && System.String.IsNullOrEmpty( msg.Body ) && ( 0 == msg.Attachments.Count ) ) {
 					foreach ( var stream in msg.Attachments.OfType<System.Net.Mail.Attachment>().Select(
 						x => x.ContentStream
 					).Where(
@@ -210,13 +210,13 @@ namespace Icod.Wod {
 					return;
 				}
 
-				msg.Subject = order.ExpandVariables( this.Subject );
-				msg.To.Add( order.ExpandVariables( this.To ) );
+				msg.Subject = workOrder.ExpandVariables( this.Subject );
+				msg.To.Add( workOrder.ExpandVariables( this.To ) );
 				if ( !System.String.IsNullOrEmpty( this.CC ) ) {
-					msg.CC.Add( order.ExpandVariables( this.CC ) );
+					msg.CC.Add( workOrder.ExpandVariables( this.CC ) );
 				}
 				if ( !System.String.IsNullOrEmpty( this.Bcc ) ) {
-					msg.Bcc.Add( order.ExpandVariables( this.Bcc ) );
+					msg.Bcc.Add( workOrder.ExpandVariables( this.Bcc ) );
 				}
 				using ( var client = new System.Net.Mail.SmtpClient() ) {
 					client.Send( msg );

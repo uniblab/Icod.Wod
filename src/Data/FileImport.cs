@@ -36,8 +36,9 @@ namespace Icod.Wod.Data {
 
 
 		#region methods
-		public void DoWork( Icod.Wod.WorkOrder order ) {
-			this.WriteRecords( order, this.Source );
+		public void DoWork( Icod.Wod.WorkOrder workOrder ) {
+			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
+			this.WriteRecords( workOrder, this.Source );
 		}
 		#endregion methods
 

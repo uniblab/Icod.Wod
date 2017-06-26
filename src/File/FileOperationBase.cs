@@ -24,7 +24,7 @@ namespace Icod.Wod.File {
 
 
 		#region methods
-		public abstract void DoWork( WorkOrder order );
+		public abstract void DoWork( WorkOrder workOrder );
 		#endregion methods
 
 	}
