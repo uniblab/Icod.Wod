@@ -4,7 +4,9 @@ using System.Linq;
 namespace Icod.Wod.File {
 
 	[System.Serializable]
-	[System.Xml.Serialization.XmlType(
+	[System.Xml.Serialization.XmlInclude( typeof( RmZip ) )]
+	[System.Xml.Serialization.XmlInclude( typeof( FromZip ) )]
+	[ System.Xml.Serialization.XmlType(
 		"zipOperation",
 		Namespace = "http://Icod.Wod",
 		IncludeInSchema = true
