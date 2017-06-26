@@ -9,48 +9,17 @@ namespace Icod.Wod.File {
 		Namespace = "http://Icod.Wod",
 		IncludeInSchema = true
 	)]
-	public sealed class FromZip : FileOperationBase {
-
-		#region fields
-		private System.Boolean myTruncateEntryName;
-		#endregion fields
-
+	public sealed class FromZip : ZipOperationBase {
 
 		#region .ctor
 		public FromZip() : base() {
-			myTruncateEntryName = true;
 		}
 		public FromZip( WorkOrder workOrder ) : base( workOrder ) {
-			myTruncateEntryName = true;
 		}
 		#endregion .ctor
 
 
 		#region properties
-		[System.Xml.Serialization.XmlAttribute(
-			"truncateEntryName",
-			Namespace = "http://Icod.Wod"
-		)]
-		[System.ComponentModel.DefaultValue( true )]
-		public System.Boolean TruncateEntryName {
-			get {
-				return myTruncateEntryName;
-			}
-			set {
-				myTruncateEntryName = value;
-			}
-		}
-
-
-		[System.Xml.Serialization.XmlElement(
-			"source",
-			Namespace = "http://Icod.Wod",
-			IsNullable = false
-		)]
-		public FileDescriptor Source {
-			get;
-			set;
-		}
 		[System.Xml.Serialization.XmlElement(
 			"destination",
 			Namespace = "http://Icod.Wod",
