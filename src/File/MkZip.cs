@@ -34,6 +34,8 @@ namespace Icod.Wod.File {
 			}
 			System.String fileName;
 			System.IO.Compression.ZipArchiveEntry entry;
+			var writeIfEmpty = this.WriteIfEmpty;
+			var isEmpty = true;
 			using ( System.IO.Stream buffer = new System.IO.MemoryStream() ) {
 				using ( var zipArchive = new System.IO.Compression.ZipArchive( buffer, System.IO.Compression.ZipArchiveMode.Create, false, this.GetEncoding() ) ) {
 					foreach ( var file in source.ListFiles().Where(
@@ -47,9 +49,12 @@ namespace Icod.Wod.File {
 							}
 						}
 					}
+					isEmpty = zipArchive.Entries.Any();
 				}
-				buffer.Seek( 0, System.IO.SeekOrigin.Begin );
-				handler.Overwrite( buffer, handler.PathCombine( this.ExpandedPath, this.ExpandedName ) );
+				if ( !isEmpty || writeIfEmpty ) {
+					buffer.Seek( 0, System.IO.SeekOrigin.Begin );
+					handler.Overwrite( buffer, handler.PathCombine( this.ExpandedPath, this.ExpandedName ) );
+				}
 			}
 		}
 		#endregion methods
