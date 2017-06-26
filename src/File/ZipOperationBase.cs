@@ -17,6 +17,7 @@ namespace Icod.Wod.File {
 		#region fields
 		private System.String myCodePage;
 		private System.Boolean myTruncateEntryName;
+		private System.Boolean myWriteEmptyArchive;
 		#endregion fields
 
 
@@ -24,10 +25,12 @@ namespace Icod.Wod.File {
 		protected ZipOperationBase() : base() {
 			myCodePage = "windows-1252";
 			myTruncateEntryName = true;
+			myWriteEmptyArchive = true;
 		}
 		protected ZipOperationBase( WorkOrder workOrder ) : base( workOrder ) {
 			myCodePage = "windows-1252";
 			myTruncateEntryName = true;
+			myWriteEmptyArchive = true;
 		}
 		#endregion .ctor
 
@@ -58,6 +61,19 @@ namespace Icod.Wod.File {
 			}
 			set {
 				myTruncateEntryName = value;
+			}
+		}
+		[System.Xml.Serialization.XmlAttribute(
+			"writeEmptyArchive",
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.ComponentModel.DefaultValue( true )]
+		public virtual System.Boolean WriteEmptyArchive {
+			get {
+				return myWriteEmptyArchive;
+			}
+			set {
+				myWriteEmptyArchive = value;
 			}
 		}
 

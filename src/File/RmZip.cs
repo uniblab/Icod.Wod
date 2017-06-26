@@ -27,6 +27,8 @@ namespace Icod.Wod.File {
 			System.String file;
 			System.IO.Stream buffer;
 			System.Collections.Generic.IEnumerable<System.IO.Compression.ZipArchiveEntry> entries;
+			var deleteIfEmpty = !this.WriteEmptyArchive;
+			var isEmpty = true;
 			foreach ( var zipFile in handler.ListFiles().Where(
 				x => x.FileType.Equals( FileType.File )
 			) ) {
@@ -41,9 +43,14 @@ namespace Icod.Wod.File {
 					foreach ( var e in entries ) {
 						e.Delete();
 					}
+					isEmpty = zipArchive.Entries.Any();
 				}
-				buffer.Seek( 0, System.IO.SeekOrigin.Begin );
-				handler.Overwrite( buffer, file );
+				if ( isEmpty && deleteIfEmpty ) {
+					handler.DeleteFile( file );
+				} else {
+					buffer.Seek( 0, System.IO.SeekOrigin.Begin );
+					handler.Overwrite( buffer, file );
+				}
 			}
 		}
 		#endregion methods
