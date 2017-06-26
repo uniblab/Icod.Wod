@@ -9,7 +9,8 @@ namespace Icod.Wod.File {
 	[System.Xml.Serialization.XmlInclude( typeof( RenameFile ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( RmDir ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( TouchFile ) )]
-	[System.Xml.Serialization.XmlType(
+	[System.Xml.Serialization.XmlInclude( typeof( ZipOperationBase ) )]
+	[ System.Xml.Serialization.XmlType(
 		"fileOperation",
 		Namespace = "http://Icod.Wod"
 	)]
