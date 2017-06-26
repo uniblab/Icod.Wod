@@ -5,8 +5,8 @@ namespace Icod.Wod.File {
 
 	[System.Serializable]
 	[System.Xml.Serialization.XmlInclude( typeof( RmZip ) )]
-	[System.Xml.Serialization.XmlInclude( typeof( FromZip ) )]
-	[System.Xml.Serialization.XmlInclude( typeof( ToZip ) )]
+	[System.Xml.Serialization.XmlInclude( typeof( MkZip ) )]
+	[System.Xml.Serialization.XmlInclude( typeof( BinaryZipOperationBase ) )]
 	[System.Xml.Serialization.XmlType(
 		"zipOperation",
 		Namespace = "http://Icod.Wod",
@@ -38,7 +38,7 @@ namespace Icod.Wod.File {
 			Namespace = "http://Icod.Wod"
 		)]
 		[System.ComponentModel.DefaultValue( "windows-1252" )]
-		public System.String CodePage {
+		public virtual System.String CodePage {
 			get {
 				return myCodePage;
 			}
@@ -52,7 +52,7 @@ namespace Icod.Wod.File {
 			Namespace = "http://Icod.Wod"
 		)]
 		[System.ComponentModel.DefaultValue( true )]
-		public System.Boolean TruncateEntryName {
+		public virtual System.Boolean TruncateEntryName {
 			get {
 				return myTruncateEntryName;
 			}
@@ -66,7 +66,7 @@ namespace Icod.Wod.File {
 			Namespace = "http://Icod.Wod",
 			IsNullable = false
 		)]
-		public FileDescriptor Source {
+		public virtual FileDescriptor Source {
 			get;
 			set;
 		}

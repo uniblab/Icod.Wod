@@ -9,7 +9,7 @@ namespace Icod.Wod.File {
 		Namespace = "http://Icod.Wod",
 		IncludeInSchema = true
 	)]
-	public sealed class FromZip : ZipOperationBase {
+	public sealed class FromZip : BinaryZipOperationBase {
 
 		#region .ctor
 		public FromZip() : base() {
@@ -17,19 +17,6 @@ namespace Icod.Wod.File {
 		public FromZip( WorkOrder workOrder ) : base( workOrder ) {
 		}
 		#endregion .ctor
-
-
-		#region properties
-		[System.Xml.Serialization.XmlElement(
-			"destination",
-			Namespace = "http://Icod.Wod",
-			IsNullable = false
-		)]
-		public FileDescriptor Destination {
-			get;
-			set;
-		}
-		#endregion properties
 
 
 		#region methods
