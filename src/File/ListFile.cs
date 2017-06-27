@@ -5,7 +5,7 @@ namespace Icod.Wod.File {
 
 	[System.Serializable]
 	[System.Xml.Serialization.XmlType(
-		"copyFile",
+		"listFile",
 		Namespace = "http://Icod.Wod",
 		IncludeInSchema = true
 	)]
@@ -41,7 +41,7 @@ namespace Icod.Wod.File {
 			Namespace = "http://Icod.Wod"
 		)]
 		[System.ComponentModel.DefaultValue( "windows-1252" )]
-		public virtual System.String CodePage {
+		public System.String CodePage {
 			get {
 				return myCodePage;
 			}
@@ -55,7 +55,7 @@ namespace Icod.Wod.File {
 			Namespace = "http://Icod.Wod"
 		)]
 		[System.ComponentModel.DefaultValue( true )]
-		public virtual System.Boolean TruncateEntryName {
+		public System.Boolean TruncateEntryName {
 			get {
 				return myTruncateEntryName;
 			}
@@ -94,7 +94,7 @@ namespace Icod.Wod.File {
 
 
 		#region methods
-		public virtual System.Text.Encoding GetEncoding() {
+		public System.Text.Encoding GetEncoding() {
 			return CodePageHelper.GetCodePage( this.CodePage );
 		}
 
