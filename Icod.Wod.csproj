@@ -103,6 +103,7 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Release-net47' ">
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="src\File\BinaryFileOperationBase.cs" />
     <Compile Include="src\File\BinaryZipOperationBase.cs" />
     <Compile Include="src\CodePageHelper.cs" />
     <Compile Include="src\ConnectionStringEntry.cs" />
@@ -112,6 +113,7 @@
     <Compile Include="src\FileHelper.cs" />
     <Compile Include="src\File\ChopFile.cs" />
     <Compile Include="src\File\FromZip.cs" />
+    <Compile Include="src\File\ListFile.cs" />
     <Compile Include="src\File\MkZip.cs" />
     <Compile Include="src\File\RmZip.cs" />
     <Compile Include="src\File\ZipOperationBase.cs" />

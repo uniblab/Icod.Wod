@@ -8,7 +8,7 @@ namespace Icod.Wod.File {
 		Namespace = "http://Icod.Wod",
 		IncludeInSchema = true
 	)]
-	public sealed class AppendFile : FileOperationBase {
+	public sealed class AppendFile : BinaryFileOperationBase {
 
 		#region fields
 		private System.Boolean myMove;
@@ -26,16 +26,6 @@ namespace Icod.Wod.File {
 
 
 		#region properties
-		[System.Xml.Serialization.XmlElement(
-			"destination",
-			Namespace = "http://Icod.Wod",
-			IsNullable = false
-		)]
-		public FileDescriptor Destination {
-			get;
-			set;
-		}
-
 		[System.Xml.Serialization.XmlAttribute(
 			"move",
 			Namespace = "http://Icod.Wod"

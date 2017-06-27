@@ -7,10 +7,9 @@ namespace Icod.Wod.File {
 		"gzipFile",
 		Namespace = "http://Icod.Wod"
 	)]
-	public sealed class GZipFile : FileOperationBase {
+	public sealed class GZipFile : BinaryFileOperationBase {
 
 		#region fields
-		private FileDescriptor myDestination;
 		private System.Boolean myDelete;
 		private System.IO.Compression.CompressionMode myCompressionMode;
 		#endregion fields
@@ -27,20 +26,6 @@ namespace Icod.Wod.File {
 
 
 		#region properties
-		[System.Xml.Serialization.XmlElement(
-			"destination",
-			Namespace = "http://Icod.Wod",
-			IsNullable = false 
-		)]
-		public FileDescriptor Destination {
-			get {
-				return myDestination;
-			}
-			set {
-				myDestination = value;
-			}
-		}
-
 		[System.Xml.Serialization.XmlAttribute(
 			"delete",
 			Namespace = "http://Icod.Wod"

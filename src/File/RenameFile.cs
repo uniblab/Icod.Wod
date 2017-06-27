@@ -8,12 +8,7 @@ namespace Icod.Wod.File {
 		Namespace = "http://Icod.Wod",
 		IncludeInSchema = true
 	)]
-	public sealed class RenameFile : FileOperationBase {
-
-		#region fields
-		private FileDescriptor myDestination;
-		#endregion fields
-
+	public sealed class RenameFile : BinaryFileOperationBase {
 
 		#region .ctor
 		public RenameFile() : base() {
@@ -21,23 +16,6 @@ namespace Icod.Wod.File {
 		public RenameFile( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
 		}
 		#endregion .ctor
-
-
-		#region properties
-		[System.Xml.Serialization.XmlElement( 
-			"destination",
-			Namespace = "http://Icod.Wod",
-			IsNullable = false 
-		)]
-		public FileDescriptor Destination {
-			get {
-				return myDestination;
-			}
-			set {
-				myDestination = value;
-			}
-		}
-		#endregion properties
 
 
 		#region methods
