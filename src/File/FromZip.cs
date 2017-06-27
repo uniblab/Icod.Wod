@@ -25,6 +25,7 @@ namespace Icod.Wod.File {
 			var source = this.Source;
 			var destD = this.Destination;
 			destD.WorkOrder = workOrder;
+			System.String ePath = destD.ExpandedPath;
 			var dest = destD.GetFileHandler( workOrder );
 
 			var handler = this.GetFileHandler( workOrder );
@@ -43,12 +44,10 @@ namespace Icod.Wod.File {
 				using ( var zipArchive = this.GetZipArchive( buffer, System.IO.Compression.ZipArchiveMode.Read ) ) {
 					foreach ( var entry in this.ListEntries( zipArchive, source ) ) {
 						using ( var entryStream = entry.Open() ) {
-							eDir = System.IO.Path.GetDirectoryName( entry.FullName );
-							if ( System.String.IsNullOrEmpty( eDir ) ) {
-								eDir = destD.ExpandedPath;
-							} else {
-								eDir = dest.PathCombine( destD.ExpandedPath, eDir );
-							}
+							eDir = ( this.TruncateEntryName )
+								? ePath
+								: dest.PathCombine( ePath, System.IO.Path.GetDirectoryName( entry.FullName ) )
+							;
 							dest.Overwrite( entryStream, dest.PathCombine( eDir, entry.Name ) );
 						}
 					}
