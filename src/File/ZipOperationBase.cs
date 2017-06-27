@@ -67,8 +67,8 @@ namespace Icod.Wod.File {
 			"writeIfEmpty",
 			Namespace = "http://Icod.Wod"
 		)]
-		[System.ComponentModel.DefaultValue( true )]
-		public virtual System.Boolean WriteIfEmpty {
+		[System.ComponentModel.DefaultValue( false )]
+		public System.Boolean WriteIfEmpty {
 			get {
 				return myWriteIfEmpty;
 			}
