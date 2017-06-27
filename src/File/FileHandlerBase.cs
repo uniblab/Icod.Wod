@@ -99,19 +99,7 @@ namespace Icod.Wod.File {
 		}
 
 		public System.String PathCombine( System.String path, System.String name ) {
-			if ( System.String.IsNullOrEmpty( name ) ) {
-				throw new System.ArgumentNullException( "name" );
-			} else if ( System.String.IsNullOrEmpty( path ) ) {
-				throw new System.ArgumentNullException( "path" );
-			}
-			var sep = this.PathSeparator.ToString();
-			while ( path.EndsWith( sep ) ) {
-				path = path.Substring( 0, path.Length - 1 );
-			}
-			while ( name.StartsWith( sep ) ) {
-				sep = sep.Substring( 1 );
-			}
-			return path + sep + name;
+			return FileHelper.PathCombine( path, this.PathSeparator, name );
 		}
 		#endregion methods
 

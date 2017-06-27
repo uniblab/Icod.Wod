@@ -47,6 +47,22 @@ namespace Icod.Wod {
 			return isNull ? null : line.ToString();
 		}
 
+		public static System.String PathCombine( System.String path, System.Char pathSeparator, System.String name ) {
+			if ( System.String.IsNullOrEmpty( name ) ) {
+				throw new System.ArgumentNullException( "name" );
+			} else if ( System.String.IsNullOrEmpty( path ) ) {
+				throw new System.ArgumentNullException( "path" );
+			}
+			var sep = pathSeparator.ToString();
+			while ( path.EndsWith( sep ) ) {
+				path = path.Substring( 0, path.Length - 1 );
+			}
+			while ( name.StartsWith( sep ) ) {
+				sep = sep.Substring( 1 );
+			}
+			return path + sep + name;
+		}
+
 	}
 
 }
