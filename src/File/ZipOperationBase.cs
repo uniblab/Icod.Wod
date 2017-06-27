@@ -91,13 +91,7 @@ namespace Icod.Wod.File {
 
 		#region methods
 		public virtual System.Text.Encoding GetEncoding() {
-			var cp = this.CodePage;
-			System.Int32 cpNumber;
-			if ( System.Int32.TryParse( cp, out cpNumber ) ) {
-				return System.Text.Encoding.GetEncoding( cpNumber );
-			} else {
-				return System.Text.Encoding.GetEncoding( cp );
-			}
+			return CodePageHelper.GetCodePage( this.CodePage );
 		}
 
 		protected virtual System.Collections.Generic.IEnumerable<System.IO.Compression.ZipArchiveEntry> MatchEntries( System.Collections.Generic.IEnumerable<System.IO.Compression.ZipArchiveEntry> collection ) {

@@ -121,13 +121,7 @@ namespace Icod.Wod.File {
 
 		#region methods
 		public System.Text.Encoding GetEncoding() {
-			var cp = this.CodePage;
-			System.Int32 cpNumber;
-			if ( System.Int32.TryParse( cp, out cpNumber ) ) {
-				return System.Text.Encoding.GetEncoding( cpNumber );
-			} else {
-				return System.Text.Encoding.GetEncoding( cp );
-			}
+			return CodePageHelper.GetCodePage( this.CodePage );
 		}
 
 		public sealed override void DoWork( WorkOrder workOrder ) {
