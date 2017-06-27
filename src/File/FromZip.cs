@@ -42,12 +42,12 @@ namespace Icod.Wod.File {
 				}
 				buffer.Seek( 0, System.IO.SeekOrigin.Begin );
 				using ( var zipArchive = this.GetZipArchive( buffer, System.IO.Compression.ZipArchiveMode.Read ) ) {
-					foreach ( var entry in this.ListEntries( zipArchive, source ) ) {
+					foreach ( var entry in this.MatchEntries( zipArchive.Entries ) ) {
+						eDir = ( this.TruncateEntryName )
+							? ePath
+							: dest.PathCombine( ePath, System.IO.Path.GetDirectoryName( entry.FullName ) )
+						;
 						using ( var entryStream = entry.Open() ) {
-							eDir = ( this.TruncateEntryName )
-								? ePath
-								: dest.PathCombine( ePath, System.IO.Path.GetDirectoryName( entry.FullName ) )
-							;
 							dest.Overwrite( entryStream, dest.PathCombine( eDir, entry.Name ) );
 						}
 					}

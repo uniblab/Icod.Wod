@@ -37,7 +37,7 @@ namespace Icod.Wod.File {
 			var writeIfEmpty = this.WriteIfEmpty;
 			var isEmpty = true;
 			using ( System.IO.Stream buffer = new System.IO.MemoryStream() ) {
-				using ( var zipArchive = new System.IO.Compression.ZipArchive( buffer, System.IO.Compression.ZipArchiveMode.Create, false, this.GetEncoding() ) ) {
+				using ( var zipArchive = this.GetZipArchive( buffer, System.IO.Compression.ZipArchiveMode.Update ) ) {
 					foreach ( var file in source.ListFiles().Where(
 						x => x.FileType.Equals( FileType.File )
 					) ) {
@@ -46,10 +46,10 @@ namespace Icod.Wod.File {
 							entry = zipArchive.CreateEntry( fileName );
 							using ( var writer = entry.Open() ) {
 								reader.CopyTo( writer );
+								isEmpty = false;
 							}
 						}
 					}
-					isEmpty = zipArchive.Entries.Any();
 				}
 				if ( !isEmpty || writeIfEmpty ) {
 					buffer.Seek( 0, System.IO.SeekOrigin.Begin );

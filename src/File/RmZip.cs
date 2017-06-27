@@ -23,6 +23,7 @@ namespace Icod.Wod.File {
 		public sealed override void DoWork( WorkOrder workOrder ) {
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			var source = this.Source;
+			source.WorkOrder = workOrder;
 			var handler = this.GetFileHandler( workOrder );
 			System.String file;
 			System.IO.Stream buffer;
@@ -39,11 +40,11 @@ namespace Icod.Wod.File {
 				}
 				buffer.Seek( 0, System.IO.SeekOrigin.Begin );
 				using ( var zipArchive = this.GetZipArchive( buffer, System.IO.Compression.ZipArchiveMode.Update ) ) {
-					entries = this.ListEntries( zipArchive, source ).Reverse();
+					entries = ( this.MatchEntries( zipArchive.Entries ) ?? new System.IO.Compression.ZipArchiveEntry[ 0 ] ).Reverse();
 					foreach ( var e in entries ) {
 						e.Delete();
 					}
-					isEmpty = zipArchive.Entries.Any();
+					isEmpty = !zipArchive.Entries.Any();
 				}
 				if ( isEmpty && deleteIfEmpty ) {
 					handler.DeleteFile( file );

@@ -100,18 +100,19 @@ namespace Icod.Wod.File {
 			}
 		}
 
-		protected virtual System.Collections.Generic.IEnumerable<System.IO.Compression.ZipArchiveEntry> ListEntries( System.IO.Compression.ZipArchive zip, FileDescriptor source ) {
-			if ( null == zip ) {
-				throw new System.ArgumentNullException( "zip" );
-			} else if ( null == source ) {
-				throw new System.ArgumentNullException( "source" );
+		protected virtual System.Collections.Generic.IEnumerable<System.IO.Compression.ZipArchiveEntry> MatchEntries( System.Collections.Generic.IEnumerable<System.IO.Compression.ZipArchiveEntry> collection ) {
+			if ( null == collection ) {
+				throw new System.ArgumentNullException( "collection" );
 			}
 
+			var source = this.Source;
+			if ( null == source ) {
+				throw new System.InvalidOperationException();
+			}
 			var regexPattern = source.RegexPattern;
-			var entries = zip.Entries;
 			var regexMatch = System.String.IsNullOrEmpty( regexPattern )
-				? entries
-				: entries.Where(
+				? collection
+				: collection.Where(
 					x => System.Text.RegularExpressions.Regex.IsMatch( x.FullName, regexPattern )
 				)
 			;
@@ -123,12 +124,13 @@ namespace Icod.Wod.File {
 				)
 			;
 			var name = source.ExpandedName;
-			return System.String.IsNullOrEmpty( name )
+			var nameMatch = System.String.IsNullOrEmpty( name )
 				? dirMatch
 				: dirMatch.Where(
 					x => x.Name.Equals( name )
 				)
 			;
+			return nameMatch;
 		}
 
 		protected virtual System.IO.Compression.ZipArchive GetZipArchive( System.IO.Stream stream, System.IO.Compression.ZipArchiveMode zipArchiveMode ) {
