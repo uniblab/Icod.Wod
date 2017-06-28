@@ -172,6 +172,10 @@ namespace Icod.Wod {
 				while ( @string.Contains( "%wod:DateTime-yyyyMMdd%" ) ) {
 					@string = @string.Replace( "%wod:DateTime-yyyyMMdd%", yyyyMMdd );
 				}
+				var hhmmss = now.ToString( "%wod:DateTime-hhmmss%" );
+				while ( @string.Contains( "%wod:DateTime-hhmmss%" ) ) {
+					@string = @string.Replace( "%wod:DateTime-hhmmss%", hhmmss );
+				}
 			}
 			@string = @string.Replace( "%wod:EmailTo%", this.EmailTo );
 			@string = @string.Replace( "%wod:JobName%", this.JobName );
