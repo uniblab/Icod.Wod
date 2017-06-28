@@ -72,7 +72,7 @@ namespace Icod.Wod.File {
 				client.CreateDirectory( this.FileDescriptor.ExpandedPath );
 			}
 		}
-		public sealed override void RmDir() {
+		public sealed override void RmDir( System.Boolean recurse ) {
 			using ( var client = this.GetClient() ) {
 				client.DeleteDirectory( this.FileDescriptor.ExpandedPath );
 			}

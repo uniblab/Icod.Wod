@@ -75,7 +75,7 @@ namespace Icod.Wod.File {
 		public sealed override void MkDir() {
 			throw new System.NotSupportedException();
 		}
-		public sealed override void RmDir() {
+		public sealed override void RmDir( System.Boolean recurse ) {
 			throw new System.NotSupportedException();
 		}
 

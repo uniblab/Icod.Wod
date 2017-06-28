@@ -62,8 +62,8 @@ namespace Icod.Wod.File {
 			var dirPath = this.FileDescriptor.ExpandedPath;
 			System.IO.Directory.CreateDirectory( dirPath );
 		}
-		public sealed override void RmDir() {
-			System.IO.Directory.Delete( this.FileDescriptor.ExpandedPath, this.FileDescriptor.Recurse );
+		public sealed override void RmDir( System.Boolean recurse ) {
+			System.IO.Directory.Delete( this.FileDescriptor.ExpandedPath, recurse );
 		}
 
 		public sealed override System.Collections.Generic.IEnumerable<FileEntry> ListFiles() {

@@ -43,8 +43,12 @@ namespace Icod.Wod.File {
 			}
 
 			var filePathName = source.ListFiles().First().File;
-			using ( var reader = source.OpenReader( filePathName ) ) {
-				dest.Overwrite( reader, source.PathCombine( source.FileDescriptor.ExpandedPath, dest.FileDescriptor.ExpandedName ) );
+			using ( var buffer = new System.IO.MemoryStream() ) {
+				using ( var reader = source.OpenReader( filePathName ) ) {
+					reader.CopyTo( buffer );
+				}
+				buffer.Seek( 0, System.IO.SeekOrigin.Begin );
+				dest.Overwrite( buffer, source.PathCombine( source.FileDescriptor.ExpandedPath, dest.FileDescriptor.ExpandedName ) );
 			}
 			source.DeleteFile( filePathName );
 		}

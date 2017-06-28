@@ -89,7 +89,7 @@ namespace Icod.Wod.File {
 		}
 
 		public abstract void MkDir();
-		public abstract void RmDir();
+		public abstract void RmDir( System.Boolean recurse );
 
 		public abstract System.Collections.Generic.IEnumerable<FileEntry> ListFiles();
 		public abstract System.Collections.Generic.IEnumerable<FileEntry> ListDirectories();

@@ -11,7 +11,6 @@ namespace Icod.Wod.File {
 		private System.String myName;
 		private System.String myRegexPattern;
 		private System.IO.SearchOption mySearchOption;
-		private System.Boolean myRecurse;
 		private System.String myUsername;
 		private System.String myPassword;
 		private System.Boolean myUsePassive;
@@ -94,20 +93,6 @@ namespace Icod.Wod.File {
 			}
 			set {
 				mySearchOption = value;
-			}
-		}
-
-		[System.Xml.Serialization.XmlAttribute(
-			"recurse",
-			Namespace = "http://Icod.Wod"
-		)]
-		[System.ComponentModel.DefaultValue( false )]
-		public virtual System.Boolean Recurse {
-			get {
-				return myRecurse;
-			}
-			set {
-				myRecurse = value;
 			}
 		}
 

@@ -20,11 +20,6 @@ namespace Icod.Wod.File {
 			set;
 		}
 
-		System.Boolean Recurse {
-			get;
-			set;
-		}
-
 		System.String Username {
 			get;
 			set;

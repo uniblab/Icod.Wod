@@ -96,7 +96,7 @@ namespace Icod.Wod.File {
 			this.SetFtpClient( ftp, System.Net.WebRequestMethods.Ftp.MakeDirectory );
 			ftp.GetResponse().Close();
 		}
-		public sealed override void RmDir() {
+		public sealed override void RmDir( System.Boolean recurse ) {
 			var fd = this.FileDescriptor;
 			var filePathName = this.PathCombine( fd.ExpandedPath, fd.ExpandedName );
 			var uri = new System.Uri( filePathName );
