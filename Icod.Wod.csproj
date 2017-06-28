@@ -112,6 +112,7 @@
     <Compile Include="src\Email.cs" />
     <Compile Include="src\FileHelper.cs" />
     <Compile Include="src\File\ChopFile.cs" />
+    <Compile Include="src\File\ExistsFile.cs" />
     <Compile Include="src\File\FromZip.cs" />
     <Compile Include="src\File\ListFile.cs" />
     <Compile Include="src\File\ListZip.cs" />
