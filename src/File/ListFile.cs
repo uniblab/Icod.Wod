@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 
 namespace Icod.Wod.File {
 
@@ -118,7 +117,7 @@ namespace Icod.Wod.File {
 				dest.WorkOrder = workOrder;
 				var dh = dest.GetFileHandler( workOrder );
 				using ( var buffer = new System.IO.MemoryStream() ) {
-					using ( var writer = new System.IO.StreamWriter( buffer, this.GetEncoding(), this.BufferLength ) ) {
+					using ( var writer = new System.IO.StreamWriter( buffer, this.GetEncoding(), this.BufferLength, true ) ) {
 						foreach ( var entry in list ) {
 							writer.WriteLine( getFileName( entry ) );
 						}
