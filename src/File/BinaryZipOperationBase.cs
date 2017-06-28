@@ -5,6 +5,7 @@ namespace Icod.Wod.File {
 
 	[System.Serializable]
 	[System.Xml.Serialization.XmlInclude( typeof( FromZip ) )]
+	[System.Xml.Serialization.XmlInclude( typeof( ListZip ) )]
 	[System.Xml.Serialization.XmlType(
 		"binaryZipOperation",
 		Namespace = "http://Icod.Wod",

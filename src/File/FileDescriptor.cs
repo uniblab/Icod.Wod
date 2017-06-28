@@ -169,26 +169,30 @@ namespace Icod.Wod.File {
 			FileHandlerBase output = null;
 
 			this.WorkOrder = workOrder;
-			var uri = new System.Uri( this.ExpandedPath );
-			switch ( uri.Scheme.ToLower() ) {
-				case "file" :
-					output = new LocalFileHandler( workOrder, this );
-					break;
-				case "ftp" :
-				case "ftps" :
-					output = new FtpFileHandler( workOrder, this );
-					break;
-				case "http" :
-				case "https" :
-					output = new FtpFileHandler( workOrder, this );
-					break;
-				case "sftp" :
-					output = new SftpFileHandler( workOrder, this );
-					break;
-				default:
-					throw new System.NotSupportedException();
+			var ep = this.ExpandedPath;
+			if ( System.String.IsNullOrEmpty( ep ) ) {
+				output = new LocalFileHandler( workOrder, this );
+			} else {
+				var uri = new System.Uri( ep );
+				switch ( uri.Scheme.ToLower() ) {
+					case "file":
+						output = new LocalFileHandler( workOrder, this );
+						break;
+					case "ftp":
+					case "ftps":
+						output = new FtpFileHandler( workOrder, this );
+						break;
+					case "http":
+					case "https":
+						output = new FtpFileHandler( workOrder, this );
+						break;
+					case "sftp":
+						output = new SftpFileHandler( workOrder, this );
+						break;
+					default:
+						throw new System.NotSupportedException();
+				}
 			}
-
 			return output;
 		}
 		#endregion methods

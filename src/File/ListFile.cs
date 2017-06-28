@@ -101,7 +101,7 @@ namespace Icod.Wod.File {
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			var source = this.GetFileHandler( workOrder );
 			if ( null == source ) {
-				throw new System.ArgumentNullException( "source" );
+				throw new System.InvalidOperationException();
 			}
 
 			System.Func<FileEntry, System.String> getFileName = null;
