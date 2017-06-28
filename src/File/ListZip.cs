@@ -10,7 +10,7 @@ namespace Icod.Wod.File {
 		Namespace = "http://Icod.Wod",
 		IncludeInSchema = true
 	)]
-	public class ListZip : BinaryZipOperationBase {
+	public sealed class ListZip : BinaryZipOperationBase {
 
 		#region fields
 		private System.Int32 myBufferLength;
@@ -56,7 +56,7 @@ namespace Icod.Wod.File {
 				throw new System.InvalidOperationException();
 			}
 
-			var sourceD = this.Source;
+			var sourceD = this.Source ?? new FileDescriptor( workOrder );
 			sourceD.WorkOrder = workOrder;
 			var source = sourceD.GetFileHandler( workOrder );
 			if ( null == source ) {
