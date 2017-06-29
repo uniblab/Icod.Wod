@@ -9,7 +9,7 @@ namespace Icod.Wod.Data {
 
 		#region fields
 		private static readonly System.Action<System.IO.StreamWriter> theEmptyEolWriter;
-		private const System.Char SpaceChar = ' ';
+		protected const System.Char SpaceChar = ' ';
 
 		private System.String myCodePage;
 		private System.Boolean myHasHeader;
@@ -39,7 +39,7 @@ namespace Icod.Wod.Data {
 			mySkip = 0;
 			myWriteIfEmpty = false;
 			myRecordSeparator = "\r\n";
-			myEolWriter = theEmptyEolWriter;
+			myEolWriter = x => x.Write( myRecordSeparator );
 			myConvertEmptyStringToNull = true;
 			myTrimValues = true;
 		}
@@ -52,7 +52,7 @@ namespace Icod.Wod.Data {
 			mySkip = 0;
 			myWriteIfEmpty = false;
 			myRecordSeparator = "\r\n";
-			myEolWriter = theEmptyEolWriter;
+			myEolWriter = x => x.Write( myRecordSeparator );
 			myConvertEmptyStringToNull = true;
 			myTrimValues = true;
 		}
@@ -303,8 +303,8 @@ namespace Icod.Wod.Data {
 			} else if ( null == writer ) {
 				throw new System.ArgumentNullException( "writer" );
 			}
-
-			writer.WriteLine( GetRow( formatMap, columns, row ) );
+			writer.Write( GetRow( formatMap, columns, row ) );
+			this.EolWriter( writer );
 		}
 		protected virtual System.String GetRow( System.Collections.Generic.IDictionary<System.Data.DataColumn, TextFileColumn> formatMap, System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Data.DataRow row ) {
 			if ( null == row ) {

@@ -321,16 +321,16 @@ namespace Icod.Wod.Data {
 			return this.ColumnReader( sb );
 		}
 
-
 		protected sealed override void WriteHeader( System.IO.StreamWriter writer, System.Collections.Generic.IEnumerable<System.Data.DataColumn> dbColumns, System.Collections.Generic.IEnumerable<TextFileColumn> fileColumns ) {
 			if ( ( null == dbColumns ) || !dbColumns.Any() ) {
 				throw new System.ArgumentNullException( "dbColumns" );
 			} else if ( null == writer ) {
 				throw new System.ArgumentNullException( "writer" );
 			}
-			writer.WriteLine( System.String.Join( this.FieldSeparatorString, dbColumns.Select(
+			writer.Write( System.String.Join( this.FieldSeparatorString, dbColumns.Select(
 				x => x.ColumnName
 			).ToArray() ) );
+			this.EolWriter( writer );
 		}
 		protected sealed override System.String GetRow( System.Collections.Generic.IDictionary<System.Data.DataColumn, TextFileColumn> formatMap, System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Data.DataRow row ) {
 			if ( null == row ) {
@@ -341,7 +341,8 @@ namespace Icod.Wod.Data {
 				throw new System.ArgumentNullException( "formatMap" );
 			}
 
-			return System.String.Join( this.FieldSeparatorString, columns.Select(
+			var qcs = this.QuoteCharString;
+			var list = columns.Select(
 				x => this.GetColumn(
 					formatMap.ContainsKey( x )
 						? formatMap[ x ] ?? new TextFileColumn( x.ColumnName )
@@ -350,7 +351,10 @@ namespace Icod.Wod.Data {
 					x,
 					row
 				)
-			) );
+			).Select(
+				x => x.Contains( this.FieldSeparatorString ) ? qcs + x + qcs : x
+			);
+			return System.String.Join( this.FieldSeparatorString, list );
 		}
 		#endregion methods
 
