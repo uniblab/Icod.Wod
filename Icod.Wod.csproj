@@ -103,6 +103,7 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Release-net47' ">
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="src\File\ExecuteFile.cs" />
     <Compile Include="src\File\BinaryFileOperationBase.cs" />
     <Compile Include="src\File\BinaryZipOperationBase.cs" />
     <Compile Include="src\CodePageHelper.cs" />
