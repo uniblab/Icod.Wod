@@ -24,13 +24,14 @@ namespace Icod.Wod.File {
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			var sourceD = this.Source;
 			sourceD.WorkOrder = workOrder;
+			var sep = sourceD.ExpandedPath;
 			var source = sourceD.GetFileHandler( workOrder );
 			var handler = this.GetFileHandler( workOrder );
 			System.Func<FileEntry, System.String> getFileName = null;
 			if ( this.TruncateEntryName ) {
 				getFileName = x => System.IO.Path.GetFileName( x.File );
 			} else {
-				getFileName = x => x.File;
+				getFileName = x => x.File.Replace( sep, System.String.Empty );
 			}
 			System.String fileName;
 			System.IO.Compression.ZipArchiveEntry entry;
@@ -43,7 +44,11 @@ namespace Icod.Wod.File {
 					) ) {
 						using ( var reader = source.OpenReader( file.File ) ) {
 							fileName = getFileName( file );
-							entry = zipArchive.CreateEntry( fileName );
+							fileName = fileName.Replace( '\\', '/' );
+							while ( fileName.StartsWith( "/", StringComparison.OrdinalIgnoreCase ) ) {
+								fileName = fileName.Substring( 1 );
+							}
+							entry = zipArchive.CreateEntry( fileName, System.IO.Compression.CompressionLevel.Optimal );
 							using ( var writer = entry.Open() ) {
 								reader.CopyTo( writer );
 								isEmpty = false;

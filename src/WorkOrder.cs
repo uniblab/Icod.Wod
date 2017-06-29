@@ -11,6 +11,8 @@ namespace Icod.Wod {
 	public sealed class WorkOrder {
 
 		#region fields
+		private const System.String DateTimeFormat = @"(?<DateTimeFormat>%wod:DateTime\{(?<dateTimeFormatString>[^\}]+)\}%)";
+
 		private ConnectionStringEntry[] myConnectionStrings;
 		[System.NonSerialized]
 		private readonly System.Collections.Generic.IDictionary<System.String,System.String> myDict;
@@ -150,32 +152,8 @@ namespace Icod.Wod {
 				return null;
 			}
 			@string = System.Environment.ExpandEnvironmentVariables( @string );
-			if ( @string.Contains( "%wod:DateTime-" ) ) {
-				var now = System.DateTime.Now;
-				var yy = now.ToString( "yy" );
-				while ( @string.Contains( "%wod:DateTime-yy%" ) ) {
-					@string = @string.Replace( "%wod:DateTime-yy%", yy );
-				}
-				var yyyy = now.ToString( "yyyy" );
-				while ( @string.Contains( "%wod:DateTime-yyyy%" ) ) {
-					@string = @string.Replace( "%wod:DateTime-yyyy%", yyyy );
-				}
-				var MM = now.ToString( "MM" );
-				while ( @string.Contains( "%wod:DateTime-MM%" ) ) {
-					@string = @string.Replace( "%wod:DateTime-MM%", MM );
-				}
-				var dd = now.ToString( "dd" );
-				while ( @string.Contains( "%wod:DateTime-dd%" ) ) {
-					@string = @string.Replace( "%wod:DateTime-dd%", dd );
-				}
-				var yyyyMMdd = now.ToString( "yyyyMMdd" );
-				while ( @string.Contains( "%wod:DateTime-yyyyMMdd%" ) ) {
-					@string = @string.Replace( "%wod:DateTime-yyyyMMdd%", yyyyMMdd );
-				}
-				var hhmmss = now.ToString( "%wod:DateTime-hhmmss%" );
-				while ( @string.Contains( "%wod:DateTime-hhmmss%" ) ) {
-					@string = @string.Replace( "%wod:DateTime-hhmmss%", hhmmss );
-				}
+			foreach ( System.Text.RegularExpressions.Match m in System.Text.RegularExpressions.Regex.Matches( @string, DateTimeFormat ) ) {
+				@string = System.Text.RegularExpressions.Regex.Replace( @string, m.Value, System.DateTime.Now.ToString( m.Groups[ "dateTimeFormatString" ].Value ) );
 			}
 			@string = @string.Replace( "%wod:EmailTo%", this.EmailTo );
 			@string = @string.Replace( "%wod:JobName%", this.JobName );
