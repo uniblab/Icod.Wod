@@ -219,6 +219,16 @@ namespace Icod.Wod.Data {
 				myTrimValues = value;
 			}
 		}
+
+		[System.Xml.Serialization.XmlAttribute(
+			"nullReplacementText",
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.ComponentModel.DefaultValue( null )]
+		public virtual System.String NullReplacementText {
+			get;
+			set;
+		}
 		#endregion properties
 
 
@@ -353,17 +363,26 @@ namespace Icod.Wod.Data {
 				throw new System.ArgumentNullException( "column" );
 			}
 
-
 			if ( null == format ) {
 				format = new TextFileColumn( column.ColumnName );
 			}
-			var s = System.String.Format( format.FormatString ?? "{0}", row[ column ] ?? System.String.Empty );
+			System.Object value = row[ column ];
+			var nrt = this.NullReplacementText;
+			System.String output;
+			output = ( ( null == value ) && ( null != nrt ) )
+				? nrt
+				: System.String.Format( format.FormatString ?? "{0}", value )
+			;
 			if ( 0 < format.Length ) {
 				var l = format.Length;
-				var w = l - s.Length;
-				s = s.PadLeft( w, SpaceChar );
+				var w = l - output.Length;
+				if ( 0 < w ) {
+					output = output.PadLeft( w, SpaceChar );
+				} else if ( w < 0 ) {
+					output = output.Substring( 0, l );
+				}
 			}
-			return s;
+			return output;
 		}
 
 		public virtual System.Collections.Generic.IEnumerable<System.Data.DataTable> ReadTables( Icod.Wod.WorkOrder workOrder ) {
