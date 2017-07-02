@@ -368,8 +368,7 @@ namespace Icod.Wod.Data {
 			}
 			System.Object value = row[ column ];
 			var nrt = this.NullReplacementText;
-			System.String output;
-			output = ( ( null == value ) && ( null != nrt ) )
+			System.String output = ( ( null == value ) && ( null != nrt ) )
 				? nrt
 				: System.String.Format( format.FormatString ?? "{0}", value )
 			;
