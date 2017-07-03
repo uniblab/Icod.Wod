@@ -366,7 +366,7 @@ namespace Icod.Wod.Data {
 			if ( null == format ) {
 				format = new TextFileColumn( column.ColumnName );
 			}
-			System.Object value = row[ column ];
+			var value = row[ column ];
 			var nrt = this.NullReplacementText;
 			var output = ( ( null == value ) && ( null != nrt ) )
 				? nrt
