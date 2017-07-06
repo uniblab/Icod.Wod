@@ -6,13 +6,15 @@ namespace Icod.Wod.File {
 	public sealed class ChainedDisposer : System.IDisposable {
 
 		#region fields
-		private System.IDisposable myOuter;
-		private System.IDisposable myInner;
+		private readonly System.IDisposable myOuter;
+		private readonly System.IDisposable myInner;
+		private System.Boolean myIsDisposed;
 		#endregion fields
 
 
 		#region .ctor
 		private ChainedDisposer() : base() {
+			myIsDisposed = false;
 		}
 		public ChainedDisposer( System.IDisposable outer, System.IDisposable inner ) : this() {
 			myInner = inner;
@@ -31,15 +33,16 @@ namespace Icod.Wod.File {
 			System.GC.SuppressFinalize( this );
 		}
 		private void Dispose( System.Boolean disposing ) {
-			if ( disposing ) {
+			if ( disposing && !myIsDisposed ) {
+				System.Threading.Thread.BeginCriticalRegion();
 				if ( null != myInner ) {
 					myInner.Dispose();
-					myInner = null;
 				}
 				if ( null != myOuter ) {
 					myOuter.Dispose();
-					myOuter = null;
 				}
+				myIsDisposed = true;
+				System.Threading.Thread.EndCriticalRegion();
 			}
 		}
 		#endregion methods
