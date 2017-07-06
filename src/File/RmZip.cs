@@ -22,8 +22,6 @@ namespace Icod.Wod.File {
 		#region methods
 		public sealed override void DoWork( WorkOrder workOrder ) {
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
-			var source = this.Source;
-			source.WorkOrder = workOrder;
 			var handler = this.GetFileHandler( workOrder );
 			System.String file;
 			System.IO.Stream buffer;

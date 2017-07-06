@@ -56,13 +56,6 @@ namespace Icod.Wod.File {
 				throw new System.InvalidOperationException();
 			}
 
-			var sourceD = this.Source ?? new FileDescriptor( workOrder );
-			sourceD.WorkOrder = workOrder;
-			var source = sourceD.GetFileHandler( workOrder );
-			if ( null == source ) {
-				throw new System.InvalidOperationException();
-			}
-
 			var destD = this.Destination;
 			destD.WorkOrder = workOrder;
 			var dest = destD.GetFileHandler( workOrder );
@@ -78,7 +71,7 @@ namespace Icod.Wod.File {
 			}
 
 			System.Collections.Generic.IEnumerable<System.IO.Compression.ZipArchiveEntry> list = null;
-			using ( var reader = source.OpenReader( source.PathCombine( this.ExpandedPath, this.ExpandedName ) ) ) {
+			using ( var reader = handler.OpenReader( handler.PathCombine( this.ExpandedPath, this.ExpandedName ) ) ) {
 				using ( var zip = this.GetZipArchive( reader, System.IO.Compression.ZipArchiveMode.Read ) ) {
 					list = this.MatchEntries( zip.Entries );
 				}

@@ -77,12 +77,19 @@ namespace Icod.Wod.File {
 			}
 		}
 
-		[System.Xml.Serialization.XmlElement(
-			"source",
+		[System.Xml.Serialization.XmlArray(
+			ElementName = "sources",
 			Namespace = "http://Icod.Wod",
 			IsNullable = false
 		)]
-		public virtual FileDescriptor Source {
+		[System.Xml.Serialization.XmlArrayItem(
+			Type = typeof( FileDescriptor ),
+			ElementName = "source",
+			Namespace = "http://Icod.Wod",
+			IsNullable = false
+		)]
+		[System.ComponentModel.DefaultValue( null )]
+		public virtual FileDescriptor[] Source {
 			get;
 			set;
 		}
@@ -95,11 +102,20 @@ namespace Icod.Wod.File {
 		}
 
 		protected virtual System.Collections.Generic.IEnumerable<System.IO.Compression.ZipArchiveEntry> MatchEntries( System.Collections.Generic.IEnumerable<System.IO.Compression.ZipArchiveEntry> collection ) {
+			return ( this.Source ?? new FileDescriptor[ 0 ] ).Select(
+				x => {
+					x.WorkOrder = this.WorkOrder;
+					return x;
+				}
+			).SelectMany(
+				x => this.MatchEntries( collection, x )
+			);
+		}
+		protected virtual System.Collections.Generic.IEnumerable<System.IO.Compression.ZipArchiveEntry> MatchEntries( System.Collections.Generic.IEnumerable<System.IO.Compression.ZipArchiveEntry> collection, FileDescriptor source ) {
 			if ( null == collection ) {
 				throw new System.ArgumentNullException( "collection" );
 			}
 
-			var source = this.Source;
 			if ( null == source ) {
 				throw new System.InvalidOperationException();
 			}

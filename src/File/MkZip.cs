@@ -22,16 +22,20 @@ namespace Icod.Wod.File {
 		#region methods
 		public sealed override void DoWork( WorkOrder workOrder ) {
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
-			var sourceD = this.Source;
-			sourceD.WorkOrder = workOrder;
-			var sep = sourceD.ExpandedPath;
-			var source = sourceD.GetFileHandler( workOrder );
+			var sources = this.Source.Select(
+				x => {
+					x.WorkOrder = workOrder;
+					return x;
+				}
+			);
+			FileHandlerBase source;
+			System.String sep;
 			var handler = this.GetFileHandler( workOrder );
-			System.Func<FileEntry, System.String> getFileName = null;
+			System.Func<FileEntry, System.String, System.String> getFileName = null;
 			if ( this.TruncateEntryName ) {
-				getFileName = x => System.IO.Path.GetFileName( x.File );
+				getFileName = ( x, y ) => System.IO.Path.GetFileName( x.File );
 			} else {
-				getFileName = x => x.File.Replace( sep, System.String.Empty );
+				getFileName = ( x, y ) => x.File.Replace( y, System.String.Empty );
 			}
 			System.String fileName;
 			System.IO.Compression.ZipArchiveEntry entry;
@@ -39,19 +43,23 @@ namespace Icod.Wod.File {
 			var isEmpty = true;
 			using ( System.IO.Stream buffer = new System.IO.MemoryStream() ) {
 				using ( var zipArchive = this.GetZipArchive( buffer, System.IO.Compression.ZipArchiveMode.Update ) ) {
-					foreach ( var file in source.ListFiles().Where(
-						x => x.FileType.Equals( FileType.File )
-					) ) {
-						using ( var reader = source.OpenReader( file.File ) ) {
-							fileName = getFileName( file );
-							fileName = fileName.Replace( '\\', '/' );
-							while ( fileName.StartsWith( "/", StringComparison.OrdinalIgnoreCase ) ) {
-								fileName = fileName.Substring( 1 );
-							}
-							entry = zipArchive.CreateEntry( fileName, System.IO.Compression.CompressionLevel.Optimal );
-							using ( var writer = entry.Open() ) {
-								reader.CopyTo( writer );
-								isEmpty = false;
+					foreach ( var sourceD in sources ?? new FileDescriptor[ 0 ] ) {
+						sep = sourceD.ExpandedPath;
+						source = sourceD.GetFileHandler( workOrder );
+						foreach ( var file in source.ListFiles().Where(
+							x => x.FileType.Equals( FileType.File )
+						) ) {
+							using ( var reader = source.OpenReader( file.File ) ) {
+								fileName = getFileName( file, sep );
+								fileName = fileName.Replace( '\\', '/' );
+								while ( fileName.StartsWith( "/", StringComparison.OrdinalIgnoreCase ) ) {
+									fileName = fileName.Substring( 1 );
+								}
+								entry = zipArchive.CreateEntry( fileName, System.IO.Compression.CompressionLevel.Optimal );
+								using ( var writer = entry.Open() ) {
+									reader.CopyTo( writer );
+									isEmpty = false;
+								}
 							}
 						}
 					}
