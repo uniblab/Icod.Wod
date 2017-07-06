@@ -131,7 +131,7 @@ namespace Icod.Wod {
 			System.Int32 i = 1;
 			IStep step = null;
 			try {
-				var steps = ( this.Steps ?? new System.Object[ 0 ] ).OfType<IStep>().ToArray();
+				var steps = ( this.Steps ?? new IStep[ 0 ] ).OfType<IStep>().ToArray();
 				foreach ( var s in steps ) {
 					step = s;
 					s.DoWork( this );
