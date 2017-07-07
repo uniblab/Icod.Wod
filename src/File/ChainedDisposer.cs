@@ -35,13 +35,15 @@ namespace Icod.Wod.File {
 		private void Dispose( System.Boolean disposing ) {
 			if ( disposing && !myIsDisposed ) {
 				System.Threading.Thread.BeginCriticalRegion();
-				if ( null != myInner ) {
-					myInner.Dispose();
+				if ( !System.Threading.Volatile.Read( ref myIsDisposed ) ) {
+					if ( null != myInner ) {
+						myInner.Dispose();
+					}
+					if ( null != myOuter ) {
+						myOuter.Dispose();
+					}
+					System.Threading.Volatile.Write( ref myIsDisposed, true );
 				}
-				if ( null != myOuter ) {
-					myOuter.Dispose();
-				}
-				myIsDisposed = true;
 				System.Threading.Thread.EndCriticalRegion();
 			}
 		}
