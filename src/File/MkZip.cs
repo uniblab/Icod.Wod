@@ -42,7 +42,7 @@ namespace Icod.Wod.File {
 			var writeIfEmpty = this.WriteIfEmpty;
 			var isEmpty = true;
 			using ( System.IO.Stream buffer = new System.IO.MemoryStream() ) {
-				using ( var zipArchive = this.GetZipArchive( buffer, System.IO.Compression.ZipArchiveMode.Update ) ) {
+				using ( var zipArchive = this.GetZipArchive( buffer, System.IO.Compression.ZipArchiveMode.Create ) ) {
 					foreach ( var sourceD in sources ?? new FileDescriptor[ 0 ] ) {
 						sep = sourceD.ExpandedPath;
 						source = sourceD.GetFileHandler( workOrder );
