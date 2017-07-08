@@ -49,7 +49,7 @@ namespace Icod.Wod.File {
 			return CodePageHelper.GetCodePage( this.CodePage );
 		}
 
-		public sealed override void DoWork( WorkOrder workOrder ) {
+		public sealed override async void DoWork( WorkOrder workOrder ) {
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			var handler = this.GetFileHandler( workOrder );
 			if ( null == handler ) {
