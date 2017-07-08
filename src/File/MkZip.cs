@@ -11,7 +11,18 @@ namespace Icod.Wod.File {
 	)]
 	public sealed class MkZip : ZipOperationBase {
 
+		#region fields
+		private static readonly System.Func<FileEntry, System.String, System.String> theTruncatedGetFileName;
+		private static readonly System.Func<FileEntry, System.String, System.String> theFullGetFileName;
+		#endregion fields
+
+
 		#region .ctor
+		static MkZip() {
+			theTruncatedGetFileName = ( x, y ) => System.IO.Path.GetFileName( x.File );
+			theFullGetFileName = ( x, y ) => x.File.Replace( y, System.String.Empty );
+		}
+
 		public MkZip() : base() {
 		}
 		public MkZip( WorkOrder workOrder ) : base( workOrder ) {
@@ -31,12 +42,10 @@ namespace Icod.Wod.File {
 			FileHandlerBase source;
 			System.String sep;
 			var handler = this.GetFileHandler( workOrder );
-			System.Func<FileEntry, System.String, System.String> getFileName = null;
-			if ( this.TruncateEntryName ) {
-				getFileName = ( x, y ) => System.IO.Path.GetFileName( x.File );
-			} else {
-				getFileName = ( x, y ) => x.File.Replace( y, System.String.Empty );
-			}
+			var getFileName = ( this.TruncateEntryName )
+				? theTruncatedGetFileName
+				: theFullGetFileName
+			;
 			System.String fileName;
 			System.IO.Compression.ZipArchiveEntry entry;
 			var writeIfEmpty = this.WriteIfEmpty;
@@ -52,13 +61,15 @@ namespace Icod.Wod.File {
 							using ( var reader = source.OpenReader( file.File ) ) {
 								fileName = getFileName( file, sep );
 								fileName = fileName.Replace( '\\', '/' );
-								while ( fileName.StartsWith( "/", StringComparison.OrdinalIgnoreCase ) ) {
+								while ( !System.String.IsNullOrEmpty( fileName ) && fileName.StartsWith( "/", StringComparison.OrdinalIgnoreCase ) ) {
 									fileName = fileName.Substring( 1 );
 								}
-								entry = zipArchive.CreateEntry( fileName, System.IO.Compression.CompressionLevel.Optimal );
-								using ( var writer = entry.Open() ) {
-									reader.CopyTo( writer );
-									isEmpty = false;
+								if ( !System.String.IsNullOrEmpty( fileName ) ) {
+									entry = zipArchive.CreateEntry( fileName, System.IO.Compression.CompressionLevel.Optimal );
+									using ( var writer = entry.Open() ) {
+										reader.CopyTo( writer );
+										isEmpty = false;
+									}
 								}
 							}
 						}
