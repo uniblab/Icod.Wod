@@ -43,7 +43,7 @@ namespace Icod.Wod.File {
 
 
 		#region methods
-		public sealed override async void DoWork( WorkOrder workOrder ) {
+		public sealed override void DoWork( WorkOrder workOrder ) {
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			this.Destination.WorkOrder = workOrder;
 			var dest = this.Destination.GetFileHandler( workOrder );

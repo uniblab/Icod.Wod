@@ -54,7 +54,7 @@ namespace Icod.Wod {
 
 
 		#region methods
-		public async void DoWork( Icod.Wod.WorkOrder workOrder ) {
+		public void DoWork( Icod.Wod.WorkOrder workOrder ) {
 			foreach ( var step in ( this.Steps ?? new IStep[ 0 ] ).OfType<IStep>() ) {
 				step.DoWork( workOrder );
 			}

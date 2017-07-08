@@ -59,7 +59,7 @@ namespace Icod.Wod {
 
 
 		#region methods
-		public async void DoWork( Icod.Wod.WorkOrder workOrder ) {
+		public void DoWork( Icod.Wod.WorkOrder workOrder ) {
 			System.Threading.Tasks.Parallel.Invoke( ( this.Steps ?? new IStep[ 0 ] ).OfType<IStep>().Select<IStep, System.Action>(
 				x => () => x.DoWork( workOrder )
 			).ToArray() );
