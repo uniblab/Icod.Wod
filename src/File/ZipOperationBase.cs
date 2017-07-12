@@ -4,8 +4,9 @@ using System.Linq;
 namespace Icod.Wod.File {
 
 	[System.Serializable]
-	[System.Xml.Serialization.XmlInclude( typeof( RmZip ) )]
+	[System.Xml.Serialization.XmlInclude( typeof( AddZip ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( MkZip ) )]
+	[System.Xml.Serialization.XmlInclude( typeof( RmZip ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( BinaryZipOperationBase ) )]
 	[System.Xml.Serialization.XmlType(
 		"zipOperation",
@@ -15,17 +16,27 @@ namespace Icod.Wod.File {
 	public abstract class ZipOperationBase : FileOperationBase {
 
 		#region fields
+		private static readonly System.Func<FileEntry, System.String, System.String> theTruncatedGetFileName;
+		private static readonly System.Func<FileEntry, System.String, System.String> theFullGetFileName;
+
 		private System.String myCodePage;
 		private System.Boolean myTruncateEntryName;
 		private System.Boolean myWriteIfEmpty;
+		private System.Func<FileEntry, System.String, System.String> myGetFileName;
 		#endregion fields
 
 
 		#region .ctor
+		static ZipOperationBase() {
+			theTruncatedGetFileName = ( x, y ) => System.IO.Path.GetFileName( x.File );
+			theFullGetFileName = ( x, y ) => x.File.Replace( y, System.String.Empty );
+		}
+
 		protected ZipOperationBase() : base() {
 			myCodePage = "windows-1252";
 			myTruncateEntryName = true;
 			myWriteIfEmpty = true;
+			myGetFileName = theTruncatedGetFileName;
 		}
 		protected ZipOperationBase( WorkOrder workOrder ) : base( workOrder ) {
 			myCodePage = "windows-1252";
@@ -61,6 +72,10 @@ namespace Icod.Wod.File {
 			}
 			set {
 				myTruncateEntryName = value;
+				myGetFileName = ( value )
+					? theTruncatedGetFileName
+					: theFullGetFileName
+				;
 			}
 		}
 		[System.Xml.Serialization.XmlAttribute(
@@ -92,6 +107,13 @@ namespace Icod.Wod.File {
 		public virtual FileDescriptor[] Source {
 			get;
 			set;
+		}
+
+		[System.Xml.Serialization.XmlIgnore]
+		public System.Func<FileEntry, System.String, System.String> GetFileName {
+			get {
+				return myGetFileName;
+			}
 		}
 		#endregion properties
 
@@ -148,6 +170,14 @@ namespace Icod.Wod.File {
 				throw new System.ArgumentNullException( "stream" );
 			}
 			return new System.IO.Compression.ZipArchive( stream, zipArchiveMode, true, this.GetEncoding() );
+		}
+
+		protected virtual System.String ProcessFileName( FileEntry file, System.String sourceExpandedPath ) {
+			var output = this.GetFileName( file, sourceExpandedPath ).Replace( '\\', '/' );
+			while ( !System.String.IsNullOrEmpty( output ) && output.StartsWith( "/", StringComparison.OrdinalIgnoreCase ) ) {
+				output = output.Substring( 1 );
+			}
+			return output;
 		}
 		#endregion methods
 

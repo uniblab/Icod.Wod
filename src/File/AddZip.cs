@@ -5,16 +5,16 @@ namespace Icod.Wod.File {
 
 	[System.Serializable]
 	[System.Xml.Serialization.XmlType(
-		"mkZip",
+		"addZip",
 		Namespace = "http://Icod.Wod",
 		IncludeInSchema = true
 	)]
-	public sealed class MkZip : ZipOperationBase {
+	public sealed class AddZip : ZipOperationBase {
 
 		#region .ctor
-		public MkZip() : base() {
+		public AddZip() : base() {
 		}
-		public MkZip( WorkOrder workOrder ) : base( workOrder ) {
+		public AddZip( WorkOrder workOrder ) : base( workOrder ) {
 		}
 		#endregion .ctor
 
@@ -28,6 +28,7 @@ namespace Icod.Wod.File {
 					return x;
 				}
 			);
+
 			FileHandlerBase source;
 			System.String sep;
 			var handler = this.GetFileHandler( workOrder );
@@ -36,7 +37,11 @@ namespace Icod.Wod.File {
 			var writeIfEmpty = this.WriteIfEmpty;
 			var isEmpty = true;
 			using ( System.IO.Stream buffer = new System.IO.MemoryStream() ) {
-				using ( var zipArchive = this.GetZipArchive( buffer, System.IO.Compression.ZipArchiveMode.Create ) ) {
+				using ( var reader = handler.OpenReader( handler.PathCombine( this.ExpandedPath, this.ExpandedName ) ) ) {
+					reader.CopyTo( buffer );
+				}
+				buffer.Seek( 0, System.IO.SeekOrigin.Begin );
+				using ( var zipArchive = this.GetZipArchive( buffer, System.IO.Compression.ZipArchiveMode.Update ) ) {
 					foreach ( var sourceD in sources ?? new FileDescriptor[ 0 ] ) {
 						sep = sourceD.ExpandedPath;
 						source = sourceD.GetFileHandler( workOrder );
@@ -46,7 +51,9 @@ namespace Icod.Wod.File {
 							using ( var reader = source.OpenReader( file.File ) ) {
 								fileName = this.ProcessFileName( file, sep );
 								if ( !System.String.IsNullOrEmpty( fileName ) ) {
-									entry = zipArchive.CreateEntry( fileName, System.IO.Compression.CompressionLevel.Optimal );
+									entry = zipArchive.Entries.FirstOrDefault(
+										x => x.FullName.Equals( fileName, StringComparison.OrdinalIgnoreCase )
+									) ?? zipArchive.CreateEntry( fileName, System.IO.Compression.CompressionLevel.Optimal );
 									using ( var writer = entry.Open() ) {
 										reader.CopyTo( writer );
 										isEmpty = false;
@@ -56,11 +63,9 @@ namespace Icod.Wod.File {
 						}
 					}
 				}
-				if ( !isEmpty || writeIfEmpty ) {
-					buffer.Seek( 0, System.IO.SeekOrigin.Begin );
-					handler.Overwrite( buffer, handler.PathCombine( this.ExpandedPath, this.ExpandedName ) );
-				}
 			}
+
+			throw new NotImplementedException();
 		}
 		#endregion methods
 
