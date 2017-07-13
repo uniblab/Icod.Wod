@@ -22,7 +22,6 @@ namespace Icod.Wod.File {
 		#region methods
 		public sealed override void DoWork( WorkOrder workOrder ) {
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
-			var source = this.Source;
 			var destD = this.Destination;
 			destD.WorkOrder = workOrder;
 			System.String ePath = destD.ExpandedPath;

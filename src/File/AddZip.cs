@@ -22,7 +22,7 @@ namespace Icod.Wod.File {
 		#region methods
 		public sealed override void DoWork( WorkOrder workOrder ) {
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
-			var sources = this.Source.Select(
+			var sources = ( this.Source ?? new FileDescriptor[ 0 ] ).Select(
 				x => {
 					x.WorkOrder = workOrder;
 					return x;
@@ -64,8 +64,6 @@ namespace Icod.Wod.File {
 					}
 				}
 			}
-
-			throw new NotImplementedException();
 		}
 		#endregion methods
 
