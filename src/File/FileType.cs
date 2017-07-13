@@ -1,5 +1,6 @@
 namespace Icod.Wod.File {
 
+	[System.Serializable]
 	public enum FileType : int {
 
 		Unknown = 0,
