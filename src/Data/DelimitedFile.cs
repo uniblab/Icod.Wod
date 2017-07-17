@@ -287,19 +287,6 @@ namespace Icod.Wod.Data {
 				} while ( reading );
 			}
 		}
-		private System.String ReadNormalColumn( System.IO.StringReader reader, System.Nullable<System.Char> first ) {
-			if ( null == reader ) {
-				throw new System.ArgumentNullException( "reader" );
-			}
-			return this.ReadColumn( reader, first, this.FieldSeparator, false );
-		}
-		private System.String ReadQuotedColumn( System.IO.StringReader reader, System.Nullable<System.Char> first ) {
-			if ( null == reader ) {
-				throw new System.ArgumentNullException( "reader" );
-			}
-			return this.ReadColumn( reader, first, this.QuoteChar, true );
-		}
-
 		private System.String ReadColumn( System.IO.StringReader reader, System.Nullable<System.Char> first, System.Char @break, System.Boolean readNextOnBreak ) {
 			if ( null == reader ) {
 				throw new System.ArgumentNullException( "reader" );
@@ -322,7 +309,6 @@ namespace Icod.Wod.Data {
 			} while ( reading );
 			return this.ColumnReader( sb );
 		}
-
 		private System.Nullable<System.Char> ReadChar( System.IO.StringReader reader, System.Nullable<System.Char> escape, System.Char @break, System.Boolean readNextOnBreak ) {
 			if ( null == reader ) {
 				throw new System.ArgumentNullException( "reader" );
