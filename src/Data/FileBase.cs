@@ -27,7 +27,8 @@ namespace Icod.Wod.Data {
 
 		#region .ctor
 		static FileBase() {
-			theEmptyEolWriter = x => {};
+			theEmptyEolWriter = x => {
+			};
 		}
 
 		protected FileBase() : base() {
@@ -326,7 +327,7 @@ namespace Icod.Wod.Data {
 			}
 
 			return System.String.Join( System.String.Empty, columns.Select(
-				x => this.GetColumn( 
+				x => this.GetColumn(
 					formatMap.ContainsKey( x )
 						? formatMap[ x ] ?? new TextFileColumn( x.ColumnName )
 						: new TextFileColumn( x.ColumnName )
@@ -346,7 +347,7 @@ namespace Icod.Wod.Data {
 			}
 
 			return columns.Select(
-				x => this.GetColumn( 
+				x => this.GetColumn(
 					formatMap.ContainsKey( x )
 						? formatMap[ x ] ?? new TextFileColumn( x.ColumnName )
 						: new TextFileColumn( x.ColumnName )

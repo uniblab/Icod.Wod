@@ -18,6 +18,7 @@ namespace Icod.Wod.Data {
 		private System.Char myQuoteChar;
 		private System.String myQuoteCharString;
 		private System.Nullable<System.Char> myEscapeChar;
+		private System.Int32 myEscapeCharNumber;
 		private System.Func<System.Text.StringBuilder, System.String> myColumnReader;
 		#endregion fields
 
@@ -33,6 +34,7 @@ namespace Icod.Wod.Data {
 			myQuoteChar = '\"';
 			myQuoteCharString = myQuoteChar.ToString();
 			myEscapeChar = null;
+			myEscapeCharNumber = -1;
 			myColumnReader = theDefaultColumnReader;
 		}
 		public DelimitedFile( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
@@ -41,6 +43,7 @@ namespace Icod.Wod.Data {
 			myQuoteChar = '\"';
 			myQuoteCharString = myQuoteChar.ToString();
 			myEscapeChar = null;
+			myEscapeCharNumber = -1;
 			myColumnReader = theDefaultColumnReader;
 		}
 		#endregion .ctor
@@ -120,11 +123,7 @@ namespace Icod.Wod.Data {
 		[System.ComponentModel.DefaultValue( -1 )]
 		public System.Int32 EscapeCharNumber {
 			get {
-				var ec = this.EscapeChar;
-				return ec.HasValue
-					? System.Convert.ToInt32( ec.Value )
-					: -1
-				;
+				return myEscapeCharNumber;
 			}
 			set {
 				if ( value <= -2 ) {
@@ -134,14 +133,19 @@ namespace Icod.Wod.Data {
 				} else {
 					myEscapeChar = System.Convert.ToChar( value );
 				}
+				myEscapeCharNumber = value;
 			}
 		}
 		[System.Xml.Serialization.XmlIgnore]
+		[System.ComponentModel.DefaultValue( null )]
 		public System.Nullable<System.Char> EscapeChar {
 			get {
 				return myEscapeChar;
 			}
 			set {
+				if ( !value.HasValue ) {
+					myEscapeCharNumber = -1;
+				}
 				myEscapeChar = value;
 			}
 		}
