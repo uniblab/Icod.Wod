@@ -27,6 +27,7 @@ namespace Icod.Wod {
 			do {
 				c = file.Read();
 				if ( -1 == c ) {
+					maxI = 0;
 					isReading = false;
 					break;
 				}

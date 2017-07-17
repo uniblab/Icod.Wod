@@ -260,9 +260,9 @@ namespace Icod.Wod.Data {
 			}
 			using ( var reader = new System.IO.StringReader( line ) ) {
 				System.Int32 i;
-				var reading = true;
 				System.Char c;
 				System.String column;
+				var reading = true;
 				var ec = this.EscapeChar;
 				var qc = this.QuoteChar;
 				do {
@@ -308,27 +308,16 @@ namespace Icod.Wod.Data {
 			if ( first.HasValue ) {
 				sb.Append( first.Value );
 			}
-			System.Char ch;
-			System.Int32 i;
+			System.Nullable<System.Char> ch;
 			System.Boolean reading = true;
 			var ec = this.EscapeChar;
 			do {
-				i = reader.Read();
-				if ( -1 == i ) {
+				ch = this.ReadChar( reader, ec, @break, readNextOnBreak );
+				if ( ch.HasValue ) {
+					sb = sb.Append( ch.Value );
+				} else {
 					reading = false;
 					break;
-				}
-				ch = System.Convert.ToChar( i );
-				if ( ec.HasValue && ( ec.Value == ch ) ) {
-					ch = System.Convert.ToChar( reader.Read() );
-				} else if ( @break == ch ) {
-					if ( readNextOnBreak ) {
-						reader.Read();
-					}
-					reading = false;
-				}
-				if ( reading ) {
-					sb.Append( ch );
 				}
 			} while ( reading );
 			return this.ColumnReader( sb );
@@ -350,7 +339,9 @@ namespace Icod.Wod.Data {
 			if ( @break.Equals( c ) ) {
 				if ( readNextOnBreak ) {
 					p = reader.Peek();
-					if ( @break.Equals( System.Convert.ToChar( p ) ) ) {
+					if ( -1 == p ) {
+						return null;
+					} else if ( @break.Equals( System.Convert.ToChar( p ) ) ) {
 						return System.Convert.ToChar( reader.Read() );
 					}
 				}
