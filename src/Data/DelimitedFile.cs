@@ -288,13 +288,22 @@ namespace Icod.Wod.Data {
 			}
 		}
 		private System.String ReadNormalColumn( System.IO.StringReader reader, System.Nullable<System.Char> first ) {
+			if ( null == reader ) {
+				throw new System.ArgumentNullException( "reader" );
+			}
 			return ReadColumn( reader, first, this.FieldSeparator, false );
 		}
 		private System.String ReadQuotedColumn( System.IO.StringReader reader, System.Nullable<System.Char> first ) {
+			if ( null == reader ) {
+				throw new System.ArgumentNullException( "reader" );
+			}
 			return ReadColumn( reader, first, this.QuoteChar, true );
 		}
 
 		private System.String ReadColumn( System.IO.StringReader reader, System.Nullable<System.Char> first, System.Char @break, System.Boolean readNextOnBreak ) {
+			if ( null == reader ) {
+				throw new System.ArgumentNullException( "reader" );
+			}
 			System.Text.StringBuilder sb = new System.Text.StringBuilder( 128 );
 			if ( first.HasValue ) {
 				sb.Append( first.Value );
@@ -323,6 +332,13 @@ namespace Icod.Wod.Data {
 				}
 			} while ( reading );
 			return this.ColumnReader( sb );
+		}
+
+		private System.Nullable<System.Char> ReadChar( System.IO.StringReader reader, System.Nullable<System.Char> escape, System.Char quote, System.Boolean readNextOnQuote ) {
+			if ( null == reader ) {
+				throw new System.ArgumentNullException( "reader" );
+			}
+			throw new System.NotImplementedException();
 		}
 
 		protected sealed override void WriteHeader( System.IO.StreamWriter writer, System.Collections.Generic.IEnumerable<System.Data.DataColumn> dbColumns, System.Collections.Generic.IEnumerable<TextFileColumn> fileColumns ) {
