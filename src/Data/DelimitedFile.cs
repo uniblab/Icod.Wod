@@ -291,13 +291,13 @@ namespace Icod.Wod.Data {
 			if ( null == reader ) {
 				throw new System.ArgumentNullException( "reader" );
 			}
-			return ReadColumn( reader, first, this.FieldSeparator, false );
+			return this.ReadColumn( reader, first, this.FieldSeparator, false );
 		}
 		private System.String ReadQuotedColumn( System.IO.StringReader reader, System.Nullable<System.Char> first ) {
 			if ( null == reader ) {
 				throw new System.ArgumentNullException( "reader" );
 			}
-			return ReadColumn( reader, first, this.QuoteChar, true );
+			return this.ReadColumn( reader, first, this.QuoteChar, true );
 		}
 
 		private System.String ReadColumn( System.IO.StringReader reader, System.Nullable<System.Char> first, System.Char @break, System.Boolean readNextOnBreak ) {
