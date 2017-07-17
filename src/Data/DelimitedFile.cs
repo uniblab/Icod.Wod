@@ -274,14 +274,14 @@ namespace Icod.Wod.Data {
 					c = System.Convert.ToChar( i );
 					if ( ec.HasValue && ( ec.Value.Equals( c ) ) ) {
 						reader.Read();
-						column = this.ReadNormalColumn( reader, System.Convert.ToChar( reader.Read() ) );
+						column = this.ReadColumn( reader, System.Convert.ToChar( reader.Read() ), this.FieldSeparator, false );
 						yield return column;
 					} else if ( qc.Equals( c ) ) {
 						reader.Read();
-						column = this.ReadQuotedColumn( reader, null );
+						column = this.ReadColumn( reader, null, this.QuoteChar, true );
 						yield return column;
 					} else {
-						column = this.ReadNormalColumn( reader, null );
+						column = this.ReadColumn( reader, null, this.FieldSeparator, false );
 						yield return column;
 					}
 				} while ( reading );
