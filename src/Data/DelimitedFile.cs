@@ -334,11 +334,29 @@ namespace Icod.Wod.Data {
 			return this.ColumnReader( sb );
 		}
 
-		private System.Nullable<System.Char> ReadChar( System.IO.StringReader reader, System.Nullable<System.Char> escape, System.Char quote, System.Boolean readNextOnQuote ) {
+		private System.Nullable<System.Char> ReadChar( System.IO.StringReader reader, System.Nullable<System.Char> escape, System.Char @break, System.Boolean readNextOnBreak ) {
 			if ( null == reader ) {
 				throw new System.ArgumentNullException( "reader" );
 			}
-			throw new System.NotImplementedException();
+
+			var p = reader.Peek();
+			if ( -1 == p ) {
+				return null;
+			}
+			var c = System.Convert.ToChar( reader.Read() );
+			if ( escape.HasValue && escape.Value.Equals( c ) ) {
+				return System.Convert.ToChar( reader.Read() );
+			}
+			if ( @break.Equals( c ) ) {
+				if ( readNextOnBreak ) {
+					p = reader.Peek();
+					if ( @break.Equals( System.Convert.ToChar( p ) ) ) {
+						return System.Convert.ToChar( reader.Read() );
+					}
+				}
+				return null;
+			}
+			return c;
 		}
 
 		protected sealed override void WriteHeader( System.IO.StreamWriter writer, System.Collections.Generic.IEnumerable<System.Data.DataColumn> dbColumns, System.Collections.Generic.IEnumerable<TextFileColumn> fileColumns ) {
