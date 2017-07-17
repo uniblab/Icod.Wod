@@ -320,6 +320,10 @@ namespace Icod.Wod.Data {
 			}
 			var c = System.Convert.ToChar( reader.Read() );
 			if ( escape.HasValue && escape.Value.Equals( c ) ) {
+				p = reader.Peek();
+				if ( -1 == p ) {
+					return null;
+				}
 				return System.Convert.ToChar( reader.Read() );
 			}
 			if ( @break.Equals( c ) ) {
