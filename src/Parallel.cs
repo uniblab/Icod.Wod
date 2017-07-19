@@ -60,9 +60,12 @@ namespace Icod.Wod {
 
 		#region methods
 		public void DoWork( Icod.Wod.WorkOrder workOrder ) {
-			System.Threading.Tasks.Parallel.Invoke( ( this.Steps ?? new IStep[ 0 ] ).OfType<IStep>().Select<IStep, System.Action>(
-				x => () => x.DoWork( workOrder )
-			).ToArray() );
+			var steps = ( this.Steps ?? new IStep[ 0 ] );
+			if ( steps.Any() ) {
+				System.Threading.Tasks.Parallel.Invoke( steps.OfType<IStep>().Select<IStep, System.Action>(
+					x => () => x.DoWork( workOrder )
+				).ToArray() );
+			}
 		}
 		#endregion methods
 
