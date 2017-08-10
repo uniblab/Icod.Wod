@@ -20,6 +20,7 @@ namespace Icod.Wod.Data {
 		private System.Nullable<System.Char> myEscapeChar;
 		private System.Int32 myEscapeCharNumber;
 		private System.Func<System.Text.StringBuilder, System.String> myColumnReader;
+		private System.Boolean myForceQuote;
 		#endregion fields
 
 
@@ -36,6 +37,7 @@ namespace Icod.Wod.Data {
 			myEscapeChar = null;
 			myEscapeCharNumber = -1;
 			myColumnReader = theDefaultColumnReader;
+			myForceQuote = true;
 		}
 		public DelimitedFile( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
 			myFieldSeparator = '\t';
@@ -45,6 +47,7 @@ namespace Icod.Wod.Data {
 			myEscapeChar = null;
 			myEscapeCharNumber = -1;
 			myColumnReader = theDefaultColumnReader;
+			myForceQuote = true;
 		}
 		#endregion .ctor
 
@@ -205,6 +208,20 @@ namespace Icod.Wod.Data {
 				myColumnReader = value;
 			}
 		}
+
+		[System.Xml.Serialization.XmlAttribute(
+			"forceQuote",
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.ComponentModel.DefaultValue( true )]
+		public System.Boolean ForceQuote {
+			get {
+				return myForceQuote;
+			}
+			set {
+				myForceQuote = value;
+			}
+		}
 		#endregion properties
 
 
@@ -346,8 +363,12 @@ namespace Icod.Wod.Data {
 			} else if ( null == writer ) {
 				throw new System.ArgumentNullException( "writer" );
 			}
+			var qcs = this.QuoteCharString;
+			var fq = this.ForceQuote;
 			writer.Write( System.String.Join( this.FieldSeparatorString, dbColumns.Select(
 				x => x.ColumnName
+			).Select(
+				x => ( fq || x.Contains( this.FieldSeparatorString ) ) ? qcs + x + qcs : x
 			).ToArray() ) );
 			this.EolWriter( writer );
 		}
@@ -360,6 +381,7 @@ namespace Icod.Wod.Data {
 				throw new System.ArgumentNullException( "formatMap" );
 			}
 
+			var fq = this.ForceQuote;
 			var qcs = this.QuoteCharString;
 			var list = columns.Select(
 				x => this.GetColumn(
@@ -371,7 +393,7 @@ namespace Icod.Wod.Data {
 					row
 				)
 			).Select(
-				x => x.Contains( this.FieldSeparatorString ) ? qcs + x + qcs : x
+				x => ( fq || x.Contains( this.FieldSeparatorString ) ) ? qcs + x + qcs : x
 			);
 			return System.String.Join( this.FieldSeparatorString, list );
 		}
