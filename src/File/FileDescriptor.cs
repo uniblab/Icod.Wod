@@ -169,7 +169,7 @@ namespace Icod.Wod.File {
 						break;
 					case "http":
 					case "https":
-						output = new FtpFileHandler( workOrder, this );
+						output = new HttpFileHandler( workOrder, this );
 						break;
 					case "sftp":
 						output = new SftpFileHandler( workOrder, this );
