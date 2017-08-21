@@ -27,7 +27,6 @@ namespace Icod.Wod.File {
 			var passwd = ub.Password.TrimToNull() ?? fd.Password.TrimToNull();
 			var host = uri.Host;
 			System.Int32 port = uri.Port;
-			var credential = (System.Net.NetworkCredential)client.Credentials;
 			client.Credentials = new System.Net.NetworkCredential(
 				username,
 				passwd
