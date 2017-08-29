@@ -45,10 +45,6 @@ namespace Icod.Wod.File {
 
 
 		#region methods
-		public System.Text.Encoding GetEncoding() {
-			return CodePageHelper.GetCodePage( this.CodePage );
-		}
-
 		public sealed override void DoWork( WorkOrder workOrder ) {
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			var handler = this.GetFileHandler( workOrder );
