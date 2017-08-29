@@ -111,7 +111,7 @@ namespace Icod.Wod.File {
 		}
 
 		[System.Xml.Serialization.XmlIgnore]
-		protected System.Action<System.IO.StreamWriter> EolWriter {
+		private System.Action<System.IO.StreamWriter> EolWriter {
 			get {
 				return myEolWriter ?? theEmptyEolWriter;
 			}
