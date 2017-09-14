@@ -10,7 +10,7 @@ namespace Icod.Wod.File {
 		}
 		public SftpFileHandler( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
 		}
-		public SftpFileHandler( Icod.Wod.WorkOrder workOrder, FileDescriptor descriptor ) : base( workOrder, descriptor ) { 
+		public SftpFileHandler( Icod.Wod.WorkOrder workOrder, FileDescriptor descriptor ) : base( workOrder, descriptor ) {
 		}
 		#endregion .ctor
 
@@ -24,10 +24,33 @@ namespace Icod.Wod.File {
 			var passwd = ub.Password.TrimToNull() ?? fd.Password.TrimToNull();
 			var host = uri.Host;
 			System.Int32 port = uri.Port;
-			return ( -1 == port )
-				? new Renci.SshNet.SftpClient( host, username, passwd )
-				: new Renci.SshNet.SftpClient( host, port, username, passwd )
+			System.Collections.Generic.ICollection<Renci.SshNet.AuthenticationMethod> authMethods = new System.Collections.Generic.List<Renci.SshNet.AuthenticationMethod>( 2 );
+			if ( !System.String.IsNullOrEmpty( passwd ) ) {
+				authMethods.Add( new Renci.SshNet.PasswordAuthenticationMethod( username, passwd ) );
+			}
+			var kfd = fd.SshKeyFile;
+			if ( null != kfd ) {
+				kfd.WorkOrder = this.WorkOrder;
+				var fp = kfd.Path.TrimToNull();
+				var fn = kfd.Name.TrimToNull();
+				var fpwd = kfd.Password.TrimToNull();
+				if ( !System.String.IsNullOrEmpty( fp ) && !System.String.IsNullOrEmpty( fn ) ) {
+					authMethods.Add( new Renci.SshNet.PrivateKeyAuthenticationMethod(
+						username,
+						new Renci.SshNet.PrivateKeyFile[ 1 ] {
+							System.String.IsNullOrEmpty( fpwd )
+								? new Renci.SshNet.PrivateKeyFile( System.IO.Path.Combine( kfd.ExpandedPath, kfd.ExpandedName ) )
+								: new Renci.SshNet.PrivateKeyFile( System.IO.Path.Combine( kfd.ExpandedPath, kfd.ExpandedName ), fpwd )
+						}
+					) );
+				}
+			}
+			var ama = authMethods.ToArray();
+			var ci = ( -1 == port )
+				? new Renci.SshNet.ConnectionInfo( host, username, ama )
+				: new Renci.SshNet.ConnectionInfo( host, port, username, ama )
 			;
+			return new Renci.SshNet.SftpClient( ci );
 		}
 		public sealed override void TouchFile() {
 			var fd = this.FileDescriptor;
@@ -82,6 +105,7 @@ namespace Icod.Wod.File {
 			var fd = this.FileDescriptor;
 			var pathName = new System.Uri( this.PathCombine( fd.ExpandedPath, fd.ExpandedName ) ).AbsolutePath;
 			using ( var client = this.GetClient() ) {
+				client.Connect();
 				return this.GetRemoteList( client, pathName, fd.RegexPattern ).Where(
 					x => x.IsRegularFile
 				).Select(
@@ -128,6 +152,8 @@ namespace Icod.Wod.File {
 		private System.Collections.Generic.IEnumerable<Renci.SshNet.Sftp.SftpFile> GetRemoteList( Renci.SshNet.SftpClient client, System.String filePathName, System.String regexPattern ) {
 			if ( null == client ) {
 				throw new System.ArgumentNullException( "client" );
+			} else if ( !client.IsConnected ) {
+				client.Connect();
 			}
 			var list = client.ListDirectory( filePathName );
 			return System.String.IsNullOrEmpty( regexPattern )

@@ -137,6 +137,16 @@ namespace Icod.Wod.File {
 			}
 		}
 
+		[System.Xml.Serialization.XmlElement(
+			ElementName = "sshKeyFile", 
+			Namespace = "http://Icod.Wod",
+			IsNullable = true
+		)]
+		public FileDescriptor SshKeyFile {
+			get;
+			set;
+		}
+
 		[System.Xml.Serialization.XmlIgnore]
 		public Icod.Wod.WorkOrder WorkOrder {
 			get {
