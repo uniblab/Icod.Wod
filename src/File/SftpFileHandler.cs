@@ -35,12 +35,13 @@ namespace Icod.Wod.File {
 				var fn = kfd.Name.TrimToNull();
 				var fpwd = kfd.Password.TrimToNull();
 				if ( !System.String.IsNullOrEmpty( fp ) && !System.String.IsNullOrEmpty( fn ) ) {
+					var kfs = kfd.GetFileHandler( this.WorkOrder ).OpenReader( System.IO.Path.Combine( kfd.ExpandedPath, kfd.ExpandedName ) );
 					authMethods.Add( new Renci.SshNet.PrivateKeyAuthenticationMethod(
 						username,
 						new Renci.SshNet.PrivateKeyFile[ 1 ] {
 							System.String.IsNullOrEmpty( fpwd )
-								? new Renci.SshNet.PrivateKeyFile( System.IO.Path.Combine( kfd.ExpandedPath, kfd.ExpandedName ) )
-								: new Renci.SshNet.PrivateKeyFile( System.IO.Path.Combine( kfd.ExpandedPath, kfd.ExpandedName ), fpwd )
+								? new Renci.SshNet.PrivateKeyFile( kfs )
+								: new Renci.SshNet.PrivateKeyFile( kfs, fpwd )
 						}
 					) );
 				}
@@ -56,6 +57,7 @@ namespace Icod.Wod.File {
 			var fd = this.FileDescriptor;
 			using ( var client = this.GetClient() ) {
 				var file = new System.Uri( this.PathCombine( fd.ExpandedPath, fd.ExpandedName ) ).AbsolutePath;
+				client.Connect();
 				client.Open( file, System.IO.FileMode.OpenOrCreate, System.IO.FileAccess.ReadWrite ).Dispose();
 			}
 		}
@@ -66,12 +68,14 @@ namespace Icod.Wod.File {
 		}
 		public sealed override void DeleteFile( System.String filePathName ) {
 			using ( var client = this.GetClient() ) {
+				client.Connect();
 				client.DeleteFile( filePathName );
 			};
 		}
 
 		public sealed override System.IO.Stream OpenReader( System.String filePathName ) {
 			var client = this.GetClient();
+			client.Connect();
 			return new ClientStream( client.Open( filePathName, System.IO.FileMode.Open, System.IO.FileAccess.Read ), client );
 		}
 		public sealed override void Overwrite( System.IO.Stream source, System.String filePathName ) {
@@ -82,6 +86,7 @@ namespace Icod.Wod.File {
 		}
 		private void Write( System.IO.Stream source, System.String filePathName, System.IO.FileMode fileMode ) {
 			using ( var client = this.GetClient() ) {
+				client.Connect();
 				using ( var dest = client.Open( filePathName, fileMode, System.IO.FileAccess.Write ) ) {
 					source.CopyTo( dest, this.BufferLength );
 					dest.Flush();
@@ -92,11 +97,13 @@ namespace Icod.Wod.File {
 
 		public sealed override void MkDir() {
 			using ( var client = this.GetClient() ) {
+				client.Connect();
 				client.CreateDirectory( this.FileDescriptor.ExpandedPath );
 			}
 		}
 		public sealed override void RmDir( System.Boolean recurse ) {
 			using ( var client = this.GetClient() ) {
+				client.Connect();
 				client.DeleteDirectory( this.FileDescriptor.ExpandedPath );
 			}
 		}
@@ -121,6 +128,7 @@ namespace Icod.Wod.File {
 			var fd = this.FileDescriptor;
 			var pathName = new System.Uri( this.PathCombine( fd.ExpandedPath, fd.ExpandedName ) ).AbsolutePath;
 			using ( var client = this.GetClient() ) {
+				client.Connect();
 				return this.GetRemoteList( client, pathName, fd.RegexPattern ).Where(
 					x => x.IsDirectory
 				).Select(
@@ -136,6 +144,7 @@ namespace Icod.Wod.File {
 			var fd = this.FileDescriptor;
 			var pathName = new System.Uri( this.PathCombine( fd.ExpandedPath, fd.ExpandedName ) ).AbsolutePath;
 			using ( var client = this.GetClient() ) {
+				client.Connect();
 				return this.GetRemoteList( client, pathName, fd.RegexPattern ).Select(
 					x => new FileEntry {
 						File = x.FullName,

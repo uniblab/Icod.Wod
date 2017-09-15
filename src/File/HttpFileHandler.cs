@@ -32,6 +32,7 @@ namespace Icod.Wod.File {
 				passwd
 			);
 			client.Method = method;
+			client.AutomaticDecompression = System.Net.DecompressionMethods.GZip;
 		}
 
 		public sealed override void TouchFile() {

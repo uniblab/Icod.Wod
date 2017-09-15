@@ -142,6 +142,7 @@ namespace Icod.Wod.File {
 			Namespace = "http://Icod.Wod",
 			IsNullable = true
 		)]
+		[System.ComponentModel.DefaultValue( null )]
 		public FileDescriptor SshKeyFile {
 			get;
 			set;
