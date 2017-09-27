@@ -110,7 +110,7 @@ namespace Icod.Wod.File {
 			var uri = new System.Uri( filePathName );
 			var ftp = (System.Net.FtpWebRequest)System.Net.FtpWebRequest.Create( uri );
 			this.SetFtpClient( ftp, System.Net.WebRequestMethods.Ftp.ListDirectory );
-			var regexPattern = fd.RegexPattern;
+			var regexPattern = fd.WorkOrder.ExpandVariables( fd.RegexPattern );
 			var list = this.ReadLines( ftp );
 			return ( System.String.IsNullOrEmpty( regexPattern )
 				? list
@@ -134,7 +134,7 @@ namespace Icod.Wod.File {
 			var uri = new System.Uri( filePathName );
 			var ftp = (System.Net.FtpWebRequest)System.Net.FtpWebRequest.Create( uri );
 			this.SetFtpClient( ftp, System.Net.WebRequestMethods.Ftp.ListDirectory );
-			var regexPattern = fd.RegexPattern;
+			var regexPattern = fd.WorkOrder.ExpandVariables( fd.RegexPattern );
 			var list = this.ReadLines( ftp );
 			return ( System.String.IsNullOrEmpty( regexPattern )
 				? list
@@ -157,7 +157,7 @@ namespace Icod.Wod.File {
 			var uri = new System.Uri( filePathName );
 			var ftp = (System.Net.FtpWebRequest)System.Net.FtpWebRequest.Create( uri );
 			this.SetFtpClient( ftp, System.Net.WebRequestMethods.Ftp.ListDirectory );
-			var regexPattern = fd.RegexPattern;
+			var regexPattern = fd.WorkOrder.ExpandVariables( fd.RegexPattern );
 			var list = this.ReadLines( ftp );
 			return ( System.String.IsNullOrEmpty( regexPattern )
 				? list

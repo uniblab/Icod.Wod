@@ -49,11 +49,11 @@ namespace Icod.Wod.File {
 			this.SetClient( http, "DELETE" );
 			using ( var response = (System.Net.HttpWebResponse)http.GetResponse() ) {
 				switch ( response.StatusCode ) {
-					case System.Net.HttpStatusCode.Accepted :
-					case System.Net.HttpStatusCode.NoContent :
-					case System.Net.HttpStatusCode.OK :
+					case System.Net.HttpStatusCode.Accepted:
+					case System.Net.HttpStatusCode.NoContent:
+					case System.Net.HttpStatusCode.OK:
 						break;
-					default :
+					default:
 						throw new System.NotSupportedException();
 				}
 			}

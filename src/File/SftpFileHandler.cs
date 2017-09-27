@@ -35,7 +35,9 @@ namespace Icod.Wod.File {
 				var fn = kfd.Name.TrimToNull();
 				var fpwd = kfd.Password.TrimToNull();
 				if ( !System.String.IsNullOrEmpty( fp ) && !System.String.IsNullOrEmpty( fn ) ) {
-					var kfs = kfd.GetFileHandler( this.WorkOrder ).OpenReader( System.IO.Path.Combine( kfd.ExpandedPath, kfd.ExpandedName ) );
+					var kfpn = System.IO.Path.Combine( kfd.ExpandedPath, kfd.ExpandedName );
+					var kfh = kfd.GetFileHandler( this.WorkOrder );
+					var kfs = kfh.OpenReader( kfpn );
 					authMethods.Add( new Renci.SshNet.PrivateKeyAuthenticationMethod(
 						username,
 						new Renci.SshNet.PrivateKeyFile[ 1 ] {
@@ -79,7 +81,9 @@ namespace Icod.Wod.File {
 			return new ClientStream( client.Open( filePathName, System.IO.FileMode.Open, System.IO.FileAccess.Read ), client );
 		}
 		public sealed override void Overwrite( System.IO.Stream source, System.String filePathName ) {
-			this.Write( source, filePathName, System.IO.FileMode.OpenOrCreate );
+			var uri = new System.Uri( filePathName );
+			var fpn = uri.LocalPath;
+			this.Write( source, fpn, System.IO.FileMode.OpenOrCreate );
 		}
 		public sealed override void Append( System.IO.Stream source, System.String filePathName ) {
 			this.Write( source, filePathName, System.IO.FileMode.Append );
@@ -96,9 +100,10 @@ namespace Icod.Wod.File {
 		}
 
 		public sealed override void MkDir() {
+			var dpn = new System.Uri( this.FileDescriptor.ExpandedPath ).AbsolutePath;
 			using ( var client = this.GetClient() ) {
 				client.Connect();
-				client.CreateDirectory( this.FileDescriptor.ExpandedPath );
+				client.CreateDirectory( dpn );
 			}
 		}
 		public sealed override void RmDir( System.Boolean recurse ) {
@@ -113,7 +118,7 @@ namespace Icod.Wod.File {
 			var pathName = new System.Uri( this.PathCombine( fd.ExpandedPath, fd.ExpandedName ) ).AbsolutePath;
 			using ( var client = this.GetClient() ) {
 				client.Connect();
-				return this.GetRemoteList( client, pathName, fd.RegexPattern ).Where(
+				return this.GetRemoteList( client, pathName, fd.WorkOrder.ExpandVariables( fd.RegexPattern ) ).Where(
 					x => x.IsRegularFile
 				).Select(
 					x => new FileEntry {
@@ -129,7 +134,7 @@ namespace Icod.Wod.File {
 			var pathName = new System.Uri( this.PathCombine( fd.ExpandedPath, fd.ExpandedName ) ).AbsolutePath;
 			using ( var client = this.GetClient() ) {
 				client.Connect();
-				return this.GetRemoteList( client, pathName, fd.RegexPattern ).Where(
+				return this.GetRemoteList( client, pathName, fd.WorkOrder.ExpandVariables( fd.RegexPattern ) ).Where(
 					x => x.IsDirectory
 				).Select(
 					x => new FileEntry {
@@ -145,7 +150,7 @@ namespace Icod.Wod.File {
 			var pathName = new System.Uri( this.PathCombine( fd.ExpandedPath, fd.ExpandedName ) ).AbsolutePath;
 			using ( var client = this.GetClient() ) {
 				client.Connect();
-				return this.GetRemoteList( client, pathName, fd.RegexPattern ).Select(
+				return this.GetRemoteList( client, pathName, fd.WorkOrder.ExpandVariables( fd.RegexPattern ) ).Select(
 					x => new FileEntry {
 						File = x.FullName,
 						Handler = this,
