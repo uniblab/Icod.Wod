@@ -49,12 +49,19 @@ namespace Icod.Wod.File {
 			var dest = this.Destination.GetFileHandler( workOrder );
 			var dfd = dest.FileDescriptor;
 			var source = this.GetFileHandler( workOrder );
-			System.String file = source.ListFiles().First().File;
-			using ( var reader = source.OpenReader( file ) ) {
-				dest.Append( reader, dest.PathCombine( dfd.ExpandedPath, dfd.ExpandedName ) );
-			}
+			var files = source.ListFiles().Select(
+				x => x.File
+			);
+			System.Action<FileHandlerBase, System.String> delFile = ( s, f ) => {
+			};
 			if ( this.Move ) {
-				source.DeleteFile( file );
+				delFile = ( s, f ) => s.DeleteFile( f );
+			}
+			foreach ( var file in files ) {
+				using ( var reader = source.OpenReader( file ) ) {
+					dest.Append( reader, dest.PathCombine( dfd.ExpandedPath, dfd.ExpandedName ) );
+				}
+				delFile( source, file );
 			}
 		}
 		#endregion methods
