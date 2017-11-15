@@ -49,14 +49,16 @@ namespace Icod.Wod.File {
 			var dest = this.Destination.GetFileHandler( workOrder );
 			var dfd = dest.FileDescriptor;
 			var source = this.GetFileHandler( workOrder );
+			System.Action<FileHandlerBase, System.String> delFile;
+			if ( this.Move ) {
+				delFile = ( s, f ) => s.DeleteFile( f );
+			} else {
+				delFile = ( s, f ) => {
+				};
+			}
 			var files = source.ListFiles().Select(
 				x => x.File
 			);
-			System.Action<FileHandlerBase, System.String> delFile = ( s, f ) => {
-			};
-			if ( this.Move ) {
-				delFile = ( s, f ) => s.DeleteFile( f );
-			}
 			foreach ( var file in files ) {
 				using ( var reader = source.OpenReader( file ) ) {
 					dest.Append( reader, dest.PathCombine( dfd.ExpandedPath, dfd.ExpandedName ) );

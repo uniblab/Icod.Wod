@@ -64,18 +64,21 @@ namespace Icod.Wod.File {
 				this.DoWork( source as LocalFileHandler, dest as LocalFileHandler );
 				return;
 			}
-			var files = source.ListFiles();
-			System.String file;
-			foreach ( var fe in files ) {
-				file = fe.File;
+			System.Action<FileHandlerBase, System.String> delFile;
+			if ( this.Move ) {
+				delFile = ( s, f ) => s.DeleteFile( f );
+			} else {
+				delFile = ( s, f ) => {
+				};
+			}
+			var files = source.ListFiles().Select(
+				x => x.File
+			);
+			foreach ( var file in files ) {
 				using ( var reader = source.OpenReader( file ) ) {
 					dest.Overwrite( reader, dest.PathCombine( dest.FileDescriptor.ExpandedPath, System.IO.Path.GetFileName( file ) ) );
 				}
-			}
-			if ( this.Move ) {
-				foreach ( var fe in source.ListFiles() ) {
-					source.DeleteFile( fe.File );
-				}
+				delFile( source, file );
 			}
 		}
 
