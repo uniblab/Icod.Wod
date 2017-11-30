@@ -160,6 +160,10 @@ namespace Icod.Wod {
 			@string = System.Environment.ExpandEnvironmentVariables( @string );
 			return @string;
 		}
+
+		public sealed override System.String ToString() {
+			return this.JobName ?? base.ToString();
+		}
 		#endregion methods
 
 	}

@@ -3,17 +3,15 @@ using System.Linq;
 namespace Icod.Wod.Data {
 
 	[System.Serializable]
-	public sealed class TextFileColumn {
+	public sealed class TextFileColumn : ColumnBase {
 
 		#region fields
-		private System.Int32 myLength;
 		private System.String myFormatString;
 		#endregion fields
 
 
 		#region .ctor
 		public TextFileColumn() : base() {
-			myLength = -1;
 			myFormatString = "{0}";
 		}
 		public TextFileColumn( System.String name ) : this() {
@@ -23,30 +21,6 @@ namespace Icod.Wod.Data {
 
 
 		#region properties
-		[System.Xml.Serialization.XmlAttribute(
-			"name",
-			Namespace = "http://Icod.Wod"
-		)]
-		[System.ComponentModel.DefaultValue( null )]
-		public System.String Name {
-			get;
-			set;
-		}
-
-		[System.Xml.Serialization.XmlAttribute(
-			"length",
-			Namespace = "http://Icod.Wod"
-		)]
-		[System.ComponentModel.DefaultValue( -1 )]
-		public System.Int32 Length {
-			get {
-				return myLength;
-			}
-			set {
-				myLength = value;
-			}
-		}
-
 		[System.Xml.Serialization.XmlAttribute(
 			"formatString",
 			Namespace = "http://Icod.Wod"
@@ -61,6 +35,16 @@ namespace Icod.Wod.Data {
 			}
 		}
 		#endregion properties
+
+
+		#region methods
+		public sealed override System.String GetColumnText( System.Object value ) {
+			return ( ( null == value ) || System.DBNull.Value.Equals( value ) )
+				? this.NullReplacementText
+				: System.String.Format( this.FormatString ?? "{0}", value )
+			;
+		}
+		#endregion methods
 
 	}
 

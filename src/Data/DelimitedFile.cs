@@ -357,7 +357,7 @@ namespace Icod.Wod.Data {
 			return c;
 		}
 
-		protected sealed override void WriteHeader( System.IO.StreamWriter writer, System.Collections.Generic.IEnumerable<System.Data.DataColumn> dbColumns, System.Collections.Generic.IEnumerable<TextFileColumn> fileColumns ) {
+		protected sealed override void WriteHeader( System.IO.StreamWriter writer, System.Collections.Generic.IEnumerable<System.Data.DataColumn> dbColumns, System.Collections.Generic.IEnumerable<ColumnBase> fileColumns ) {
 			if ( ( null == dbColumns ) || !dbColumns.Any() ) {
 				throw new System.ArgumentNullException( "dbColumns" );
 			} else if ( null == writer ) {
@@ -372,7 +372,7 @@ namespace Icod.Wod.Data {
 			).ToArray() ) );
 			this.EolWriter( writer );
 		}
-		protected sealed override System.String GetRow( System.Collections.Generic.IDictionary<System.Data.DataColumn, TextFileColumn> formatMap, System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Data.DataRow row ) {
+		protected sealed override System.String GetRow( System.Collections.Generic.IDictionary<System.Data.DataColumn, ColumnBase> formatMap, System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Data.DataRow row ) {
 			if ( null == row ) {
 				throw new System.ArgumentNullException( "row" );
 			} else if ( ( null == columns ) || !columns.Any() ) {
@@ -384,16 +384,11 @@ namespace Icod.Wod.Data {
 			var fq = this.ForceQuote;
 			var qcs = this.QuoteCharString;
 			var list = columns.Select(
-				x => this.GetColumn(
-					formatMap.ContainsKey( x )
-						? formatMap[ x ] ?? new TextFileColumn( x.ColumnName )
-						: new TextFileColumn( x.ColumnName )
-					,
-					x,
-					row
-				)
+				x => this.GetColumn( formatMap[ x ], x, row )
 			).Select(
-				x => ( fq || x.Contains( this.FieldSeparatorString ) ) ? qcs + x + qcs : x
+				x => ( fq || x.Contains( this.FieldSeparatorString ) )
+					? qcs + x + qcs
+					: x
 			);
 			return System.String.Join( this.FieldSeparatorString, list );
 		}

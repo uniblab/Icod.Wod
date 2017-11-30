@@ -13,7 +13,7 @@ namespace Icod.Wod.Data {
 
 		private System.String myCodePage;
 		private System.Boolean myHasHeader;
-		private TextFileColumn[] myColumns;
+		private ColumnBase[ ] myColumns;
 		private System.Int32 myBufferLength;
 		private System.Boolean myAppend;
 		private System.Int32 mySkip;
@@ -101,7 +101,7 @@ namespace Icod.Wod.Data {
 			Namespace = "http://Icod.Wod"
 		)]
 		[System.ComponentModel.DefaultValue( null )]
-		public virtual TextFileColumn[] Columns {
+		public virtual ColumnBase[ ] Columns {
 			get {
 				return myColumns;
 			}
@@ -266,17 +266,22 @@ namespace Icod.Wod.Data {
 				}
 			}
 		}
-		protected virtual System.Collections.Generic.IDictionary<System.Data.DataColumn, TextFileColumn> BuildFormatMap( System.Collections.Generic.IEnumerable<System.Data.DataColumn> dbColumns ) {
+		protected virtual System.Collections.Generic.IDictionary<System.Data.DataColumn, ColumnBase> BuildFormatMap( System.Collections.Generic.IEnumerable<System.Data.DataColumn> dbColumns ) {
 			if ( ( null == dbColumns ) || !dbColumns.Any() ) {
 				throw new System.ArgumentNullException( "dbColumns" );
 			}
-			var output = new System.Collections.Generic.Dictionary<System.Data.DataColumn, TextFileColumn>();
+			var output = new System.Collections.Generic.Dictionary<System.Data.DataColumn, ColumnBase>();
 			var cols = this.Columns ?? new TextFileColumn[ 0 ];
 
 			foreach ( var dbCol in dbColumns ) {
 				output.Add( dbCol, cols.FirstOrDefault(
 					x => x.Name.Equals( dbCol.ColumnName, System.StringComparison.OrdinalIgnoreCase )
 				) ?? new TextFileColumn( dbCol.ColumnName ) );
+			}
+			foreach ( var missing in dbColumns.Where(
+				x => !output.ContainsKey( x )
+			).ToArray() ) {
+				output.Add( missing, new TextFileColumn( missing.ColumnName ) );
 			}
 			return output;
 		}
@@ -289,7 +294,7 @@ namespace Icod.Wod.Data {
 
 			this.WriteHeader( writer, table.Columns.OfType<System.Data.DataColumn>(), this.Columns );
 		}
-		protected abstract void WriteHeader( System.IO.StreamWriter writer, System.Collections.Generic.IEnumerable<System.Data.DataColumn> dbColumns, System.Collections.Generic.IEnumerable<TextFileColumn> fileColumns );
+		protected abstract void WriteHeader( System.IO.StreamWriter writer, System.Collections.Generic.IEnumerable<System.Data.DataColumn> dbColumns, System.Collections.Generic.IEnumerable<ColumnBase> fileColumns );
 		protected virtual void WriteFile( System.IO.Stream stream ) {
 			if ( null == stream ) {
 				throw new System.ArgumentNullException( "stream" );
@@ -304,7 +309,7 @@ namespace Icod.Wod.Data {
 			}
 		}
 
-		protected virtual void WriteRow( System.IO.StreamWriter writer, System.Collections.Generic.IDictionary<System.Data.DataColumn, TextFileColumn> formatMap, System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Data.DataRow row ) {
+		protected virtual void WriteRow( System.IO.StreamWriter writer, System.Collections.Generic.IDictionary<System.Data.DataColumn, ColumnBase> formatMap, System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Data.DataRow row ) {
 			if ( null == row ) {
 				throw new System.ArgumentNullException( "row" );
 			} else if ( ( null == columns ) || !columns.Any() ) {
@@ -317,7 +322,7 @@ namespace Icod.Wod.Data {
 			writer.Write( GetRow( formatMap, columns, row ) );
 			this.EolWriter( writer );
 		}
-		protected virtual System.String GetRow( System.Collections.Generic.IDictionary<System.Data.DataColumn, TextFileColumn> formatMap, System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Data.DataRow row ) {
+		protected virtual System.String GetRow( System.Collections.Generic.IDictionary<System.Data.DataColumn, ColumnBase> formatMap, System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Data.DataRow row ) {
 			if ( null == row ) {
 				throw new System.ArgumentNullException( "row" );
 			} else if ( ( null == columns ) || !columns.Any() ) {
@@ -327,17 +332,10 @@ namespace Icod.Wod.Data {
 			}
 
 			return System.String.Join( System.String.Empty, columns.Select(
-				x => this.GetColumn(
-					formatMap.ContainsKey( x )
-						? formatMap[ x ] ?? new TextFileColumn( x.ColumnName )
-						: new TextFileColumn( x.ColumnName )
-					,
-					x,
-					row
-				)
+				x => this.GetColumn( formatMap[ x ], x, row )
 			) );
 		}
-		protected virtual System.Collections.Generic.IEnumerable<System.String> GetColumns( System.Collections.Generic.IDictionary<System.Data.DataColumn, TextFileColumn> formatMap, System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Data.DataRow row ) {
+		protected virtual System.Collections.Generic.IEnumerable<System.String> GetColumns( System.Collections.Generic.IDictionary<System.Data.DataColumn, ColumnBase> formatMap, System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Data.DataRow row ) {
 			if ( null == row ) {
 				throw new System.ArgumentNullException( "row" );
 			} else if ( ( null == columns ) || !columns.Any() ) {
@@ -347,17 +345,10 @@ namespace Icod.Wod.Data {
 			}
 
 			return columns.Select(
-				x => this.GetColumn(
-					formatMap.ContainsKey( x )
-						? formatMap[ x ] ?? new TextFileColumn( x.ColumnName )
-						: new TextFileColumn( x.ColumnName )
-					,
-					x,
-					row
-				)
+				x => this.GetColumn( formatMap[ x ], x, row )
 			);
 		}
-		protected virtual System.String GetColumn( TextFileColumn format, System.Data.DataColumn column, System.Data.DataRow row ) {
+		protected virtual System.String GetColumn( ColumnBase format, System.Data.DataColumn column, System.Data.DataRow row ) {
 			if ( null == row ) {
 				throw new System.ArgumentNullException( "row" );
 			} else if ( null == column ) {
@@ -367,12 +358,7 @@ namespace Icod.Wod.Data {
 			if ( null == format ) {
 				format = new TextFileColumn( column.ColumnName );
 			}
-			var value = row[ column ];
-			var nrt = this.NullReplacementText;
-			var output = ( ( null == value ) && ( null != nrt ) )
-				? nrt
-				: System.String.Format( format.FormatString ?? "{0}", value )
-			;
+			var output = format.GetColumnText( row[ column ] ) ?? this.NullReplacementText ?? System.String.Empty;
 			if ( 0 < format.Length ) {
 				var l = format.Length;
 				var w = l - output.Length;
@@ -389,9 +375,8 @@ namespace Icod.Wod.Data {
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			System.String fileName;
 			foreach ( var file in this.GetFiles() ) {
-				fileName = System.IO.Path.GetFileName( file.File );
 				using ( var stream = this.OpenReader( file ) ) {
-					yield return this.ReadFile( fileName, stream );
+					yield return this.ReadFile( file.File, stream );
 				}
 			}
 		}
@@ -408,22 +393,37 @@ namespace Icod.Wod.Data {
 			return new System.IO.StreamReader( this.GetFileHandler( this.WorkOrder ).OpenReader( file.File ), this.GetEncoding(), true, this.BufferLength );
 		}
 
-		protected virtual System.Data.DataTable BuildTable( System.String fileName, System.IO.StreamReader file ) {
+		protected virtual System.Data.DataTable BuildTable( System.String filePathName, System.IO.StreamReader file ) {
 			if ( null == file ) {
 				throw new System.ArgumentNullException( "file" );
-			} else if ( System.String.IsNullOrEmpty( fileName ) ) {
-				throw new System.ArgumentNullException( "fileName" );
+			} else if ( System.String.IsNullOrEmpty( filePathName ) ) {
+				throw new System.ArgumentNullException( "filePathName" );
 			}
 
 			var output = new System.Data.DataTable();
 			foreach ( var column in this.BuildColumns( file ) ) {
 				output.Columns.Add( column );
 			}
+			var fileName = System.IO.Path.GetFileName( filePathName );
 			var fileNameColumn = new System.Data.DataColumn( "%wod:FileName%", typeof( System.String ) );
 			fileNameColumn.AllowDBNull = false;
 			fileNameColumn.ReadOnly = true;
 			fileNameColumn.DefaultValue = fileName;
 			output.Columns.Add( fileNameColumn );
+
+			var filePathNameColumn = new System.Data.DataColumn( "%wod:FilePathName%", typeof( System.String ) );
+			filePathNameColumn.AllowDBNull = false;
+			filePathNameColumn.ReadOnly = true;
+			filePathNameColumn.DefaultValue = filePathName;
+			output.Columns.Add( filePathNameColumn );
+
+			var directoryName = System.IO.Path.GetDirectoryName( filePathName );
+			var directoryNameColumn = new System.Data.DataColumn( "%wod:DirectoryName%", typeof( System.String ) );
+			directoryNameColumn.AllowDBNull = false;
+			directoryNameColumn.ReadOnly = true;
+			directoryNameColumn.DefaultValue = filePathName;
+			output.Columns.Add( directoryNameColumn );
+
 			output.TableName = fileName;
 
 			return output;
@@ -431,16 +431,16 @@ namespace Icod.Wod.Data {
 		protected abstract System.Collections.Generic.IEnumerable<System.Data.DataColumn> BuildColumns( System.IO.StreamReader file );
 		protected abstract System.Data.DataRow ReadRecord( System.Data.DataTable table, System.IO.StreamReader file );
 		protected abstract System.Collections.Generic.IEnumerable<System.String> ReadRecord( System.IO.StreamReader file );
-		protected virtual System.Data.DataTable ReadFile( System.String fileName, System.IO.StreamReader file ) {
+		protected virtual System.Data.DataTable ReadFile( System.String filePathName, System.IO.StreamReader file ) {
 			if ( null == file ) {
 				throw new System.ArgumentNullException( "file" );
-			} else if ( System.String.IsNullOrEmpty( fileName ) ) {
-				throw new System.ArgumentNullException( "fileName" );
+			} else if ( System.String.IsNullOrEmpty( filePathName ) ) {
+				throw new System.ArgumentNullException( "filePathName" );
 			}
 
 			System.Data.DataTable table = null;
 			try {
-				table = this.BuildTable( fileName, file );
+				table = this.BuildTable( filePathName, file );
 				if ( !file.EndOfStream ) {
 					System.Int32 s = 0;
 					var skip = this.Skip;
@@ -452,10 +452,15 @@ namespace Icod.Wod.Data {
 					}
 				}
 			} catch ( System.Exception e ) {
-				if ( !e.Data.Contains( "%wod:FileName%" ) ) {
-					e.Data.Add( "%wod:FileName%", fileName );
+				if ( !e.Data.Contains( "%wod:FilePathName%" ) ) {
+					e.Data.Add( "%wod:FilePathName%", filePathName );
 				} else {
-					e.Data[ "%wod:FileName%" ] = fileName;
+					e.Data[ "%wod:FilePathName%" ] = filePathName;
+				}
+				if ( !e.Data.Contains( "%wod:FileName%" ) ) {
+					e.Data.Add( "%wod:FileName%", System.IO.Path.GetFileName( filePathName ) );
+				} else {
+					e.Data[ "%wod:FileName%" ] = System.IO.Path.GetFileName( filePathName );
 				}
 				throw;
 			}

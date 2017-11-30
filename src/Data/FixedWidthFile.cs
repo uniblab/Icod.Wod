@@ -94,10 +94,10 @@ namespace Icod.Wod.Data {
 		protected sealed override System.Collections.Generic.IEnumerable<System.Data.DataColumn> BuildColumns( System.IO.StreamReader file ) {
 			if ( null == file ) {
 				throw new System.ArgumentNullException( "file" );
-			} else if ( !( this.Columns ?? new TextFileColumn[ 0 ] ).Any() ) {
+			} else if ( !( this.Columns ?? new ColumnBase[ 0 ] ).Any() ) {
 				throw new System.InvalidOperationException();
 			} else if ( this.Columns.Any(
-				x => ( 1 < x.Length )
+				x => ( x.Length < -1 )
 			) ) {
 				throw new System.ArgumentException( "All column lengths must be positive." );
 			}
@@ -144,7 +144,7 @@ namespace Icod.Wod.Data {
 			}
 		}
 
-		protected sealed override void WriteHeader( System.IO.StreamWriter writer, System.Collections.Generic.IEnumerable<System.Data.DataColumn> dbColumns, System.Collections.Generic.IEnumerable<TextFileColumn> fileColumns ) {
+		protected sealed override void WriteHeader( System.IO.StreamWriter writer, System.Collections.Generic.IEnumerable<System.Data.DataColumn> dbColumns, System.Collections.Generic.IEnumerable<ColumnBase> fileColumns ) {
 			if ( ( null == fileColumns ) || !fileColumns.Any() ) {
 				throw new System.ArgumentNullException( "fileColumns" );
 			} else if ( ( null == dbColumns ) || !dbColumns.Any() ) {
