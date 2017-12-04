@@ -421,7 +421,7 @@ namespace Icod.Wod.Data {
 			var directoryNameColumn = new System.Data.DataColumn( "%wod:DirectoryName%", typeof( System.String ) );
 			directoryNameColumn.AllowDBNull = false;
 			directoryNameColumn.ReadOnly = true;
-			directoryNameColumn.DefaultValue = filePathName;
+			directoryNameColumn.DefaultValue = directoryName;
 			output.Columns.Add( directoryNameColumn );
 
 			output.TableName = fileName;
