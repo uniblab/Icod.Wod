@@ -5,7 +5,18 @@ namespace Icod.Wod.File {
 	[System.Serializable]
 	public sealed class SftpFileHandler : RemoteFileHandlerBase {
 
+		#region fields
+		private static readonly System.Func<System.IO.Stream, System.String, Renci.SshNet.PrivateKeyFile> theStreamPasswdAuthMethodCtor;
+		private static readonly System.Func<System.IO.Stream, System.String, Renci.SshNet.PrivateKeyFile> theStreamAuthMethodCtor;
+		#endregion fields
+
+
 		#region .ctor
+		static SftpFileHandler() {
+			theStreamPasswdAuthMethodCtor = ( stream, passwd ) => new Renci.SshNet.PrivateKeyFile( stream, passwd );
+			theStreamAuthMethodCtor = ( stream, passwd ) => new Renci.SshNet.PrivateKeyFile( stream );
+		}
+
 		public SftpFileHandler() : base() {
 		}
 		public SftpFileHandler( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
@@ -18,43 +29,41 @@ namespace Icod.Wod.File {
 		#region methods
 		private Renci.SshNet.SftpClient GetClient() {
 			var fd = this.FileDescriptor;
+			var kf = fd.SshKeyFile;
+			kf.WorkOrder = fd.WorkOrder;
 			var uri = new System.Uri( fd.ExpandedPath );
 			var ub = new System.UriBuilder( fd.ExpandedPath );
 			var username = uri.UserInfo.TrimToNull() ?? ub.UserName.TrimToNull() ?? fd.Username.TrimToNull();
 			var passwd = ub.Password.TrimToNull() ?? fd.Password.TrimToNull();
 			var host = uri.Host;
 			System.Int32 port = uri.Port;
-			System.Collections.Generic.ICollection<Renci.SshNet.AuthenticationMethod> authMethods = new System.Collections.Generic.List<Renci.SshNet.AuthenticationMethod>( 2 );
-			if ( !System.String.IsNullOrEmpty( passwd ) ) {
-				authMethods.Add( new Renci.SshNet.PasswordAuthenticationMethod( username, passwd ) );
-			}
-			var kfd = fd.SshKeyFile;
-			if ( null != kfd ) {
-				kfd.WorkOrder = this.WorkOrder;
-				var fp = kfd.Path.TrimToNull();
-				var fn = kfd.Name.TrimToNull();
-				var fpwd = kfd.Password.TrimToNull();
-				if ( !System.String.IsNullOrEmpty( fp ) && !System.String.IsNullOrEmpty( fn ) ) {
-					var kfpn = System.IO.Path.Combine( kfd.ExpandedPath, kfd.ExpandedName );
-					var kfh = kfd.GetFileHandler( this.WorkOrder );
-					var kfs = kfh.OpenReader( kfpn );
-					authMethods.Add( new Renci.SshNet.PrivateKeyAuthenticationMethod(
-						username,
-						new Renci.SshNet.PrivateKeyFile[ 1 ] {
-							System.String.IsNullOrEmpty( fpwd )
-								? new Renci.SshNet.PrivateKeyFile( kfs )
-								: new Renci.SshNet.PrivateKeyFile( kfs, fpwd )
-						}
-					) );
+			var kffd = kf.GetFileHandler( this.WorkOrder );
+			var kfpasswd = kf.KeyFilePassword.TrimToNull();
+			var action = System.String.IsNullOrEmpty( kfpasswd )
+				? theStreamAuthMethodCtor
+				: theStreamPasswdAuthMethodCtor
+			;
+			System.Collections.Generic.List<Renci.SshNet.AuthenticationMethod> ama = new System.Collections.Generic.List<Renci.SshNet.AuthenticationMethod>( 2 );
+			ama.Add( new Renci.SshNet.PasswordAuthenticationMethod( username, passwd ) );
+			ama.Add( new Renci.SshNet.PrivateKeyAuthenticationMethod( username, kffd.ListFiles().Select(
+				fe => {
+					var kfs = new System.IO.MemoryStream();
+					using ( var keySource = kffd.OpenReader( fe.File ) ) {
+						keySource.CopyTo( kfs );
+					}
+					kfs.Seek( 0, System.IO.SeekOrigin.Begin );
+					return kfs;
 				}
-			}
-			var ama = authMethods.ToArray();
+			).Select(
+				x => action( x, kfpasswd )
+			).ToArray() ) );
 			var ci = ( -1 == port )
-				? new Renci.SshNet.ConnectionInfo( host, username, ama )
-				: new Renci.SshNet.ConnectionInfo( host, port, username, ama )
+				? new Renci.SshNet.ConnectionInfo( host, username, ama.ToArray() )
+				: new Renci.SshNet.ConnectionInfo( host, port, username, ama.ToArray() )
 			;
 			return new Renci.SshNet.SftpClient( ci );
 		}
+
 		public sealed override void TouchFile() {
 			var fd = this.FileDescriptor;
 			using ( var client = this.GetClient() ) {

@@ -59,7 +59,7 @@ namespace Icod.Wod {
 				path = path.Substring( 0, path.Length - 1 );
 			}
 			while ( name.StartsWith( sep ) ) {
-				sep = sep.Substring( 1 );
+				name = name.Substring( 1 );
 			}
 			return path + sep + name;
 		}

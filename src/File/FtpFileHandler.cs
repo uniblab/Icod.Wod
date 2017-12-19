@@ -53,28 +53,28 @@ namespace Icod.Wod.File {
 			this.DeleteFile( filePathName );
 		}
 		public sealed override void DeleteFile( System.String filePathName ) {
-			var uri = new System.Uri( filePathName );
+			var uri = new System.Uri( this.PathCombine( this.FileDescriptor.ExpandedPath, filePathName ) );
 			var ftp = (System.Net.FtpWebRequest)System.Net.FtpWebRequest.Create( uri );
 			this.SetFtpClient( ftp, System.Net.WebRequestMethods.Ftp.DeleteFile );
 			ftp.GetResponse().Close();
 		}
 
 		public override System.IO.Stream OpenReader( System.String filePathName ) {
-			var uri = new System.Uri( filePathName );
+			var uri = new System.Uri( this.PathCombine( this.FileDescriptor.ExpandedPath, filePathName ) );
 			var ftp = (System.Net.FtpWebRequest)System.Net.FtpWebRequest.Create( uri );
 			this.SetFtpClient( ftp, System.Net.WebRequestMethods.Ftp.DownloadFile );
 			var client = ftp.GetResponse();
 			return new ClientStream( client.GetResponseStream(), client );
 		}
 		public sealed override void Overwrite( System.IO.Stream source, System.String filePathName ) {
-			var uri = new System.Uri( filePathName );
+			var uri = new System.Uri( this.PathCombine( this.FileDescriptor.ExpandedPath, filePathName ) );
 			var ftp = (System.Net.FtpWebRequest)System.Net.FtpWebRequest.Create( uri );
 			this.SetFtpClient( ftp, System.Net.WebRequestMethods.Ftp.UploadFile );
 			this.Write( source, ftp );
 			ftp.GetResponse().Close();
 		}
 		public sealed override void Append( System.IO.Stream source, System.String filePathName ) {
-			var uri = new System.Uri( filePathName );
+			var uri = new System.Uri( this.PathCombine( this.FileDescriptor.ExpandedPath, filePathName ) );
 			var ftp = (System.Net.FtpWebRequest)System.Net.FtpWebRequest.Create( uri );
 			this.SetFtpClient( ftp, System.Net.WebRequestMethods.Ftp.AppendFile );
 			this.Write( source, ftp );
@@ -109,33 +109,43 @@ namespace Icod.Wod.File {
 			var filePathName = this.PathCombine( fd.ExpandedPath, fd.ExpandedName );
 			var uri = new System.Uri( filePathName );
 			var ftp = (System.Net.FtpWebRequest)System.Net.FtpWebRequest.Create( uri );
-			this.SetFtpClient( ftp, System.Net.WebRequestMethods.Ftp.ListDirectory );
+			this.SetFtpClient( ftp, System.Net.WebRequestMethods.Ftp.ListDirectoryDetails );
 			var regexPattern = fd.WorkOrder.ExpandVariables( fd.RegexPattern );
 			var list = this.ReadLines( ftp );
-			return ( System.String.IsNullOrEmpty( regexPattern )
-				? list
-				: list.Where(
-					x => System.Text.RegularExpressions.Regex.IsMatch( x, regexPattern )
-				)
-			).Select(
+			return list.Select(
 				x => new FileEntry {
-					File = x,
-					FileType = System.String.IsNullOrEmpty( System.IO.Path.GetExtension( x ) )
+					File = this.StripNameFromList( x ),
+					FileType = x.StartsWith( "d", System.StringComparison.OrdinalIgnoreCase )
 						? FileType.Directory
 						: FileType.File
 					,
 					Handler = this
 				}
+			).Where(
+				x => System.String.IsNullOrEmpty( regexPattern )
+					? true
+					: System.Text.RegularExpressions.Regex.IsMatch( x.File, regexPattern )
 			);
+		}
+		private System.String StripNameFromList( System.String listLine ) {
+			var q = listLine.Split( new System.Char[ 1 ] { ' ' }, 9, System.StringSplitOptions.RemoveEmptyEntries );
+			return q[ q.Length - 1 ];
 		}
 		public sealed override System.Collections.Generic.IEnumerable<FileEntry> ListFiles() {
 			var fd = this.FileDescriptor;
 			var filePathName = this.PathCombine( fd.ExpandedPath, fd.ExpandedName );
 			var uri = new System.Uri( filePathName );
 			var ftp = (System.Net.FtpWebRequest)System.Net.FtpWebRequest.Create( uri );
-			this.SetFtpClient( ftp, System.Net.WebRequestMethods.Ftp.ListDirectory );
+			this.SetFtpClient( ftp, System.Net.WebRequestMethods.Ftp.ListDirectoryDetails );
 			var regexPattern = fd.WorkOrder.ExpandVariables( fd.RegexPattern );
-			var list = this.ReadLines( ftp );
+			var list = this.ReadLines( ftp ).Where(
+				x => !x.StartsWith( "d", System.StringComparison.OrdinalIgnoreCase )
+			).Select(
+				x => {
+					var y = x.Split( new System.Char[ 1 ] { ' ' }, 9, System.StringSplitOptions.RemoveEmptyEntries );
+					return y[ y.Length - 1 ];
+				}
+			);
 			return ( System.String.IsNullOrEmpty( regexPattern )
 				? list
 				: list.Where(
@@ -145,7 +155,7 @@ namespace Icod.Wod.File {
 				x => !System.String.IsNullOrEmpty( System.IO.Path.GetExtension( x ) )
 			).Select(
 				x => new FileEntry {
-					File = x,
+					File = this.PathCombine( fd.ExpandedName, x ),
 					FileType = FileType.File,
 					Handler = this
 				}
@@ -156,22 +166,29 @@ namespace Icod.Wod.File {
 			var filePathName = this.PathCombine( fd.ExpandedPath, fd.ExpandedName );
 			var uri = new System.Uri( filePathName );
 			var ftp = (System.Net.FtpWebRequest)System.Net.FtpWebRequest.Create( uri );
-			this.SetFtpClient( ftp, System.Net.WebRequestMethods.Ftp.ListDirectory );
+			this.SetFtpClient( ftp, System.Net.WebRequestMethods.Ftp.ListDirectoryDetails );
 			var regexPattern = fd.WorkOrder.ExpandVariables( fd.RegexPattern );
-			var list = this.ReadLines( ftp );
-			return ( System.String.IsNullOrEmpty( regexPattern )
-				? list
-				: list.Where(
-					x => System.Text.RegularExpressions.Regex.IsMatch( x, regexPattern )
-				)
-			).Where(
-				x => System.String.IsNullOrEmpty( System.IO.Path.GetExtension( x ) )
-			).Select(
+			var list = this.ReadLines( ftp ).Where(
+				x => x.StartsWith( "d", System.StringComparison.OrdinalIgnoreCase )
+			).Select( 
+				x => {
+					var y = x.Split( new System.Char[ 1 ] { ' ' }, 9, System.StringSplitOptions.RemoveEmptyEntries );
+					return y[ y.Length -1 ];
+				}
+			);
+			return list.Select(
 				x => new FileEntry {
-					File = x,
-					FileType = FileType.Directory,
+					File = this.StripNameFromList( x ),
+					FileType = x.StartsWith( "d", System.StringComparison.OrdinalIgnoreCase )
+						? FileType.Directory
+						: FileType.File
+					,
 					Handler = this
 				}
+			).Where(
+				x => System.String.IsNullOrEmpty( regexPattern )
+					? true
+					: System.Text.RegularExpressions.Regex.IsMatch( x.File, regexPattern )
 			);
 		}
 		#endregion methods

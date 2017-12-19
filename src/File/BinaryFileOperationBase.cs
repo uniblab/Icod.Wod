@@ -3,7 +3,7 @@
 	[System.Xml.Serialization.XmlInclude( typeof( AppendFile ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( CopyFile ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( GZipFile ) )]
-	[System.Xml.Serialization.XmlInclude( typeof( ListFile ) )]
+	[System.Xml.Serialization.XmlInclude( typeof( FileOrDirectoryLister ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( RenameFile ) )]
 	[System.Xml.Serialization.XmlType(
 		"binaryFileOperation",

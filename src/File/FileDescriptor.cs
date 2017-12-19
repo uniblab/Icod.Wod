@@ -1,5 +1,6 @@
 namespace Icod.Wod.File {
 
+	[System.Serializable]
 	[System.Xml.Serialization.XmlType(
 		"fileDescriptor",
 		Namespace = "http://Icod.Wod"
@@ -138,12 +139,12 @@ namespace Icod.Wod.File {
 		}
 
 		[System.Xml.Serialization.XmlElement(
-			ElementName = "sshKeyFile", 
+			ElementName = "sshKeyFile",
 			Namespace = "http://Icod.Wod",
 			IsNullable = true
 		)]
 		[System.ComponentModel.DefaultValue( null )]
-		public FileDescriptor SshKeyFile {
+		public SshKeyFileDescriptor SshKeyFile {
 			get;
 			set;
 		}

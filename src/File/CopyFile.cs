@@ -71,10 +71,11 @@ namespace Icod.Wod.File {
 				delFile = ( s, f ) => {
 				};
 			}
-			var files = source.ListFiles().Select(
+			var files = source.ListFiles();
+			var fileEntries = files.Select(
 				x => x.File
 			);
-			foreach ( var file in files ) {
+			foreach ( var file in fileEntries ) {
 				using ( var reader = source.OpenReader( file ) ) {
 					dest.Overwrite( reader, dest.PathCombine( dest.FileDescriptor.ExpandedPath, System.IO.Path.GetFileName( file ) ) );
 				}
@@ -90,7 +91,7 @@ namespace Icod.Wod.File {
 			}
 			System.String file;
 			var files = source.ListFiles();
-			System.Action<System.String, System.String> action = ( this.Move )
+			var action = ( this.Move )
 				? theMoveFile
 				: theCopyFile
 			;

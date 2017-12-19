@@ -4,16 +4,16 @@ namespace Icod.Wod.File {
 
 	[System.Serializable]
 	[System.Xml.Serialization.XmlType(
-		"listFile",
+		"listDirectory",
 		Namespace = "http://Icod.Wod",
 		IncludeInSchema = true
 	)]
-	public sealed class ListFile : FileOrDirectoryLister {
+	public sealed class ListDirectory : FileOrDirectoryLister {
 
 		#region .ctor
-		public ListFile() : base() {
+		public ListDirectory() : base() {
 		}
-		public ListFile( WorkOrder workOrder ) : base( workOrder ) {
+		public ListDirectory( WorkOrder workOrder ) : base( workOrder ) {
 		}
 		#endregion .ctor
 
@@ -23,7 +23,7 @@ namespace Icod.Wod.File {
 			if ( null == source ) {
 				throw new System.ArgumentNullException( "source" );
 			}
-			return source.ListFiles();
+			return source.ListDirectories();
 		}
 		#endregion methods
 
