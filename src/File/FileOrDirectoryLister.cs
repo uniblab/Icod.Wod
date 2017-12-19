@@ -6,10 +6,6 @@ namespace Icod.Wod.File {
 	[System.Xml.Serialization.XmlInclude( typeof( List ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( ListFile ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( ListDirectory ) )]
-	[System.Xml.Serialization.XmlType(
-		"fileOrDirectoryLister",
-		Namespace = "http://Icod.Wod"
-	)]
 	public abstract class FileOrDirectoryLister : BinaryFileOperationBase {
 
 		#region fields

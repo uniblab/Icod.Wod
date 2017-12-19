@@ -11,12 +11,43 @@ namespace Icod.Wod.File {
 	)]
 	public sealed class MkZip : ZipOperationBase {
 
+		#region fields
+		private System.Boolean myMove;
+
+		private static readonly System.Action<FileHandlerBase, System.String> theMoveFile;
+		private static readonly System.Action<FileHandlerBase, System.String> theCopyFile;
+		#endregion fields
+
 		#region .ctor
+		static MkZip() {
+			theMoveFile = ( handler, sourceFilePathName ) => handler.DeleteFile( sourceFilePathName );
+			theCopyFile = ( handler, sourceFilePathName ) => { ; };
+		}
+
 		public MkZip() : base() {
+			myMove = false;
 		}
 		public MkZip( WorkOrder workOrder ) : base( workOrder ) {
+			myMove = false;
 		}
 		#endregion .ctor
+
+
+		#region properties
+		[System.Xml.Serialization.XmlAttribute(
+			"move",
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.ComponentModel.DefaultValue( false )]
+		public System.Boolean Move {
+			get {
+				return myMove;
+			}
+			set {
+				myMove = value;
+			}
+		}
+		#endregion properties
 
 
 		#region methods
@@ -35,6 +66,12 @@ namespace Icod.Wod.File {
 			System.IO.Compression.ZipArchiveEntry entry;
 			var writeIfEmpty = this.WriteIfEmpty;
 			var isEmpty = true;
+			System.Action<FileHandlerBase, System.String> fileAct = null;
+			if ( this.Move ) {
+				fileAct = theMoveFile;
+			} else {
+				fileAct = theCopyFile;
+			}
 			using ( System.IO.Stream buffer = new System.IO.MemoryStream() ) {
 				using ( var zipArchive = this.GetZipArchive( buffer, System.IO.Compression.ZipArchiveMode.Create ) ) {
 					foreach ( var sourceD in sources ?? new FileDescriptor[ 0 ] ) {
@@ -53,6 +90,7 @@ namespace Icod.Wod.File {
 									}
 								}
 							}
+							fileAct( source, file.File );
 						}
 					}
 				}

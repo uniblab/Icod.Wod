@@ -1,6 +1,10 @@
 ﻿namespace Icod.Wod.File {
 
 	[System.Serializable]
+	[System.Xml.Serialization.XmlType(
+		"sshKeyFileDescriptor",
+		Namespace = "http://Icod.Wod"
+	)]
 	public class SshKeyFileDescriptor : FileDescriptor {
 
 		#region fields
