@@ -29,11 +29,9 @@ namespace Icod.Wod.File {
 		#region methods
 		private System.Net.FtpWebRequest SetFtpClient( System.Uri uri, System.String method ) {
 			var fd = this.FileDescriptor;
-			System.UriBuilder ub = new System.UriBuilder( fd.ExpandedPath );
-			var username = uri.UserInfo.TrimToNull() ?? ub.UserName.TrimToNull() ?? fd.Username.TrimToNull();
-			var passwd = ub.Password.TrimToNull() ?? fd.Password.TrimToNull();
-			var host = uri.Host;
+			var ub = new System.UriBuilder( fd.ExpandedPath );
 			System.Net.FtpWebRequest client = null;
+
 			if ( uri.Scheme.Equals( "ftps", System.StringComparison.OrdinalIgnoreCase ) ) {
 				if ( uri.Port <= 0 ) {
 					ub.Port = 990;
@@ -44,10 +42,6 @@ namespace Icod.Wod.File {
 			} else {
 				client = (System.Net.FtpWebRequest)System.Net.FtpWebRequest.Create( ub.Uri );
 			}
-			client.Credentials = new System.Net.NetworkCredential(
-				username,
-				passwd
-			);
 			client.UsePassive = fd.UsePassive;
 			var kf = fd.SshKeyFile;
 			if ( null != kf ) {
@@ -69,6 +63,12 @@ namespace Icod.Wod.File {
 					}
 				).ToArray() );
 			}
+			var username = uri.UserInfo.TrimToNull() ?? ub.UserName.TrimToNull() ?? fd.Username.TrimToNull();
+			var passwd = ub.Password.TrimToNull() ?? fd.Password.TrimToNull();
+			client.Credentials = new System.Net.NetworkCredential(
+				username,
+				passwd
+			);
 			client.Method = method;
 			return client;
 		}
