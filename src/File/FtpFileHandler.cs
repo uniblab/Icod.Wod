@@ -5,7 +5,18 @@ namespace Icod.Wod.File {
 	[System.Serializable]
 	public sealed class FtpFileHandler : RemoteFileHandlerBase {
 
+		#region fields
+		private static readonly System.Func<System.Byte[], System.String, System.Security.Cryptography.X509Certificates.X509Certificate> theStreamPasswdAuthMethodCtor;
+		private static readonly System.Func<System.Byte[], System.String, System.Security.Cryptography.X509Certificates.X509Certificate> theStreamAuthMethodCtor;
+		#endregion fields
+
+
 		#region .ctor
+		static FtpFileHandler() {
+			theStreamPasswdAuthMethodCtor = ( data, passwd ) => new System.Security.Cryptography.X509Certificates.X509Certificate( data, passwd );
+			theStreamAuthMethodCtor = ( data, passwd ) => new System.Security.Cryptography.X509Certificates.X509Certificate( data );
+		}
+
 		public FtpFileHandler() : base() {
 		}
 		public FtpFileHandler( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
@@ -16,31 +27,57 @@ namespace Icod.Wod.File {
 
 
 		#region methods
-		private void SetFtpClient( System.Net.FtpWebRequest client, System.String method ) {
-			if ( null == client ) {
-				throw new System.ArgumentNullException( "client" );
-			}
+		private System.Net.FtpWebRequest SetFtpClient( System.Uri uri, System.String method ) {
 			var fd = this.FileDescriptor;
-			var uri = new System.Uri( fd.ExpandedPath );
-			var ub = new System.UriBuilder( fd.ExpandedPath );
+			System.UriBuilder ub = new System.UriBuilder( fd.ExpandedPath );
 			var username = uri.UserInfo.TrimToNull() ?? ub.UserName.TrimToNull() ?? fd.Username.TrimToNull();
 			var passwd = ub.Password.TrimToNull() ?? fd.Password.TrimToNull();
 			var host = uri.Host;
-			System.Int32 port = uri.Port;
+			System.Net.FtpWebRequest client = null;
+			if ( uri.Scheme.Equals( "ftps", System.StringComparison.OrdinalIgnoreCase ) ) {
+				if ( uri.Port <= 0 ) {
+					ub.Port = 990;
+				}
+				ub.Scheme = "ftp";
+				client = (System.Net.FtpWebRequest)System.Net.FtpWebRequest.Create( ub.Uri );
+				client.EnableSsl = true;
+			} else {
+				client = (System.Net.FtpWebRequest)System.Net.FtpWebRequest.Create( ub.Uri );
+			}
 			client.Credentials = new System.Net.NetworkCredential(
 				username,
 				passwd
 			);
 			client.UsePassive = fd.UsePassive;
+			var kf = fd.SshKeyFile;
+			if ( null != kf ) {
+				kf.WorkOrder = fd.WorkOrder;
+				var kffd = kf.GetFileHandler( this.WorkOrder );
+				var kfpasswd = kf.KeyFilePassword.TrimToNull();
+				var action = System.String.IsNullOrEmpty( kfpasswd )
+					? theStreamAuthMethodCtor
+					: theStreamPasswdAuthMethodCtor
+				;
+				client.ClientCertificates.AddRange( kffd.ListFiles().Select(
+					fe => {
+						var kfs = new System.IO.MemoryStream();
+						using ( var keySource = kffd.OpenReader( fe.File ) ) {
+							keySource.CopyTo( kfs );
+						}
+						kfs.Seek( 0, System.IO.SeekOrigin.Begin );
+						return action( kfs.ToArray(), kfpasswd );
+					}
+				).ToArray() );
+			}
 			client.Method = method;
+			return client;
 		}
 
 		public sealed override void TouchFile() {
 			var fd = this.FileDescriptor;
 			var filePathName = this.PathCombine( fd.ExpandedPath, fd.ExpandedName );
 			var uri = new System.Uri( filePathName );
-			var ftp = (System.Net.FtpWebRequest)System.Net.FtpWebRequest.Create( uri );
-			this.SetFtpClient( ftp, System.Net.WebRequestMethods.Ftp.AppendFile );
+			var ftp = this.SetFtpClient( uri, System.Net.WebRequestMethods.Ftp.AppendFile );
 			ftp.ContentLength = 0;
 			using ( var dummy = ftp.GetRequestStream() ) {
 				dummy.Flush();
@@ -50,33 +87,31 @@ namespace Icod.Wod.File {
 		public sealed override void DeleteFile() {
 			var fd = this.FileDescriptor;
 			var filePathName = this.PathCombine( fd.ExpandedPath, fd.ExpandedName );
-			this.DeleteFile( filePathName );
+			var uri = new System.Uri( filePathName );
+			var ftp = this.SetFtpClient( uri, System.Net.WebRequestMethods.Ftp.DeleteFile );
+			ftp.GetResponse().Close();
 		}
 		public sealed override void DeleteFile( System.String filePathName ) {
 			var uri = new System.Uri( this.PathCombine( this.FileDescriptor.ExpandedPath, filePathName ) );
-			var ftp = (System.Net.FtpWebRequest)System.Net.FtpWebRequest.Create( uri );
-			this.SetFtpClient( ftp, System.Net.WebRequestMethods.Ftp.DeleteFile );
+			var ftp = this.SetFtpClient( uri, System.Net.WebRequestMethods.Ftp.DeleteFile );
 			ftp.GetResponse().Close();
 		}
 
 		public override System.IO.Stream OpenReader( System.String filePathName ) {
 			var uri = new System.Uri( this.PathCombine( this.FileDescriptor.ExpandedPath, filePathName ) );
-			var ftp = (System.Net.FtpWebRequest)System.Net.FtpWebRequest.Create( uri );
-			this.SetFtpClient( ftp, System.Net.WebRequestMethods.Ftp.DownloadFile );
+			var ftp = this.SetFtpClient( uri, System.Net.WebRequestMethods.Ftp.DownloadFile );
 			var client = ftp.GetResponse();
 			return new ClientStream( client.GetResponseStream(), client );
 		}
 		public sealed override void Overwrite( System.IO.Stream source, System.String filePathName ) {
 			var uri = new System.Uri( this.PathCombine( this.FileDescriptor.ExpandedPath, filePathName ) );
-			var ftp = (System.Net.FtpWebRequest)System.Net.FtpWebRequest.Create( uri );
-			this.SetFtpClient( ftp, System.Net.WebRequestMethods.Ftp.UploadFile );
+			var ftp = this.SetFtpClient( uri, System.Net.WebRequestMethods.Ftp.UploadFile );
 			this.Write( source, ftp );
 			ftp.GetResponse().Close();
 		}
 		public sealed override void Append( System.IO.Stream source, System.String filePathName ) {
 			var uri = new System.Uri( this.PathCombine( this.FileDescriptor.ExpandedPath, filePathName ) );
-			var ftp = (System.Net.FtpWebRequest)System.Net.FtpWebRequest.Create( uri );
-			this.SetFtpClient( ftp, System.Net.WebRequestMethods.Ftp.AppendFile );
+			var ftp = this.SetFtpClient( uri, System.Net.WebRequestMethods.Ftp.AppendFile );
 			this.Write( source, ftp );
 			ftp.GetResponse().Close();
 		}
@@ -91,16 +126,14 @@ namespace Icod.Wod.File {
 			var fd = this.FileDescriptor;
 			var filePathName = this.PathCombine( fd.ExpandedPath, fd.ExpandedName );
 			var uri = new System.Uri( filePathName );
-			var ftp = (System.Net.FtpWebRequest)System.Net.FtpWebRequest.Create( uri );
-			this.SetFtpClient( ftp, System.Net.WebRequestMethods.Ftp.MakeDirectory );
+			var ftp = this.SetFtpClient( uri, System.Net.WebRequestMethods.Ftp.MakeDirectory );
 			ftp.GetResponse().Close();
 		}
 		public sealed override void RmDir( System.Boolean recurse ) {
 			var fd = this.FileDescriptor;
 			var filePathName = this.PathCombine( fd.ExpandedPath, fd.ExpandedName );
 			var uri = new System.Uri( filePathName );
-			var ftp = (System.Net.FtpWebRequest)System.Net.FtpWebRequest.Create( uri );
-			this.SetFtpClient( ftp, System.Net.WebRequestMethods.Ftp.RemoveDirectory );
+			var ftp = this.SetFtpClient( uri, System.Net.WebRequestMethods.Ftp.RemoveDirectory );
 			ftp.GetResponse().Close();
 		}
 
@@ -108,8 +141,7 @@ namespace Icod.Wod.File {
 			var fd = this.FileDescriptor;
 			var filePathName = this.PathCombine( fd.ExpandedPath, fd.ExpandedName );
 			var uri = new System.Uri( filePathName );
-			var ftp = (System.Net.FtpWebRequest)System.Net.FtpWebRequest.Create( uri );
-			this.SetFtpClient( ftp, System.Net.WebRequestMethods.Ftp.ListDirectoryDetails );
+			var ftp = this.SetFtpClient( uri, System.Net.WebRequestMethods.Ftp.ListDirectoryDetails );
 			var regexPattern = fd.WorkOrder.ExpandVariables( fd.RegexPattern );
 			var list = this.ReadLines( ftp );
 			return list.Select(
@@ -135,8 +167,7 @@ namespace Icod.Wod.File {
 			var fd = this.FileDescriptor;
 			var filePathName = this.PathCombine( fd.ExpandedPath, fd.ExpandedName );
 			var uri = new System.Uri( filePathName );
-			var ftp = (System.Net.FtpWebRequest)System.Net.FtpWebRequest.Create( uri );
-			this.SetFtpClient( ftp, System.Net.WebRequestMethods.Ftp.ListDirectoryDetails );
+			var ftp = this.SetFtpClient( uri, System.Net.WebRequestMethods.Ftp.ListDirectoryDetails );
 			var regexPattern = fd.WorkOrder.ExpandVariables( fd.RegexPattern );
 			var list = this.ReadLines( ftp ).Where(
 				x => !x.StartsWith( "d", System.StringComparison.OrdinalIgnoreCase )
@@ -165,15 +196,14 @@ namespace Icod.Wod.File {
 			var fd = this.FileDescriptor;
 			var filePathName = this.PathCombine( fd.ExpandedPath, fd.ExpandedName );
 			var uri = new System.Uri( filePathName );
-			var ftp = (System.Net.FtpWebRequest)System.Net.FtpWebRequest.Create( uri );
-			this.SetFtpClient( ftp, System.Net.WebRequestMethods.Ftp.ListDirectoryDetails );
+			var ftp = this.SetFtpClient( uri, System.Net.WebRequestMethods.Ftp.ListDirectoryDetails );
 			var regexPattern = fd.WorkOrder.ExpandVariables( fd.RegexPattern );
 			var list = this.ReadLines( ftp ).Where(
 				x => x.StartsWith( "d", System.StringComparison.OrdinalIgnoreCase )
-			).Select( 
+			).Select(
 				x => {
 					var y = x.Split( new System.Char[ 1 ] { ' ' }, 9, System.StringSplitOptions.RemoveEmptyEntries );
-					return y[ y.Length -1 ];
+					return y[ y.Length - 1 ];
 				}
 			);
 			return list.Select(
