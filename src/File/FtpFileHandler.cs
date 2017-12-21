@@ -28,8 +28,7 @@ namespace Icod.Wod.File {
 
 		#region methods
 		private System.Net.FtpWebRequest SetFtpClient( System.Uri uri, System.String method ) {
-			var fd = this.FileDescriptor;
-			var ub = new System.UriBuilder( fd.ExpandedPath );
+			var ub = new System.UriBuilder( uri );
 			System.Net.FtpWebRequest client = null;
 
 			if ( uri.Scheme.Equals( "ftps", System.StringComparison.OrdinalIgnoreCase ) ) {
@@ -42,6 +41,7 @@ namespace Icod.Wod.File {
 			} else {
 				client = (System.Net.FtpWebRequest)System.Net.FtpWebRequest.Create( ub.Uri );
 			}
+			var fd = this.FileDescriptor;
 			client.UsePassive = fd.UsePassive;
 			var kf = fd.SshKeyFile;
 			if ( null != kf ) {
@@ -92,25 +92,25 @@ namespace Icod.Wod.File {
 			ftp.GetResponse().Close();
 		}
 		public sealed override void DeleteFile( System.String filePathName ) {
-			var uri = new System.Uri( this.PathCombine( this.FileDescriptor.ExpandedPath, filePathName ) );
+			var uri = new System.Uri( filePathName );
 			var ftp = this.SetFtpClient( uri, System.Net.WebRequestMethods.Ftp.DeleteFile );
 			ftp.GetResponse().Close();
 		}
 
 		public override System.IO.Stream OpenReader( System.String filePathName ) {
-			var uri = new System.Uri( this.PathCombine( this.FileDescriptor.ExpandedPath, filePathName ) );
+			var uri = new System.Uri( filePathName );
 			var ftp = this.SetFtpClient( uri, System.Net.WebRequestMethods.Ftp.DownloadFile );
 			var client = ftp.GetResponse();
 			return new ClientStream( client.GetResponseStream(), client );
 		}
 		public sealed override void Overwrite( System.IO.Stream source, System.String filePathName ) {
-			var uri = new System.Uri( this.PathCombine( this.FileDescriptor.ExpandedPath, filePathName ) );
+			var uri = new System.Uri( filePathName );
 			var ftp = this.SetFtpClient( uri, System.Net.WebRequestMethods.Ftp.UploadFile );
 			this.Write( source, ftp );
 			ftp.GetResponse().Close();
 		}
 		public sealed override void Append( System.IO.Stream source, System.String filePathName ) {
-			var uri = new System.Uri( this.PathCombine( this.FileDescriptor.ExpandedPath, filePathName ) );
+			var uri = new System.Uri( filePathName );
 			var ftp = this.SetFtpClient( uri, System.Net.WebRequestMethods.Ftp.AppendFile );
 			this.Write( source, ftp );
 			ftp.GetResponse().Close();
@@ -146,7 +146,7 @@ namespace Icod.Wod.File {
 			var list = this.ReadLines( ftp );
 			return list.Select(
 				x => new FileEntry {
-					File = this.StripNameFromList( x ),
+					File = this.PathCombine( fd.ExpandedPath, this.StripNameFromList( x ) ),
 					FileType = x.StartsWith( "d", System.StringComparison.OrdinalIgnoreCase )
 						? FileType.Directory
 						: FileType.File
@@ -168,15 +168,17 @@ namespace Icod.Wod.File {
 			var filePathName = this.PathCombine( fd.ExpandedPath, fd.ExpandedName );
 			var uri = new System.Uri( filePathName );
 			var ftp = this.SetFtpClient( uri, System.Net.WebRequestMethods.Ftp.ListDirectoryDetails );
-			var regexPattern = fd.WorkOrder.ExpandVariables( fd.RegexPattern );
-			var list = this.ReadLines( ftp ).Where(
+			var ldd = this.ReadLines( ftp );
+			var fileList = ldd.Where(
 				x => !x.StartsWith( "d", System.StringComparison.OrdinalIgnoreCase )
-			).Select(
+			);
+			var list = fileList.Select(
 				x => {
 					var y = x.Split( new System.Char[ 1 ] { ' ' }, 9, System.StringSplitOptions.RemoveEmptyEntries );
 					return y[ y.Length - 1 ];
 				}
 			);
+			var regexPattern = fd.WorkOrder.ExpandVariables( fd.RegexPattern );
 			return ( System.String.IsNullOrEmpty( regexPattern )
 				? list
 				: list.Where(
@@ -186,7 +188,7 @@ namespace Icod.Wod.File {
 				x => !System.String.IsNullOrEmpty( System.IO.Path.GetExtension( x ) )
 			).Select(
 				x => new FileEntry {
-					File = this.PathCombine( fd.ExpandedName, x ),
+					File = this.PathCombine( fd.ExpandedPath, x ),
 					FileType = FileType.File,
 					Handler = this
 				}
@@ -208,7 +210,7 @@ namespace Icod.Wod.File {
 			);
 			return list.Select(
 				x => new FileEntry {
-					File = this.StripNameFromList( x ),
+					File = this.PathCombine( fd.ExpandedPath, this.StripNameFromList( x ) ),
 					FileType = x.StartsWith( "d", System.StringComparison.OrdinalIgnoreCase )
 						? FileType.Directory
 						: FileType.File
