@@ -78,6 +78,9 @@ namespace Icod.Wod.File {
 		public sealed override void RmDir( System.Boolean recurse ) {
 			throw new System.NotSupportedException();
 		}
+		public sealed override void RmDir( System.String filePathName, System.Boolean recurse ) {
+			throw new System.NotSupportedException();
+		}
 
 		public sealed override System.Collections.Generic.IEnumerable<FileEntry> List() {
 			throw new System.NotSupportedException();

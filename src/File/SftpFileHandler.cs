@@ -27,10 +27,10 @@ namespace Icod.Wod.File {
 
 
 		#region methods
-		private Renci.SshNet.SftpClient GetClient() {
+		private Renci.SshNet.SftpClient GetSftpClient( System.Uri uri ) {
+			var ub = new System.UriBuilder( uri );
+
 			var fd = this.FileDescriptor;
-			var uri = new System.Uri( fd.ExpandedPath );
-			var ub = new System.UriBuilder( fd.ExpandedPath );
 			var username = uri.UserInfo.TrimToNull() ?? ub.UserName.TrimToNull() ?? fd.Username.TrimToNull();
 			var passwd = ub.Password.TrimToNull() ?? fd.Password.TrimToNull();
 			var host = uri.Host;
@@ -38,8 +38,9 @@ namespace Icod.Wod.File {
 			System.Collections.Generic.List<Renci.SshNet.AuthenticationMethod> ama = new System.Collections.Generic.List<Renci.SshNet.AuthenticationMethod>( 2 );
 			var kf = fd.SshKeyFile;
 			if ( null != kf ) {
-				kf.WorkOrder = fd.WorkOrder;
-				var kffd = kf.GetFileHandler( this.WorkOrder );
+				var wo = fd.WorkOrder;
+				kf.WorkOrder = wo;
+				var kffd = kf.GetFileHandler( wo );
 				var kfpasswd = kf.KeyFilePassword.TrimToNull();
 				var action = System.String.IsNullOrEmpty( kfpasswd )
 					? theStreamAuthMethodCtor
@@ -68,41 +69,50 @@ namespace Icod.Wod.File {
 
 		public sealed override void TouchFile() {
 			var fd = this.FileDescriptor;
-			using ( var client = this.GetClient() ) {
-				var file = new System.Uri( this.PathCombine( fd.ExpandedPath, fd.ExpandedName ) ).AbsolutePath;
+			var filePathName = this.PathCombine( fd.ExpandedPath, fd.ExpandedName );
+			var uri = new System.Uri( filePathName );
+			using ( var client = this.GetSftpClient( uri ) ) {
+				var file = uri.AbsolutePath;
 				client.Connect();
 				client.Open( file, System.IO.FileMode.OpenOrCreate, System.IO.FileAccess.ReadWrite ).Dispose();
 			}
 		}
-
 		public sealed override void DeleteFile() {
 			var fd = this.FileDescriptor;
-			this.DeleteFile( new System.Uri( this.PathCombine( fd.ExpandedPath, fd.ExpandedName ) ).AbsolutePath );
+			var filePathName = this.PathCombine( fd.ExpandedPath, fd.ExpandedName );
+			var uri = new System.Uri( filePathName );
+			using ( var client = this.GetSftpClient( uri ) ) {
+				var file = uri.AbsolutePath;
+				client.Connect();
+				client.DeleteFile( file );
+			}
 		}
 		public sealed override void DeleteFile( System.String filePathName ) {
-			using ( var client = this.GetClient() ) {
+			var uri = new System.Uri( filePathName );
+			using ( var client = this.GetSftpClient( uri ) ) {
+				var file = uri.AbsolutePath;
 				client.Connect();
-				client.DeleteFile( filePathName );
-			};
+				client.DeleteFile( file );
+			}
 		}
 
 		public sealed override System.IO.Stream OpenReader( System.String filePathName ) {
-			var client = this.GetClient();
+			var uri = new System.Uri( filePathName );
+			var client = this.GetSftpClient( uri );
 			client.Connect();
-			return new ClientStream( client.Open( filePathName, System.IO.FileMode.Open, System.IO.FileAccess.Read ), client );
+			return new ClientStream( client.Open( uri.AbsolutePath, System.IO.FileMode.Open, System.IO.FileAccess.Read ), client );
 		}
 		public sealed override void Overwrite( System.IO.Stream source, System.String filePathName ) {
-			var uri = new System.Uri( filePathName );
-			var fpn = uri.LocalPath;
-			this.Write( source, fpn, System.IO.FileMode.OpenOrCreate );
+			this.Write( source, filePathName, System.IO.FileMode.OpenOrCreate );
 		}
 		public sealed override void Append( System.IO.Stream source, System.String filePathName ) {
 			this.Write( source, filePathName, System.IO.FileMode.Append );
 		}
 		private void Write( System.IO.Stream source, System.String filePathName, System.IO.FileMode fileMode ) {
-			using ( var client = this.GetClient() ) {
+			var uri = new System.Uri( filePathName );
+			using ( var client = this.GetSftpClient( uri ) ) {
 				client.Connect();
-				using ( var dest = client.Open( filePathName, fileMode, System.IO.FileAccess.Write ) ) {
+				using ( var dest = client.Open( uri.AbsolutePath, fileMode, System.IO.FileAccess.Write ) ) {
 					source.CopyTo( dest, this.BufferLength );
 					dest.Flush();
 					dest.SetLength( dest.Position );
@@ -111,29 +121,75 @@ namespace Icod.Wod.File {
 		}
 
 		public sealed override void MkDir() {
-			var dpn = new System.Uri( this.FileDescriptor.ExpandedPath ).AbsolutePath;
-			using ( var client = this.GetClient() ) {
+			var fd = this.FileDescriptor;
+			System.String dirPath = System.String.IsNullOrEmpty( fd.ExpandedName )
+				? fd.ExpandedPath
+				: this.PathCombine( fd.ExpandedPath, fd.ExpandedName )
+			;
+			var uri = new System.Uri( dirPath );
+			using ( var client = this.GetSftpClient( uri ) ) {
 				client.Connect();
-				client.CreateDirectory( dpn );
+				client.CreateDirectory( uri.AbsolutePath );
 			}
 		}
 		public sealed override void RmDir( System.Boolean recurse ) {
-			using ( var client = this.GetClient() ) {
+			var fd = this.FileDescriptor;
+			System.String dirPath = System.String.IsNullOrEmpty( fd.ExpandedName )
+				? fd.ExpandedPath
+				: this.PathCombine( fd.ExpandedPath, fd.ExpandedName )
+			;
+			var uri = new System.Uri( dirPath );
+			using ( var client = this.GetSftpClient( uri ) ) {
 				client.Connect();
-				client.DeleteDirectory( this.FileDescriptor.ExpandedPath );
+				client.DeleteDirectory( uri.AbsolutePath );
+			}
+		}
+		public sealed override void RmDir( System.String filePathName, System.Boolean recurse ) {
+			var uri = new System.Uri( filePathName );
+			using ( var client = this.GetSftpClient( uri ) ) {
+				client.Connect();
+				client.DeleteDirectory( uri.AbsolutePath );
 			}
 		}
 
+		public sealed override System.Collections.Generic.IEnumerable<FileEntry> List() {
+			var fd = this.FileDescriptor;
+			var filePathName = System.String.IsNullOrEmpty( fd.ExpandedName )
+				? fd.ExpandedPath
+				: this.PathCombine( fd.ExpandedPath, fd.ExpandedName )
+			;
+			var uri = new System.Uri( filePathName );
+			var regexPattern = fd.WorkOrder.ExpandVariables( fd.RegexPattern );
+			using ( var client = this.GetSftpClient( uri ) ) {
+				client.Connect();
+				return this.GetRemoteList( client, uri.AbsolutePath, regexPattern ).Select(
+					x => new FileEntry {
+						File = this.BuildFullName( uri, x.FullName ),
+						Handler = this,
+						FileType = x.IsDirectory
+							? FileType.Directory
+							: x.IsRegularFile
+								? FileType.File
+								: FileType.Unknown
+					}
+				);
+			}
+		}
 		public sealed override System.Collections.Generic.IEnumerable<FileEntry> ListFiles() {
 			var fd = this.FileDescriptor;
-			var pathName = new System.Uri( this.PathCombine( fd.ExpandedPath, fd.ExpandedName ) ).AbsolutePath;
-			using ( var client = this.GetClient() ) {
+			var filePathName = System.String.IsNullOrEmpty( fd.ExpandedName )
+				? fd.ExpandedPath
+				: this.PathCombine( fd.ExpandedPath, fd.ExpandedName )
+			;
+			var uri = new System.Uri( filePathName );
+			var regexPattern = fd.WorkOrder.ExpandVariables( fd.RegexPattern );
+			using ( var client = this.GetSftpClient( uri ) ) {
 				client.Connect();
-				return this.GetRemoteList( client, pathName, fd.WorkOrder.ExpandVariables( fd.RegexPattern ) ).Where(
+				return this.GetRemoteList( client, uri.AbsolutePath, regexPattern ).Where(
 					x => x.IsRegularFile
 				).Select(
 					x => new FileEntry {
-						File = x.FullName,
+						File = this.BuildFullName( uri, x.FullName ),
 						Handler = this,
 						FileType = FileType.File
 					}
@@ -142,34 +198,21 @@ namespace Icod.Wod.File {
 		}
 		public sealed override System.Collections.Generic.IEnumerable<FileEntry> ListDirectories() {
 			var fd = this.FileDescriptor;
-			var pathName = new System.Uri( this.PathCombine( fd.ExpandedPath, fd.ExpandedName ) ).AbsolutePath;
-			using ( var client = this.GetClient() ) {
+			var filePathName = System.String.IsNullOrEmpty( fd.ExpandedName )
+				? fd.ExpandedPath
+				: this.PathCombine( fd.ExpandedPath, fd.ExpandedName )
+			;
+			var uri = new System.Uri( filePathName );
+			var regexPattern = fd.WorkOrder.ExpandVariables( fd.RegexPattern );
+			using ( var client = this.GetSftpClient( uri ) ) {
 				client.Connect();
-				return this.GetRemoteList( client, pathName, fd.WorkOrder.ExpandVariables( fd.RegexPattern ) ).Where(
+				return this.GetRemoteList( client, uri.AbsolutePath, regexPattern ).Where(
 					x => x.IsDirectory
 				).Select(
 					x => new FileEntry {
-						File = x.FullName,
+						File = this.BuildFullName( uri, x.FullName ),
 						Handler = this,
 						FileType = FileType.Directory
-					}
-				);
-			}
-		}
-		public sealed override System.Collections.Generic.IEnumerable<FileEntry> List() {
-			var fd = this.FileDescriptor;
-			var pathName = new System.Uri( this.PathCombine( fd.ExpandedPath, fd.ExpandedName ) ).AbsolutePath;
-			using ( var client = this.GetClient() ) {
-				client.Connect();
-				return this.GetRemoteList( client, pathName, fd.WorkOrder.ExpandVariables( fd.RegexPattern ) ).Select(
-					x => new FileEntry {
-						File = x.FullName,
-						Handler = this,
-						FileType = x.IsDirectory
-							? FileType.Directory
-							: x.IsRegularFile
-								? FileType.File
-								: FileType.Unknown
 					}
 				);
 			}
@@ -187,6 +230,9 @@ namespace Icod.Wod.File {
 					x => System.Text.RegularExpressions.Regex.IsMatch( x.FullName, regexPattern )
 				)
 			;
+		}
+		private System.String BuildFullName( System.Uri uri, System.String pathName ) {
+			return new System.UriBuilder( "sftp", uri.Host, uri.Port, pathName ).Uri.ToString();
 		}
 		#endregion methods
 

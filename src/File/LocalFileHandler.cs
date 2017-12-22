@@ -59,11 +59,23 @@ namespace Icod.Wod.File {
 		}
 
 		public sealed override void MkDir() {
-			var dirPath = this.FileDescriptor.ExpandedPath;
+			var fd = this.FileDescriptor;
+			System.String dirPath = System.String.IsNullOrEmpty( fd.ExpandedName )
+				? fd.ExpandedPath
+				: this.PathCombine( fd.ExpandedPath, fd.ExpandedName )
+			;
 			System.IO.Directory.CreateDirectory( dirPath );
 		}
 		public sealed override void RmDir( System.Boolean recurse ) {
-			System.IO.Directory.Delete( this.FileDescriptor.ExpandedPath, recurse );
+			var fd = this.FileDescriptor;
+			System.String dirPath = System.String.IsNullOrEmpty( fd.ExpandedName )
+				? fd.ExpandedPath
+				: this.PathCombine( fd.ExpandedPath, fd.ExpandedName )
+			;
+			System.IO.Directory.Delete( dirPath, recurse );
+		}
+		public sealed override void RmDir( System.String filePathName, System.Boolean recurse ) {
+			System.IO.Directory.Delete( filePathName, recurse );
 		}
 
 		public sealed override System.Collections.Generic.IEnumerable<FileEntry> ListFiles() {

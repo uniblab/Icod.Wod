@@ -18,6 +18,7 @@ namespace Icod.Wod.File {
 		private static readonly System.Action<FileHandlerBase, System.String> theCopyFile;
 		#endregion fields
 
+
 		#region .ctor
 		static MkZip() {
 			theMoveFile = ( handler, sourceFilePathName ) => handler.DeleteFile( sourceFilePathName );
