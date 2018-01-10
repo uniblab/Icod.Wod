@@ -60,7 +60,11 @@ namespace Icod.Wod.File {
 				throw new System.ArgumentNullException( "source" );
 			}
 
-			var filePathName = source.ListFiles().First().File;
+			var file = source.ListFiles().FirstOrDefault();
+			if ( null == file ) {
+				return;
+			}
+			var filePathName = file.File;
 			System.IO.File.Move( filePathName, source.PathCombine( source.FileDescriptor.ExpandedPath, dest.FileDescriptor.ExpandedName ) );
 		}
 		#endregion methods
