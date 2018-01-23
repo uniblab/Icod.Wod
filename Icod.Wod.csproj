@@ -67,7 +67,10 @@
     <Compile Include="src\Email.cs" />
     <Compile Include="src\FileHelper.cs" />
     <Compile Include="src\File\AddZip.cs" />
+    <Compile Include="src\File\ExecuteFile.cs" />
+    <Compile Include="src\File\FileBase.cs" />
     <Compile Include="src\File\FileOrDirectoryLister.cs" />
+    <Compile Include="src\File\FileRedirection.cs" />
     <Compile Include="src\File\List.cs" />
     <Compile Include="src\File\ListDirectory.cs" />
     <Compile Include="src\File\SshKeyFileDescriptor.cs" />
@@ -117,7 +120,7 @@
     <Compile Include="src\Data\DbDescriptor.cs" />
     <Compile Include="src\Data\DbHelper.cs" />
     <Compile Include="src\Data\DbTable.cs" />
-    <Compile Include="src\Data\FileBase.cs" />
+    <Compile Include="src\Data\DataFileBase.cs" />
     <Compile Include="src\Data\FileExport.cs" />
     <Compile Include="src\Data\FileImport.cs" />
     <Compile Include="src\Data\TextFileColumn.cs" />

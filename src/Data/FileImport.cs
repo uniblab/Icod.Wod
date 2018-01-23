@@ -10,7 +10,7 @@ namespace Icod.Wod.Data {
 	public sealed class FileImport : DbDescriptor, IStep {
 
 		#region fields
-		private FileBase mySource;
+		private DataFileBase mySource;
 		#endregion fields
 
 
@@ -23,8 +23,8 @@ namespace Icod.Wod.Data {
 
 
 		#region properties
-		[System.Xml.Serialization.XmlElement( "source", Type = typeof( FileBase ), IsNullable = false, Namespace = "http://Icod.Wod" )]
-		public FileBase Source {
+		[System.Xml.Serialization.XmlElement( "source", Type = typeof( DataFileBase ), IsNullable = false, Namespace = "http://Icod.Wod" )]
+		public DataFileBase Source {
 			get {
 				return mySource;
 			}

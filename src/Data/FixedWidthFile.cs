@@ -8,7 +8,7 @@ namespace Icod.Wod.Data {
 		Namespace = "http://Icod.Wod",
 		IncludeInSchema = true
 	)]
-	public class FixedWidthFile : FileBase {
+	public class FixedWidthFile : DataFileBase {
 
 		#region fields
 		private static readonly System.Func<System.String, System.Int32, System.Int32, System.String> theDefaultColumnReader;

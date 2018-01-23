@@ -5,19 +5,16 @@ namespace Icod.Wod.Data {
 	[System.Serializable]
 	[System.Xml.Serialization.XmlInclude( typeof( DelimitedFile ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( FixedWidthFile ) )]
-	public abstract class FileBase : Icod.Wod.File.FileDescriptor, ITableDestination, ITableSource {
+	public abstract class DataFileBase : Icod.Wod.File.FileBase, ITableDestination, ITableSource {
 
 		#region fields
 		private static readonly System.Action<System.IO.StreamWriter> theEmptyEolWriter;
 		protected const System.Char SpaceChar = ' ';
 
-		private System.String myCodePage;
 		private System.Boolean myHasHeader;
 		private ColumnBase[ ] myColumns;
-		private System.Int32 myBufferLength;
 		private System.Boolean myAppend;
 		private System.Int32 mySkip;
-		private System.Boolean myWriteIfEmpty;
 		private System.String myRecordSeparator;
 		private System.Action<System.IO.StreamWriter> myEolWriter;
 		private System.Boolean myConvertEmptyStringToNull;
@@ -26,32 +23,26 @@ namespace Icod.Wod.Data {
 
 
 		#region .ctor
-		static FileBase() {
+		static DataFileBase() {
 			theEmptyEolWriter = x => {
 			};
 		}
 
-		protected FileBase() : base() {
-			myCodePage = "windows-1252";
+		protected DataFileBase() : base() {
 			myHasHeader = true;
 			myColumns = null;
-			myBufferLength = 16384;
 			myAppend = false;
 			mySkip = 0;
-			myWriteIfEmpty = false;
 			myRecordSeparator = "\r\n";
 			myEolWriter = x => x.Write( myRecordSeparator );
 			myConvertEmptyStringToNull = true;
 			myTrimValues = true;
 		}
-		protected FileBase( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
-			myCodePage = "windows-1252";
+		protected DataFileBase( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
 			myHasHeader = true;
 			myColumns = null;
-			myBufferLength = 16384;
 			myAppend = false;
 			mySkip = 0;
-			myWriteIfEmpty = false;
 			myRecordSeparator = "\r\n";
 			myEolWriter = x => x.Write( myRecordSeparator );
 			myConvertEmptyStringToNull = true;
@@ -61,20 +52,6 @@ namespace Icod.Wod.Data {
 
 
 		#region properties
-		[System.Xml.Serialization.XmlAttribute(
-			"codePage",
-			Namespace = "http://Icod.Wod"
-		)]
-		[System.ComponentModel.DefaultValue( "windows-1252" )]
-		public System.String CodePage {
-			get {
-				return myCodePage;
-			}
-			set {
-				myCodePage = value;
-			}
-		}
-
 		[System.Xml.Serialization.XmlAttribute(
 			"hasHeader",
 			Namespace = "http://Icod.Wod"
@@ -109,19 +86,6 @@ namespace Icod.Wod.Data {
 				myColumns = value;
 			}
 		}
-		[System.Xml.Serialization.XmlAttribute(
-			"bufferLength",
-			Namespace = "http://Icod.Wod"
-		)]
-		[System.ComponentModel.DefaultValue( 16384 )]
-		public System.Int32 BufferLength {
-			get {
-				return myBufferLength;
-			}
-			set {
-				myBufferLength = value;
-			}
-		}
 
 		[System.Xml.Serialization.XmlAttribute(
 			"append",
@@ -151,20 +115,6 @@ namespace Icod.Wod.Data {
 					throw new System.ArgumentOutOfRangeException( "value", "Parameter cannot be negative." );
 				}
 				mySkip = value;
-			}
-		}
-
-		[System.Xml.Serialization.XmlAttribute(
-			"writeIfEmpty",
-			Namespace = "http://Icod.Wod"
-		)]
-		[System.ComponentModel.DefaultValue( false )]
-		public System.Boolean WriteIfEmpty {
-			get {
-				return myWriteIfEmpty;
-			}
-			set {
-				myWriteIfEmpty = value;
 			}
 		}
 

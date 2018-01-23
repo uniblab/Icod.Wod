@@ -8,7 +8,7 @@ namespace Icod.Wod.Data {
 		Namespace = "http://Icod.Wod",
 		IncludeInSchema = true
 	)]
-	public class DelimitedFile : FileBase {
+	public class DelimitedFile : DataFileBase {
 
 		#region fields
 		private static readonly System.Func<System.Text.StringBuilder, System.String> theDefaultColumnReader;
