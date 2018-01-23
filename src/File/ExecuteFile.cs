@@ -111,15 +111,14 @@ namespace Icod.Wod.File {
 		public sealed override void DoWork( WorkOrder workOrder ) {
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 
-			var eh = new LocalFileHandler( workOrder, this );
-			var prog = eh.ListFiles().FirstOrDefault();
-			if ( null == prog ) {
+			var prog = new LocalFileHandler( workOrder, this ).PathCombine( this.ExpandedPath, this.ExpandedName ).TrimToNull();
+			if ( System.String.IsNullOrEmpty( prog ) ) {
 				throw new System.InvalidOperationException();
 			}
 			var wd = this.WorkingDirectory.TrimToNull() ?? System.Environment.CurrentDirectory;
 			var args = this.Args.TrimToNull();
 
-			var si = new System.Diagnostics.ProcessStartInfo( prog.File, args );
+			var si = new System.Diagnostics.ProcessStartInfo( prog, args );
 			si.CreateNoWindow = true;
 			si.UseShellExecute = false;
 
@@ -136,27 +135,32 @@ namespace Icod.Wod.File {
 				si.StandardOutputEncoding = this.StdOut.GetEncoding();
 			}
 
+			var ec = this.RunProcess( si );
+			if ( this.RequireSuccessExitCode && ( this.SuccessExitCode != ec ) ) {
+				throw new System.ApplicationException( "The process did not exit correctly." );
+			}
+		}
+		private System.Int32 RunProcess( System.Diagnostics.ProcessStartInfo startInfo ) {
 			using ( var proc = new System.Diagnostics.Process() ) {
-				proc.StartInfo = si;
+				proc.StartInfo = startInfo;
 				proc.Start();
 				proc.WaitForExit();
-				var ec = proc.ExitCode;
 
 				var pErr = proc.StandardError;
-				if ( ( null != stdErr ) &&( null != pErr ) && !pErr.EndOfStream ) {
-					var errH = stdErr.GetFileHandler( workOrder );
-					errH.Overwrite( pErr.BaseStream, errH.PathCombine( stdErr.ExpandedPath, stdErr.ExpandedPath ) );
+				var stdErr = this.StdErr;
+				if ( ( null != stdErr ) && ( null != pErr ) && !pErr.EndOfStream ) {
+					var errH = stdErr.GetFileHandler( this.WorkOrder );
+					errH.Overwrite( pErr.BaseStream, errH.PathCombine( stdErr.ExpandedPath, stdErr.ExpandedName ) );
 				}
 
 				var pOut = proc.StandardOutput;
+				var stdOut = this.StdOut;
 				if ( ( null != stdOut ) && ( null != pOut ) && !pOut.EndOfStream ) {
-					var outH = stdOut.GetFileHandler( workOrder );
-					outH.Overwrite( pOut.BaseStream, outH.PathCombine( stdOut.ExpandedPath, stdOut.ExpandedPath ) );
+					var outH = stdOut.GetFileHandler( this.WorkOrder );
+					outH.Overwrite( pOut.BaseStream, outH.PathCombine( stdOut.ExpandedPath, stdOut.ExpandedName ) );
 				}
 
-				if ( this.RequireSuccessExitCode && ( this.SuccessExitCode != ec ) ) {
-					throw new System.ApplicationException( "The process did not exit correctly." );
-				}
+				return proc.ExitCode;
 			}
 		}
 		#endregion methods
