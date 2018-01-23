@@ -12,15 +12,24 @@ namespace Icod.Wod.File {
 
 		#region fields
 		private System.Int32 mySuccessExitCode;
+		private System.String myArgs;
+		private FileRedirection myStdErr;
+		private FileRedirection myStdOut;
 		#endregion fields
 
 
 		#region .ctor
 		public ExecuteFile() : base() {
 			mySuccessExitCode = 0;
+			myArgs = null;
+			myStdErr = null;
+			myStdOut = null;
 		}
 		public ExecuteFile( WorkOrder workOrder ) : base( workOrder ) {
 			mySuccessExitCode = 0;
+			myArgs = null;
+			myStdErr = null;
+			myStdOut = null;
 		}
 		#endregion .ctor
 
@@ -75,8 +84,12 @@ namespace Icod.Wod.File {
 			Namespace = "http://Icod.Wod"
 		)]
 		public FileRedirection StdOut {
-			get;
-			set;
+			get {
+				return myStdOut;
+			}
+			set {
+				myStdOut = value;
+			}
 		}
 
 		[System.Xml.Serialization.XmlElement(
@@ -84,8 +97,12 @@ namespace Icod.Wod.File {
 			Namespace = "http://Icod.Wod"
 		)]
 		public FileRedirection StdErr {
-			get;
-			set;
+			get {
+				return myStdErr;
+			}
+			set {
+				myStdErr = value;
+			}
 		}
 		#endregion properties
 
