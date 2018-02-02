@@ -41,8 +41,18 @@ namespace Icod.Wod.File {
 		)]
 		[System.ComponentModel.DefaultValue( (System.String)null )]
 		public System.String Args {
-			get;
-			set;
+			get {
+				return myArgs;
+			}
+			set {
+				myArgs = value.TrimToNull();
+			}
+		}
+
+		public System.String ExpandedArgs {
+			get {
+				return this.WorkOrder.ExpandVariables( myArgs.TrimToNull() );
+			}
 		}
 
 		[System.Xml.Serialization.XmlAttribute(
@@ -116,7 +126,7 @@ namespace Icod.Wod.File {
 				throw new System.InvalidOperationException();
 			}
 			var wd = this.WorkingDirectory.TrimToNull() ?? System.Environment.CurrentDirectory;
-			var args = this.Args.TrimToNull();
+			var args = this.ExpandedArgs;
 
 			var si = new System.Diagnostics.ProcessStartInfo( prog, args );
 			si.CreateNoWindow = true;
