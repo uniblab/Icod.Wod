@@ -100,7 +100,8 @@ namespace Icod.Wod.File {
 			var uri = new System.Uri( filePathName );
 			var client = this.GetSftpClient( uri );
 			client.Connect();
-			return new ClientStream( client.Open( uri.AbsolutePath, System.IO.FileMode.Open, System.IO.FileAccess.Read ), client );
+			var absolutePath = System.Uri.UnescapeDataString( uri.AbsolutePath );
+			return new ClientStream( client.Open( absolutePath, System.IO.FileMode.Open, System.IO.FileAccess.Read ), client );
 		}
 		public sealed override void Overwrite( System.IO.Stream source, System.String filePathName ) {
 			this.Write( source, filePathName, System.IO.FileMode.OpenOrCreate );
@@ -112,7 +113,8 @@ namespace Icod.Wod.File {
 			var uri = new System.Uri( filePathName );
 			using ( var client = this.GetSftpClient( uri ) ) {
 				client.Connect();
-				using ( var dest = client.Open( uri.AbsolutePath, fileMode, System.IO.FileAccess.Write ) ) {
+				var absolutePath = System.Uri.UnescapeDataString( uri.AbsolutePath );
+				using ( var dest = client.Open( absolutePath, fileMode, System.IO.FileAccess.Write ) ) {
 					source.CopyTo( dest, this.BufferLength );
 					dest.Flush();
 					dest.SetLength( dest.Position );

@@ -35,7 +35,7 @@ namespace Icod.Wod.File {
 			"path",
 			Namespace = "http://Icod.Wod"
 		)]
-		[System.IO.IODescription( "The directory to monitor" )]
+		[System.IO.IODescription( "The directory of interest" )]
 		public virtual System.String Path {
 			get {
 				return myPath;
