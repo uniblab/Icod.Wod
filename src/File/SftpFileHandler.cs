@@ -101,7 +101,16 @@ namespace Icod.Wod.File {
 			var client = this.GetSftpClient( uri );
 			client.Connect();
 			var absolutePath = System.Uri.UnescapeDataString( uri.AbsolutePath );
-			return new ClientStream( client.Open( absolutePath, System.IO.FileMode.Open, System.IO.FileAccess.Read ), client );
+			System.IO.Stream stream = null;
+			try {
+				stream = client.Open( absolutePath, System.IO.FileMode.Open, System.IO.FileAccess.Read );
+			} catch ( System.Exception ) {
+				if ( null != stream ) {
+					stream.Dispose();
+				}
+				throw;
+			}
+			return new ClientStream( stream, client );
 		}
 		public sealed override void Overwrite( System.IO.Stream source, System.String filePathName ) {
 			this.Write( source, filePathName, System.IO.FileMode.OpenOrCreate );

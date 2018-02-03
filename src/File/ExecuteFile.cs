@@ -147,7 +147,11 @@ namespace Icod.Wod.File {
 
 			var ec = this.RunProcess( si );
 			if ( this.RequireSuccessExitCode && ( this.SuccessExitCode != ec ) ) {
-				throw new System.ApplicationException( "The process did not exit correctly." );
+				var ex = new System.ApplicationException( "The process did not exit correctly." );
+				ex.Data.Add( "Program", prog );
+				ex.Data.Add( "Args", args );
+				ex.Data.Add( "Working Direcotry", wd );
+				throw ex;
 			}
 		}
 		private System.Int32 RunProcess( System.Diagnostics.ProcessStartInfo startInfo ) {
