@@ -99,6 +99,7 @@ namespace Icod.Wod.File {
 				using ( var gzip = new System.IO.Compression.GZipStream( reader, System.IO.Compression.CompressionMode.Decompress, true ) ) {
 					using ( var buffer = new System.IO.MemoryStream() ) {
 						gzip.CopyTo( buffer );
+						buffer.Flush();
 						buffer.Seek( 0, System.IO.SeekOrigin.Begin );
 						var fn = this.GetDestinatonFileName( sourceFilePathName );
 						dest.Overwrite( buffer, dest.PathCombine( dfd.ExpandedPath, fn ) );
@@ -119,6 +120,7 @@ namespace Icod.Wod.File {
 				using ( var gzip = new System.IO.Compression.GZipStream( buffer, System.IO.Compression.CompressionMode.Compress, true ) ) {
 					using ( var reader = source.OpenReader( sourceFilePathName ) ) {
 						reader.CopyTo( gzip );
+						gzip.Flush();
 						buffer.Seek( 0, System.IO.SeekOrigin.Begin );
 						var fn = this.GetDestinatonFileName( sourceFilePathName );
 						dest.Overwrite( buffer, dest.PathCombine( dfd.ExpandedPath, fn ) );

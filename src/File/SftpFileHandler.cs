@@ -90,23 +90,31 @@ namespace Icod.Wod.File {
 		public sealed override void DeleteFile( System.String filePathName ) {
 			var uri = new System.Uri( filePathName );
 			using ( var client = this.GetSftpClient( uri ) ) {
-				var file = uri.AbsolutePath;
+				var absolutePath = System.Uri.UnescapeDataString( uri.AbsolutePath );
 				client.Connect();
-				client.DeleteFile( file );
+				client.DeleteFile( absolutePath );
 			}
 		}
 
 		public sealed override System.IO.Stream OpenReader( System.String filePathName ) {
 			var uri = new System.Uri( filePathName );
-			var client = this.GetSftpClient( uri );
-			client.Connect();
-			var absolutePath = System.Uri.UnescapeDataString( uri.AbsolutePath );
+			Renci.SshNet.SftpClient client = null;
 			System.IO.Stream stream = null;
 			try {
-				stream = client.Open( absolutePath, System.IO.FileMode.Open, System.IO.FileAccess.Read );
+				client = this.GetSftpClient( uri );
+				client.Connect();
+				var absolutePath = System.Uri.UnescapeDataString( uri.AbsolutePath );
+				try {
+					stream = client.Open( absolutePath, System.IO.FileMode.Open, System.IO.FileAccess.Read );
+				} catch ( System.Exception ) {
+					if ( null != stream ) {
+						stream.Dispose();
+					}
+					throw;
+				}
 			} catch ( System.Exception ) {
-				if ( null != stream ) {
-					stream.Dispose();
+				if  ( null != client ) {
+					client.Dispose();
 				}
 				throw;
 			}

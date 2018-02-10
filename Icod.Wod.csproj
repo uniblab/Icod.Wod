@@ -74,6 +74,7 @@
     <Compile Include="src\File\List.cs" />
     <Compile Include="src\File\ListDirectory.cs" />
     <Compile Include="src\File\SshKeyFileDescriptor.cs" />
+    <Compile Include="src\File\TouchZip.cs" />
     <Compile Include="src\Serial.cs" />
     <Compile Include="src\Parallel.cs" />
     <Compile Include="src\StringHelper.cs" />
