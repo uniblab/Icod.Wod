@@ -129,7 +129,7 @@ namespace Icod.Wod.File {
 			var args = this.ExpandedArgs;
 
 			var si = new System.Diagnostics.ProcessStartInfo( prog, args );
-			si.CreateNoWindow = true;
+			si.CreateNoWindow = false;
 			si.UseShellExecute = false;
 
 			var stdErr = this.StdErr;
@@ -160,18 +160,22 @@ namespace Icod.Wod.File {
 				proc.Start();
 				proc.WaitForExit();
 
-				var pErr = proc.StandardError;
 				var stdErr = this.StdErr;
-				if ( ( null != stdErr ) && ( null != pErr ) && !pErr.EndOfStream ) {
-					var errH = stdErr.GetFileHandler( this.WorkOrder );
-					errH.Overwrite( pErr.BaseStream, errH.PathCombine( stdErr.ExpandedPath, stdErr.ExpandedName ) );
+				if ( null != stdErr ) {
+					var pErr = proc.StandardError;
+					if ( ( null != pErr ) && !pErr.EndOfStream ) {
+						var errH = stdErr.GetFileHandler( this.WorkOrder );
+						errH.Overwrite( pErr.BaseStream, errH.PathCombine( stdErr.ExpandedPath, stdErr.ExpandedName ) );
+					}
 				}
 
-				var pOut = proc.StandardOutput;
 				var stdOut = this.StdOut;
-				if ( ( null != stdOut ) && ( null != pOut ) && !pOut.EndOfStream ) {
-					var outH = stdOut.GetFileHandler( this.WorkOrder );
-					outH.Overwrite( pOut.BaseStream, outH.PathCombine( stdOut.ExpandedPath, stdOut.ExpandedName ) );
+				if ( null != stdOut ) {
+					var pOut = proc.StandardOutput;
+					if ( ( null != pOut ) && !pOut.EndOfStream ) {
+						var outH = stdOut.GetFileHandler( this.WorkOrder );
+						outH.Overwrite( pOut.BaseStream, outH.PathCombine( stdOut.ExpandedPath, stdOut.ExpandedName ) );
+					}
 				}
 
 				return proc.ExitCode;

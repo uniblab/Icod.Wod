@@ -30,6 +30,16 @@ namespace Icod.Wod.File {
 			set;
 		}
 
+		System.Boolean UsePassive {
+			get;
+			set;
+		}
+
+		SshKeyFileDescriptor SshKeyFile {
+			get;
+			set;
+		}
+
 	}
 
 }

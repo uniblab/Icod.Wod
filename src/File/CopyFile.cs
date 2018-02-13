@@ -79,7 +79,8 @@ namespace Icod.Wod.File {
 			);
 			foreach ( var file in fileEntries ) {
 				using ( var reader = source.OpenReader( file ) ) {
-					dest.Overwrite( reader, dest.PathCombine( dest.FileDescriptor.ExpandedPath, System.IO.Path.GetFileName( file ) ) );
+					var dfd = dest.FileDescriptor;
+					dest.Overwrite( reader, dest.PathCombine( dfd.ExpandedPath, dfd.ExpandedName.TrimToNull() ?? System.IO.Path.GetFileName( file ) ) );
 				}
 				delFile( source, file );
 			}

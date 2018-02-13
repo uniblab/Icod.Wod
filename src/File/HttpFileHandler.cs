@@ -26,13 +26,14 @@ namespace Icod.Wod.File {
 			var username = uri.UserInfo.TrimToNull() ?? ub.UserName.TrimToNull() ?? fd.Username.TrimToNull();
 			var passwd = ub.Password.TrimToNull() ?? fd.Password.TrimToNull();
 			var host = uri.Host;
-			System.Int32 port = uri.Port;
 			client.Credentials = new System.Net.NetworkCredential(
 				username,
 				passwd
 			);
 			client.Method = method;
-			client.AutomaticDecompression = System.Net.DecompressionMethods.GZip;
+			client.AutomaticDecompression = System.Net.DecompressionMethods.None;
+			client.PreAuthenticate = true;
+			System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
 		}
 
 		public sealed override void TouchFile() {
@@ -83,13 +84,46 @@ namespace Icod.Wod.File {
 		}
 
 		public sealed override System.Collections.Generic.IEnumerable<FileEntry> List() {
-			throw new System.NotSupportedException();
+			var fd = this.FileDescriptor;
+			var filePathName = System.String.IsNullOrEmpty( fd.ExpandedName )
+				? fd.ExpandedPath
+				: this.PathCombine( fd.ExpandedPath, fd.ExpandedName )
+			;
+			return new FileEntry[ 1 ] {
+				new FileEntry {
+					FileType = FileType.Unknown,
+					Handler = this,
+					File = filePathName
+				}
+			};
 		}
 		public sealed override System.Collections.Generic.IEnumerable<FileEntry> ListFiles() {
-			throw new System.NotSupportedException();
+			var fd = this.FileDescriptor;
+			var filePathName = System.String.IsNullOrEmpty( fd.ExpandedName )
+				? fd.ExpandedPath
+				: this.PathCombine( fd.ExpandedPath, fd.ExpandedName )
+			;
+			return new FileEntry[ 1 ] {
+				new FileEntry {
+					FileType = FileType.Unknown,
+					Handler = this,
+					File = filePathName
+				}
+			};
 		}
 		public sealed override System.Collections.Generic.IEnumerable<FileEntry> ListDirectories() {
-			throw new System.NotSupportedException();
+			var fd = this.FileDescriptor;
+			var filePathName = System.String.IsNullOrEmpty( fd.ExpandedName )
+				? fd.ExpandedPath
+				: this.PathCombine( fd.ExpandedPath, fd.ExpandedName )
+			;
+			return new FileEntry[ 1 ] {
+				new FileEntry {
+					FileType = FileType.Unknown,
+					Handler = this,
+					File = filePathName
+				}
+			};
 		}
 		#endregion methods
 
