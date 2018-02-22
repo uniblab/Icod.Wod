@@ -27,7 +27,7 @@ namespace Icod.Wod {
 
 		#region .ctor
 		public Email() : base() {
-			myBodyCodePage = "windows-1252";
+			myBodyCodePage = "us-ascii";
 			mySubjectCodePage = "us-ascii";
 			myBodyIsHtml = false;
 			mySendIfEmpty = false;
@@ -88,7 +88,7 @@ namespace Icod.Wod {
 			"bodyCodePage",
 			Namespace = "http://Icod.Wod"
 		)]
-		[System.ComponentModel.DefaultValue( "windows-1252" )]
+		[System.ComponentModel.DefaultValue( "us-ascii" )]
 		public System.String BodyCodePage {
 			get {
 				return myBodyCodePage;
