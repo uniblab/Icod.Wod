@@ -4,7 +4,7 @@ namespace Icod.Wod.Data {
 
 	[System.Serializable]
 	[System.Xml.Serialization.XmlInclude( typeof( DbFileBase ) )]
-	[System.Xml.Serialization.XmlInclude( typeof( DbCommand ) )]
+	[System.Xml.Serialization.XmlInclude( typeof( Command ) )]
 	public abstract class DbDescriptorBase : ITableSource, ITableDestination {
 
 		#region fields

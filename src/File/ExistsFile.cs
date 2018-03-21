@@ -46,7 +46,7 @@ namespace Icod.Wod.File {
 			Namespace = "http://Icod.Wod"
 		)]
 		[System.Xml.Serialization.XmlArrayItem(
-			typeof( Data.DbCommand ),
+			typeof( Data.Command ),
 			IsNullable = false,
 			Namespace = "http://Icod.Wod"
 		)]

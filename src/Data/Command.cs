@@ -4,19 +4,20 @@ namespace Icod.Wod.Data {
 
 	[System.Serializable]
 	[System.Xml.Serialization.XmlType(
-		"dbCommand",
-		Namespace = "http://Icod.Wod"
+		"command",
+		Namespace = "http://Icod.Wod",
+		IncludeInSchema = true
 	)]
-	public sealed class DbCommand : DbDescriptorBase, Icod.Wod.IStep {
+	public sealed class Command : DbOperationBase {
 
 		#region .ctor
-		public DbCommand() : base() {
+		public Command() : base() {
 		}
 		#endregion .ctor
 
 
 		#region methods
-		public void DoWork( Icod.Wod.WorkOrder workOrder ) {
+		public sealed override void DoWork( Icod.Wod.WorkOrder workOrder ) {
 			using ( var cnxn = this.CreateConnection( workOrder ) ) {
 				if ( System.Data.ConnectionState.Open != cnxn.State ) {
 					cnxn.Open();

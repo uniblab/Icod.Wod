@@ -98,17 +98,7 @@ namespace Icod.Wod {
 			Namespace = "http://Icod.Wod"
 		)]
 		[System.Xml.Serialization.XmlArrayItem(
-			typeof( Data.FileExport ),
-			IsNullable = false,
-			Namespace = "http://Icod.Wod"
-		)]
-		[System.Xml.Serialization.XmlArrayItem(
-			typeof( Data.FileImport ),
-			IsNullable = false,
-			Namespace = "http://Icod.Wod"
-		)]
-		[System.Xml.Serialization.XmlArrayItem(
-			typeof( Data.DbCommand ),
+			typeof( Data.DbOperationBase ),
 			IsNullable = false,
 			Namespace = "http://Icod.Wod"
 		)]
