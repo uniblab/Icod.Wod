@@ -112,10 +112,7 @@ namespace Icod.Wod.Data {
 			command.Transaction = transaction;
 			command.CommandText = commandText;
 			command.CommandType = commandType;
-			command.CommandTimeout = ( commandTimeout.HasValue ) 
-				? commandTimeout.Value
-				: connection.ConnectionTimeout
-			;
+			command.CommandTimeout = commandTimeout ?? connection.ConnectionTimeout;
 			return command;
 		}
 

@@ -8,7 +8,7 @@ namespace Icod.Wod.Data {
 		Namespace = "http://Icod.Wod",
 		IncludeInSchema = true
 	)]
-	public class DelimitedFile : DataFileBase {
+	public sealed class DelimitedFile : TextFileBase {
 
 		#region fields
 		private static readonly System.Func<System.Text.StringBuilder, System.String> theDefaultColumnReader;
@@ -308,12 +308,12 @@ namespace Icod.Wod.Data {
 			if ( null == reader ) {
 				throw new System.ArgumentNullException( "reader" );
 			}
-			System.Text.StringBuilder sb = new System.Text.StringBuilder( 128 );
+			var sb = new System.Text.StringBuilder( 128 );
 			if ( first.HasValue ) {
 				sb.Append( first.Value );
 			}
 			System.Nullable<System.Char> ch;
-			System.Boolean reading = true;
+			var reading = true;
 			var ec = this.EscapeChar;
 			do {
 				ch = this.ReadChar( reader, ec, @break, readNextOnBreak );
@@ -350,6 +350,8 @@ namespace Icod.Wod.Data {
 						return null;
 					} else if ( @break.Equals( System.Convert.ToChar( p ) ) ) {
 						return System.Convert.ToChar( reader.Read() );
+					} else {
+						reader.Read();
 					}
 				}
 				return null;
@@ -389,7 +391,7 @@ namespace Icod.Wod.Data {
 				x => ( fq || x.Contains( this.FieldSeparatorString ) )
 					? qcs + x + qcs
 					: x
-			);
+			).ToArray();
 			return System.String.Join( this.FieldSeparatorString, list );
 		}
 		#endregion methods

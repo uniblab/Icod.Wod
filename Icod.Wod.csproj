@@ -61,9 +61,13 @@
     <Compile Include="src\CodePageHelper.cs" />
     <Compile Include="src\ConnectionStringEntry.cs" />
     <Compile Include="src\Data\ColumnBase.cs" />
+    <Compile Include="src\Data\DbFileBase.cs" />
     <Compile Include="src\Data\DelimitedFile.cs" />
     <Compile Include="src\Data\FixedWidthFile.cs" />
+    <Compile Include="src\Data\Interfaces\IRecordSeparator.cs" />
+    <Compile Include="src\Data\JsonFile.cs" />
     <Compile Include="src\Data\LiteralColumn.cs" />
+    <Compile Include="src\Data\TextFileBase.cs" />
     <Compile Include="src\Email.cs" />
     <Compile Include="src\FileHelper.cs" />
     <Compile Include="src\File\AddZip.cs" />
@@ -118,7 +122,7 @@
     <Compile Include="src\Data\ColumnMap.cs" />
     <Compile Include="src\Data\ColumnMapValueComparer.cs" />
     <Compile Include="src\Data\DbCommand.cs" />
-    <Compile Include="src\Data\DbDescriptor.cs" />
+    <Compile Include="src\Data\DbDescriptorBase.cs" />
     <Compile Include="src\Data\DbHelper.cs" />
     <Compile Include="src\Data\DbTable.cs" />
     <Compile Include="src\Data\DataFileBase.cs" />
@@ -134,6 +138,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\Icod.Wod.Client\packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Renci.SshNet, Version=2016.1.0.0, Culture=neutral, PublicKeyToken=1cee9f8bde3db106, processorArchitecture=MSIL">
       <HintPath>..\Icod.Wod.Client\packages\SSH.NET.2016.1.0\lib\net40\Renci.SshNet.dll</HintPath>
     </Reference>

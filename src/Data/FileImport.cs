@@ -7,7 +7,7 @@ namespace Icod.Wod.Data {
 		"fileImport",
 		Namespace = "http://Icod.Wod"
 	)]
-	public sealed class FileImport : DbDescriptor, IStep {
+	public sealed class FileImport : DbFileBase {
 
 		#region fields
 		private DataFileBase mySource;
@@ -36,7 +36,7 @@ namespace Icod.Wod.Data {
 
 
 		#region methods
-		public void DoWork( Icod.Wod.WorkOrder workOrder ) {
+		public sealed override void DoWork( Icod.Wod.WorkOrder workOrder ) {
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			this.WriteRecords( workOrder, this.Source );
 		}

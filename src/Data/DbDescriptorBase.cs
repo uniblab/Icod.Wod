@@ -3,7 +3,9 @@ using System.Linq;
 namespace Icod.Wod.Data {
 
 	[System.Serializable]
-	public abstract class DbDescriptor : ITableSource, ITableDestination {
+	[System.Xml.Serialization.XmlInclude( typeof( DbFileBase ) )]
+	[System.Xml.Serialization.XmlInclude( typeof( DbCommand ) )]
+	public abstract class DbDescriptorBase : ITableSource, ITableDestination {
 
 		#region fields
 		private System.String myConnectionStringName;
@@ -23,14 +25,14 @@ namespace Icod.Wod.Data {
 
 
 		#region .ctor
-		protected DbDescriptor() : base() {
+		protected DbDescriptorBase() : base() {
 			myCommandType = System.Data.CommandType.Text;
 			myCommandTimeout = -2;
 			myUpdateBatchSize = 1;
 			myMissingSchemaAction = System.Data.MissingSchemaAction.Add;
 			myMissingMappingAction = System.Data.MissingMappingAction.Passthrough;
 		}
-		public DbDescriptor( Icod.Wod.WorkOrder workOrder ) : this() {
+		public DbDescriptorBase( Icod.Wod.WorkOrder workOrder ) : this() {
 			myWorkOrder = workOrder;
 		}
 		#endregion .ctor
@@ -276,7 +278,7 @@ namespace Icod.Wod.Data {
 						System.Data.DataTable dest;
 						using ( var set = new System.Data.DataSet() ) {
 							this.FillSchema( adapter, set );
-							System.String tableName = this.TableName;
+							var tableName = this.TableName;
 							dest = set.Tables[ tableName ];
 							foreach ( var t in source.ReadTables( workOrder ) ) {
 								amap.Clear();
@@ -463,12 +465,13 @@ namespace Icod.Wod.Data {
 			);
 			System.Data.DataColumn a;
 			foreach ( var ac in missingSourceMatch ) {
-				a = new System.Data.DataColumn( ac.FromName, typeof( System.String ) );
-				a.AllowDBNull = true;
-				a.DefaultValue = destCol.First(
+				a = new System.Data.DataColumn( ac.FromName, typeof( System.String ) ) {
+					AllowDBNull = true,
+					DefaultValue = destCol.First(
 					x => System.String.Equals( ac.ToName, x.ColumnName, System.StringComparison.OrdinalIgnoreCase )
-				).DefaultValue;
-				a.ReadOnly = true;
+				).DefaultValue,
+					ReadOnly = true
+				};
 				source.Columns.Add( a );
 			}
 

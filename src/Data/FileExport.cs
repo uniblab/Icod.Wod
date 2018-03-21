@@ -7,7 +7,7 @@ namespace Icod.Wod.Data {
 		"fileExport",
 		Namespace = "http://Icod.Wod"
 	)]
-	public sealed class FileExport : DbDescriptor, IStep {
+	public sealed class FileExport : DbFileBase {
 
 		#region fields
 		private DataFileBase myDestination;
@@ -36,7 +36,7 @@ namespace Icod.Wod.Data {
 
 
 		#region methods
-		public void DoWork( Icod.Wod.WorkOrder workOrder ) {
+		public sealed override void DoWork( Icod.Wod.WorkOrder workOrder ) {
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			this.Destination.WorkOrder = workOrder;
 			this.Destination.WriteRecords( workOrder, this );

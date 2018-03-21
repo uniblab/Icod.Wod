@@ -7,7 +7,7 @@ namespace Icod.Wod.Data {
 		"dbCommand",
 		Namespace = "http://Icod.Wod"
 	)]
-	public sealed class DbCommand : DbDescriptor, Icod.Wod.IStep {
+	public sealed class DbCommand : DbDescriptorBase, Icod.Wod.IStep {
 
 		#region .ctor
 		public DbCommand() : base() {

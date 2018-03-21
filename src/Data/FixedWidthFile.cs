@@ -8,7 +8,7 @@ namespace Icod.Wod.Data {
 		Namespace = "http://Icod.Wod",
 		IncludeInSchema = true
 	)]
-	public class FixedWidthFile : DataFileBase {
+	public sealed class FixedWidthFile : TextFileBase {
 
 		#region fields
 		private static readonly System.Func<System.String, System.Int32, System.Int32, System.String> theDefaultColumnReader;
@@ -129,13 +129,13 @@ namespace Icod.Wod.Data {
 				x => x.MaxLength
 			).Sum() + ( this.RecordSeparator ?? System.String.Empty ).Length;
 			var buffer = new System.Char[ bufferLen ];
-			System.Int32 r = file.ReadBlock( buffer, 0, bufferLen );
+			var r = file.ReadBlock( buffer, 0, bufferLen );
 			if ( 0 == r ) {
 				yield break;
 			}
 			var record = new System.String( buffer, 0, r );
 			System.Int32 l;
-			System.Int32 i = 0;
+			var i = 0;
 			var colReader = this.ColumnReader;
 			foreach ( var c in cols ) {
 				l = c.MaxLength;

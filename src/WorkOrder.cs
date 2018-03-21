@@ -21,12 +21,12 @@ namespace Icod.Wod {
 
 		#region .ctor
 		public WorkOrder() : base() {
-			myDict = new System.Collections.Generic.Dictionary<System.String,System.String>( System.StringComparer.OrdinalIgnoreCase );
-
-			myDict.Add( "%wod:File-PathName%", System.String.Empty );
-			myDict.Add( "%wod:File-Path%", System.String.Empty );
-			myDict.Add( "%wod:File-Name%", System.String.Empty );
-			myDict.Add( "%wod:File-NameWithoutExtension%", System.String.Empty );
+			myDict = new System.Collections.Generic.Dictionary<System.String, System.String>( System.StringComparer.OrdinalIgnoreCase ) {
+				{ "%wod:File-PathName%", System.String.Empty },
+				{ "%wod:File-Path%", System.String.Empty },
+				{ "%wod:File-Name%", System.String.Empty },
+				{ "%wod:File-NameWithoutExtension%", System.String.Empty }
+			};
 		}
 		#endregion .ctor
 
