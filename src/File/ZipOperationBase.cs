@@ -109,13 +109,6 @@ namespace Icod.Wod.File {
 			get;
 			set;
 		}
-
-		[System.Xml.Serialization.XmlIgnore]
-		protected System.Func<FileEntry, System.String, System.String> MapFileName {
-			get {
-				return myGetFileName;
-			}
-		}
 		#endregion properties
 
 
@@ -174,7 +167,7 @@ namespace Icod.Wod.File {
 		}
 
 		protected virtual System.String ProcessFileName( FileEntry file, System.String sourceExpandedPath ) {
-			var output = this.MapFileName( file, sourceExpandedPath ).Replace( '\\', '/' );
+			var output = myGetFileName( file, sourceExpandedPath ).Replace( '\\', '/' );
 			while ( !System.String.IsNullOrEmpty( output ) && output.StartsWith( "/", StringComparison.OrdinalIgnoreCase ) ) {
 				output = output.Substring( 1 );
 			}
