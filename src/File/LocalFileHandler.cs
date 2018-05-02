@@ -51,7 +51,7 @@ namespace Icod.Wod.File {
 			this.Write( source, filePathName, System.IO.FileMode.Append );
 		}
 		private void Write( System.IO.Stream source, System.String filePathName, System.IO.FileMode fileMode ) {
-			using ( var dest = System.IO.File.Open( filePathName, fileMode, System.IO.FileAccess.ReadWrite, System.IO.FileShare.Read ) ) {
+			using ( var dest = System.IO.File.Open( filePathName, fileMode, System.IO.FileAccess.Write, System.IO.FileShare.Read ) ) {
 				source.CopyTo( dest, this.BufferLength );
 				dest.Flush();
 				dest.SetLength( dest.Position );

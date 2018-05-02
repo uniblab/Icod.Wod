@@ -61,7 +61,7 @@ namespace Icod.Wod.File {
 			);
 			foreach ( var file in files ) {
 				using ( var reader = source.OpenReader( file ) ) {
-					dest.Append( reader, dest.PathCombine( dfd.ExpandedPath, dfd.ExpandedName ) );
+					dest.Append( reader, dfd.GetFilePathName( dest, file ) );
 				}
 				delFile( source, file );
 			}

@@ -197,8 +197,8 @@ namespace Icod.Wod.File {
 		}
 
 		public virtual System.String GetFileName( System.String alternateName ) {
-			alternateName = alternateName.TrimToNull();
 			var output = this.ExpandedName.TrimToNull();
+			alternateName = alternateName.TrimToNull();
 			if ( !System.String.IsNullOrEmpty( alternateName ) ) {
 				output = output ?? System.IO.Path.GetFileName( alternateName );
 			}
