@@ -195,6 +195,21 @@ namespace Icod.Wod.File {
 			}
 			return output;
 		}
+
+		public virtual System.String GetFileName( System.String alternateName ) {
+			alternateName = alternateName.TrimToNull();
+			var output = this.ExpandedName.TrimToNull();
+			if ( !System.String.IsNullOrEmpty( alternateName ) ) {
+				output = output ?? System.IO.Path.GetFileName( alternateName );
+			}
+			return output;
+		}
+		public virtual System.String GetFilePathName( FileHandlerBase handler, System.String alternateName ) {
+			if ( null == handler ) {
+				throw new System.ArgumentNullException( "handler" );
+			}
+			return handler.PathCombine( this.ExpandedPath, this.GetFileName( alternateName ) );
+		}
 		#endregion methods
 
 	}

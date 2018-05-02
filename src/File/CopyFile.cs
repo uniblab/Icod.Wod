@@ -80,7 +80,7 @@ namespace Icod.Wod.File {
 			foreach ( var file in fileEntries ) {
 				using ( var reader = source.OpenReader( file ) ) {
 					var dfd = dest.FileDescriptor;
-					dest.Overwrite( reader, dest.PathCombine( dfd.ExpandedPath, dfd.ExpandedName.TrimToNull() ?? System.IO.Path.GetFileName( file ) ) );
+					dest.Overwrite( reader, dfd.GetFilePathName( dest, file ) );
 				}
 				delFile( source, file );
 			}
