@@ -35,7 +35,7 @@ namespace Icod.Wod.File {
 
 
 		#region properties
-		public override System.Boolean CanRead {
+		public sealed override System.Boolean CanRead {
 			get {
 				if ( null == myStream ) {
 					throw new System.ObjectDisposedException( null );
@@ -43,7 +43,7 @@ namespace Icod.Wod.File {
 				return myStream.CanRead;
 			}
 		}
-		public override System.Boolean CanSeek {
+		public sealed override System.Boolean CanSeek {
 			get {
 				if ( null == myStream ) {
 					throw new System.ObjectDisposedException( null );
@@ -51,7 +51,7 @@ namespace Icod.Wod.File {
 				return myStream.CanSeek;
 			}
 		}
-		public override System.Boolean CanWrite {
+		public sealed override System.Boolean CanWrite {
 			get {
 				if ( null == myStream ) {
 					throw new System.ObjectDisposedException( null );
@@ -60,7 +60,7 @@ namespace Icod.Wod.File {
 			}
 		}
 
-		public override System.Int64 Length {
+		public sealed override System.Int64 Length {
 			get {
 				if ( null == myStream ) {
 					throw new System.ObjectDisposedException( null );
@@ -68,7 +68,7 @@ namespace Icod.Wod.File {
 				return myStream.Length;
 			}
 		}
-		public override System.Int64 Position {
+		public sealed override System.Int64 Position {
 			get {
 				if ( null == myStream ) {
 					throw new System.ObjectDisposedException( null );
@@ -86,7 +86,7 @@ namespace Icod.Wod.File {
 
 
 		#region methods
-		protected override void Dispose( System.Boolean disposing ) {
+		protected sealed override void Dispose( System.Boolean disposing ) {
 			if ( disposing ) {
 				System.IDisposable probe = myStream;
 				if ( null != probe ) {
@@ -102,31 +102,31 @@ namespace Icod.Wod.File {
 			base.Dispose( disposing );
 		}
 
-		public override void Flush() {
+		public sealed override void Flush() {
 			if ( null == myStream ) {
 				throw new System.ObjectDisposedException( null );
 			}
 			myStream.Flush();
 		}
-		public override System.Int64 Seek( System.Int64 offset, System.IO.SeekOrigin origin ) {
+		public sealed override System.Int64 Seek( System.Int64 offset, System.IO.SeekOrigin origin ) {
 			if ( null == myStream ) {
 				throw new System.ObjectDisposedException( null );
 			}
 			return myStream.Seek( offset, origin );
 		}
-		public override void SetLength( System.Int64 value ) {
+		public sealed override void SetLength( System.Int64 value ) {
 			if ( null == myStream ) {
 				throw new System.ObjectDisposedException( null );
 			}
 			myStream.SetLength( value );
 		}
-		public override System.Int32 Read( [System.Runtime.InteropServices.In, System.Runtime.InteropServices.Out] System.Byte[] buffer, System.Int32 offset, System.Int32 count ) {
+		public sealed override System.Int32 Read( [System.Runtime.InteropServices.In, System.Runtime.InteropServices.Out] System.Byte[] buffer, System.Int32 offset, System.Int32 count ) {
 			if ( null == myStream ) {
 				throw new System.ObjectDisposedException( null );
 			}
 			return myStream.Read( buffer, offset, count );
 		}
-		public override void Write( System.Byte[] buffer, System.Int32 offset, System.Int32 count ) {
+		public sealed override void Write( System.Byte[] buffer, System.Int32 offset, System.Int32 count ) {
 			if ( null == myStream ) {
 				throw new System.ObjectDisposedException( null );
 			}
