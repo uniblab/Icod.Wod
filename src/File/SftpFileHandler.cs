@@ -74,7 +74,7 @@ namespace Icod.Wod.File {
 			using ( var client = this.GetSftpClient( uri ) ) {
 				var file = uri.AbsolutePath;
 				client.Connect();
-				client.Open( file, System.IO.FileMode.OpenOrCreate, System.IO.FileAccess.ReadWrite ).Dispose();
+				client.Open( file, System.IO.FileMode.OpenOrCreate, System.IO.FileAccess.Write ).Dispose();
 			}
 		}
 		public sealed override void DeleteFile() {
