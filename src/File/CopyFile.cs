@@ -92,6 +92,7 @@ namespace Icod.Wod.File {
 			} else if ( null == source ) {
 				throw new System.ArgumentNullException( "source" );
 			}
+			var dfd = dest.FileDescriptor;
 			System.String file;
 			var files = source.ListFiles();
 			var action = ( this.Move )
@@ -100,7 +101,7 @@ namespace Icod.Wod.File {
 			;
 			foreach ( var fe in files ) {
 				file = fe.File;
-				action( file, dest.PathCombine( dest.FileDescriptor.ExpandedPath, System.IO.Path.GetFileName( file ) ) );
+				action( file, dfd.GetFilePathName( dest, file ) );
 			}
 		}
 		#endregion methods

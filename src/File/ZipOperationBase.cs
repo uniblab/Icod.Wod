@@ -111,7 +111,7 @@ namespace Icod.Wod.File {
 		}
 
 		[System.Xml.Serialization.XmlIgnore]
-		public System.Func<FileEntry, System.String, System.String> GetFileName {
+		protected System.Func<FileEntry, System.String, System.String> MapFileName {
 			get {
 				return myGetFileName;
 			}
@@ -174,7 +174,7 @@ namespace Icod.Wod.File {
 		}
 
 		protected virtual System.String ProcessFileName( FileEntry file, System.String sourceExpandedPath ) {
-			var output = this.GetFileName( file, sourceExpandedPath ).Replace( '\\', '/' );
+			var output = this.MapFileName( file, sourceExpandedPath ).Replace( '\\', '/' );
 			while ( !System.String.IsNullOrEmpty( output ) && output.StartsWith( "/", StringComparison.OrdinalIgnoreCase ) ) {
 				output = output.Substring( 1 );
 			}
