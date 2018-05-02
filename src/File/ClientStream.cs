@@ -6,8 +6,8 @@ namespace Icod.Wod.File {
 	public sealed class ClientStream : System.IO.Stream {
 
 		#region fields
-		private System.IO.Stream myStream;
-		private System.IDisposable myClient;
+		private readonly System.IO.Stream myStream;
+		private readonly System.IDisposable myClient;
 		private readonly System.Boolean myDisposeClient;
 		#endregion fields
 
@@ -88,15 +88,9 @@ namespace Icod.Wod.File {
 		#region methods
 		protected sealed override void Dispose( System.Boolean disposing ) {
 			if ( disposing ) {
-				System.IDisposable probe = myStream;
-				if ( null != probe ) {
-					probe.Dispose();
-					myStream = null;
-				}
-				probe = myClient;
-				if ( myDisposeClient && ( null != probe ) ) {
-					probe.Dispose();
-					myClient = null;
+				myStream.Dispose();
+				if ( myDisposeClient ) {
+					myClient.Dispose();
 				}
 			}
 			base.Dispose( disposing );
