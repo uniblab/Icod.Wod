@@ -229,6 +229,12 @@ namespace Icod.Wod.File {
 					return y[ y.Length - 1 ];
 				}
 			);
+			System.Func<System.String, System.Boolean> regexMatch = null;
+			if ( System.String.IsNullOrEmpty( regexPattern ) ) {
+				regexMatch = x => true;
+			} else {
+				regexMatch = x => System.Text.RegularExpressions.Regex.IsMatch( x, regexPattern );
+			}
 			return list.Select(
 				x => new FileEntry {
 					File = this.PathCombine( fd.ExpandedPath, this.StripNameFromList( x ) ),
@@ -239,9 +245,7 @@ namespace Icod.Wod.File {
 					Handler = this
 				}
 			).Where(
-				x => System.String.IsNullOrEmpty( regexPattern )
-					? true
-					: System.Text.RegularExpressions.Regex.IsMatch( x.File, regexPattern )
+				x => regexMatch( x.File )
 			);
 		}
 		#endregion methods
