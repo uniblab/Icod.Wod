@@ -88,12 +88,14 @@ namespace Icod.Wod.File {
 		#region methods
 		protected override void Dispose( System.Boolean disposing ) {
 			if ( disposing ) {
-				if ( null != myStream ) {
-					myStream.Dispose();
+				System.IDisposable probe = myStream;
+				if ( null != probe ) {
+					probe.Dispose();
 					myStream = null;
 				}
-				if ( myDisposeClient && ( null != myClient ) ) {
-					myClient.Dispose();
+				probe = myClient;
+				if ( myDisposeClient && ( null != probe ) ) {
+					probe.Dispose();
 					myClient = null;
 				}
 			}
