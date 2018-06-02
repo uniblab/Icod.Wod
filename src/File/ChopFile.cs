@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 
 namespace Icod.Wod.File {
 
@@ -19,7 +18,7 @@ namespace Icod.Wod.File {
 		private System.Int32 myHead;
 		private System.Int32 myTail;
 		private System.Action<System.IO.StreamWriter> myEolWriter;
-		#endregion fields
+		#endregion fieldsfs
 
 
 		#region .ctor
