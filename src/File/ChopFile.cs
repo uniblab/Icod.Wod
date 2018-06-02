@@ -138,9 +138,7 @@ namespace Icod.Wod.File {
 			System.Int32 i;
 			IQueue<System.String> bank;
 			var rs = this.RecordSeparator;
-			foreach ( var filePathName in source.ListFiles().Where(
-				x => x.FileType.Equals( FileType.File )
-			).Select(
+			foreach ( var filePathName in source.ListFiles().Select(
 				x => x.File
 			) ) {
 				using ( var buffer = new System.IO.MemoryStream() ) {
