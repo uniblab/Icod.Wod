@@ -11,6 +11,7 @@ namespace Icod.Wod.File {
 	public sealed class ChopFile : FileOperationBase {
 
 		#region fields
+		private const System.Int32 DefaultBufferSize = 16384;
 		private static readonly System.Action<System.IO.StreamWriter> theEmptyEolWriter;
 
 		private System.String myCodePage;
@@ -18,6 +19,7 @@ namespace Icod.Wod.File {
 		private System.Int32 myHead;
 		private System.Int32 myTail;
 		private System.Action<System.IO.StreamWriter> myEolWriter;
+		private System.Int32 myBufferSize;
 		#endregion fieldsfs
 
 
@@ -115,6 +117,23 @@ namespace Icod.Wod.File {
 				return myEolWriter ?? theEmptyEolWriter;
 			}
 		}
+
+		[System.Xml.Serialization.XmlAttribute(
+			"bufferSize",
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.ComponentModel.DefaultValue( DefaultBufferSize )]
+		public System.Int32 BufferSize {
+			get {
+				return myBufferSize;
+			}
+			set {
+				if ( value <= 0 ) {
+					throw new System.InvalidOperationException();
+				}
+				myBufferSize = value;
+			}
+		}
 		#endregion properties
 
 
@@ -141,10 +160,10 @@ namespace Icod.Wod.File {
 			foreach ( var filePathName in source.ListFiles().Select(
 				x => x.File
 			) ) {
-				using ( var buffer = new System.IO.MemoryStream() ) {
+				using ( var buffer = new System.IO.MemoryStream( DefaultBufferSize ) ) {
 					using ( var s = source.OpenReader( filePathName ) ) {
-						using ( var sr = new System.IO.StreamReader( s, enc ) ) {
-							using ( var sw = new System.IO.StreamWriter( buffer, enc ) ) {
+						using ( var sr = new System.IO.StreamReader( s, enc, true, this.BufferSize, true ) ) {
+							using ( var sw = new System.IO.StreamWriter( buffer, enc, this.BufferSize, true ) ) {
 								i = head;
 								while ( !sr.EndOfStream && ( 0 < i-- ) ) {
 									sr.ReadLine( rs );
