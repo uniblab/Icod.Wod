@@ -61,8 +61,7 @@ namespace Icod.Wod.File {
 
 		[System.Xml.Serialization.XmlAttribute(
 			"head",
-			Namespace = "http://Icod.Wod",
-			DataType = "xsd:positiveInteger"
+			Namespace = "http://Icod.Wod"
 		)]
 		[System.ComponentModel.DefaultValue( 0 )]
 		public System.Int32 Head {
@@ -78,8 +77,7 @@ namespace Icod.Wod.File {
 		}
 		[System.Xml.Serialization.XmlAttribute(
 			"tail",
-			Namespace = "http://Icod.Wod",
-			DataType = "xsd:positiveInteger"
+			Namespace = "http://Icod.Wod"
 		)]
 		[System.ComponentModel.DefaultValue( 0 )]
 		public System.Int32 Tail {
