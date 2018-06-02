@@ -133,8 +133,6 @@ namespace Icod.Wod.File {
 			}
 
 			var enc = this.GetEncoding();
-			System.String line;
-			System.Int32 count;
 			System.Int32 head = this.Head;
 			System.Int32 tail = this.Tail;
 			System.Int32 i;
