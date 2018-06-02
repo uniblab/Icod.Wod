@@ -81,8 +81,13 @@
     <Compile Include="src\File\ListDirectory.cs" />
     <Compile Include="src\File\SshKeyFileDescriptor.cs" />
     <Compile Include="src\File\TouchZip.cs" />
+    <Compile Include="src\Interfaces\IIsEmpty.cs" />
+    <Compile Include="src\Interfaces\IQueue`1.cs" />
+    <Compile Include="src\Interfaces\IStack`1.cs" />
+    <Compile Include="src\Queue`1.cs" />
     <Compile Include="src\Serial.cs" />
     <Compile Include="src\Parallel.cs" />
+    <Compile Include="src\Stack`1.cs" />
     <Compile Include="src\StringHelper.cs" />
     <Compile Include="src\WorkOrder.cs" />
     <Compile Include="src\Interfaces\IStep.cs" />

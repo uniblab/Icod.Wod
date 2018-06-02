@@ -61,7 +61,8 @@ namespace Icod.Wod.File {
 
 		[System.Xml.Serialization.XmlAttribute(
 			"head",
-			Namespace = "http://Icod.Wod"
+			Namespace = "http://Icod.Wod",
+			DataType = "xsd:positiveInteger"
 		)]
 		[System.ComponentModel.DefaultValue( 0 )]
 		public System.Int32 Head {
@@ -77,7 +78,8 @@ namespace Icod.Wod.File {
 		}
 		[System.Xml.Serialization.XmlAttribute(
 			"tail",
-			Namespace = "http://Icod.Wod"
+			Namespace = "http://Icod.Wod",
+			DataType = "xsd:positiveInteger"
 		)]
 		[System.ComponentModel.DefaultValue( 0 )]
 		public System.Int32 Tail {
@@ -134,11 +136,13 @@ namespace Icod.Wod.File {
 			}
 
 			var enc = this.GetEncoding();
-			System.Collections.Generic.IList<System.String> lines;
 			System.String line;
 			System.Int32 count;
-			var head = this.Head;
-			System.Int32 tail;
+			System.Int32 head = this.Head;
+			System.Int32 tail = this.Tail;
+			System.Int32 i;
+			IQueue<System.String> bank;
+			var rs = this.RecordSeparator;
 			foreach ( var filePathName in source.ListFiles().Where(
 				x => x.FileType.Equals( FileType.File )
 			).Select(
@@ -147,30 +151,27 @@ namespace Icod.Wod.File {
 				using ( var buffer = new System.IO.MemoryStream() ) {
 					using ( var s = source.OpenReader( filePathName ) ) {
 						using ( var sr = new System.IO.StreamReader( s, enc ) ) {
-							for ( System.Int32 i = 0; i < head; i++ ) {
-								sr.ReadLine( this.RecordSeparator );
-							}
-							lines = new System.Collections.Generic.List<System.String>();
-							do {
-								line = sr.ReadLine( this.RecordSeparator );
-								if ( null != line ) {
-									lines.Add( line );
+							using ( var sw = new System.IO.StreamWriter( buffer, enc ) ) {
+								i = head;
+								while ( !sr.EndOfStream && ( 0 < i-- ) ) {
+									sr.ReadLine( rs );
 								}
-							} while ( null != line );
+								if ( 0 < tail ) {
+									bank = Queue<System.String>.Empty;
+									while ( !sr.EndOfStream && ( tail < bank.Count ) ) {
+										bank = bank.Enqueue( sr.ReadLine( rs ) );
+									}
+									while ( !sr.EndOfStream ) {
+										sw.Write( bank.Peek() );
+										bank = bank.Dequeue().Enqueue( sr.ReadLine( rs ) );
+									}
+								} else {
+									while ( !sr.EndOfStream ) {
+										sw.Write( sr.ReadLine( rs ) );
+									}
+								}
+							}
 						}
-					}
-					count = lines.Count - 1;
-					tail = count - this.Tail;
-					for ( System.Int32 i = count; tail < i; i-- ) {
-						lines.RemoveAt( i );
-					}
-					using ( var bw = new System.IO.StreamWriter( buffer, enc ) ) {
-						count = lines.Count;
-						for ( System.Int32 i = 0; i < count; i++ ) {
-							bw.Write( lines[ i ] );
-							this.EolWriter( bw );
-						}
-						lines.Clear();
 					}
 					buffer.Seek( 0, System.IO.SeekOrigin.Begin );
 					source.Overwrite( buffer, filePathName );
