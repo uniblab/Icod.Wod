@@ -151,7 +151,7 @@ namespace Icod.Wod.File {
 								}
 								if ( 0 < tail ) {
 									bank = Queue<System.String>.Empty;
-									while ( !sr.EndOfStream && ( tail < bank.Count ) ) {
+									while ( !sr.EndOfStream && ( bank.Count < tail ) ) {
 										bank = bank.Enqueue( sr.ReadLine( rs ) );
 									}
 									while ( !sr.EndOfStream ) {
