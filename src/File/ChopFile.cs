@@ -20,6 +20,7 @@ namespace Icod.Wod.File {
 		private System.Int32 myTail;
 		private System.Action<System.IO.StreamWriter> myEolWriter;
 		private System.Int32 myBufferSize;
+		private System.Action<System.Int32, System.IO.StreamReader, System.String, System.IO.StreamWriter> tailWriter;
 		#endregion fieldsfs
 
 
@@ -147,43 +148,35 @@ namespace Icod.Wod.File {
 			var source = this.GetFileHandler( workOrder );
 			if ( null == source ) {
 				throw new System.InvalidOperationException();
-			} else if ( 0 == this.Head ) {
+			}
+			System.Int32 head = this.Head;
+			System.Int32 tail = this.Tail;
+			if ( ( 0 == head ) && ( 0 == tail ) ) {
 				return;
 			}
 
+			if ( 0 == tail ) {
+				tailWriter = StraightTailWriter;
+			} else {
+				tailWriter = BufferedTailWriter;
+			}
 			var enc = this.GetEncoding();
-			System.Int32 head = this.Head;
-			System.Int32 tail = this.Tail;
-			System.Int32 i;
-			IQueue<System.String> bank;
 			var rs = this.RecordSeparator;
 			foreach ( var filePathName in source.ListFiles().Select(
 				x => x.File
 			) ) {
 				using ( var buffer = new System.IO.MemoryStream( DefaultBufferSize ) ) {
-					using ( var s = source.OpenReader( filePathName ) ) {
-						using ( var sr = new System.IO.StreamReader( s, enc, true, this.BufferSize, true ) ) {
-							using ( var sw = new System.IO.StreamWriter( buffer, enc, this.BufferSize, true ) ) {
-								i = head;
+					using ( var sw = new System.IO.StreamWriter( buffer, enc, this.BufferSize, true ) ) {
+						using ( var s = source.OpenReader( filePathName ) ) {
+							using ( var sr = new System.IO.StreamReader( s, enc, true, this.BufferSize, true ) ) {
+								var i = head;
 								while ( !sr.EndOfStream && ( 0 < i-- ) ) {
 									sr.ReadLine( rs );
 								}
-								if ( 0 < tail ) {
-									bank = Queue<System.String>.Empty;
-									while ( !sr.EndOfStream && ( bank.Count < tail ) ) {
-										bank = bank.Enqueue( sr.ReadLine( rs ) );
-									}
-									while ( !sr.EndOfStream ) {
-										sw.Write( bank.Peek() );
-										bank = bank.Dequeue().Enqueue( sr.ReadLine( rs ) );
-									}
-								} else {
-									while ( !sr.EndOfStream ) {
-										sw.Write( sr.ReadLine( rs ) );
-									}
-								}
+								tailWriter( tail, sr, rs, sw );
 							}
 						}
+						sw.Flush();
 					}
 					buffer.Seek( 0, System.IO.SeekOrigin.Begin );
 					source.Overwrite( buffer, filePathName );
@@ -191,6 +184,35 @@ namespace Icod.Wod.File {
 			}
 		}
 		#endregion methods
+
+
+		#region static methods
+		private static void BufferedTailWriter( System.Int32 tail, System.IO.StreamReader reader, System.String recordSeparator, System.IO.StreamWriter writer ) {
+			if ( null == writer ) {
+				throw new System.ArgumentNullException( "writer" );
+			} else if ( null == reader ) {
+				throw new System.ArgumentNullException( "reader" );
+			}
+			var bank = Queue<System.String>.Empty;
+			while ( !reader.EndOfStream && ( bank.Count < tail ) ) {
+				bank = bank.Enqueue( reader.ReadLine( recordSeparator ) );
+			}
+			while ( !reader.EndOfStream ) {
+				writer.Write( bank.Peek() );
+				bank = bank.Dequeue().Enqueue( reader.ReadLine( recordSeparator ) );
+			}
+		}
+		private static void StraightTailWriter( System.Int32 tail, System.IO.StreamReader reader, System.String recordSeparator, System.IO.StreamWriter writer ) {
+			if ( null == writer ) {
+				throw new System.ArgumentNullException( "writer" );
+			} else if ( null == reader ) {
+				throw new System.ArgumentNullException( "reader" );
+			}
+			while ( !reader.EndOfStream ) {
+				writer.Write( reader.ReadLine( recordSeparator ) );
+			}
+		}
+		#endregion static methods
 
 	}
 
