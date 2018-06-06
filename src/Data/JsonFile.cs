@@ -21,6 +21,26 @@ namespace Icod.Wod.Data {
 		#endregion .ctor
 
 
+		#region properties
+		[System.Xml.Serialization.XmlAttribute(
+			"deserializeAs",
+			Namespace = "http://Icod.Wod"
+		)]
+		public System.String DeserializeAs {
+			get;
+			set;
+		}
+		[System.Xml.Serialization.XmlAttribute(
+			"mapWith",
+			Namespace = "http://Icod.Wod"
+		)]
+		public System.String MapWith {
+			get;
+			set;
+		}
+		#endregion properties
+
+
 		#region methods
 		public sealed override void WriteRecords( Icod.Wod.WorkOrder workOrder, ITableSource source ) {
 			if ( null == source ) {
@@ -69,20 +89,16 @@ namespace Icod.Wod.Data {
 
 			var table = new System.Data.DataTable();
 			try {
-				var list = ReadFile( filePathName );
-				foreach ( var columnName in list.SelectMany(
-					x => x.Keys
-				).Select(
-					x => x
-				).Distinct( System.StringComparer.OrdinalIgnoreCase )
-				) {
-					table.Columns.Add( new System.Data.DataColumn( columnName ) );
+				var list = this.ExecuteMap( this.ReadFile( filePathName ) );
+				var pi = list.GetType().GetGenericArguments().Last().GetProperties();
+				foreach ( var p in pi ) {
+					table.Columns.Add( new System.Data.DataColumn( p.Name ) );
 				}
 				System.Data.DataRow row = null;
 				foreach ( var record in list ) {
 					row = table.NewRow();
-					foreach ( var kvp in record ) {
-						row[ kvp.Key ] = kvp.Value;
+					foreach ( var p in pi ) {
+						row[ p.Name ] = p.GetValue( record );
 					}
 					table.Rows.Add( row );
 				}
@@ -103,10 +119,22 @@ namespace Icod.Wod.Data {
 
 			return table;
 		}
-		private static System.Collections.Generic.IEnumerable<System.Collections.Generic.IDictionary<System.String, System.Object>> ReadFile( System.String fileName ) {
+		private System.Collections.Generic.IEnumerable<System.Object> ExecuteMap( System.Object obj ) {
+			var t = System.Type.GetType( this.MapWith, true, false );
+			var mapper = (IMapWith)System.Activator.CreateInstance( t );
+			return mapper.ExecuteMap( obj );
+		}
+		private System.Object ReadFile( System.String fileName ) {
 			using ( var fileStream = System.IO.File.Open( fileName, System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.Read ) ) {
 				using ( var streamReader = new System.IO.StreamReader( fileStream, System.Text.Encoding.ASCII, true, 16384, true ) ) {
-					return (System.Collections.Generic.IEnumerable<System.Collections.Generic.IDictionary<System.String, System.Object>>)new Newtonsoft.Json.JsonSerializer().Deserialize( streamReader, typeof( System.Collections.Generic.IEnumerable<System.Collections.Generic.Dictionary<System.String, System.Object>> ) );
+					var typeName = this.DeserializeAs.TrimToNull();
+					var engine = new Newtonsoft.Json.JsonSerializer();
+					using ( var reader = new Newtonsoft.Json.JsonTextReader( streamReader ) ) {
+						return (  System.String.IsNullOrEmpty( typeName ) )
+							? engine.Deserialize( reader )
+							: engine.Deserialize( reader, System.Type.GetType( typeName, true, false ) )
+						;
+					}
 				}
 			}
 		}

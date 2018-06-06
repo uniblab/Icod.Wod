@@ -66,6 +66,7 @@
     <Compile Include="src\Data\DbOperationBase.cs" />
     <Compile Include="src\Data\DelimitedFile.cs" />
     <Compile Include="src\Data\FixedWidthFile.cs" />
+    <Compile Include="src\Data\Interfaces\IMapWith.cs" />
     <Compile Include="src\Data\Interfaces\IRecordSeparator.cs" />
     <Compile Include="src\Data\JsonFile.cs" />
     <Compile Include="src\Data\LiteralColumn.cs" />
