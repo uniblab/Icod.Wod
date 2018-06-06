@@ -17,9 +17,11 @@ namespace Icod.Wod.File {
 
 		#region methods
 		private void SetClient( System.Net.HttpWebRequest client, System.String method ) {
+#if DEBUG
 			if ( null == client ) {
 				throw new System.ArgumentNullException( "client" );
 			}
+#endif
 			var fd = this.FileDescriptor;
 			var uri = new System.Uri( fd.ExpandedPath );
 			var ub = new System.UriBuilder( fd.ExpandedPath );

@@ -226,11 +226,13 @@ namespace Icod.Wod.Data {
 			return table;
 		}
 		private void BuildTable( System.IO.StreamReader file, System.Data.DataTable table ) {
+#if DEBUG
 			if ( null == table ) {
 				throw new System.ArgumentNullException( "table" );
 			} else if ( null == file ) {
 				throw new System.ArgumentNullException( "file" );
 			}
+#endif
 
 			foreach ( var column in this.BuildColumns( file ) ) {
 				table.Columns.Add( column );
@@ -269,11 +271,13 @@ namespace Icod.Wod.Data {
 			}
 		}
 		private void WriteHeader( System.IO.StreamWriter writer, System.Data.DataTable table ) {
+#if DEBUG
 			if ( null == table ) {
 				throw new System.ArgumentNullException( "table" );
 			} else if ( null == writer ) {
 				throw new System.ArgumentNullException( "writer" );
 			}
+#endif
 
 			this.WriteHeader( writer, table.Columns.OfType<System.Data.DataColumn>(), this.Columns );
 		}
@@ -293,9 +297,11 @@ namespace Icod.Wod.Data {
 		}
 
 		private void ReadPreamble( System.IO.StreamReader file ) {
+#if DEBUG
 			if ( null == file ) {
 				throw new System.ArgumentNullException( "file" );
 			}
+#endif
 			var bs = file.BaseStream;
 			if ( ( null == bs ) || !bs.CanRead ) {
 				throw new System.InvalidOperationException();

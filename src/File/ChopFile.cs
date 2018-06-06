@@ -188,11 +188,13 @@ namespace Icod.Wod.File {
 
 		#region static methods
 		private static void BufferedTailWriter( System.Int32 tail, System.IO.StreamReader reader, System.String recordSeparator, System.IO.StreamWriter writer ) {
+#if DEBUG
 			if ( null == writer ) {
 				throw new System.ArgumentNullException( "writer" );
 			} else if ( null == reader ) {
 				throw new System.ArgumentNullException( "reader" );
 			}
+#endif
 			var bank = Queue<System.String>.Empty;
 			while ( !reader.EndOfStream && ( bank.Count < tail ) ) {
 				bank = bank.Enqueue( reader.ReadLine( recordSeparator ) );
@@ -203,11 +205,13 @@ namespace Icod.Wod.File {
 			}
 		}
 		private static void StraightTailWriter( System.Int32 tail, System.IO.StreamReader reader, System.String recordSeparator, System.IO.StreamWriter writer ) {
+#if DEBUG
 			if ( null == writer ) {
 				throw new System.ArgumentNullException( "writer" );
 			} else if ( null == reader ) {
 				throw new System.ArgumentNullException( "reader" );
 			}
+#endif
 			while ( !reader.EndOfStream ) {
 				writer.Write( reader.ReadLine( recordSeparator ) );
 			}

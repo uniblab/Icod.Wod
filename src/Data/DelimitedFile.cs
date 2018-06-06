@@ -255,17 +255,22 @@ namespace Icod.Wod.Data {
 			return table.Rows.Add( rowList );
 		}
 		private System.Collections.Generic.IEnumerable<System.String> ReadHeaderLine( System.IO.StreamReader file ) {
+#if DEBUG
 			if ( null == file ) {
 				throw new System.ArgumentNullException( "file" );
 			}
+#endif
 			var output = this.ReadRecord( file );
 			return output;
 		}
 
 		protected sealed override System.Collections.Generic.IEnumerable<System.String> ReadRecord( System.IO.StreamReader file ) {
+#if DEBUG
 			if ( null == file ) {
 				throw new System.ArgumentNullException( "file" );
-			} else if ( file.EndOfStream ) {
+			}
+#endif
+			if ( file.EndOfStream ) {
 				yield break;
 			} else if ( System.String.IsNullOrEmpty( this.RecordSeparator ) ) {
 				throw new System.InvalidOperationException();
@@ -305,9 +310,11 @@ namespace Icod.Wod.Data {
 			}
 		}
 		private System.String ReadColumn( System.IO.StringReader reader, System.Nullable<System.Char> first, System.Char @break, System.Boolean readNextOnBreak ) {
+#if DEBUG
 			if ( null == reader ) {
 				throw new System.ArgumentNullException( "reader" );
 			}
+#endif
 			var sb = new System.Text.StringBuilder( 128 );
 			if ( first.HasValue ) {
 				sb.Append( first.Value );
@@ -327,9 +334,11 @@ namespace Icod.Wod.Data {
 			return this.ColumnReader( sb );
 		}
 		private System.Nullable<System.Char> ReadChar( System.IO.StringReader reader, System.Nullable<System.Char> escape, System.Char @break, System.Boolean readNextOnBreak ) {
+#if DEBUG
 			if ( null == reader ) {
 				throw new System.ArgumentNullException( "reader" );
 			}
+#endif
 
 			var p = reader.Peek();
 			if ( -1 == p ) {

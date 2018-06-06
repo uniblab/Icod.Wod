@@ -87,11 +87,13 @@ namespace Icod.Wod.File {
 		}
 
 		private void DoWork( LocalFileHandler source, LocalFileHandler dest ) {
+#if DEBUG
 			if ( null == dest ) {
 				throw new System.ArgumentNullException( "dest" );
 			} else if ( null == source ) {
 				throw new System.ArgumentNullException( "source" );
 			}
+#endif
 			var dfd = dest.FileDescriptor;
 			System.String file;
 			var files = source.ListFiles();

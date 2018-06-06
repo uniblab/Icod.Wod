@@ -56,7 +56,8 @@
 		}
 
 		internal Queue( IStack<T> drain, IStack<T> source ) {
-			if ( drain.IsEmpty ) {
+			source = source ?? Stack<T>.Empty;
+			if ( ( drain ?? Stack<T>.Empty ).IsEmpty ) {
 				drain = source.Reverse();
 				source = Stack<T>.Empty;
 			}

@@ -87,12 +87,15 @@ namespace Icod.Wod.File {
 			}
 		}
 		private void Decompress( Icod.Wod.File.FileHandlerBase source, System.String sourceFilePathName, Icod.Wod.File.FileHandlerBase dest ) {
+#if DEBUG
 			if ( null == dest ) {
 				throw new System.ArgumentNullException( "dest" );
-			} else if ( System.String.IsNullOrEmpty( sourceFilePathName ) ) {
-				throw new System.ArgumentNullException( "sourceFilePathName" );
 			} else if ( null == source ) {
 				throw new System.ArgumentNullException( "source" );
+			}
+#endif
+			if (System.String.IsNullOrEmpty(sourceFilePathName ) ) {
+				throw new System.ArgumentNullException( "sourceFilePathName" );
 			}
 			var dfd = dest.FileDescriptor;
 			using ( var reader = source.OpenReader( sourceFilePathName ) ) {
@@ -108,12 +111,15 @@ namespace Icod.Wod.File {
 			}
 		}
 		private void Compress( Icod.Wod.File.FileHandlerBase source, System.String sourceFilePathName, Icod.Wod.File.FileHandlerBase dest ) {
+#if DEBUG
 			if ( null == dest ) {
 				throw new System.ArgumentNullException( "dest" );
-			} else if ( System.String.IsNullOrEmpty( sourceFilePathName ) ) {
-				throw new System.ArgumentNullException( "sourceFilePathName" );
 			} else if ( null == source ) {
 				throw new System.ArgumentNullException( "source" );
+			}
+#endif
+			if ( System.String.IsNullOrEmpty( sourceFilePathName ) ) {
+				throw new System.ArgumentNullException( "sourceFilePathName" );
 			}
 			var dfd = dest.FileDescriptor;
 			using ( var buffer = new System.IO.MemoryStream() ) {
@@ -129,9 +135,11 @@ namespace Icod.Wod.File {
 			}
 		}
 		private System.String GetDestinatonFileName( System.String source ) {
+#if DEBUG
 			if ( System.String.IsNullOrEmpty( source ) ) {
 				throw new System.ArgumentNullException( "source" );
 			}
+#endif
 			System.String fn;
 			switch ( this.CompressionMode ) {
 				case System.IO.Compression.CompressionMode.Decompress :

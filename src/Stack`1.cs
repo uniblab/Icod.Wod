@@ -7,6 +7,12 @@ namespace Icod.Wod {
 
 		#region nested classes
 		internal sealed class EmptyStack<T> : IStack<T> {
+			private static readonly System.Int32 theHashCode;
+			static EmptyStack() {
+				unchecked {
+					theHashCode = typeof( EmptyStack<T> ).AssemblyQualifiedName.GetHashCode() + typeof( T ).AssemblyQualifiedName.GetHashCode();
+				}
+			}
 			internal EmptyStack() : base() {
 			}
 			public System.Boolean IsEmpty {
@@ -32,6 +38,9 @@ namespace Icod.Wod {
 				return this;
 			}
 
+			public sealed override System.Int32 GetHashCode() {
+				return theHashCode;
+			}
 			public System.Collections.Generic.IEnumerator<T> GetEnumerator() {
 				yield break;
 			}
@@ -40,9 +49,22 @@ namespace Icod.Wod {
 			}
 		}
 		internal sealed class SingleStack<T> : IStack<T> {
+			private static readonly System.Int32 theHashCode;
 			private readonly T myValue;
+			private readonly System.Int32 myHashCode;
+			static SingleStack() {
+				unchecked {
+					theHashCode = typeof( SingleStack<T> ).AssemblyQualifiedName.GetHashCode() + typeof( T ).AssemblyQualifiedName.GetHashCode();
+				}
+			}
 			internal SingleStack( T value ) : base() {
 				myValue = value;
+				myHashCode = theHashCode;
+				if ( !System.Object.ReferenceEquals( value, null ) ) {
+					unchecked {
+						myHashCode += value.GetHashCode();
+					}
+				}
 			}
 			public System.Boolean IsEmpty {
 				get {
@@ -66,6 +88,10 @@ namespace Icod.Wod {
 			public IStack<T> Reverse() {
 				return this;
 			}
+			public sealed override System.Int32 GetHashCode() {
+				return theHashCode;
+			}
+
 			public System.Collections.Generic.IEnumerator<T> GetEnumerator() {
 				yield return myValue;
 			}
@@ -77,25 +103,37 @@ namespace Icod.Wod {
 
 
 		#region fields
+		private static readonly System.Int32 theHashCode;
 		private static readonly IStack<T> theEmpty;
 
 		private readonly T myValue;
 		private readonly IStack<T> myTail;
 		private readonly System.Int32 myCount;
+		private readonly System.Int32 myHashCode;
 		#endregion fields
 
 
 		#region .ctor
 		static Stack() {
 			theEmpty = new EmptyStack<T>();
+			unchecked {
+				theHashCode = typeof( SingleStack<T> ).AssemblyQualifiedName.GetHashCode() + typeof( T ).AssemblyQualifiedName.GetHashCode();
+			}
 		}
 
 		private Stack() : base() {
+			myHashCode = theHashCode;
 		}
 		private Stack( IStack<T> tail, T value ) : this() {
 			myValue = value;
 			myTail = tail ?? Stack<T>.Empty;
 			myCount = 1 + myTail.Count;
+			unchecked {
+				myHashCode += myTail.GetHashCode();
+				if ( !System.Object.ReferenceEquals( value, null ) ) {
+					myHashCode += value.GetHashCode();
+				}
+			}
 		}
 		#endregion .ctor
 
