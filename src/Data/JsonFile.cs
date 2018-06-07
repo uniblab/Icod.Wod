@@ -11,7 +11,7 @@ namespace Icod.Wod.Data {
 		Namespace = "http://Icod.Wod",
 		IncludeInSchema = true
 	)]
-	public class JsonFile : DataFileBase {
+	public sealed class JsonFile : DataFileBase {
 
 		#region .ctor
 		public JsonFile() : base() {
@@ -23,10 +23,10 @@ namespace Icod.Wod.Data {
 
 		#region properties
 		[System.Xml.Serialization.XmlAttribute(
-			"deserializeAs",
+			"typeName",
 			Namespace = "http://Icod.Wod"
 		)]
-		public System.String DeserializeAs {
+		public System.String TypeName {
 			get;
 			set;
 		}
@@ -35,6 +35,11 @@ namespace Icod.Wod.Data {
 			Namespace = "http://Icod.Wod"
 		)]
 		public System.String MapWith {
+			get;
+			set;
+		}
+
+		public File.FileDescriptor[] Assemblies {
 			get;
 			set;
 		}
@@ -79,7 +84,6 @@ namespace Icod.Wod.Data {
 				}
 			}
 		}
-
 		protected sealed override System.Data.DataTable ReadFile( System.String filePathName, System.IO.StreamReader file ) {
 			if ( null == file ) {
 				throw new System.ArgumentNullException( "file" );
@@ -87,6 +91,7 @@ namespace Icod.Wod.Data {
 				throw new System.ArgumentNullException( "filePathName" );
 			}
 
+			this.LoadAssemblies( this.WorkOrder );
 			var table = new System.Data.DataTable();
 			try {
 				var list = this.ExecuteMap( this.ReadFile( filePathName ) );
@@ -126,14 +131,27 @@ namespace Icod.Wod.Data {
 		}
 		private System.Object ReadFile( System.String fileName ) {
 			using ( var fileStream = System.IO.File.Open( fileName, System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.Read ) ) {
-				using ( var streamReader = new System.IO.StreamReader( fileStream, System.Text.Encoding.ASCII, true, 16384, true ) ) {
-					var typeName = this.DeserializeAs.TrimToNull();
+				using ( var streamReader = new System.IO.StreamReader( fileStream, System.Text.Encoding.ASCII, true, this.BufferLength, true ) ) {
+					var typeName = this.TypeName.TrimToNull();
 					var engine = new Newtonsoft.Json.JsonSerializer();
 					using ( var reader = new Newtonsoft.Json.JsonTextReader( streamReader ) ) {
 						return (  System.String.IsNullOrEmpty( typeName ) )
 							? engine.Deserialize( reader )
 							: engine.Deserialize( reader, System.Type.GetType( typeName, true, false ) )
 						;
+					}
+				}
+			}
+		}
+		private void LoadAssemblies( WorkOrder workOrder ) {
+			foreach ( var fd in ( this.Assemblies ?? new File.FileDescriptor[ 0 ] ) ) {
+				var handler = fd.GetFileHandler( workOrder );
+				foreach ( var file in handler.ListFiles() ) {
+					using ( var reader = handler.OpenReader( file.File ) ) {
+						using ( var raw = new System.IO.MemoryStream() ) {
+							reader.CopyTo( raw );
+							System.Reflection.Assembly.Load( raw.ToArray() );
+						}
 					}
 				}
 			}
