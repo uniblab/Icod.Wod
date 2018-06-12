@@ -39,6 +39,16 @@ namespace Icod.Wod.Data {
 			set;
 		}
 
+		[System.Xml.Serialization.XmlArray(
+			IsNullable = false,
+			Namespace = "http://Icod.Wod",
+			ElementName = "assemblies"
+		)]
+		[System.Xml.Serialization.XmlArrayItem(
+			"assembly",
+			IsNullable = false,
+			Namespace = "http://Icod.Wod"
+		)]
 		public File.FileDescriptor[] Assemblies {
 			get;
 			set;
@@ -91,10 +101,10 @@ namespace Icod.Wod.Data {
 				throw new System.ArgumentNullException( "filePathName" );
 			}
 
-			this.LoadAssemblies( this.WorkOrder );
 			var table = new System.Data.DataTable();
 			try {
-				var list = this.ExecuteMap( this.ReadFile( filePathName ) );
+				var assemblies = this.LoadAssemblies( this.WorkOrder );
+				var list = this.ExecuteMap( this.ReadFile( filePathName, assemblies ), assemblies );
 				var pi = list.GetType().GetGenericArguments().Last().GetProperties();
 				foreach ( var p in pi ) {
 					table.Columns.Add( new System.Data.DataColumn( p.Name ) );
@@ -124,37 +134,47 @@ namespace Icod.Wod.Data {
 
 			return table;
 		}
-		private System.Collections.Generic.IEnumerable<System.Object> ExecuteMap( System.Object obj ) {
-			var t = System.Type.GetType( this.MapWith, true, false );
-			var mapper = (IMapWith)System.Activator.CreateInstance( t );
-			return mapper.ExecuteMap( obj );
+		private System.Collections.Generic.IEnumerable<System.Object> ExecuteMap( System.Object obj, System.Collections.Generic.IEnumerable<System.Reflection.Assembly> collection ) {
+			var t = this.GetTypeFromName( this.MapWith, collection );
+			var mapper = (Icod.Wod.Map.IMapWith)System.Activator.CreateInstance( t );
+			var output = mapper.ExecuteMap( obj );
+			return output;
 		}
-		private System.Object ReadFile( System.String fileName ) {
+		private System.Type GetJsonType( System.Collections.Generic.IEnumerable<System.Reflection.Assembly> collection ) {
+			return this.GetTypeFromName( this.TypeName, collection );
+		}
+		private System.Type GetTypeFromName( System.String name, System.Collections.Generic.IEnumerable<System.Reflection.Assembly> collection ) {
+			return collection.Select(
+				x => x.GetType( name, true, false )
+			).Where(
+				x => null != x
+			).FirstOrDefault();
+		}
+		private System.Object ReadFile( System.String fileName, System.Collections.Generic.IEnumerable<System.Reflection.Assembly> collection ) {
 			using ( var fileStream = System.IO.File.Open( fileName, System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.Read ) ) {
 				using ( var streamReader = new System.IO.StreamReader( fileStream, System.Text.Encoding.ASCII, true, this.BufferLength, true ) ) {
-					var typeName = this.TypeName.TrimToNull();
 					var engine = new Newtonsoft.Json.JsonSerializer();
 					using ( var reader = new Newtonsoft.Json.JsonTextReader( streamReader ) ) {
-						return (  System.String.IsNullOrEmpty( typeName ) )
-							? engine.Deserialize( reader )
-							: engine.Deserialize( reader, System.Type.GetType( typeName, true, false ) )
-						;
+						var output = engine.Deserialize( reader, this.GetTypeFromName( this.TypeName, collection ) );
+						return output;
 					}
 				}
 			}
 		}
-		private void LoadAssemblies( WorkOrder workOrder ) {
+		private System.Collections.Generic.IEnumerable<System.Reflection.Assembly> LoadAssemblies( WorkOrder workOrder ) {
+			System.Collections.Generic.ICollection<System.Reflection.Assembly> output = new System.Collections.Generic.List<System.Reflection.Assembly>();
 			foreach ( var fd in ( this.Assemblies ?? new File.FileDescriptor[ 0 ] ) ) {
 				var handler = fd.GetFileHandler( workOrder );
 				foreach ( var file in handler.ListFiles() ) {
 					using ( var reader = handler.OpenReader( file.File ) ) {
 						using ( var raw = new System.IO.MemoryStream() ) {
 							reader.CopyTo( raw );
-							System.Reflection.Assembly.Load( raw.ToArray() );
+							output.Add( System.Reflection.Assembly.Load( raw.ToArray() ) );
 						}
 					}
 				}
 			}
+			return output;
 		}
 		#endregion methods
 
