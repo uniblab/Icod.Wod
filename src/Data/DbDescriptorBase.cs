@@ -275,11 +275,10 @@ namespace Icod.Wod.Data {
 					var amap = adapter.TableMappings;
 					using ( var cb = this.CreateCommandBuilder( workOrder, adapter ) ) {
 						System.Data.Common.DataTableMapping tmap;
-						System.Data.DataTable dest;
 						using ( var set = new System.Data.DataSet() ) {
 							this.FillSchema( adapter, set );
 							var tableName = this.TableName;
-							dest = set.Tables[ tableName ];
+							var dest = set.Tables[ tableName ];
 							foreach ( var t in source.ReadTables( workOrder ) ) {
 								amap.Clear();
 								tmap = amap.Add( tableName, t.TableName );
