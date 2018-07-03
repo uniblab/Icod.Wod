@@ -95,7 +95,7 @@ namespace Icod.Wod.File {
 			return CodePageHelper.GetCodePage( this.CodePage );
 		}
 		protected abstract System.Collections.Generic.IEnumerable<FileEntry> GetEntries( FileHandlerBase source );
-		public override void DoWork( WorkOrder workOrder ) {
+		public override void DoWork( WorkOrder workOrder, IStack<ContextRecord> context ) {
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			var source = this.GetFileHandler( workOrder );
 			if ( null == source ) {

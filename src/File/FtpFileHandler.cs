@@ -157,7 +157,7 @@ namespace Icod.Wod.File {
 			;
 			var uri = new System.Uri( filePathName );
 			var ftp = this.GetFtpClient( uri, System.Net.WebRequestMethods.Ftp.ListDirectoryDetails );
-			var regexPattern = fd.WorkOrder.ExpandVariables( fd.RegexPattern );
+			var regexPattern = fd.WorkOrder.ExpandPseudoVariables( fd.RegexPattern );
 			var list = this.ReadLines( ftp );
 			return list.Select(
 				x => new FileEntry {
@@ -196,7 +196,7 @@ namespace Icod.Wod.File {
 					return y[ y.Length - 1 ];
 				}
 			);
-			var regexPattern = fd.WorkOrder.ExpandVariables( fd.RegexPattern );
+			var regexPattern = fd.WorkOrder.ExpandPseudoVariables( fd.RegexPattern );
 			return ( System.String.IsNullOrEmpty( regexPattern )
 				? list
 				: list.Where(
@@ -220,7 +220,7 @@ namespace Icod.Wod.File {
 			;
 			var uri = new System.Uri( filePathName );
 			var ftp = this.GetFtpClient( uri, System.Net.WebRequestMethods.Ftp.ListDirectoryDetails );
-			var regexPattern = fd.WorkOrder.ExpandVariables( fd.RegexPattern );
+			var regexPattern = fd.WorkOrder.ExpandPseudoVariables( fd.RegexPattern );
 			var list = this.ReadLines( ftp ).Where(
 				x => x.StartsWith( "d", System.StringComparison.OrdinalIgnoreCase )
 			).Select(

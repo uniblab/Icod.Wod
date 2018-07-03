@@ -14,19 +14,12 @@ namespace Icod.Wod {
 		private const System.String DateTimeFormat = @"(?<DateTimeFormat>%wod:DateTime\{(?<dateTimeFormatString>[^\}]+)\}%)";
 
 		private ConnectionStringEntry[] myConnectionStrings;
-		[System.NonSerialized]
-		private readonly System.Collections.Generic.IDictionary<System.String,System.String> myDict;
+		private Variable[] myVariables;
 		#endregion fields
 
 
 		#region .ctor
 		public WorkOrder() : base() {
-			myDict = new System.Collections.Generic.Dictionary<System.String, System.String>( System.StringComparer.OrdinalIgnoreCase ) {
-				{ "%wod:File-PathName%", System.String.Empty },
-				{ "%wod:File-Path%", System.String.Empty },
-				{ "%wod:File-Name%", System.String.Empty },
-				{ "%wod:File-NameWithoutExtension%", System.String.Empty }
-			};
 		}
 		#endregion .ctor
 
@@ -75,6 +68,25 @@ namespace Icod.Wod {
 		[System.Xml.Serialization.XmlArray(
 			IsNullable = false,
 			Namespace = "http://Icod.Wod",
+			ElementName = "variables"
+		)]
+		[System.Xml.Serialization.XmlArrayItem(
+			"variable",
+			IsNullable = false,
+			Namespace = "http://Icod.Wod"
+		)]
+		public Variable[] Variables {
+			get {
+				return myVariables;
+			}
+			set {
+				myVariables = value;
+			}
+		}
+
+		[System.Xml.Serialization.XmlArray(
+			IsNullable = false,
+			Namespace = "http://Icod.Wod",
 			ElementName = "steps"
 		)]
 		[System.Xml.Serialization.XmlArrayItem(
@@ -106,13 +118,6 @@ namespace Icod.Wod {
 			get;
 			set;
 		}
-
-		[System.Xml.Serialization.XmlIgnore]
-		public System.Collections.Generic.IDictionary<System.String,System.String> VarDictionary {
-			get {
-				return myDict;
-			}
-		}
 		#endregion properties
 
 
@@ -136,18 +141,43 @@ namespace Icod.Wod {
 			}
 		}
 
-		public System.String ExpandVariables( System.String @string ) {
+		private System.String ExpandEnvironmentVariables( System.String @string ) {
 			@string = @string.TrimToNull();
 			if ( System.String.IsNullOrEmpty( @string ) ) {
 				return null;
 			}
-			@string = System.Environment.ExpandEnvironmentVariables( @string );
+			return System.Environment.ExpandEnvironmentVariables( @string );
+		}
+		private System.String ExpandWodVariables( System.String @string ) {
+			@string = @string.TrimToNull();
+			if ( System.String.IsNullOrEmpty( @string ) ) {
+				return null;
+			}
 			foreach ( System.Text.RegularExpressions.Match m in System.Text.RegularExpressions.Regex.Matches( @string, DateTimeFormat ) ) {
 				@string = System.Text.RegularExpressions.Regex.Replace( @string, m.Value, System.DateTime.Now.ToString( m.Groups[ "dateTimeFormatString" ].Value ) );
 			}
 			@string = @string.Replace( "%wod:EmailTo%", this.EmailTo );
 			@string = @string.Replace( "%wod:JobName%", this.JobName );
-			@string = System.Environment.ExpandEnvironmentVariables( @string );
+			return @string;
+		}
+		private System.String ExpandWorkOrderVariables( System.String @string ) {
+			@string = @string.TrimToNull();
+			if ( System.String.IsNullOrEmpty( @string ) ) {
+				return null;
+			}
+			foreach ( var @var in ( this.Variables ?? new Variable[ 0 ] ) ) {
+				@string = @string.Replace( "%var:" + @var.Name + "%", @var.Value ?? System.String.Empty );
+			}
+			return @string;
+		}
+		public System.String ExpandPseudoVariables( System.String @string ) {
+			@string = @string.TrimToNull();
+			if ( System.String.IsNullOrEmpty( @string ) ) {
+				return null;
+			}
+			@string = this.ExpandWorkOrderVariables( @string );
+			@string = this.ExpandWodVariables( @string );
+			@string = this.ExpandEnvironmentVariables( @string );
 			return @string;
 		}
 

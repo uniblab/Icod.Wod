@@ -42,7 +42,7 @@ namespace Icod.Wod.File {
 
 
 		#region methods
-		public sealed override void DoWork( WorkOrder workOrder ) {
+		public sealed override void DoWork( WorkOrder workOrder, IStack<ContextRecord> context ) {
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			var fh = this.GetFileHandler( workOrder );
 			foreach ( var fe in fh.ListDirectories() ) {

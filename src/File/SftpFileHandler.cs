@@ -178,7 +178,7 @@ namespace Icod.Wod.File {
 				: this.PathCombine( fd.ExpandedPath, fd.ExpandedName )
 			;
 			var uri = new System.Uri( filePathName );
-			var regexPattern = fd.WorkOrder.ExpandVariables( fd.RegexPattern );
+			var regexPattern = fd.WorkOrder.ExpandPseudoVariables( fd.RegexPattern );
 			using ( var client = this.GetSftpClient( uri ) ) {
 				client.Connect();
 				return this.GetRemoteList( client, uri.AbsolutePath, regexPattern ).Select(
@@ -201,7 +201,7 @@ namespace Icod.Wod.File {
 				: this.PathCombine( fd.ExpandedPath, fd.ExpandedName )
 			;
 			var uri = new System.Uri( filePathName );
-			var regexPattern = fd.WorkOrder.ExpandVariables( fd.RegexPattern );
+			var regexPattern = fd.WorkOrder.ExpandPseudoVariables( fd.RegexPattern );
 			using ( var client = this.GetSftpClient( uri ) ) {
 				client.Connect();
 				return this.GetRemoteList( client, uri.AbsolutePath, regexPattern ).Where(
@@ -222,7 +222,7 @@ namespace Icod.Wod.File {
 				: this.PathCombine( fd.ExpandedPath, fd.ExpandedName )
 			;
 			var uri = new System.Uri( filePathName );
-			var regexPattern = fd.WorkOrder.ExpandVariables( fd.RegexPattern );
+			var regexPattern = fd.WorkOrder.ExpandPseudoVariables( fd.RegexPattern );
 			using ( var client = this.GetSftpClient( uri ) ) {
 				client.Connect();
 				return this.GetRemoteList( client, uri.AbsolutePath, regexPattern ).Where(

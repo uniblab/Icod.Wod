@@ -47,7 +47,7 @@ namespace Icod.Wod.File {
 		[System.Xml.Serialization.XmlIgnore]
 		public virtual System.String ExpandedPath {
 			get {
-				return this.WorkOrder.ExpandVariables( myPath );
+				return this.WorkOrder.ExpandPseudoVariables( myPath );
 			}
 		}
 
@@ -67,7 +67,7 @@ namespace Icod.Wod.File {
 		[System.Xml.Serialization.XmlIgnore]
 		public virtual System.String ExpandedName {
 			get {
-				return this.WorkOrder.ExpandVariables( myName );
+				return this.WorkOrder.ExpandPseudoVariables( myName );
 			}
 		}
 

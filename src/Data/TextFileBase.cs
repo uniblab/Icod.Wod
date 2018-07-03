@@ -239,29 +239,32 @@ namespace Icod.Wod.Data {
 			}
 		}
 
-		public sealed override void WriteRecords( Icod.Wod.WorkOrder workOrder, ITableSource source ) {
-			if ( null == source ) {
-				throw new System.ArgumentNullException( "source" );
-			} else if ( null == workOrder ) {
+		protected sealed override void WriteRecords( Icod.Wod.WorkOrder workOrder, System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Collections.Generic.IEnumerable<System.Data.DataRow> rows ) {
+#if DEBUG
+			if ( null == workOrder ) {
 				throw new System.ArgumentNullException( "workOrder" );
 			}
-
-			using ( var table = source.ReadTables( workOrder ).FirstOrDefault() ) {
-				var rows = table.Rows.OfType<System.Data.DataRow>();
-				if ( !rows.Any() && !this.WriteIfEmpty ) {
-					return;
+#endif
+			var cols = ( columns ?? new System.Data.DataColumn[ 0 ] );
+			if ( this.WriteIfEmpty ) {
+				if ( !cols.Any() ) {
+					throw new System.ArgumentNullException( "columns" );
 				}
-				using ( var buffer = new System.IO.MemoryStream() ) {
-					using ( var writer = new System.IO.StreamWriter( buffer, this.GetEncoding(), this.BufferLength ) ) {
-						var dbColumns = table.Columns.OfType<System.Data.DataColumn>();
-						this.WriteHeader( writer, dbColumns );
-						var formatMap = this.BuildFormatMap( dbColumns );
-						foreach ( var row in rows ) {
-							this.WriteRow( writer, formatMap, dbColumns, row );
-						}
-						writer.Flush();
-						this.WriteFile( buffer );
+			} else if (
+				( !( rows ?? new System.Data.DataRow[ 0 ] ).Any() )
+				|| ( !cols.Any() )
+			) {
+				return;
+			}
+			using ( var buffer = new System.IO.MemoryStream() ) {
+				using ( var writer = new System.IO.StreamWriter( buffer, this.GetEncoding(), this.BufferLength ) ) {
+					this.WriteHeader( writer, columns );
+					var formatMap = this.BuildFormatMap( columns );
+					foreach ( var row in rows ) {
+						this.WriteRow( writer, formatMap, columns, row );
 					}
+					writer.Flush();
+					this.WriteFile( buffer );
 				}
 			}
 		}

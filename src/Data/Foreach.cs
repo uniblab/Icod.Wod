@@ -1,16 +1,17 @@
 ﻿using System.Linq;
 
-namespace Icod.Wod {
+namespace Icod.Wod.Data {
 
 	[System.Serializable]
 	[System.Xml.Serialization.XmlType(
-		"parallel",
-		Namespace = "http://Icod.Wod"
+		"foreach",
+		Namespace = "http://Icod.Wod",
+		IncludeInSchema = true
 	)]
-	public sealed class Parallel : IStep {
+	internal abstract class Foreach : DbOperationBase {
 
 		#region .ctor
-		public Parallel() : base() {
+		public Foreach() : base() {
 		}
 		#endregion .ctor
 
@@ -23,6 +24,11 @@ namespace Icod.Wod {
 		)]
 		[System.Xml.Serialization.XmlArrayItem(
 			typeof( Email ),
+			IsNullable = false,
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.Xml.Serialization.XmlArrayItem(
+			typeof( Parallel ),
 			IsNullable = false,
 			Namespace = "http://Icod.Wod"
 		)]
@@ -45,25 +51,22 @@ namespace Icod.Wod {
 			get;
 			set;
 		}
-
-		[System.Xml.Serialization.XmlIgnore]
-		public IStack<ContextRecord> Context {
-			get;
-			set;
-		}
 		#endregion properties
 
 
 		#region methods
-		public void DoWork( WorkOrder workOrder ) {
-			this.DoWork( workOrder,  Stack<ContextRecord>.Empty );
-		}
-		public void DoWork( Icod.Wod.WorkOrder workOrder, IStack<ContextRecord> context ) {
-			var steps = ( this.Steps ?? new IStep[ 0 ] );
-			if ( steps.Any() ) {
-				System.Threading.Tasks.Parallel.Invoke( steps.OfType<IStep>().Select<IStep, System.Action>(
-					x => () => x.DoWork( workOrder )
-				).ToArray() );
+		public sealed override void DoWork( Icod.Wod.WorkOrder workOrder, IStack<ContextRecord> context ) {
+			using ( var cnxn = this.CreateConnection( workOrder ) ) {
+				if ( System.Data.ConnectionState.Open != cnxn.State ) {
+					cnxn.Open();
+				}
+				using ( var cmd = this.CreateCommand( cnxn ) ) {
+					using ( var rdr = cmd.ExecuteReader() ) {
+						foreach (  var step in ( this.Steps ?? new System.Object[ 0 ] ).OfType<IStep>() ) {
+							//step.DoWork( workOrder );
+						}
+					}
+				}
 			}
 		}
 		#endregion methods

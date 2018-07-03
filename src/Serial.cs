@@ -40,11 +40,20 @@ namespace Icod.Wod {
 			get;
 			set;
 		}
+
+		[System.Xml.Serialization.XmlIgnore]
+		public IStack<ContextRecord> Context {
+			get;
+			set;
+		}
 		#endregion properties
 
 
 		#region methods
-		public void DoWork( Icod.Wod.WorkOrder workOrder ) {
+		public void DoWork( WorkOrder workOrder ) {
+			this.DoWork( workOrder, Stack<ContextRecord>.Empty );
+		}
+		public void DoWork( Icod.Wod.WorkOrder workOrder, IStack<ContextRecord> context ) {
 			foreach ( var step in ( this.Steps ?? new IStep[ 0 ] ).OfType<IStep>() ) {
 				step.DoWork( workOrder );
 			}

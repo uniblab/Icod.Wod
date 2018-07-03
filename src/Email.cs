@@ -181,15 +181,24 @@ namespace Icod.Wod {
 				myAttachments = value;
 			}
 		}
+
+		[System.Xml.Serialization.XmlIgnore]
+		public IStack<ContextRecord> Context {
+			get;
+			set;
+		}
 		#endregion properties
 
 
 		#region methods
 		public void DoWork( Icod.Wod.WorkOrder workOrder ) {
+			this.DoWork( workOrder, Stack<ContextRecord>.Empty );
+		}
+		public void DoWork( Icod.Wod.WorkOrder workOrder, IStack<ContextRecord> context ) {
 			this.WorkOrder = workOrder;
 			using ( var msg = new System.Net.Mail.MailMessage() ) {
 				msg.IsBodyHtml = this.BodyIsHtml;
-				msg.Body = workOrder.ExpandVariables( this.Body );
+				msg.Body = workOrder.ExpandPseudoVariables( this.Body );
 				File.FileHandlerBase handler;
 				foreach ( var a in ( this.Attachments ?? new Icod.Wod.File.FileDescriptor[ 0 ] ) ) {
 					handler = a.GetFileHandler( workOrder );
@@ -210,13 +219,13 @@ namespace Icod.Wod {
 					return;
 				}
 
-				msg.Subject = workOrder.ExpandVariables( this.Subject );
-				msg.To.Add( workOrder.ExpandVariables( this.To ) );
+				msg.Subject = workOrder.ExpandPseudoVariables( this.Subject );
+				msg.To.Add( workOrder.ExpandPseudoVariables( this.To ) );
 				if ( !System.String.IsNullOrEmpty( this.CC ) ) {
-					msg.CC.Add( workOrder.ExpandVariables( this.CC ) );
+					msg.CC.Add( workOrder.ExpandPseudoVariables( this.CC ) );
 				}
 				if ( !System.String.IsNullOrEmpty( this.Bcc ) ) {
-					msg.Bcc.Add( workOrder.ExpandVariables( this.Bcc ) );
+					msg.Bcc.Add( workOrder.ExpandPseudoVariables( this.Bcc ) );
 				}
 				using ( var client = new System.Net.Mail.SmtpClient() ) {
 					client.Send( msg );

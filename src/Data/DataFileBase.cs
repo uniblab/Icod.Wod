@@ -66,7 +66,50 @@ namespace Icod.Wod.Data {
 
 
 		#region methods
-		public abstract void WriteRecords( Icod.Wod.WorkOrder workOrder, ITableSource source );
+		public virtual void WriteRecords( Icod.Wod.WorkOrder workOrder, ITableSource source ) {
+			if ( null == source ) {
+				if ( this.WriteIfEmpty ) {
+					throw new System.ArgumentNullException( "source" );
+				} else {
+					return;
+				}
+			} else if ( null == workOrder ) {
+				throw new System.ArgumentNullException( "workOrder" );
+			}
+			this.WriteRecords( workOrder, source.ReadTables( workOrder ).OfType<System.Data.DataTable>() );
+		}
+		protected virtual void WriteRecords( Icod.Wod.WorkOrder workOrder, System.Collections.Generic.IEnumerable<System.Data.DataTable> source ) {
+#if DEBUG
+			if ( ( null == source ) || !source.Any() ) {
+				if ( this.WriteIfEmpty ) {
+					throw new System.ArgumentNullException( "source" );
+				} else {
+					return;
+				}
+			} else if ( null == workOrder ) {
+				throw new System.ArgumentNullException( "workOrder" );
+			}
+#endif
+			using ( var table = source.FirstOrDefault() ) {
+				this.WriteRecords( workOrder, table );
+			}
+		}
+		protected virtual void WriteRecords( Icod.Wod.WorkOrder workOrder, System.Data.DataTable source ) {
+#if DEBUG
+			if ( null == source ) {
+				if ( this.WriteIfEmpty ) {
+					throw new System.ArgumentNullException( "source" );
+				} else {
+					return;
+				}
+			} else if ( null == workOrder ) {
+				throw new System.ArgumentNullException( "workOrder" );
+			}
+#endif
+			this.WriteRecords( workOrder, source.Columns.OfType<System.Data.DataColumn>(), source.Rows.OfType<System.Data.DataRow>() );
+		}
+		protected abstract void WriteRecords( Icod.Wod.WorkOrder workOrder, System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Collections.Generic.IEnumerable<System.Data.DataRow> rows );
+
 		protected System.Collections.Generic.IDictionary<System.Data.DataColumn, ColumnBase> BuildFormatMap( System.Collections.Generic.IEnumerable<System.Data.DataColumn> dbColumns ) {
 			if ( ( null == dbColumns ) || !dbColumns.Any() ) {
 				throw new System.ArgumentNullException( "dbColumns" );

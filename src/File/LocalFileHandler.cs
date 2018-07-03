@@ -80,7 +80,7 @@ namespace Icod.Wod.File {
 
 		public sealed override System.Collections.Generic.IEnumerable<FileEntry> ListFiles() {
 			var fd = this.FileDescriptor;
-			var regexPattern = fd.WorkOrder.ExpandVariables( fd.RegexPattern );
+			var regexPattern = fd.WorkOrder.ExpandPseudoVariables( fd.RegexPattern );
 			var list = System.IO.Directory.EnumerateFiles( fd.ExpandedPath, fd.ExpandedName, fd.SearchOption );
 			return ( ( System.String.IsNullOrEmpty( regexPattern ) )
 				? list
@@ -97,7 +97,7 @@ namespace Icod.Wod.File {
 		}
 		public sealed override System.Collections.Generic.IEnumerable<FileEntry> ListDirectories() {
 			var fd = this.FileDescriptor;
-			var regexPattern = fd.WorkOrder.ExpandVariables( fd.RegexPattern );
+			var regexPattern = fd.WorkOrder.ExpandPseudoVariables( fd.RegexPattern );
 			var list = System.IO.Directory.EnumerateDirectories( fd.ExpandedPath, fd.ExpandedName, fd.SearchOption );
 			return ( ( System.String.IsNullOrEmpty( regexPattern ) )
 				? list
