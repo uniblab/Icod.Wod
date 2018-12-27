@@ -18,6 +18,7 @@ namespace Icod.Wod.Data {
 
 		#region methods
 		public sealed override void DoWork( Icod.Wod.WorkOrder workOrder, IStack<ContextRecord> context ) {
+			this.Context = context ?? Stack<ContextRecord>.Empty;
 			using ( var cnxn = this.CreateConnection( workOrder ) ) {
 				if ( System.Data.ConnectionState.Open != cnxn.State ) {
 					cnxn.Open();

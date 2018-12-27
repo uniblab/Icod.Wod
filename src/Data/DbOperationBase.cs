@@ -1,5 +1,6 @@
 ﻿namespace Icod.Wod.Data {
 
+	[System.Serializable]
 	[System.Xml.Serialization.XmlInclude( typeof( Command ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( FileImport ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( FileExport ) )]

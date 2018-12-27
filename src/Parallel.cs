@@ -59,6 +59,7 @@ namespace Icod.Wod {
 			this.DoWork( workOrder,  Stack<ContextRecord>.Empty );
 		}
 		public void DoWork( Icod.Wod.WorkOrder workOrder, IStack<ContextRecord> context ) {
+			this.Context = context ?? Stack<ContextRecord>.Empty;
 			var steps = ( this.Steps ?? new IStep[ 0 ] );
 			if ( steps.Any() ) {
 				System.Threading.Tasks.Parallel.Invoke( steps.OfType<IStep>().Select<IStep, System.Action>(

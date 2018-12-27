@@ -119,6 +119,7 @@ namespace Icod.Wod.File {
 
 		#region methods
 		public sealed override void DoWork( WorkOrder workOrder, IStack<ContextRecord> context ) {
+			this.Context = context ?? Stack<ContextRecord>.Empty;
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 
 			var prog = new LocalFileHandler( workOrder, this ).PathCombine( this.ExpandedPath, this.ExpandedName ).TrimToNull();

@@ -37,6 +37,7 @@ namespace Icod.Wod.Data {
 
 		#region methods
 		public sealed override void DoWork( Icod.Wod.WorkOrder workOrder, IStack<ContextRecord> context ) {
+			this.Context = context ?? Stack<ContextRecord>.Empty;
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			this.WriteRecords( workOrder, this.Source );
 		}

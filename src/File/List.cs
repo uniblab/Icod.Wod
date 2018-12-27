@@ -8,7 +8,7 @@ namespace Icod.Wod.File {
 		Namespace = "http://Icod.Wod",
 		IncludeInSchema = true
 	)]
-	public sealed class List : FileOrDirectoryLister {
+	public sealed class List : FileOrDirectoryListerBase {
 
 		#region .ctor
 		public List() : base() {
@@ -25,7 +25,8 @@ namespace Icod.Wod.File {
 			}
 			return source.List();
 		}
-		public sealed override void DoWork( WorkOrder workOrder ) {
+		public sealed override void DoWork( WorkOrder workOrder, IStack<ContextRecord> context ) {
+			this.Context = context ?? Stack<ContextRecord>.Empty;
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			var source = this.GetFileHandler( workOrder );
 			if ( null == source ) {

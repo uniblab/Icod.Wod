@@ -70,7 +70,8 @@ namespace Icod.Wod.File {
 				passwd
 			);
 			client.Method = method;
-			System.Net.ServicePointManager.ServerCertificateValidationCallback += ( System.Object sender, System.Security.Cryptography.X509Certificates.X509Certificate certificate, System.Security.Cryptography.X509Certificates.X509Chain chain, System.Net.Security.SslPolicyErrors sslPolicyErrors ) => ( System.Net.Security.SslPolicyErrors.None == sslPolicyErrors );
+			//System.Net.ServicePointManager.ServerCertificateValidationCallback += ( System.Object sender, System.Security.Cryptography.X509Certificates.X509Certificate certificate, System.Security.Cryptography.X509Certificates.X509Chain chain, System.Net.Security.SslPolicyErrors sslPolicyErrors ) => ( System.Net.Security.SslPolicyErrors.None == sslPolicyErrors );
+			System.Net.ServicePointManager.ServerCertificateValidationCallback += ( System.Object sender, System.Security.Cryptography.X509Certificates.X509Certificate certificate, System.Security.Cryptography.X509Certificates.X509Chain chain, System.Net.Security.SslPolicyErrors sslPolicyErrors ) => true;
 			return client;
 		}
 

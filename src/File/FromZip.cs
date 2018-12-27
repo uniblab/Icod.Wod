@@ -19,8 +19,9 @@ namespace Icod.Wod.File {
 		#endregion .ctor
 
 
-		#region methods
+		#region method
 		public sealed override void DoWork( WorkOrder workOrder, IStack<ContextRecord> context ) {
+			this.Context = context ?? Stack<ContextRecord>.Empty;
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			var destD = this.Destination;
 			destD.WorkOrder = workOrder;

@@ -54,6 +54,7 @@ namespace Icod.Wod {
 			this.DoWork( workOrder, Stack<ContextRecord>.Empty );
 		}
 		public void DoWork( Icod.Wod.WorkOrder workOrder, IStack<ContextRecord> context ) {
+			this.Context = context ?? Stack<ContextRecord>.Empty;
 			foreach ( var step in ( this.Steps ?? new IStep[ 0 ] ).OfType<IStep>() ) {
 				step.DoWork( workOrder );
 			}

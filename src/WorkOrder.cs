@@ -12,9 +12,6 @@ namespace Icod.Wod {
 
 		#region fields
 		private const System.String DateTimeFormat = @"(?<DateTimeFormat>%wod:DateTime\{(?<dateTimeFormatString>[^\}]+)\}%)";
-
-		private ConnectionStringEntry[] myConnectionStrings;
-		private Variable[] myVariables;
 		#endregion fields
 
 
@@ -57,16 +54,12 @@ namespace Icod.Wod {
 		)]
 		[System.ComponentModel.DefaultValue( null )]
 		public ConnectionStringEntry[] ConnectionStrings {
-			get {
-				return myConnectionStrings;
-			}
-			set {
-				myConnectionStrings = value;
-			}
+			get;
+			set;
 		}
 
 		[System.Xml.Serialization.XmlArray(
-			IsNullable = false,
+			IsNullable = true,
 			Namespace = "http://Icod.Wod",
 			ElementName = "variables"
 		)]
@@ -76,11 +69,31 @@ namespace Icod.Wod {
 			Namespace = "http://Icod.Wod"
 		)]
 		public Variable[] Variables {
+			get;
+			set;
+		}
+
+		[System.Xml.Serialization.XmlArray(
+			IsNullable = true,
+			Namespace = "http://Icod.Wod",
+			ElementName = "emails"
+		)]
+		[System.Xml.Serialization.XmlArrayItem(
+			"email",
+			IsNullable = false,
+			Namespace = "http://Icod.Wod"
+		)]
+		public System.String[] Email {
+			get;
+			set;
+		}
+
+		[System.Xml.Serialization.XmlIgnore]
+		public System.String EmailList {
 			get {
-				return myVariables;
-			}
-			set {
-				myVariables = value;
+				return System.String.Join( ",", ( this.Email ?? new System.String[ 0 ] ).Union( new System.String[ 1 ] { this.EmailTo ?? System.String.Empty } ).Where(
+					x => !System.String.IsNullOrEmpty( x )
+				) ) ?? System.String.Empty;
 			}
 		}
 
@@ -153,10 +166,10 @@ namespace Icod.Wod {
 			if ( System.String.IsNullOrEmpty( @string ) ) {
 				return null;
 			}
-			foreach ( System.Text.RegularExpressions.Match m in System.Text.RegularExpressions.Regex.Matches( @string, DateTimeFormat ) ) {
+			foreach ( System.Text.RegularExpressions.Match m in System.Text.RegularExpressions.Regex.Matches( @string, WorkOrder.DateTimeFormat ) ) {
 				@string = System.Text.RegularExpressions.Regex.Replace( @string, m.Value, System.DateTime.Now.ToString( m.Groups[ "dateTimeFormatString" ].Value ) );
 			}
-			@string = @string.Replace( "%wod:EmailTo%", this.EmailTo );
+			@string = @string.Replace( "%wod:EmailTo%", this.EmailList );
 			@string = @string.Replace( "%wod:JobName%", this.JobName );
 			return @string;
 		}
@@ -178,6 +191,30 @@ namespace Icod.Wod {
 			@string = this.ExpandWorkOrderVariables( @string );
 			@string = this.ExpandWodVariables( @string );
 			@string = this.ExpandEnvironmentVariables( @string );
+			return @string;
+		}
+		public System.String ExpandPseudoVariables( System.String @string, IStack<ContextRecord> context ) {
+			@string = @string.TrimToNull();
+			if ( System.String.IsNullOrEmpty( @string ) ) {
+				return null;
+			}
+			System.Collections.Generic.IEnumerable<System.Data.DataColumn> cols;
+			foreach ( var rec in ( context ?? Stack<ContextRecord>.Empty ).Where(
+				x => ( null != x.Record )
+			).Select(
+				x => x.Record
+			).Where(
+				x => ( null != x ) && ( null != x.Table ) && ( null != x.Table.Columns )
+			) ) {
+				cols = rec.Table.Columns.OfType<System.Data.DataColumn>();
+				if ( ( null == cols ) || !cols.Any() ) {
+					continue;
+				}
+				foreach ( var col in cols ) {
+					@string = @string.Replace( "%rec:" + col.ColumnName + "%", ( rec[ col ] ?? System.String.Empty ).ToString() );
+				}
+			}
+			@string = this.ExpandPseudoVariables( @string );
 			return @string;
 		}
 

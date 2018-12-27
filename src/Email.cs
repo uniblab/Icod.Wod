@@ -48,6 +48,11 @@ namespace Icod.Wod {
 				myTo = value;
 			}
 		}
+		public System.String ExpandedTo {
+			get {
+				return this.WorkOrder.ExpandPseudoVariables( this.To );
+			}
+		}
 		[System.Xml.Serialization.XmlAttribute(
 			"cc",
 			Namespace = "http://Icod.Wod"
@@ -58,6 +63,11 @@ namespace Icod.Wod {
 			}
 			set {
 				myCc = value;
+			}
+		}
+		public System.String ExpandedCC {
+			get {
+				return this.WorkOrder.ExpandPseudoVariables( this.CC );
 			}
 		}
 		[System.Xml.Serialization.XmlAttribute(
@@ -72,6 +82,11 @@ namespace Icod.Wod {
 				myBcc = value;
 			}
 		}
+		public System.String ExpandedBcc {
+			get {
+				return this.WorkOrder.ExpandPseudoVariables( this.Bcc );
+			}
+		}
 		[System.Xml.Serialization.XmlAttribute(
 			"subject",
 			Namespace = "http://Icod.Wod"
@@ -82,6 +97,11 @@ namespace Icod.Wod {
 			}
 			set {
 				mySubject = value;
+			}
+		}
+		public System.String ExpandedSubject {
+			get {
+				return this.WorkOrder.ExpandPseudoVariables( this.Subject );
 			}
 		}
 		[System.Xml.Serialization.XmlAttribute(
@@ -97,6 +117,11 @@ namespace Icod.Wod {
 				myBodyCodePage = value;
 			}
 		}
+		public System.String ExpandedBodyCodePage {
+			get {
+				return this.WorkOrder.ExpandPseudoVariables( this.BodyCodePage );
+			}
+		}
 		[System.Xml.Serialization.XmlAttribute(
 			"subjectCodePage",
 			Namespace = "http://Icod.Wod"
@@ -108,6 +133,11 @@ namespace Icod.Wod {
 			}
 			set {
 				mySubjectCodePage = value;
+			}
+		}
+		public System.String ExpandedSubjectCodePage {
+			get {
+				return this.WorkOrder.ExpandPseudoVariables( this.SubjectCodePage );
 			}
 		}
 		[System.Xml.Serialization.XmlAttribute(
@@ -195,9 +225,11 @@ namespace Icod.Wod {
 			this.DoWork( workOrder, Stack<ContextRecord>.Empty );
 		}
 		public void DoWork( Icod.Wod.WorkOrder workOrder, IStack<ContextRecord> context ) {
-			this.WorkOrder = workOrder;
+			this.Context = context ?? Stack<ContextRecord>.Empty;
+			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			using ( var msg = new System.Net.Mail.MailMessage() ) {
 				msg.IsBodyHtml = this.BodyIsHtml;
+				msg.BodyEncoding = CodePageHelper.GetCodePage( this.BodyCodePage );
 				msg.Body = workOrder.ExpandPseudoVariables( this.Body );
 				File.FileHandlerBase handler;
 				foreach ( var a in ( this.Attachments ?? new Icod.Wod.File.FileDescriptor[ 0 ] ) ) {
@@ -219,13 +251,14 @@ namespace Icod.Wod {
 					return;
 				}
 
-				msg.Subject = workOrder.ExpandPseudoVariables( this.Subject );
-				msg.To.Add( workOrder.ExpandPseudoVariables( this.To ) );
+				msg.SubjectEncoding = CodePageHelper.GetCodePage( this.SubjectCodePage );
+				msg.Subject = workOrder.ExpandPseudoVariables( this.ExpandedSubject );
+				msg.To.Add( workOrder.ExpandPseudoVariables( this.ExpandedTo ) );
 				if ( !System.String.IsNullOrEmpty( this.CC ) ) {
-					msg.CC.Add( workOrder.ExpandPseudoVariables( this.CC ) );
+					msg.CC.Add( workOrder.ExpandPseudoVariables( this.ExpandedCC ) );
 				}
 				if ( !System.String.IsNullOrEmpty( this.Bcc ) ) {
-					msg.Bcc.Add( workOrder.ExpandPseudoVariables( this.Bcc ) );
+					msg.Bcc.Add( workOrder.ExpandPseudoVariables( this.ExpandedBcc ) );
 				}
 				using ( var client = new System.Net.Mail.SmtpClient() ) {
 					client.Send( msg );

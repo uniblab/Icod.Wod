@@ -3,11 +3,11 @@
 namespace Icod.Wod.Data {
 
 	[System.Serializable]
-	[System.Xml.Serialization.XmlType(
-		"foreach",
-		Namespace = "http://Icod.Wod",
-		IncludeInSchema = true
-	)]
+	//[System.Xml.Serialization.XmlType(
+	//	"foreach",
+	//	Namespace = "http://Icod.Wod",
+	//	IncludeInSchema = true
+	//)]
 	internal abstract class Foreach : DbOperationBase {
 
 		#region .ctor
@@ -60,13 +60,7 @@ namespace Icod.Wod.Data {
 				if ( System.Data.ConnectionState.Open != cnxn.State ) {
 					cnxn.Open();
 				}
-				using ( var cmd = this.CreateCommand( cnxn ) ) {
-					using ( var rdr = cmd.ExecuteReader() ) {
-						foreach (  var step in ( this.Steps ?? new System.Object[ 0 ] ).OfType<IStep>() ) {
-							//step.DoWork( workOrder );
-						}
-					}
-				}
+				// need to work out the datatableadapter logic here, iterate foreach row, passing this.Context.Push( row ) as the context.
 			}
 		}
 		#endregion methods

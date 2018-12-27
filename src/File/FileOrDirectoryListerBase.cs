@@ -6,7 +6,7 @@ namespace Icod.Wod.File {
 	[System.Xml.Serialization.XmlInclude( typeof( List ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( ListFile ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( ListDirectory ) )]
-	public abstract class FileOrDirectoryLister : BinaryFileOperationBase {
+	public abstract class FileOrDirectoryListerBase : BinaryFileOperationBase {
 
 		#region fields
 		private System.String myCodePage;
@@ -17,13 +17,13 @@ namespace Icod.Wod.File {
 
 
 		#region .ctor
-		protected FileOrDirectoryLister() : base() {
+		protected FileOrDirectoryListerBase() : base() {
 			myCodePage = "windows-1252";
 			myTruncateEntryName = true;
 			myWriteIfEmpty = true;
 			myBufferLength = 16384;
 		}
-		protected FileOrDirectoryLister( WorkOrder workOrder ) : base( workOrder ) {
+		protected FileOrDirectoryListerBase( WorkOrder workOrder ) : base( workOrder ) {
 			myCodePage = "windows-1252";
 			myTruncateEntryName = true;
 			myWriteIfEmpty = true;
@@ -96,6 +96,7 @@ namespace Icod.Wod.File {
 		}
 		protected abstract System.Collections.Generic.IEnumerable<FileEntry> GetEntries( FileHandlerBase source );
 		public override void DoWork( WorkOrder workOrder, IStack<ContextRecord> context ) {
+			this.Context = context ?? Stack<ContextRecord>.Empty;
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			var source = this.GetFileHandler( workOrder );
 			if ( null == source ) {
