@@ -1,504 +1,511 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://Icod.Wod" elementFormDefault="qualified" targetNamespace="http://Icod.Wod" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import />
-  <xs:attribute name="name" type="xs:string" />
-  <xs:attribute default="System.Data.SqlClient" name="providerName" type="xs:string" />
-  <xs:attribute name="connectionString" type="xs:string" />
-  <xs:complexType name="email">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="1" name="body" type="xs:string" />
-      <xs:element minOccurs="0" maxOccurs="1" name="attachments" type="tns:ArrayOfFileDescriptor" />
-    </xs:sequence>
-    <xs:attribute name="to" type="xs:string" />
-    <xs:attribute name="cc" type="xs:string" />
-    <xs:attribute name="bcc" type="xs:string" />
-    <xs:attribute name="subject" type="xs:string" />
-    <xs:attribute default="us-ascii" name="bodyCodePage" type="xs:string" />
-    <xs:attribute default="us-ascii" name="subjectCodePage" type="xs:string" />
-    <xs:attribute default="false" name="bodyIsHtml" type="xs:boolean" />
-    <xs:attribute default="false" name="sendIfEmpty" type="xs:boolean" />
-  </xs:complexType>
-  <xs:complexType name="ArrayOfFileDescriptor">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="attach" type="tns:fileDescriptor" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="fileDescriptor">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="1" name="sshKeyFile" nillable="true" type="tns:sshKeyFileDescriptor" />
-    </xs:sequence>
-    <xs:attribute name="path" type="xs:string" />
-    <xs:attribute name="name" type="xs:string" />
-    <xs:attribute name="regexPattern" type="xs:string" />
-    <xs:attribute default="TopDirectoryOnly" name="searchOption" type="tns:SearchOption" />
-    <xs:attribute name="username" type="xs:string" />
-    <xs:attribute name="password" type="xs:string" />
-    <xs:attribute default="true" name="usePassive" type="xs:boolean" />
-  </xs:complexType>
-  <xs:complexType name="sshKeyFileDescriptor">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:fileDescriptor">
-        <xs:attribute name="keyFilePassword" type="xs:string" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:simpleType name="SearchOption">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="TopDirectoryOnly" />
-      <xs:enumeration value="AllDirectories" />
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:complexType name="serial">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="1" name="steps" type="tns:ArrayOfChoice1" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="ArrayOfChoice1">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:element minOccurs="0" maxOccurs="1" name="dbOperation" type="tns:dbOperation" />
-      <xs:element minOccurs="0" maxOccurs="1" name="email" type="tns:email" />
-      <xs:element minOccurs="0" maxOccurs="1" name="fileOperation" type="tns:fileOperation" />
-    </xs:choice>
-  </xs:complexType>
-  <xs:complexType name="dbOperation" abstract="true">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:DbDescriptorBase" />
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="DbDescriptorBase" abstract="true">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="1" name="columnMapping" type="tns:ArrayOfColumnMap" />
-    </xs:sequence>
-    <xs:attribute name="connectionStringName" type="xs:string" />
-    <xs:attribute name="commandText" type="xs:string" />
-    <xs:attribute default="-2" name="commandTimeout" type="xs:int" />
-    <xs:attribute default="Text" name="commandType" type="tns:CommandType" />
-    <xs:attribute name="namespace" type="xs:string" />
-    <xs:attribute default="1" name="updateBatchSize" type="xs:int" />
-    <xs:attribute default="Add" name="missingSchemaAction" type="tns:MissingSchemaAction" />
-    <xs:attribute default="Passthrough" name="missingMappingAction" type="tns:MissingMappingAction" />
-    <xs:attribute name="tableName" type="xs:string" />
-    <xs:attribute name="schemaQuery" type="xs:string" />
-  </xs:complexType>
-  <xs:complexType name="ArrayOfColumnMap">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="map" type="tns:ColumnMap" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="ColumnMap">
-    <xs:attribute default="false" name="skip" type="xs:boolean" />
-    <xs:attribute name="from" type="xs:string" />
-    <xs:attribute name="to" type="xs:string" />
-  </xs:complexType>
-  <xs:simpleType name="CommandType">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="Text" />
-      <xs:enumeration value="StoredProcedure" />
-      <xs:enumeration value="TableDirect" />
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:simpleType name="MissingSchemaAction">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="Add" />
-      <xs:enumeration value="Ignore" />
-      <xs:enumeration value="Error" />
-      <xs:enumeration value="AddWithKey" />
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:simpleType name="MissingMappingAction">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="Passthrough" />
-      <xs:enumeration value="Ignore" />
-      <xs:enumeration value="Error" />
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:complexType name="command">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:dbOperation" />
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="DbFileBase" abstract="true">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:dbOperation" />
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="fileExport">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:DbFileBase">
-        <xs:sequence>
-          <xs:element minOccurs="0" maxOccurs="1" name="destination" type="tns:DataFileBase" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="DataFileBase" abstract="true">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:FileBase">
-        <xs:sequence>
-          <xs:element minOccurs="0" maxOccurs="1" name="columns" type="tns:ArrayOfTextFileColumn" />
-        </xs:sequence>
-        <xs:attribute default="false" name="append" type="xs:boolean" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="FileBase" abstract="true">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:fileDescriptor">
-        <xs:attribute default="windows-1252" name="codePage" type="xs:string" />
-        <xs:attribute default="false" name="writeIfEmpty" type="xs:boolean" />
-        <xs:attribute default="16384" name="bufferLength" type="xs:int" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="FileRedirection">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:FileBase" />
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="ArrayOfTextFileColumn">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="column" type="tns:TextFileColumn" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="TextFileColumn">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:ColumnBase">
-        <xs:attribute default="{0}" name="formatString" type="xs:string" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="ColumnBase" abstract="true">
-    <xs:attribute name="name" type="xs:string" />
-    <xs:attribute default="-1" name="length" type="xs:int" />
-    <xs:attribute name="nullReplacementText" type="xs:string" />
-  </xs:complexType>
-  <xs:complexType name="TextFileBase" abstract="true">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:DataFileBase">
-        <xs:attribute default="true" name="hasHeader" type="xs:boolean" />
-        <xs:attribute default="0" name="skipCount" type="xs:int" />
-        <xs:attribute default="&#xD;&#xA;" name="recordSeparator" type="xs:string" />
-        <xs:attribute default="true" name="convertEmptyStringToNull" type="xs:boolean" />
-        <xs:attribute default="true" name="trimValues" type="xs:boolean" />
-        <xs:attribute name="nullReplacementText" type="xs:string" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="delimitedFile">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:TextFileBase">
-        <xs:attribute default="9" name="fieldSeperator" type="xs:int" />
-        <xs:attribute default="34" name="quoteChar" type="xs:int" />
-        <xs:attribute default="-1" name="escapeChar" type="xs:int" />
-        <xs:attribute default="true" name="forceQuote" type="xs:boolean" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="fixedWidthFile">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:TextFileBase" />
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="jsonFile">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:DataFileBase">
-        <xs:sequence>
-          <xs:element minOccurs="0" maxOccurs="1" name="assemblies" type="tns:ArrayOfFileDescriptor1" />
-        </xs:sequence>
-        <xs:attribute name="typeName" type="xs:string" />
-        <xs:attribute name="mapWith" type="xs:string" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="ArrayOfFileDescriptor1">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="assembly" type="tns:fileDescriptor" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="fileImport">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:DbFileBase">
-        <xs:sequence>
-          <xs:element minOccurs="0" maxOccurs="1" name="source" type="tns:DataFileBase" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="fileOperation" abstract="true">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:fileDescriptor" />
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="binaryFileOperation" abstract="true">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:fileOperation">
-        <xs:sequence>
-          <xs:element minOccurs="0" maxOccurs="1" name="destination" type="tns:fileDescriptor" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="renameFile">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:binaryFileOperation" />
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="FileOrDirectoryLister" abstract="true">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:binaryFileOperation">
-        <xs:attribute default="windows-1252" name="codePage" type="xs:string" />
-        <xs:attribute default="true" name="truncateEntryName" type="xs:boolean" />
-        <xs:attribute default="false" name="writeIfEmpty" type="xs:boolean" />
-        <xs:attribute default="16384" name="bufferLength" type="xs:int" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="list">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:FileOrDirectoryLister" />
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="listDirectory">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:FileOrDirectoryLister" />
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="listFile">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:FileOrDirectoryLister" />
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:attribute default="windows-1252" name="codePage" type="xs:string" />
-  <xs:attribute default="true" name="truncateEntryName" type="xs:boolean" />
-  <xs:attribute default="false" name="writeIfEmpty" type="xs:boolean" />
-  <xs:attribute default="16384" name="bufferLength" type="xs:int" />
-  <xs:complexType name="gzipFile">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:binaryFileOperation">
-        <xs:attribute default="false" name="delete" type="xs:boolean" />
-        <xs:attribute default="Decompress" name="compressionMode" type="tns:CompressionMode" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:simpleType name="CompressionMode">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="Decompress" />
-      <xs:enumeration value="Compress" />
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:complexType name="copyFile">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:binaryFileOperation">
-        <xs:attribute default="false" name="move" type="xs:boolean" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="appendFile">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:binaryFileOperation">
-        <xs:attribute default="false" name="move" type="xs:boolean" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="zipOperation" abstract="true">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:fileOperation">
-        <xs:sequence>
-          <xs:element minOccurs="0" maxOccurs="1" name="sources" type="tns:ArrayOfFileDescriptor2" />
-        </xs:sequence>
-        <xs:attribute default="windows-1252" name="codePage" type="xs:string" />
-        <xs:attribute default="true" name="truncateEntryName" type="xs:boolean" />
-        <xs:attribute default="false" name="writeIfEmpty" type="xs:boolean" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="ArrayOfFileDescriptor2">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="source" type="tns:fileDescriptor" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="binaryZipOperation" abstract="true">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:zipOperation">
-        <xs:sequence>
-          <xs:element minOccurs="0" maxOccurs="1" name="destination" type="tns:fileDescriptor" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="listZip">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:binaryZipOperation">
-        <xs:attribute default="16384" name="bufferLength" type="xs:int" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="fromZip">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:binaryZipOperation" />
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="touchZip">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:zipOperation" />
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="rmZip">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:zipOperation" />
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="mkZip">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:zipOperation">
-        <xs:attribute default="false" name="move" type="xs:boolean" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="addZip">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:zipOperation" />
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="touchFile">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:fileOperation" />
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="rmDir">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:fileOperation">
-        <xs:attribute default="false" name="recurse" type="xs:boolean" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="mkDir">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:fileOperation" />
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="executeFile">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:fileOperation">
-        <xs:sequence>
-          <xs:element minOccurs="0" maxOccurs="1" name="stdOut" type="tns:FileRedirection" />
-          <xs:element minOccurs="0" maxOccurs="1" name="stdErr" type="tns:FileRedirection" />
-        </xs:sequence>
-        <xs:attribute name="args" type="xs:string" />
-        <xs:attribute name="workingDirectory" type="xs:string" />
-        <xs:attribute default="0" name="successExitCode" type="xs:int" />
-        <xs:attribute default="false" name="requireSuccessExitCode" type="xs:boolean" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="deleteFile">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:fileOperation" />
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="chopFile">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:fileOperation">
-        <xs:attribute default="windows-1252" name="codePage" type="xs:string" />
-        <xs:attribute default="0" name="head" type="xs:int" />
-        <xs:attribute default="0" name="tail" type="xs:int" />
-        <xs:attribute default="&#xD;&#xA;" name="recordSeparator" type="xs:string" />
-        <xs:attribute default="16384" name="bufferSize" type="xs:int" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="parallel">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="1" name="steps" type="tns:ArrayOfChoice2" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="ArrayOfChoice2">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:element minOccurs="0" maxOccurs="1" name="dbOperation" type="tns:dbOperation" />
-      <xs:element minOccurs="0" maxOccurs="1" name="email" type="tns:email" />
-      <xs:element minOccurs="0" maxOccurs="1" name="serial" type="tns:serial" />
-      <xs:element minOccurs="0" maxOccurs="1" name="fileOperation" type="tns:fileOperation" />
-    </xs:choice>
-  </xs:complexType>
-  <xs:complexType name="variable">
-    <xs:attribute name="name" type="xs:string" />
-    <xs:attribute name="value" type="xs:string" />
-  </xs:complexType>
-  <xs:element name="WorkOrder" type="tns:WorkOrder" />
-  <xs:complexType name="WorkOrder">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="1" name="connectionStrings" type="tns:ArrayOfConnectionStringEntry" />
-      <xs:element minOccurs="0" maxOccurs="1" name="variables" type="tns:ArrayOfVariable" />
-      <xs:element minOccurs="0" maxOccurs="1" name="steps" type="tns:ArrayOfChoice3" />
-    </xs:sequence>
-    <xs:attribute name="jobName" type="xs:string" />
-    <xs:attribute name="emailTo" type="xs:string" />
-  </xs:complexType>
-  <xs:complexType name="ArrayOfConnectionStringEntry">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="connectionString" type="tns:ConnectionStringEntry" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="ConnectionStringEntry">
-    <xs:attribute name="name" type="xs:string" />
-    <xs:attribute default="System.Data.SqlClient" name="providerName" type="xs:string" />
-    <xs:attribute name="connectionString" type="xs:string" />
-  </xs:complexType>
-  <xs:complexType name="ArrayOfVariable">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="variable" type="tns:variable" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="ArrayOfChoice3">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:element minOccurs="0" maxOccurs="1" name="dbOperation" type="tns:dbOperation" />
-      <xs:element minOccurs="0" maxOccurs="1" name="email" type="tns:email" />
-      <xs:element minOccurs="0" maxOccurs="1" name="serial" type="tns:serial" />
-      <xs:element minOccurs="0" maxOccurs="1" name="fileOperation" type="tns:fileOperation" />
-      <xs:element minOccurs="0" maxOccurs="1" name="parallel" type="tns:parallel" />
-    </xs:choice>
-  </xs:complexType>
-  <xs:element name="columns" type="tns:ArrayOfTextFileColumn" />
-  <xs:attribute default="false" name="append" type="xs:boolean" />
-  <xs:attribute default="true" name="hasHeader" type="xs:boolean" />
-  <xs:attribute default="0" name="skipCount" type="xs:int" />
-  <xs:attribute default="&#xD;&#xA;" name="recordSeparator" type="xs:string" />
-  <xs:attribute default="true" name="convertEmptyStringToNull" type="xs:boolean" />
-  <xs:attribute default="true" name="trimValues" type="xs:boolean" />
-  <xs:attribute name="nullReplacementText" type="xs:string" />
-  <xs:complexType name="existsFile">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:fileOperation">
-        <xs:sequence>
-          <xs:element minOccurs="0" maxOccurs="1" name="steps" type="tns:ArrayOfChoice4" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="ArrayOfChoice4">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:element minOccurs="0" maxOccurs="1" name="fileExport" type="tns:fileExport" />
-      <xs:element minOccurs="0" maxOccurs="1" name="email" type="tns:email" />
-      <xs:element minOccurs="0" maxOccurs="1" name="command" type="tns:command" />
-      <xs:element minOccurs="0" maxOccurs="1" name="fileOperation" type="tns:fileOperation" />
-      <xs:element minOccurs="0" maxOccurs="1" name="fileImport" type="tns:fileImport" />
-    </xs:choice>
-  </xs:complexType>
-  <xs:attribute default="-1" name="length" type="xs:int" />
-  <xs:attribute name="value" type="xs:string" />
-  <xs:attribute default="{0}" name="formatString" type="xs:string" />
-  <xs:attribute default="false" name="skip" type="xs:boolean" />
-  <xs:attribute name="from" type="xs:string" />
-  <xs:attribute name="to" type="xs:string" />
-  <xs:element name="columnMapping" type="tns:ArrayOfColumnMap" />
-  <xs:attribute name="connectionStringName" type="xs:string" />
-  <xs:attribute name="commandText" type="xs:string" />
-  <xs:attribute default="-2" name="commandTimeout" type="xs:int" />
-  <xs:attribute default="Text" name="commandType" type="CommandType" />
-  <xs:attribute name="namespace" type="xs:string" />
-  <xs:attribute default="1" name="updateBatchSize" type="xs:int" />
-  <xs:attribute default="Add" name="missingSchemaAction" type="MissingSchemaAction" />
-  <xs:attribute default="Passthrough" name="missingMappingAction" type="MissingMappingAction" />
-  <xs:attribute name="tableName" type="xs:string" />
-  <xs:attribute name="schemaQuery" type="xs:string" />
+	<xs:import />
+	<xs:attribute name="name" type="xs:string" />
+	<xs:attribute default="System.Data.SqlClient" name="providerName" type="xs:string" />
+	<xs:attribute name="connectionString" type="xs:string" />
+	<xs:complexType name="email">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="body" type="xs:string" />
+			<xs:element minOccurs="0" maxOccurs="1" name="attachments" type="tns:ArrayOfFileDescriptor" />
+		</xs:sequence>
+		<xs:attribute name="to" type="xs:string" />
+		<xs:attribute name="cc" type="xs:string" />
+		<xs:attribute name="bcc" type="xs:string" />
+		<xs:attribute name="subject" type="xs:string" />
+		<xs:attribute default="us-ascii" name="bodyCodePage" type="xs:string" />
+		<xs:attribute default="us-ascii" name="subjectCodePage" type="xs:string" />
+		<xs:attribute default="false" name="bodyIsHtml" type="xs:boolean" />
+		<xs:attribute default="false" name="sendIfEmpty" type="xs:boolean" />
+	</xs:complexType>
+	<xs:complexType name="ArrayOfFileDescriptor">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="attach" type="tns:fileDescriptor" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="fileDescriptor">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="sshKeyFile" nillable="true" type="tns:sshKeyFileDescriptor" />
+		</xs:sequence>
+		<xs:attribute name="path" type="xs:string" />
+		<xs:attribute name="name" type="xs:string" />
+		<xs:attribute name="regexPattern" type="xs:string" />
+		<xs:attribute default="TopDirectoryOnly" name="searchOption" type="tns:SearchOption" />
+		<xs:attribute name="username" type="xs:string" />
+		<xs:attribute name="password" type="xs:string" />
+		<xs:attribute default="true" name="usePassive" type="xs:boolean" />
+	</xs:complexType>
+	<xs:complexType name="sshKeyFileDescriptor">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:fileDescriptor">
+				<xs:attribute name="keyFilePassword" type="xs:string" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:simpleType name="SearchOption">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="TopDirectoryOnly" />
+			<xs:enumeration value="AllDirectories" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="serial">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="steps" type="tns:ArrayOfChoice1" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ArrayOfChoice1">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:element minOccurs="0" maxOccurs="1" name="dbOperation" type="tns:dbOperation" />
+			<xs:element minOccurs="0" maxOccurs="1" name="email" type="tns:email" />
+			<xs:element minOccurs="0" maxOccurs="1" name="fileOperation" type="tns:fileOperation" />
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="dbOperation" abstract="true">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:DbDescriptorBase" />
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="DbDescriptorBase" abstract="true">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="columnMapping" type="tns:ArrayOfColumnMap" />
+		</xs:sequence>
+		<xs:attribute name="connectionStringName" type="xs:string" />
+		<xs:attribute name="commandText" type="xs:string" />
+		<xs:attribute default="-2" name="commandTimeout" type="xs:int" />
+		<xs:attribute default="Text" name="commandType" type="tns:CommandType" />
+		<xs:attribute name="namespace" type="xs:string" />
+		<xs:attribute default="1" name="updateBatchSize" type="xs:int" />
+		<xs:attribute default="Add" name="missingSchemaAction" type="tns:MissingSchemaAction" />
+		<xs:attribute default="Passthrough" name="missingMappingAction" type="tns:MissingMappingAction" />
+		<xs:attribute name="tableName" type="xs:string" />
+		<xs:attribute name="schemaQuery" type="xs:string" />
+	</xs:complexType>
+	<xs:complexType name="ArrayOfColumnMap">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="map" type="tns:ColumnMap" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ColumnMap">
+		<xs:attribute default="false" name="skip" type="xs:boolean" />
+		<xs:attribute name="from" type="xs:string" />
+		<xs:attribute name="to" type="xs:string" />
+	</xs:complexType>
+	<xs:simpleType name="CommandType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Text" />
+			<xs:enumeration value="StoredProcedure" />
+			<xs:enumeration value="TableDirect" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="MissingSchemaAction">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Add" />
+			<xs:enumeration value="Ignore" />
+			<xs:enumeration value="Error" />
+			<xs:enumeration value="AddWithKey" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="MissingMappingAction">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Passthrough" />
+			<xs:enumeration value="Ignore" />
+			<xs:enumeration value="Error" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="command">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:dbOperation" />
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="DbFileBase" abstract="true">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:dbOperation" />
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="fileExport">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:DbFileBase">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="1" name="destination" type="tns:DataFileBase" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="DataFileBase" abstract="true">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:FileBase">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="1" name="columns" type="tns:ArrayOfTextFileColumn" />
+				</xs:sequence>
+				<xs:attribute default="false" name="append" type="xs:boolean" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="FileBase" abstract="true">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:fileDescriptor">
+				<xs:attribute default="windows-1252" name="codePage" type="xs:string" />
+				<xs:attribute default="false" name="writeIfEmpty" type="xs:boolean" />
+				<xs:attribute default="16384" name="bufferLength" type="xs:int" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="FileRedirection">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:FileBase" />
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ArrayOfTextFileColumn">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="column" type="tns:TextFileColumn" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TextFileColumn">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:ColumnBase">
+				<xs:attribute default="{0}" name="formatString" type="xs:string" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ColumnBase" abstract="true">
+		<xs:attribute name="name" type="xs:string" />
+		<xs:attribute default="-1" name="length" type="xs:int" />
+		<xs:attribute name="nullReplacementText" type="xs:string" />
+	</xs:complexType>
+	<xs:complexType name="TextFileBase" abstract="true">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:DataFileBase">
+				<xs:attribute default="true" name="hasHeader" type="xs:boolean" />
+				<xs:attribute default="0" name="skipCount" type="xs:int" />
+				<xs:attribute default="&#xD;&#xA;" name="recordSeparator" type="xs:string" />
+				<xs:attribute default="true" name="convertEmptyStringToNull" type="xs:boolean" />
+				<xs:attribute default="true" name="trimValues" type="xs:boolean" />
+				<xs:attribute name="nullReplacementText" type="xs:string" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="delimitedFile">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:TextFileBase">
+				<xs:attribute default="9" name="fieldSeperator" type="xs:int" />
+				<xs:attribute default="34" name="quoteChar" type="xs:int" />
+				<xs:attribute default="-1" name="escapeChar" type="xs:int" />
+				<xs:attribute default="true" name="forceQuote" type="xs:boolean" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="fixedWidthFile">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:TextFileBase" />
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="jsonFile">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:DataFileBase">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="1" name="assemblies" type="tns:ArrayOfFileDescriptor1" />
+				</xs:sequence>
+				<xs:attribute name="typeName" type="xs:string" />
+				<xs:attribute name="mapWith" type="xs:string" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ArrayOfFileDescriptor1">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="assembly" type="tns:fileDescriptor" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="fileImport">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:DbFileBase">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="1" name="source" type="tns:DataFileBase" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="fileOperation" abstract="true">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:fileDescriptor" />
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="binaryFileOperation" abstract="true">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:fileOperation">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="1" name="destination" type="tns:fileDescriptor" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="renameFile">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:binaryFileOperation" />
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="FileOrDirectoryListerBase" abstract="true">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:binaryFileOperation">
+				<xs:attribute default="windows-1252" name="codePage" type="xs:string" />
+				<xs:attribute default="true" name="truncateEntryName" type="xs:boolean" />
+				<xs:attribute default="false" name="writeIfEmpty" type="xs:boolean" />
+				<xs:attribute default="16384" name="bufferLength" type="xs:int" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="list">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:FileOrDirectoryListerBase" />
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="listDirectory">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:FileOrDirectoryListerBase" />
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="listFile">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:FileOrDirectoryListerBase" />
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:attribute default="windows-1252" name="codePage" type="xs:string" />
+	<xs:attribute default="true" name="truncateEntryName" type="xs:boolean" />
+	<xs:attribute default="false" name="writeIfEmpty" type="xs:boolean" />
+	<xs:attribute default="16384" name="bufferLength" type="xs:int" />
+	<xs:complexType name="gzipFile">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:binaryFileOperation">
+				<xs:attribute default="false" name="delete" type="xs:boolean" />
+				<xs:attribute default="Decompress" name="compressionMode" type="tns:CompressionMode" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:simpleType name="CompressionMode">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Decompress" />
+			<xs:enumeration value="Compress" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="copyFile">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:binaryFileOperation">
+				<xs:attribute default="false" name="move" type="xs:boolean" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="appendFile">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:binaryFileOperation">
+				<xs:attribute default="false" name="move" type="xs:boolean" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="zipOperation" abstract="true">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:fileOperation">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="1" name="sources" type="tns:ArrayOfFileDescriptor2" />
+				</xs:sequence>
+				<xs:attribute default="windows-1252" name="codePage" type="xs:string" />
+				<xs:attribute default="true" name="truncateEntryName" type="xs:boolean" />
+				<xs:attribute default="false" name="writeIfEmpty" type="xs:boolean" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ArrayOfFileDescriptor2">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="source" type="tns:fileDescriptor" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="binaryZipOperation" abstract="true">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:zipOperation">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="1" name="destination" type="tns:fileDescriptor" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="listZip">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:binaryZipOperation">
+				<xs:attribute default="16384" name="bufferLength" type="xs:int" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="fromZip">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:binaryZipOperation" />
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="touchZip">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:zipOperation" />
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="rmZip">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:zipOperation" />
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="mkZip">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:zipOperation">
+				<xs:attribute default="false" name="move" type="xs:boolean" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="addZip">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:zipOperation" />
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="touchFile">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:fileOperation" />
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="rmDir">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:fileOperation">
+				<xs:attribute default="false" name="recurse" type="xs:boolean" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="mkDir">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:fileOperation" />
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="executeFile">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:fileOperation">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="1" name="stdOut" type="tns:FileRedirection" />
+					<xs:element minOccurs="0" maxOccurs="1" name="stdErr" type="tns:FileRedirection" />
+				</xs:sequence>
+				<xs:attribute name="args" type="xs:string" />
+				<xs:attribute name="workingDirectory" type="xs:string" />
+				<xs:attribute default="0" name="successExitCode" type="xs:int" />
+				<xs:attribute default="false" name="requireSuccessExitCode" type="xs:boolean" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="deleteFile">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:fileOperation" />
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="chopFile">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:fileOperation">
+				<xs:attribute default="windows-1252" name="codePage" type="xs:string" />
+				<xs:attribute default="0" name="head" type="xs:int" />
+				<xs:attribute default="0" name="tail" type="xs:int" />
+				<xs:attribute default="&#xD;&#xA;" name="recordSeparator" type="xs:string" />
+				<xs:attribute default="16384" name="bufferSize" type="xs:int" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="parallel">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="steps" type="tns:ArrayOfChoice2" />
+		</xs:sequence>
+		<xs:attribute default="-1" name="maxDegreeOfParallelism" type="xs:int" />
+	</xs:complexType>
+	<xs:complexType name="ArrayOfChoice2">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:element minOccurs="0" maxOccurs="1" name="dbOperation" type="tns:dbOperation" />
+			<xs:element minOccurs="0" maxOccurs="1" name="email" type="tns:email" />
+			<xs:element minOccurs="0" maxOccurs="1" name="serial" type="tns:serial" />
+			<xs:element minOccurs="0" maxOccurs="1" name="fileOperation" type="tns:fileOperation" />
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="variable">
+		<xs:attribute name="name" type="xs:string" />
+		<xs:attribute name="value" type="xs:string" />
+	</xs:complexType>
+	<xs:element name="WorkOrder" type="tns:WorkOrder" />
+	<xs:complexType name="WorkOrder">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="connectionStrings" type="tns:ArrayOfConnectionStringEntry" />
+			<xs:element minOccurs="1" maxOccurs="1" name="variables" nillable="true" type="tns:ArrayOfVariable" />
+			<xs:element minOccurs="1" maxOccurs="1" name="emails" nillable="true" type="tns:ArrayOfString" />
+			<xs:element minOccurs="0" maxOccurs="1" name="steps" type="tns:ArrayOfChoice3" />
+		</xs:sequence>
+		<xs:attribute name="jobName" type="xs:string" />
+		<xs:attribute name="emailTo" type="xs:string" />
+	</xs:complexType>
+	<xs:complexType name="ArrayOfConnectionStringEntry">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="connectionString" type="tns:ConnectionStringEntry" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ConnectionStringEntry">
+		<xs:attribute name="name" type="xs:string" />
+		<xs:attribute default="System.Data.SqlClient" name="providerName" type="xs:string" />
+		<xs:attribute name="connectionString" type="xs:string" />
+	</xs:complexType>
+	<xs:complexType name="ArrayOfVariable">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="variable" type="tns:variable" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ArrayOfString">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="email" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ArrayOfChoice3">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:element minOccurs="0" maxOccurs="1" name="dbOperation" type="tns:dbOperation" />
+			<xs:element minOccurs="0" maxOccurs="1" name="email" type="tns:email" />
+			<xs:element minOccurs="0" maxOccurs="1" name="serial" type="tns:serial" />
+			<xs:element minOccurs="0" maxOccurs="1" name="fileOperation" type="tns:fileOperation" />
+			<xs:element minOccurs="0" maxOccurs="1" name="parallel" type="tns:parallel" />
+		</xs:choice>
+	</xs:complexType>
+	<xs:element name="columns" type="tns:ArrayOfTextFileColumn" />
+	<xs:attribute default="false" name="append" type="xs:boolean" />
+	<xs:attribute default="true" name="hasHeader" type="xs:boolean" />
+	<xs:attribute default="0" name="skipCount" type="xs:int" />
+	<xs:attribute default="&#xD;&#xA;" name="recordSeparator" type="xs:string" />
+	<xs:attribute default="true" name="convertEmptyStringToNull" type="xs:boolean" />
+	<xs:attribute default="true" name="trimValues" type="xs:boolean" />
+	<xs:attribute name="nullReplacementText" type="xs:string" />
+	<xs:complexType name="existsFile">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:fileOperation">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="1" name="steps" type="tns:ArrayOfChoice4" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ArrayOfChoice4">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:element minOccurs="0" maxOccurs="1" name="fileExport" type="tns:fileExport" />
+			<xs:element minOccurs="0" maxOccurs="1" name="email" type="tns:email" />
+			<xs:element minOccurs="0" maxOccurs="1" name="command" type="tns:command" />
+			<xs:element minOccurs="0" maxOccurs="1" name="fileOperation" type="tns:fileOperation" />
+			<xs:element minOccurs="0" maxOccurs="1" name="fileImport" type="tns:fileImport" />
+		</xs:choice>
+	</xs:complexType>
+	<xs:attribute default="-1" name="length" type="xs:int" />
+	<xs:attribute name="value" type="xs:string" />
+	<xs:attribute default="{0}" name="formatString" type="xs:string" />
+	<xs:attribute default="false" name="skip" type="xs:boolean" />
+	<xs:attribute name="from" type="xs:string" />
+	<xs:attribute name="to" type="xs:string" />
+	<xs:element name="columnMapping" type="tns:ArrayOfColumnMap" />
+	<xs:attribute name="connectionStringName" type="xs:string" />
+	<xs:attribute name="commandText" type="xs:string" />
+	<xs:attribute default="-2" name="commandTimeout" type="xs:int" />
+	<xs:attribute default="Text" name="commandType" type="CommandType" />
+	<xs:attribute name="namespace" type="xs:string" />
+	<xs:attribute default="1" name="updateBatchSize" type="xs:int" />
+	<xs:attribute default="Add" name="missingSchemaAction" type="MissingSchemaAction" />
+	<xs:attribute default="Passthrough" name="missingMappingAction" type="MissingMappingAction" />
+	<xs:attribute name="tableName" type="xs:string" />
+	<xs:attribute name="schemaQuery" type="xs:string" />
 </xs:schema>

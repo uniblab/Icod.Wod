@@ -16,7 +16,7 @@
 			<xs:extension xmlns:q6="http://Icod.Wod" base="q6:dbOperation" />
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:complexType name="FileOrDirectoryLister" abstract="true">
+	<xs:complexType name="FileOrDirectoryListerBase" abstract="true">
 		<xs:complexContent mixed="false">
 			<xs:extension xmlns:q7="http://Icod.Wod" base="q7:binaryFileOperation">
 				<xs:attribute ref="q7:codePage" />
@@ -67,7 +67,7 @@
 			<xs:extension base="FileBase" />
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="FileOrDirectoryLister" nillable="true" type="FileOrDirectoryLister" />
+	<xs:element name="FileOrDirectoryListerBase" nillable="true" type="FileOrDirectoryListerBase" />
 	<xs:element name="FileRedirection" nillable="true" type="FileRedirection" />
 	<xs:element name="list" nillable="true" xmlns:q21="http://Icod.Wod" type="q21:list" />
 	<xs:element name="listDirectory" nillable="true" xmlns:q22="http://Icod.Wod" type="q22:listDirectory" />
