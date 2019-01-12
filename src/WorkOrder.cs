@@ -83,6 +83,7 @@ namespace Icod.Wod {
 			IsNullable = false,
 			Namespace = "http://Icod.Wod"
 		)]
+		[System.Xml.Serialization.XmlIgnore]
 		public System.String[] Email {
 			get;
 			set;

@@ -82,6 +82,7 @@
     <Compile Include="src\File\ListDirectory.cs" />
     <Compile Include="src\File\SshKeyFileDescriptor.cs" />
     <Compile Include="src\File\TouchZip.cs" />
+    <Compile Include="src\File\XmlTransformFile.cs" />
     <Compile Include="src\Interfaces\IIsEmpty.cs" />
     <Compile Include="src\Interfaces\IQueue`1.cs" />
     <Compile Include="src\Interfaces\IStack`1.cs" />

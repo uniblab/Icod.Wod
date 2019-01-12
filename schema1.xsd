@@ -238,6 +238,15 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
+	<xs:complexType name="xmlTransformFile">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:binaryFileOperation">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="1" name="xsltFile" type="tns:fileDescriptor" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 	<xs:complexType name="renameFile">
 		<xs:complexContent mixed="false">
 			<xs:extension base="tns:binaryFileOperation" />
@@ -429,7 +438,7 @@
 	<xs:complexType name="WorkOrder">
 		<xs:sequence>
 			<xs:element minOccurs="0" maxOccurs="1" name="connectionStrings" type="tns:ArrayOfConnectionStringEntry" />
-			<xs:element minOccurs="0" maxOccurs="1" name="variables" nillable="true" type="tns:ArrayOfVariable" />
+			<xs:element minOccurs="1" maxOccurs="1" name="variables" nillable="true" type="tns:ArrayOfVariable" />
 			<xs:element minOccurs="0" maxOccurs="1" name="steps" type="tns:ArrayOfChoice3" />
 		</xs:sequence>
 		<xs:attribute name="jobName" type="xs:string" />
