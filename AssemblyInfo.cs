@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle( "Icod.Wod" )]
-[assembly: AssemblyDescription( "" )]
+[assembly: AssemblyDescription( "The Icod Work on Demand framework" )]
 [assembly: AssemblyConfiguration( "" )]
 [assembly: AssemblyCompany( "" )]
 [assembly: AssemblyProduct( "Icod.Wod" )]
@@ -29,5 +29,5 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion( "2.0.1.0" )]
-[assembly: AssemblyFileVersion( "2.0.1.0" )]
+[assembly: AssemblyVersion( "2.1.0.0" )]
+[assembly: AssemblyFileVersion( "2.1.0.0" )]
