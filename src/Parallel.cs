@@ -10,13 +10,13 @@ namespace Icod.Wod {
 	public sealed class Parallel : IStep {
 
 		#region fields
-		public const System.Int32 DefaultMaxConcurrency = -1;
+		public const System.Int32 DefaultMaxDegreeOfParallelism = -1;
 		#endregion fields
 
 
 		#region .ctor
 		public Parallel() : base() {
-			this.MaxConcurrency = DefaultMaxConcurrency;
+			this.MaxDegreeOfParallelism = DefaultMaxDegreeOfParallelism;
 		}
 		#endregion .ctor
 
@@ -53,11 +53,11 @@ namespace Icod.Wod {
 		}
 
 		[System.Xml.Serialization.XmlAttribute(
-			"maxConcurrency",
+			"maxDegreeOfParallelism",
 			Namespace = "http://Icod.Wod"
 		)]
-		[System.ComponentModel.DefaultValue( DefaultMaxConcurrency )]
-		public System.Int32 MaxConcurrency {
+		[System.ComponentModel.DefaultValue( DefaultMaxDegreeOfParallelism )]
+		public System.Int32 MaxDegreeOfParallelism {
 			get;
 			set;
 		}
@@ -82,7 +82,7 @@ namespace Icod.Wod {
 			if ( steps.Any() ) {
 				System.Threading.Tasks.Parallel.Invoke(
 					new System.Threading.Tasks.ParallelOptions {
-						MaxDegreeOfParallelism = this.MaxConcurrency
+						MaxDegreeOfParallelism = this.MaxDegreeOfParallelism
 					},
 					steps.ToArray()
 				);
