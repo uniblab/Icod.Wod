@@ -429,8 +429,7 @@
 	<xs:complexType name="WorkOrder">
 		<xs:sequence>
 			<xs:element minOccurs="0" maxOccurs="1" name="connectionStrings" type="tns:ArrayOfConnectionStringEntry" />
-			<xs:element minOccurs="1" maxOccurs="1" name="variables" nillable="true" type="tns:ArrayOfVariable" />
-			<xs:element minOccurs="1" maxOccurs="1" name="emails" nillable="true" type="tns:ArrayOfString" />
+			<xs:element minOccurs="0" maxOccurs="1" name="variables" nillable="true" type="tns:ArrayOfVariable" />
 			<xs:element minOccurs="0" maxOccurs="1" name="steps" type="tns:ArrayOfChoice3" />
 		</xs:sequence>
 		<xs:attribute name="jobName" type="xs:string" />
