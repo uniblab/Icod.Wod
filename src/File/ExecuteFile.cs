@@ -13,6 +13,7 @@ namespace Icod.Wod.File {
 		#region fields
 		private System.Int32 mySuccessExitCode;
 		private System.String myArgs;
+		private System.String myWorkingDirectory;
 		private FileRedirection myStdErr;
 		private FileRedirection myStdOut;
 		#endregion fields
@@ -61,8 +62,17 @@ namespace Icod.Wod.File {
 		)]
 		[System.ComponentModel.DefaultValue( (System.String)null )]
 		public System.String WorkingDirectory {
-			get;
-			set;
+			get {
+				return myWorkingDirectory;
+			}
+			set {
+				myWorkingDirectory = value.TrimToNull();
+			}
+		}
+		public System.String ExpandedWorkingDirectory {
+			get {
+				return this.WorkOrder.ExpandPseudoVariables( myWorkingDirectory.TrimToNull() ?? System.Environment.CurrentDirectory );
+			}
 		}
 
 		[System.Xml.Serialization.XmlAttribute(
@@ -126,7 +136,7 @@ namespace Icod.Wod.File {
 			if ( System.String.IsNullOrEmpty( prog ) ) {
 				throw new System.InvalidOperationException();
 			}
-			var wd = this.WorkingDirectory.TrimToNull() ?? System.Environment.CurrentDirectory;
+			var wd = this.ExpandedWorkingDirectory.TrimToNull() ?? System.Environment.CurrentDirectory;
 			var args = this.ExpandedArgs;
 
 			var si = new System.Diagnostics.ProcessStartInfo( prog, args ) {
