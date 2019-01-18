@@ -9,11 +9,6 @@ namespace Icod.Wod.Data {
 	)]
 	public sealed class FileImport : DbFileBase {
 
-		#region fields
-		private DataFileBase mySource;
-		#endregion fields
-
-
 		#region .ctor
 		public FileImport() : base() {
 		}
@@ -25,12 +20,8 @@ namespace Icod.Wod.Data {
 		#region properties
 		[System.Xml.Serialization.XmlElement( "source", Type = typeof( DataFileBase ), IsNullable = false, Namespace = "http://Icod.Wod" )]
 		public DataFileBase Source {
-			get {
-				return mySource;
-			}
-			set {
-				mySource = value;
-			}
+			get;
+			set;
 		}
 		#endregion properties
 

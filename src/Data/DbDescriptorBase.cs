@@ -286,6 +286,7 @@ namespace Icod.Wod.Data {
 									tmap.ColumnMappings.Add( cmap );
 								}
 								adapter.Update( t );
+								t.Dispose();
 							}
 						}
 					}

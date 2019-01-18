@@ -144,7 +144,7 @@ namespace Icod.Wod.File {
 		[System.Xml.Serialization.XmlElement(
 			ElementName = "sshKeyFile",
 			Namespace = "http://Icod.Wod",
-			IsNullable = true
+			IsNullable = false
 		)]
 		[System.ComponentModel.DefaultValue( null )]
 		public SshKeyFileDescriptor SshKeyFile {

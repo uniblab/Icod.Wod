@@ -59,22 +59,23 @@ namespace Icod.Wod {
 		}
 
 		[System.Xml.Serialization.XmlArray(
-			IsNullable = true,
-			Namespace = "http://Icod.Wod",
-			ElementName = "variables"
+			ElementName = "variables",
+			IsNullable = false,
+			Namespace = "http://Icod.Wod"
 		)]
 		[System.Xml.Serialization.XmlArrayItem(
 			"variable",
 			IsNullable = false,
 			Namespace = "http://Icod.Wod"
 		)]
+		[System.ComponentModel.DefaultValue( null )]
 		public Variable[] Variables {
 			get;
 			set;
 		}
 
 		[System.Xml.Serialization.XmlArray(
-			IsNullable = true,
+			IsNullable = false,
 			Namespace = "http://Icod.Wod",
 			ElementName = "emails"
 		)]
@@ -84,6 +85,7 @@ namespace Icod.Wod {
 			Namespace = "http://Icod.Wod"
 		)]
 		[System.Xml.Serialization.XmlIgnore]
+		[System.ComponentModel.DefaultValue( null )]
 		public System.String[] Email {
 			get;
 			set;
@@ -128,6 +130,7 @@ namespace Icod.Wod {
 			IsNullable = false,
 			Namespace = "http://Icod.Wod"
 		)]
+		[System.ComponentModel.DefaultValue( null )]
 		public System.Object[] Steps {
 			get;
 			set;

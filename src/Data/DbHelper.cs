@@ -54,18 +54,40 @@ namespace Icod.Wod.Data {
 			} );
 		}
 		public static System.Data.Common.DbConnection CreateConnection( this Icod.Wod.ConnectionStringEntry connectionString ) {
-			var output = System.Data.Common.DbProviderFactories.GetFactory(
-				connectionString.ProviderName
-			).CreateConnection();
-			output.ConnectionString = connectionString.ConnectionString;
-			return output;
+			if ( null == connectionString ) {
+				throw new System.ArgumentNullException( "connectionString" );
+			}
+			try {
+				var output = System.Data.Common.DbProviderFactories.GetFactory(
+					connectionString.ProviderName
+				).CreateConnection();
+				output.ConnectionString = connectionString.ConnectionString;
+				return output;
+			} catch ( System.Exception ex ) {
+				ex.Data.Add( "connectionString", connectionString.GetType().AssemblyQualifiedName );
+				ex.Data.Add( "connectionString.Name", connectionString.Name );
+				ex.Data.Add( "connectionString.ProviderName", connectionString.ProviderName );
+				ex.Data.Add( "connectionString.ProviConnectionStringderName", connectionString.ConnectionString );
+				throw;
+			}
 		}
 		public static System.Data.Common.DbConnection CreateConnection( this System.Configuration.ConnectionStringSettings connectionString ) {
-			var output = System.Data.Common.DbProviderFactories.GetFactory(
-				connectionString.ProviderName
-			).CreateConnection();
-			output.ConnectionString = connectionString.ConnectionString;
-			return output;
+			if ( null == connectionString ) {
+				throw new System.ArgumentNullException( "connectionString" );
+			}
+			try {
+				var output = System.Data.Common.DbProviderFactories.GetFactory(
+					connectionString.ProviderName
+				).CreateConnection();
+				output.ConnectionString = connectionString.ConnectionString;
+				return output;
+			} catch ( System.Exception ex ) {
+				ex.Data.Add( "connectionString", connectionString.GetType().AssemblyQualifiedName );
+				ex.Data.Add( "connectionString.Name", connectionString.Name );
+				ex.Data.Add( "connectionString.ProviderName", connectionString.ProviderName );
+				ex.Data.Add( "connectionString.ProviConnectionStringderName", connectionString.ConnectionString );
+				throw;
+			}
 		}
 
 		public static System.Data.Common.DbCommand CreateCommand( this System.Data.Common.DbConnection connection ) {

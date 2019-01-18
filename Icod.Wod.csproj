@@ -64,6 +64,7 @@
     <Compile Include="src\Data\ColumnBase.cs" />
     <Compile Include="src\Data\DbFileBase.cs" />
     <Compile Include="src\Data\DbOperationBase.cs" />
+    <Compile Include="src\Data\DbParameter.cs" />
     <Compile Include="src\Data\DelimitedFile.cs" />
     <Compile Include="src\Data\FixedWidthFile.cs" />
     <Compile Include="src\Data\Foreach.cs" />
