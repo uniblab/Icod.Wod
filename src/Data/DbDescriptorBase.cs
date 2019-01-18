@@ -273,21 +273,19 @@ namespace Icod.Wod.Data {
 			using ( var cnxn = this.CreateConnection( workOrder ) ) {
 				using ( var adapter = this.CreateDataAdapter( cnxn, workOrder ) ) {
 					var amap = adapter.TableMappings;
-					using ( var cb = this.CreateCommandBuilder( workOrder, adapter ) ) {
-						System.Data.Common.DataTableMapping tmap;
-						using ( var set = new System.Data.DataSet() ) {
-							this.FillSchema( adapter, set );
-							var tableName = this.TableName;
-							var dest = set.Tables[ tableName ];
-							foreach ( var t in source.ReadTables( workOrder ) ) {
-								amap.Clear();
-								tmap = amap.Add( tableName, t.TableName );
-								foreach ( var cmap in this.CreateDataColumnMapping( t, dest ) ) {
-									tmap.ColumnMappings.Add( cmap );
-								}
-								adapter.Update( t );
-								t.Dispose();
+					System.Data.Common.DataTableMapping tmap;
+					using ( var set = new System.Data.DataSet() ) {
+						this.FillSchema( adapter, set );
+						var tableName = this.TableName;
+						var dest = set.Tables[ tableName ];
+						foreach ( var t in source.ReadTables( workOrder ) ) {
+							amap.Clear();
+							tmap = amap.Add( tableName, t.TableName );
+							foreach ( var cmap in this.CreateDataColumnMapping( t, dest ) ) {
+								tmap.ColumnMappings.Add( cmap );
 							}
+							adapter.Update( t );
+							t.Dispose();
 						}
 					}
 				}
