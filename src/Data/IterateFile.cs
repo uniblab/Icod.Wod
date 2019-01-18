@@ -26,9 +26,9 @@ namespace Icod.Wod.Data {
 		}
 
 		[System.Xml.Serialization.XmlArray(
+			ElementName = "parameters",
 			IsNullable = false,
-			Namespace = "http://Icod.Wod",
-			ElementName = "parameters"
+			Namespace = "http://Icod.Wod"
 		)]
 		[System.Xml.Serialization.XmlArrayItem(
 			"parameter",
