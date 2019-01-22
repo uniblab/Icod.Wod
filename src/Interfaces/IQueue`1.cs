@@ -13,6 +13,8 @@
 
 		IQueue<T> Reverse();
 
+		IStack<T> ToStack();
+
 	}
 
 }

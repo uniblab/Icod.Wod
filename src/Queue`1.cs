@@ -31,6 +31,9 @@
 			public IQueue<T> Reverse() {
 				throw new System.InvalidOperationException();
 			}
+			public IStack<T> ToStack() {
+				return Stack<T>.Empty;
+			}
 			public System.Collections.Generic.IEnumerator<T> GetEnumerator() {
 				yield break;
 			}
@@ -109,6 +112,14 @@
 		public IQueue<T> Reverse() {
 			return new Queue<T>( mySource.Reverse(), myDrain.Reverse() );
 		}
+		public IStack<T> ToStack() {
+			var output = Stack<T>.Empty;
+			foreach ( var item in this ) {
+				output = output.Push( item );
+			}
+			return output;
+		}
+
 
 		public System.Collections.Generic.IEnumerator<T> GetEnumerator() {
 			IQueue<T> probe = this;

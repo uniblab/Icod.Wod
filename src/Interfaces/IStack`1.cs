@@ -12,6 +12,8 @@
 
 		IStack<T> Reverse();
 
+		IQueue<T> ToQueue();
+
 	}
 
 }

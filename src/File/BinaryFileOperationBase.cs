@@ -6,6 +6,7 @@
 	[System.Xml.Serialization.XmlInclude( typeof( FileOrDirectoryListerBase ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( RenameFile ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( XmlTransformFile ) )]
+	[System.Xml.Serialization.XmlInclude( typeof( CountBinaryFileOperationBase ) )]
 	[System.Xml.Serialization.XmlType(
 		"binaryFileOperation",
 		Namespace = "http://Icod.Wod"

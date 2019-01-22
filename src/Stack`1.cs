@@ -37,6 +37,9 @@ namespace Icod.Wod {
 			public IStack<T> Reverse() {
 				return this;
 			}
+			public IQueue<T> ToQueue() {
+				return Queue<T>.Empty;
+			}
 
 			public sealed override System.Int32 GetHashCode() {
 				return theHashCode;
@@ -88,6 +91,10 @@ namespace Icod.Wod {
 			public IStack<T> Reverse() {
 				return this;
 			}
+			public IQueue<T> ToQueue() {
+				return Queue<T>.Empty.Enqueue( myValue );
+			}
+
 			public sealed override System.Int32 GetHashCode() {
 				return theHashCode;
 			}
@@ -186,6 +193,14 @@ namespace Icod.Wod {
 			while ( !probe.IsEmpty ) {
 				output = output.Push( probe.Peek() );
 				probe = probe.Pop();
+			}
+			return output;
+		}
+
+		public IQueue<T> ToQueue() {
+			var output = Queue<T>.Empty;
+			foreach ( var item in this.Reverse() ) {
+				output = output.Enqueue( item );
 			}
 			return output;
 		}

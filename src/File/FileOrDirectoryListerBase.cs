@@ -34,20 +34,6 @@ namespace Icod.Wod.File {
 
 		#region properties
 		[System.Xml.Serialization.XmlAttribute(
-			"codePage",
-			Namespace = "http://Icod.Wod"
-		)]
-		[System.ComponentModel.DefaultValue( "windows-1252" )]
-		public System.String CodePage {
-			get {
-				return myCodePage;
-			}
-			set {
-				myCodePage = value;
-			}
-		}
-
-		[System.Xml.Serialization.XmlAttribute(
 			"truncateEntryName",
 			Namespace = "http://Icod.Wod"
 		)]
@@ -58,33 +44,6 @@ namespace Icod.Wod.File {
 			}
 			set {
 				myTruncateEntryName = value;
-			}
-		}
-		[System.Xml.Serialization.XmlAttribute(
-			"writeIfEmpty",
-			Namespace = "http://Icod.Wod"
-		)]
-		[System.ComponentModel.DefaultValue( false )]
-		public System.Boolean WriteIfEmpty {
-			get {
-				return myWriteIfEmpty;
-			}
-			set {
-				myWriteIfEmpty = value;
-			}
-		}
-
-		[System.Xml.Serialization.XmlAttribute(
-			"bufferLength",
-			Namespace = "http://Icod.Wod"
-		)]
-		[System.ComponentModel.DefaultValue( 16384 )]
-		public System.Int32 BufferLength {
-			get {
-				return myBufferLength;
-			}
-			set {
-				myBufferLength = value;
 			}
 		}
 		#endregion properties

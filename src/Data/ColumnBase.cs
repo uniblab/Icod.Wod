@@ -46,7 +46,7 @@ namespace Icod.Wod.Data {
 			"nullReplacementText",
 			Namespace = "http://Icod.Wod"
 		)]
-		[System.ComponentModel.DefaultValue( null )]
+		[System.ComponentModel.DefaultValue( "" )]
 		public virtual System.String NullReplacementText {
 			get;
 			set;

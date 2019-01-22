@@ -18,7 +18,12 @@ namespace Icod.Wod.Data {
 
 
 		#region properties
-		[System.Xml.Serialization.XmlElement( "destination", Type = typeof( DataFileBase ), IsNullable = false, Namespace = "http://Icod.Wod" )]
+		[System.Xml.Serialization.XmlElement( 
+			"destination", 
+			Type = typeof( DataFileBase ), 
+			IsNullable = false, 
+			Namespace = "http://Icod.Wod" )
+		]
 		public DataFileBase Destination {
 			get;
 			set;

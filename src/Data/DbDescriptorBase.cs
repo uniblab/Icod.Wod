@@ -271,6 +271,7 @@ namespace Icod.Wod.Data {
 			}
 
 			using ( var cnxn = this.CreateConnection( workOrder ) ) {
+				cnxn.Open();
 				using ( var adapter = this.CreateDataAdapter( cnxn, workOrder ) ) {
 					var amap = adapter.TableMappings;
 					System.Data.Common.DataTableMapping tmap;

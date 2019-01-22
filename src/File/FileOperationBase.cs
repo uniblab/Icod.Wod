@@ -12,7 +12,7 @@ namespace Icod.Wod.File {
 		"fileOperation",
 		Namespace = "http://Icod.Wod"
 	)]
-	public abstract class FileOperationBase : FileDescriptor, IStep {
+	public abstract class FileOperationBase : FileBase, IStep {
 
 		#region .ctor
 		protected FileOperationBase() : base() {

@@ -18,7 +18,12 @@ namespace Icod.Wod.Data {
 
 
 		#region properties
-		[System.Xml.Serialization.XmlElement( "source", Type = typeof( DataFileBase ), IsNullable = false, Namespace = "http://Icod.Wod" )]
+		[System.Xml.Serialization.XmlElement( 
+			"source", 
+			Type = typeof( DataFileBase ), 
+			IsNullable = false, 
+			Namespace = "http://Icod.Wod" )
+		]
 		public DataFileBase Source {
 			get;
 			set;
@@ -52,6 +57,7 @@ namespace Icod.Wod.Data {
 				this.ExecuteCommand( workOrder, this.Source );
 			}
 		}
+
 		public void ExecuteCommand( Icod.Wod.WorkOrder workOrder, DataFileBase source ) {
 			using ( var connection = this.CreateConnection( workOrder ) ) {
 				connection.Open();
@@ -90,7 +96,9 @@ namespace Icod.Wod.Data {
 
 			var sourceToColMap = new System.Collections.Generic.Dictionary<System.Data.DataColumn, ColumnMap>( System.Math.Max( sourceColumns.Count(), columnMaps.Count() ) );
 			foreach ( var pair in sourceColumns.Join(
-				columnMaps,
+				columnMaps.Where(
+					x => !x.Skip
+				),
 				x => x.ColumnName,
 				y => y.FromName,
 				( x, y ) => new {
@@ -148,9 +156,8 @@ namespace Icod.Wod.Data {
 
 			foreach ( var row in source.Rows.OfType<System.Data.DataRow>() ) {
 				foreach ( var kvp in columnParameterMap ) {
-					command.Parameters[ kvp.Value.ParameterName ].Value = row[ kvp.Key.ColumnName ];
+					command.Parameters[ kvp.Value.ParameterName ].Value = row[ kvp.Key.ColumnName ] ?? System.DBNull.Value;
 				}
-				command.Prepare();
 				command.ExecuteNonQuery();
 			}
 		}
