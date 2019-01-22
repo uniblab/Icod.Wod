@@ -4,6 +4,7 @@ namespace Icod.Wod.File {
 
 	[System.Serializable]
 	[System.Xml.Serialization.XmlInclude( typeof( HeadFile ) )]
+	[System.Xml.Serialization.XmlInclude( typeof( TailFile ) )]
 	[System.Xml.Serialization.XmlType(
 		"countBinaryFileOperation",
 		Namespace = "http://Icod.Wod"

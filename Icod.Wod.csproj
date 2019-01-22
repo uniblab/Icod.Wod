@@ -138,7 +138,6 @@
     <Compile Include="src\File\Interfaces\IFile.cs" />
     <Compile Include="src\File\BinaryFileOperationBase.cs" />
     <Compile Include="src\File\BinaryZipOperationBase.cs" />
-    <Compile Include="src\File\ChopFile.cs" />
     <Compile Include="src\File\ExistsFile.cs" />
     <Compile Include="src\File\FromZip.cs" />
     <Compile Include="src\File\ListFile.cs" />
