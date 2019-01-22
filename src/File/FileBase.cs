@@ -8,6 +8,7 @@ namespace Icod.Wod.File {
 	public abstract class FileBase : Icod.Wod.File.FileDescriptor {
 
 		#region fields
+		public const System.String DefaultRecordSeparator = "\r\n";
 		private static readonly System.Action<System.IO.StreamWriter> theEmptyEolWriter;
 
 		private System.String myCodePage;
@@ -27,14 +28,14 @@ namespace Icod.Wod.File {
 			myCodePage = "windows-1252";
 			myBufferLength = 16384;
 			myWriteIfEmpty = false;
-			myRecordSeparator = "\r\n";
+			myRecordSeparator = DefaultRecordSeparator;
 			myEolWriter = theEmptyEolWriter;
 		}
 		protected FileBase( WorkOrder workOrder ) : base( workOrder ) {
 			myCodePage = "windows-1252";
 			myBufferLength = 16384;
 			myWriteIfEmpty = false;
-			myRecordSeparator = "\r\n";
+			myRecordSeparator = DefaultRecordSeparator;
 			myEolWriter = theEmptyEolWriter;
 		}
 		#endregion  .ctor
@@ -87,7 +88,7 @@ namespace Icod.Wod.File {
 			"recordSeparator",
 			Namespace = "http://Icod.Wod"
 		)]
-		[System.ComponentModel.DefaultValue( "\r\n" )]
+		[System.ComponentModel.DefaultValue( DefaultRecordSeparator )]
 		public System.String RecordSeparator {
 			get {
 				return myRecordSeparator;

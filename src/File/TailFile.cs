@@ -47,8 +47,9 @@ namespace Icod.Wod.File {
 			) ) {
 				using ( var buffer = new System.IO.MemoryStream( this.BufferLength ) ) {
 					using ( var writer = new System.IO.StreamWriter( buffer, sourceEncoding ) ) {
+						var rs = this.RecordSeparator;
 						foreach ( var line in reader( sourceHandler, file, sourceEncoding ) ) {
-							writer.WriteLine( line );
+							writer.Write( line + rs );
 						}
 					}
 					buffer.Seek( 0, System.IO.SeekOrigin.Begin );
@@ -62,10 +63,11 @@ namespace Icod.Wod.File {
 			System.Int32 lineCount = 0;
 			using ( var stream = fileHandler.OpenReader( filePathName ) ) {
 				using ( var reader = new System.IO.StreamReader( stream, encoding, true, fileHandler.BufferLength ) ) {
-					line = reader.ReadLine();
+					var rs = this.RecordSeparator;
+					line = reader.ReadLine( rs );
 					while ( null != line ) {
 						output = output.Enqueue( line );
-						line = reader.ReadLine();
+						line = reader.ReadLine( rs );
 					}
 				}
 			}
@@ -83,9 +85,10 @@ namespace Icod.Wod.File {
 			System.String line = null;
 			using ( var stream = fileHandler.OpenReader( filePathName ) ) {
 				using ( var reader = new System.IO.StreamReader( stream, encoding, true, fileHandler.BufferLength ) ) {
+					var rs = this.RecordSeparator;
 					var count = -this.Count;
 					for ( var i = 0; i < count; i++ ) {
-						line = reader.ReadLine();
+						line = reader.ReadLine( rs );
 						if ( null == line ) {
 							break;
 						}
@@ -93,7 +96,7 @@ namespace Icod.Wod.File {
 					line = reader.ReadLine();
 					while ( null != line ) {
 						output = output.Enqueue( line );
-						line = reader.ReadLine();
+						line = reader.ReadLine( rs );
 					}
 				}
 			}
