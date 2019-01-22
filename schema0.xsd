@@ -34,6 +34,7 @@
         <xs:attribute ref="q12:codePage" />
         <xs:attribute ref="q12:writeIfEmpty" />
         <xs:attribute ref="q12:bufferLength" />
+        <xs:attribute ref="q12:recordSeparator" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -52,10 +53,9 @@
       <xs:extension base="DataFileBase">
         <xs:attribute xmlns:q15="http://Icod.Wod" ref="q15:hasHeader" />
         <xs:attribute xmlns:q16="http://Icod.Wod" ref="q16:skipCount" />
-        <xs:attribute xmlns:q17="http://Icod.Wod" ref="q17:recordSeparator" />
-        <xs:attribute xmlns:q18="http://Icod.Wod" ref="q18:convertEmptyStringToNull" />
-        <xs:attribute xmlns:q19="http://Icod.Wod" ref="q19:trimValues" />
-        <xs:attribute xmlns:q20="http://Icod.Wod" ref="q20:nullReplacementText" />
+        <xs:attribute xmlns:q17="http://Icod.Wod" ref="q17:convertEmptyStringToNull" />
+        <xs:attribute xmlns:q18="http://Icod.Wod" ref="q18:trimValues" />
+        <xs:attribute xmlns:q19="http://Icod.Wod" ref="q19:nullReplacementText" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -66,18 +66,18 @@
   </xs:complexType>
   <xs:element name="FileOrDirectoryListerBase" nillable="true" type="FileOrDirectoryListerBase" />
   <xs:element name="FileRedirection" nillable="true" type="FileRedirection" />
-  <xs:element name="countBinaryFileOperation" nillable="true" xmlns:q21="http://Icod.Wod" type="q21:countBinaryFileOperation" />
-  <xs:element name="headFile" nillable="true" xmlns:q22="http://Icod.Wod" type="q22:headFile" />
-  <xs:element name="list" nillable="true" xmlns:q23="http://Icod.Wod" type="q23:list" />
-  <xs:element name="listDirectory" nillable="true" xmlns:q24="http://Icod.Wod" type="q24:listDirectory" />
-  <xs:element name="sshKeyFileDescriptor" nillable="true" xmlns:q25="http://Icod.Wod" type="q25:sshKeyFileDescriptor" />
-  <xs:element name="tailFile" nillable="true" xmlns:q26="http://Icod.Wod" type="q26:tailFile" />
-  <xs:element name="touchZip" nillable="true" xmlns:q27="http://Icod.Wod" type="q27:touchZip" />
-  <xs:element name="xmlTransformFile" nillable="true" xmlns:q28="http://Icod.Wod" type="q28:xmlTransformFile" />
-  <xs:element name="appendFile" nillable="true" xmlns:q29="http://Icod.Wod" type="q29:appendFile" />
-  <xs:element name="copyFile" nillable="true" xmlns:q30="http://Icod.Wod" type="q30:copyFile" />
-  <xs:element name="deleteFile" nillable="true" xmlns:q31="http://Icod.Wod" type="q31:deleteFile" />
-  <xs:element name="fileDescriptor" nillable="true" xmlns:q32="http://Icod.Wod" type="q32:fileDescriptor" />
+  <xs:element name="countBinaryFileOperation" nillable="true" xmlns:q20="http://Icod.Wod" type="q20:countBinaryFileOperation" />
+  <xs:element name="headFile" nillable="true" xmlns:q21="http://Icod.Wod" type="q21:headFile" />
+  <xs:element name="list" nillable="true" xmlns:q22="http://Icod.Wod" type="q22:list" />
+  <xs:element name="listDirectory" nillable="true" xmlns:q23="http://Icod.Wod" type="q23:listDirectory" />
+  <xs:element name="sshKeyFileDescriptor" nillable="true" xmlns:q24="http://Icod.Wod" type="q24:sshKeyFileDescriptor" />
+  <xs:element name="tailFile" nillable="true" xmlns:q25="http://Icod.Wod" type="q25:tailFile" />
+  <xs:element name="touchZip" nillable="true" xmlns:q26="http://Icod.Wod" type="q26:touchZip" />
+  <xs:element name="xmlTransformFile" nillable="true" xmlns:q27="http://Icod.Wod" type="q27:xmlTransformFile" />
+  <xs:element name="appendFile" nillable="true" xmlns:q28="http://Icod.Wod" type="q28:appendFile" />
+  <xs:element name="copyFile" nillable="true" xmlns:q29="http://Icod.Wod" type="q29:copyFile" />
+  <xs:element name="deleteFile" nillable="true" xmlns:q30="http://Icod.Wod" type="q30:deleteFile" />
+  <xs:element name="fileDescriptor" nillable="true" xmlns:q31="http://Icod.Wod" type="q31:fileDescriptor" />
   <xs:element name="FileEntry" nillable="true" type="FileEntry" />
   <xs:complexType name="FileEntry">
     <xs:sequence>
@@ -95,11 +95,11 @@
   <xs:element name="FileHandlerBase" nillable="true" type="FileHandlerBase" />
   <xs:complexType name="FileHandlerBase" abstract="true">
     <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="1" name="FileDescriptor" xmlns:q33="http://Icod.Wod" type="q33:fileDescriptor" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FileDescriptor" xmlns:q32="http://Icod.Wod" type="q32:fileDescriptor" />
       <xs:element minOccurs="0" maxOccurs="1" default="16384" name="BufferLength" type="xs:int" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="fileOperation" nillable="true" xmlns:q34="http://Icod.Wod" type="q34:fileOperation" />
+  <xs:element name="fileOperation" nillable="true" xmlns:q33="http://Icod.Wod" type="q33:fileOperation" />
   <xs:element name="FileType" type="FileType" />
   <xs:element name="FtpFileHandler" nillable="true" type="FtpFileHandler" />
   <xs:complexType name="FtpFileHandler">
@@ -112,7 +112,7 @@
       <xs:extension base="FileHandlerBase" />
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="gzipFile" nillable="true" xmlns:q35="http://Icod.Wod" type="q35:gzipFile" />
+  <xs:element name="gzipFile" nillable="true" xmlns:q34="http://Icod.Wod" type="q34:gzipFile" />
   <xs:element name="HttpFileHandler" nillable="true" type="HttpFileHandler" />
   <xs:complexType name="HttpFileHandler">
     <xs:complexContent mixed="false">
@@ -125,77 +125,76 @@
       <xs:extension base="FileHandlerBase" />
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="mkDir" nillable="true" xmlns:q36="http://Icod.Wod" type="q36:mkDir" />
+  <xs:element name="mkDir" nillable="true" xmlns:q35="http://Icod.Wod" type="q35:mkDir" />
   <xs:element name="RemoteFileHandlerBase" nillable="true" type="RemoteFileHandlerBase" />
-  <xs:element name="renameFile" nillable="true" xmlns:q37="http://Icod.Wod" type="q37:renameFile" />
-  <xs:element name="rmDir" nillable="true" xmlns:q38="http://Icod.Wod" type="q38:rmDir" />
+  <xs:element name="renameFile" nillable="true" xmlns:q36="http://Icod.Wod" type="q36:renameFile" />
+  <xs:element name="rmDir" nillable="true" xmlns:q37="http://Icod.Wod" type="q37:rmDir" />
   <xs:element name="SftpFileHandler" nillable="true" type="SftpFileHandler" />
   <xs:complexType name="SftpFileHandler">
     <xs:complexContent mixed="false">
       <xs:extension base="RemoteFileHandlerBase" />
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="touchFile" nillable="true" xmlns:q39="http://Icod.Wod" type="q39:touchFile" />
-  <xs:element name="binaryFileOperation" nillable="true" xmlns:q40="http://Icod.Wod" type="q40:binaryFileOperation" />
-  <xs:element name="binaryZipOperation" nillable="true" xmlns:q41="http://Icod.Wod" type="q41:binaryZipOperation" />
-  <xs:element name="chopFile" nillable="true" xmlns:q42="http://Icod.Wod" type="q42:chopFile" />
-  <xs:element name="existsFile" nillable="true" xmlns:q43="http://Icod.Wod" type="q43:existsFile" />
-  <xs:element name="fromZip" nillable="true" xmlns:q44="http://Icod.Wod" type="q44:fromZip" />
-  <xs:element name="listFile" nillable="true" xmlns:q45="http://Icod.Wod" type="q45:listFile" />
-  <xs:element name="listZip" nillable="true" xmlns:q46="http://Icod.Wod" type="q46:listZip" />
-  <xs:element name="mkZip" nillable="true" xmlns:q47="http://Icod.Wod" type="q47:mkZip" />
-  <xs:element name="rmZip" nillable="true" xmlns:q48="http://Icod.Wod" type="q48:rmZip" />
-  <xs:element name="zipOperation" nillable="true" xmlns:q49="http://Icod.Wod" type="q49:zipOperation" />
+  <xs:element name="touchFile" nillable="true" xmlns:q38="http://Icod.Wod" type="q38:touchFile" />
+  <xs:element name="binaryFileOperation" nillable="true" xmlns:q39="http://Icod.Wod" type="q39:binaryFileOperation" />
+  <xs:element name="binaryZipOperation" nillable="true" xmlns:q40="http://Icod.Wod" type="q40:binaryZipOperation" />
+  <xs:element name="existsFile" nillable="true" xmlns:q41="http://Icod.Wod" type="q41:existsFile" />
+  <xs:element name="fromZip" nillable="true" xmlns:q42="http://Icod.Wod" type="q42:fromZip" />
+  <xs:element name="listFile" nillable="true" xmlns:q43="http://Icod.Wod" type="q43:listFile" />
+  <xs:element name="listZip" nillable="true" xmlns:q44="http://Icod.Wod" type="q44:listZip" />
+  <xs:element name="mkZip" nillable="true" xmlns:q45="http://Icod.Wod" type="q45:mkZip" />
+  <xs:element name="rmZip" nillable="true" xmlns:q46="http://Icod.Wod" type="q46:rmZip" />
+  <xs:element name="zipOperation" nillable="true" xmlns:q47="http://Icod.Wod" type="q47:zipOperation" />
   <xs:element name="ColumnBase" nillable="true" type="ColumnBase" />
   <xs:complexType name="ColumnBase" abstract="true">
-    <xs:attribute xmlns:q50="http://Icod.Wod" ref="q50:name" />
-    <xs:attribute xmlns:q51="http://Icod.Wod" ref="q51:length" />
-    <xs:attribute xmlns:q52="http://Icod.Wod" ref="q52:nullReplacementText" />
+    <xs:attribute xmlns:q48="http://Icod.Wod" ref="q48:name" />
+    <xs:attribute xmlns:q49="http://Icod.Wod" ref="q49:length" />
+    <xs:attribute xmlns:q50="http://Icod.Wod" ref="q50:nullReplacementText" />
   </xs:complexType>
   <xs:complexType name="LiteralColumn">
     <xs:complexContent mixed="false">
       <xs:extension base="ColumnBase">
-        <xs:attribute xmlns:q53="http://Icod.Wod" ref="q53:value" />
+        <xs:attribute xmlns:q51="http://Icod.Wod" ref="q51:value" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
   <xs:complexType name="TextFileColumn">
     <xs:complexContent mixed="false">
       <xs:extension base="ColumnBase">
-        <xs:attribute xmlns:q54="http://Icod.Wod" ref="q54:formatString" />
+        <xs:attribute xmlns:q52="http://Icod.Wod" ref="q52:formatString" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="DbFileBase" nillable="true" type="DbFileBase" />
-  <xs:element name="dbOperation" nillable="true" xmlns:q55="http://Icod.Wod" type="q55:dbOperation" />
-  <xs:element name="dbParameter" nillable="true" xmlns:q56="http://Icod.Wod" type="q56:dbParameter" />
-  <xs:element name="delimitedFile" nillable="true" xmlns:q57="http://Icod.Wod" type="q57:delimitedFile" />
-  <xs:element name="fixedWidthFile" nillable="true" xmlns:q58="http://Icod.Wod" type="q58:fixedWidthFile" />
-  <xs:element name="jsonFile" nillable="true" xmlns:q59="http://Icod.Wod" type="q59:jsonFile" />
+  <xs:element name="dbOperation" nillable="true" xmlns:q53="http://Icod.Wod" type="q53:dbOperation" />
+  <xs:element name="dbParameter" nillable="true" xmlns:q54="http://Icod.Wod" type="q54:dbParameter" />
+  <xs:element name="delimitedFile" nillable="true" xmlns:q55="http://Icod.Wod" type="q55:delimitedFile" />
+  <xs:element name="fixedWidthFile" nillable="true" xmlns:q56="http://Icod.Wod" type="q56:fixedWidthFile" />
+  <xs:element name="jsonFile" nillable="true" xmlns:q57="http://Icod.Wod" type="q57:jsonFile" />
   <xs:element name="LiteralColumn" nillable="true" type="LiteralColumn" />
   <xs:element name="TextFileBase" nillable="true" type="TextFileBase" />
   <xs:element name="ColumnMap" nillable="true" type="ColumnMap" />
   <xs:complexType name="ColumnMap">
-    <xs:attribute xmlns:q60="http://Icod.Wod" ref="q60:skip" />
-    <xs:attribute xmlns:q61="http://Icod.Wod" ref="q61:from" />
-    <xs:attribute xmlns:q62="http://Icod.Wod" ref="q62:to" />
+    <xs:attribute xmlns:q58="http://Icod.Wod" ref="q58:skip" />
+    <xs:attribute xmlns:q59="http://Icod.Wod" ref="q59:from" />
+    <xs:attribute xmlns:q60="http://Icod.Wod" ref="q60:to" />
   </xs:complexType>
-  <xs:element name="command" nillable="true" xmlns:q63="http://Icod.Wod" type="q63:command" />
+  <xs:element name="command" nillable="true" xmlns:q61="http://Icod.Wod" type="q61:command" />
   <xs:element name="DbDescriptorBase" nillable="true" type="DbDescriptorBase" />
   <xs:complexType name="DbDescriptorBase" abstract="true">
     <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="1" xmlns:q64="http://Icod.Wod" ref="q64:columnMapping" />
+      <xs:element minOccurs="0" maxOccurs="1" xmlns:q62="http://Icod.Wod" ref="q62:columnMapping" />
     </xs:sequence>
-    <xs:attribute xmlns:q65="http://Icod.Wod" ref="q65:connectionStringName" />
-    <xs:attribute xmlns:q66="http://Icod.Wod" ref="q66:commandText" />
-    <xs:attribute xmlns:q67="http://Icod.Wod" ref="q67:commandTimeout" />
-    <xs:attribute xmlns:q68="http://Icod.Wod" ref="q68:commandType" />
-    <xs:attribute xmlns:q69="http://Icod.Wod" ref="q69:namespace" />
-    <xs:attribute xmlns:q70="http://Icod.Wod" ref="q70:updateBatchSize" />
-    <xs:attribute xmlns:q71="http://Icod.Wod" ref="q71:missingSchemaAction" />
-    <xs:attribute xmlns:q72="http://Icod.Wod" ref="q72:missingMappingAction" />
-    <xs:attribute xmlns:q73="http://Icod.Wod" ref="q73:tableName" />
-    <xs:attribute xmlns:q74="http://Icod.Wod" ref="q74:schemaQuery" />
+    <xs:attribute xmlns:q63="http://Icod.Wod" ref="q63:connectionStringName" />
+    <xs:attribute xmlns:q64="http://Icod.Wod" ref="q64:commandText" />
+    <xs:attribute xmlns:q65="http://Icod.Wod" ref="q65:commandTimeout" />
+    <xs:attribute xmlns:q66="http://Icod.Wod" ref="q66:commandType" />
+    <xs:attribute xmlns:q67="http://Icod.Wod" ref="q67:namespace" />
+    <xs:attribute xmlns:q68="http://Icod.Wod" ref="q68:updateBatchSize" />
+    <xs:attribute xmlns:q69="http://Icod.Wod" ref="q69:missingSchemaAction" />
+    <xs:attribute xmlns:q70="http://Icod.Wod" ref="q70:missingMappingAction" />
+    <xs:attribute xmlns:q71="http://Icod.Wod" ref="q71:tableName" />
+    <xs:attribute xmlns:q72="http://Icod.Wod" ref="q72:schemaQuery" />
   </xs:complexType>
   <xs:simpleType name="CommandType">
     <xs:restriction base="xs:string">
@@ -220,7 +219,7 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="DataFileBase" nillable="true" type="DataFileBase" />
-  <xs:element name="fileExport" nillable="true" xmlns:q75="http://Icod.Wod" type="q75:fileExport" />
-  <xs:element name="fileImport" nillable="true" xmlns:q76="http://Icod.Wod" type="q76:fileImport" />
+  <xs:element name="fileExport" nillable="true" xmlns:q73="http://Icod.Wod" type="q73:fileExport" />
+  <xs:element name="fileImport" nillable="true" xmlns:q74="http://Icod.Wod" type="q74:fileImport" />
   <xs:element name="TextFileColumn" nillable="true" type="TextFileColumn" />
 </xs:schema>
