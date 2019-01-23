@@ -9,12 +9,15 @@ namespace Icod.Wod.File {
 
 		#region fields
 		public const System.String DefaultRecordSeparator = "\r\n";
+		public const System.String DefaultCodePage = "windows-1252";
+		public const System.Int32 DefaultBufferLength = 16384;
 		private static readonly System.Action<System.IO.StreamWriter> theEmptyEolWriter;
 
 		private System.String myCodePage;
 		private System.Boolean myWriteIfEmpty;
 		private System.Int32 myBufferLength;
 		private System.String myRecordSeparator;
+		[System.NonSerialized]
 		private System.Action<System.IO.StreamWriter> myEolWriter;
 		#endregion fields
 
@@ -25,15 +28,15 @@ namespace Icod.Wod.File {
 		}
 
 		protected FileBase() : base() {
-			myCodePage = "windows-1252";
-			myBufferLength = 16384;
+			myCodePage = DefaultCodePage;
+			myBufferLength = DefaultBufferLength;
 			myWriteIfEmpty = false;
 			myRecordSeparator = DefaultRecordSeparator;
 			myEolWriter = theEmptyEolWriter;
 		}
 		protected FileBase( WorkOrder workOrder ) : base( workOrder ) {
-			myCodePage = "windows-1252";
-			myBufferLength = 16384;
+			myCodePage = DefaultCodePage;
+			myBufferLength = DefaultBufferLength;
 			myWriteIfEmpty = false;
 			myRecordSeparator = DefaultRecordSeparator;
 			myEolWriter = theEmptyEolWriter;
@@ -46,7 +49,7 @@ namespace Icod.Wod.File {
 			"codePage",
 			Namespace = "http://Icod.Wod"
 		)]
-		[System.ComponentModel.DefaultValue( "windows-1252" )]
+		[System.ComponentModel.DefaultValue( DefaultCodePage )]
 		public System.String CodePage {
 			get {
 				return myCodePage;
@@ -74,7 +77,7 @@ namespace Icod.Wod.File {
 			"bufferLength",
 			Namespace = "http://Icod.Wod"
 		)]
-		[System.ComponentModel.DefaultValue( 16384 )]
+		[System.ComponentModel.DefaultValue( DefaultBufferLength )]
 		public System.Int32 BufferLength {
 			get {
 				return myBufferLength;

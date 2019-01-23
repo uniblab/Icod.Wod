@@ -98,6 +98,7 @@
     <Compile Include="src\File\HeadFile.cs" />
     <Compile Include="src\File\List.cs" />
     <Compile Include="src\File\ListDirectory.cs" />
+    <Compile Include="src\File\RebaseFile.cs" />
     <Compile Include="src\File\SshKeyFileDescriptor.cs" />
     <Compile Include="src\File\TailFile.cs" />
     <Compile Include="src\File\TouchZip.cs" />

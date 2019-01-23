@@ -19,7 +19,7 @@ namespace Icod.Wod.File {
 
 
 		#region methods
-		public override void DoWork( WorkOrder workOrder, IStack<ContextRecord> context ) {
+		public sealed override void DoWork( WorkOrder workOrder, IStack<ContextRecord> context ) {
 			this.Context = context ?? Stack<ContextRecord>.Empty;
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			var sourceHandler = this.GetFileHandler( workOrder );
@@ -28,7 +28,7 @@ namespace Icod.Wod.File {
 			}
 			var dest = this.Destination;
 			if ( null == dest ) {
-				throw new System.InvalidOperationException( "Destination cannot be null." );
+				dest = this;
 			}
 			var destHandler = dest.GetFileHandler( workOrder );
 
