@@ -531,6 +531,13 @@
   <xs:attribute default="true" name="convertEmptyStringToNull" type="xs:boolean" />
   <xs:attribute default="true" name="trimValues" type="xs:boolean" />
   <xs:attribute default="" name="nullReplacementText" type="xs:string" />
+  <xs:complexType name="rebaseFile">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:fileOperation">
+        <xs:attribute default="windows-1252" name="outputCodePage" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
   <xs:complexType name="existsFile">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:fileOperation">
