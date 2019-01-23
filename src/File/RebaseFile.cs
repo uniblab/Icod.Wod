@@ -53,6 +53,9 @@ namespace Icod.Wod.File {
 
 			var sourceEncoding = CodePageHelper.GetCodePage( this.CodePage );
 			var destEncoding = CodePageHelper.GetCodePage( this.OutputCodePage );
+			if ( sourceEncoding.Equals( destEncoding ) ) {
+				return;
+			}
 			foreach ( var file in sourceHandler.ListFiles().Select(
 				x => x.File
 			) ) {
