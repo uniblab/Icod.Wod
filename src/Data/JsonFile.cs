@@ -160,7 +160,7 @@ namespace Icod.Wod.Data {
 		}
 		private System.Object ReadFile( System.String fileName, System.Collections.Generic.IEnumerable<System.Reflection.Assembly> collection ) {
 			using ( var fileStream = System.IO.File.Open( fileName, System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.Read ) ) {
-				using ( var streamReader = new System.IO.StreamReader( fileStream, System.Text.Encoding.ASCII, true, this.BufferLength, true ) ) {
+				using ( var streamReader = new System.IO.StreamReader( fileStream, CodePageHelper.GetCodePage( this.CodePage ), true, this.BufferLength, true ) ) {
 					var engine = new Newtonsoft.Json.JsonSerializer();
 					using ( var reader = new Newtonsoft.Json.JsonTextReader( streamReader ) ) {
 						var output = engine.Deserialize( reader, this.GetTypeFromName( this.TypeName, collection ) );
@@ -177,7 +177,8 @@ namespace Icod.Wod.Data {
 					using ( var reader = handler.OpenReader( file.File ) ) {
 						using ( var raw = new System.IO.MemoryStream() ) {
 							reader.CopyTo( raw );
-							output.Add( System.Reflection.Assembly.Load( raw.ToArray() ) );
+							var a = System.Reflection.Assembly.Load( raw.ToArray() );
+							output.Add( a );
 						}
 					}
 				}
