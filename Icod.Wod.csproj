@@ -28,7 +28,9 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release-net461' ">
+	<PropertyGroup Condition=" '$(Configuration)' == 'Staging' ">
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)' == 'Release-net461' ">
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release-net47' ">
   </PropertyGroup>
