@@ -46,7 +46,7 @@ namespace Icod.Wod.File {
 				x => x.File
 			) ) {
 				using ( var buffer = new System.IO.MemoryStream( this.BufferLength ) ) {
-					using ( var writer = new System.IO.StreamWriter( buffer, sourceEncoding ) ) {
+					using ( var writer = new System.IO.StreamWriter( buffer, sourceEncoding, this.BufferLength, true ) ) {
 						var rs = this.RecordSeparator;
 						foreach ( var line in reader( sourceHandler, file, sourceEncoding ) ) {
 							writer.Write( line + rs );
