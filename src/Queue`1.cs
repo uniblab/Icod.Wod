@@ -79,11 +79,9 @@
 			}
 			public System.Collections.Generic.IEnumerator<U> GetEnumerator() {
 				yield return myValue;
-				yield break;
 			}
 			System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() {
 				yield return myValue;
-				yield break;
 			}
 		}
 		#endregion nested classes
