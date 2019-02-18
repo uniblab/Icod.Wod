@@ -200,7 +200,7 @@ namespace Icod.Wod.Data {
 		}
 
 		[System.Xml.Serialization.XmlIgnore]
-		protected System.Func<System.Text.StringBuilder, System.String> ColumnReader {
+		private System.Func<System.Text.StringBuilder, System.String> ColumnReader {
 			get {
 				return myColumnReader ?? theDefaultColumnReader;
 			}

@@ -79,7 +79,7 @@ namespace Icod.Wod.Data {
 		}
 
 		[System.Xml.Serialization.XmlIgnore]
-		protected System.Func<System.String, System.Int32, System.Int32, System.String> ColumnReader {
+		private System.Func<System.String, System.Int32, System.Int32, System.String> ColumnReader {
 			get {
 				return myColumnReader ?? theDefaultColumnReader;
 			}
