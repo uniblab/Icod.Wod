@@ -11,6 +11,9 @@ namespace Icod.Wod.Data {
 	public sealed class DelimitedFile : TextFileBase {
 
 		#region fields
+		private static readonly System.Func<System.Text.StringBuilder, System.String> theValueToString;
+		private static readonly System.Func<System.Text.StringBuilder, System.String> theTrimToNullReader;
+		private static readonly System.Func<System.Text.StringBuilder, System.String> theTrimReader;
 		private static readonly System.Func<System.Text.StringBuilder, System.String> theDefaultColumnReader;
 
 		private System.Char myFieldSeparator;
@@ -26,7 +29,16 @@ namespace Icod.Wod.Data {
 
 		#region .ctor
 		static DelimitedFile() {
-			theDefaultColumnReader = x => x.ToString().TrimToNull();
+			theValueToString = a => ( null == a ) 
+				? null 
+				: ( System.DBNull.Value.Equals( a ) ) 
+					? null 
+					: a.ToString()
+			;
+			theTrimReader = a => ( theValueToString( a ) ?? System.String.Empty ).Trim();
+			theTrimToNullReader = a => theValueToString( a ).TrimToNull();
+
+			theDefaultColumnReader = x => theTrimToNullReader( x );
 		}
 
 		public DelimitedFile() : base() {
@@ -164,14 +176,11 @@ namespace Icod.Wod.Data {
 			}
 			set {
 				base.ConvertEmptyStringToNull = value;
-				System.Func<System.Text.StringBuilder, System.String> w = a => a.ToString();
-				var q = ( this.TrimValues )
-					? a => w( a ).TrimToNull()
-					: w
-				;
-				this.ColumnReader = ( value )
-					? q
-					: a => q( a ) ?? System.String.Empty
+				this.ColumnReader = ( this.ConvertEmptyStringToNull )
+					? theTrimToNullReader
+					: ( this.TrimValues )
+						? theTrimReader
+						: theValueToString
 				;
 			}
 		}
@@ -187,14 +196,11 @@ namespace Icod.Wod.Data {
 			}
 			set {
 				base.TrimValues = value;
-				System.Func<System.Text.StringBuilder, System.String> w = a => a.ToString();
-				var q = ( value )
-					? a => w( a ).TrimToNull()
-					: w
-				;
 				this.ColumnReader = ( this.ConvertEmptyStringToNull )
-					? q
-					: a => q( a ) ?? System.String.Empty
+					? theTrimToNullReader
+					: ( this.TrimValues )
+						? theTrimReader
+						: theValueToString
 				;
 			}
 		}

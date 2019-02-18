@@ -290,7 +290,7 @@ namespace Icod.Wod.Data {
 				throw new System.InvalidOperationException();
 			}
 			var skip = this.Skip;
-			Int32 s = 0;
+			var s = 0;
 			while ( ( ++s < skip ) && !file.EndOfStream ) {
 				this.ReadRecord( file );
 			}
