@@ -4,7 +4,7 @@
 	public sealed class Queue<T> : IQueue<T> {
 
 		#region nested classes
-		internal sealed class EmptyQueue : IQueue<T> {
+		internal sealed class EmptyQueue<U> : IQueue<U> {
 			internal EmptyQueue() : base() {
 			}
 
@@ -19,25 +19,70 @@
 				}
 			}
 
-			public IQueue<T> Dequeue() {
+			public IQueue<U> Dequeue() {
 				throw new System.InvalidOperationException();
 			}
-			public T Peek() {
+			public U Peek() {
 				throw new System.InvalidOperationException();
 			}
-			public IQueue<T> Enqueue( T value ) {
-				return new Queue<T>( Stack<T>.Empty.Push( value ), Stack<T>.Empty );
+			public IQueue<U> Enqueue( U value ) {
+				return new SingleQueue<U>( value );
 			}
-			public IQueue<T> Reverse() {
+			public IQueue<U> Reverse() {
 				throw new System.InvalidOperationException();
 			}
-			public IStack<T> ToStack() {
-				return Stack<T>.Empty;
+			public IStack<U> ToStack() {
+				return Stack<U>.Empty;
 			}
-			public System.Collections.Generic.IEnumerator<T> GetEnumerator() {
+			public System.Collections.Generic.IEnumerator<U> GetEnumerator() {
 				yield break;
 			}
 			System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() {
+				yield break;
+			}
+		}
+
+		internal sealed class SingleQueue<U> : IQueue<U> {
+			private readonly U myValue;
+
+			internal SingleQueue() : base() {
+			}
+			internal SingleQueue( U value ) : this() {
+				myValue = value;
+			}
+
+			public System.Int32 Count {
+				get {
+					return 1;
+				}
+			}
+			public System.Boolean IsEmpty {
+				get {
+					return false;
+				}
+			}
+
+			public IQueue<U> Dequeue() {
+				return Queue<U>.Empty;
+			}
+			public U Peek() {
+				return myValue;
+			}
+			public IQueue<U> Enqueue( U value ) {
+				return new Queue<U>( Stack<U>.Empty.Push( myValue ), Stack<U>.Empty.Push( value ) );
+			}
+			public IQueue<U> Reverse() {
+				return this;
+			}
+			public IStack<U> ToStack() {
+				return Stack<U>.Empty.Push( myValue );
+			}
+			public System.Collections.Generic.IEnumerator<U> GetEnumerator() {
+				yield return myValue;
+				yield break;
+			}
+			System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() {
+				yield return myValue;
 				yield break;
 			}
 		}
@@ -55,7 +100,7 @@
 
 		#region .ctor
 		static Queue() {
-			theEmpty = new EmptyQueue();
+			theEmpty = new EmptyQueue<T>();
 		}
 
 		internal Queue( IStack<T> drain, IStack<T> source ) {
