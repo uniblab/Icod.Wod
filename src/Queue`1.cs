@@ -150,7 +150,6 @@
 			} else {
 				return new Queue<T>( mySource.Reverse(), Stack<T>.Empty );
 			}
-			throw new System.InvalidOperationException();
 		}
 		public IQueue<T> Reverse() {
 			return new Queue<T>( mySource.Reverse(), myDrain.Reverse() );
