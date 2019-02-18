@@ -20,9 +20,7 @@ namespace Icod.Wod.File {
 		private static readonly System.Func<FileEntry, System.String, System.String> theTruncatedGetFileName;
 		private static readonly System.Func<FileEntry, System.String, System.String> theFullGetFileName;
 
-		private System.String myCodePage;
 		private System.Boolean myTruncateEntryName;
-		private System.Boolean myWriteIfEmpty;
 		private System.Func<FileEntry, System.String, System.String> myGetFileName;
 		#endregion fields
 
@@ -34,34 +32,16 @@ namespace Icod.Wod.File {
 		}
 
 		protected ZipOperationBase() : base() {
-			myCodePage = "windows-1252";
 			myTruncateEntryName = true;
-			myWriteIfEmpty = true;
 			myGetFileName = theTruncatedGetFileName;
 		}
 		protected ZipOperationBase( WorkOrder workOrder ) : base( workOrder ) {
-			myCodePage = "windows-1252";
 			myTruncateEntryName = true;
-			myWriteIfEmpty = true;
 		}
 		#endregion .ctor
 
 
 		#region properties
-		[System.Xml.Serialization.XmlAttribute(
-			"codePage",
-			Namespace = "http://Icod.Wod"
-		)]
-		[System.ComponentModel.DefaultValue( "windows-1252" )]
-		public virtual System.String CodePage {
-			get {
-				return myCodePage;
-			}
-			set {
-				myCodePage = value;
-			}
-		}
-
 		[System.Xml.Serialization.XmlAttribute(
 			"truncateEntryName",
 			Namespace = "http://Icod.Wod"
@@ -77,19 +57,6 @@ namespace Icod.Wod.File {
 					? theTruncatedGetFileName
 					: theFullGetFileName
 				;
-			}
-		}
-		[System.Xml.Serialization.XmlAttribute(
-			"writeIfEmpty",
-			Namespace = "http://Icod.Wod"
-		)]
-		[System.ComponentModel.DefaultValue( false )]
-		public System.Boolean WriteIfEmpty {
-			get {
-				return myWriteIfEmpty;
-			}
-			set {
-				myWriteIfEmpty = value;
 			}
 		}
 
@@ -113,10 +80,6 @@ namespace Icod.Wod.File {
 
 
 		#region methods
-		public virtual System.Text.Encoding GetEncoding() {
-			return CodePageHelper.GetCodePage( this.CodePage );
-		}
-
 		protected virtual System.Collections.Generic.IEnumerable<System.IO.Compression.ZipArchiveEntry> MatchEntries( System.Collections.Generic.IEnumerable<System.IO.Compression.ZipArchiveEntry> collection ) {
 			return ( this.Source ?? new FileDescriptor[ 0 ] ).Select(
 				x => {

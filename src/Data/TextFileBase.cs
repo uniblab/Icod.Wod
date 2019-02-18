@@ -14,7 +14,6 @@ namespace Icod.Wod.Data {
 		private System.Action<System.IO.StreamWriter> myEolWriter;
 		private System.Boolean myHasHeader;
 		private System.Int32 mySkip;
-		private System.String myRecordSeparator;
 		private System.Boolean myConvertEmptyStringToNull;
 		private System.Boolean myTrimValues;
 		#endregion fields
@@ -29,18 +28,16 @@ namespace Icod.Wod.Data {
 		protected TextFileBase() : base() {
 			myHasHeader = true;
 			mySkip = 0;
-			myRecordSeparator = "\r\n";
 			myConvertEmptyStringToNull = true;
 			myTrimValues = true;
-			myEolWriter = x => x.Write( myRecordSeparator );
+			myEolWriter = x => x.Write( DefaultRecordSeparator );
 		}
 		protected TextFileBase( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
 			myHasHeader = true;
 			mySkip = 0;
-			myRecordSeparator = "\r\n";
 			myConvertEmptyStringToNull = true;
 			myTrimValues = true;
-			myEolWriter = x => x.Write( myRecordSeparator );
+			myEolWriter = x => x.Write( DefaultRecordSeparator );
 		}
 		#endregion .ctor
 
@@ -83,23 +80,6 @@ namespace Icod.Wod.Data {
 			}
 			set {
 				myEolWriter = value;
-			}
-		}
-		[System.Xml.Serialization.XmlAttribute(
-			"recordSeparator",
-			Namespace = "http://Icod.Wod"
-		)]
-		[System.ComponentModel.DefaultValue( "\r\n" )]
-		public System.String RecordSeparator {
-			get {
-				return myRecordSeparator;
-			}
-			set {
-				myRecordSeparator = value;
-				this.EolWriter = System.String.IsNullOrEmpty( value )
-					? EmptyEolWriter
-					: x => x.Write( myRecordSeparator )
-				;
 			}
 		}
 
@@ -295,7 +275,7 @@ namespace Icod.Wod.Data {
 			} else if ( null == writer ) {
 				throw new System.ArgumentNullException( "writer" );
 			}
-			writer.Write( GetRow( formatMap, columns, row ) );
+			writer.Write( this.GetRow( formatMap, columns, row ) );
 			this.EolWriter( writer );
 		}
 

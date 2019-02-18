@@ -12,36 +12,12 @@ namespace Icod.Wod.File {
 	)]
 	public sealed class ListZip : BinaryZipOperationBase {
 
-		#region fields
-		private System.Int32 myBufferLength;
-		#endregion fields
-
-
 		#region .ctor
 		public ListZip() : base() {
-			myBufferLength = 16384;
 		}
 		public ListZip( WorkOrder workOrder ) : base( workOrder ) {
-			myBufferLength = 16384;
 		}
 		#endregion .ctor
-
-
-		#region properties
-		[System.Xml.Serialization.XmlAttribute(
-			"bufferLength",
-			Namespace = "http://Icod.Wod"
-		)]
-		[System.ComponentModel.DefaultValue( 16384 )]
-		public System.Int32 BufferLength {
-			get {
-				return myBufferLength;
-			}
-			set {
-				myBufferLength = value;
-			}
-		}
-		#endregion properties
 
 
 		#region methods

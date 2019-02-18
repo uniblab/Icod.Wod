@@ -50,9 +50,6 @@ namespace Icod.Wod.File {
 
 
 		#region methods
-		public System.Text.Encoding GetEncoding() {
-			return CodePageHelper.GetCodePage( this.CodePage );
-		}
 		protected abstract System.Collections.Generic.IEnumerable<FileEntry> GetEntries( FileHandlerBase source );
 		public override void DoWork( WorkOrder workOrder, IStack<ContextRecord> context ) {
 			this.Context = context ?? Stack<ContextRecord>.Empty;
