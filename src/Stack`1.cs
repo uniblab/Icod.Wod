@@ -6,11 +6,11 @@ namespace Icod.Wod {
 	public sealed class Stack<T> : IStack<T> {
 
 		#region nested classes
-		internal sealed class EmptyStack<T> : IStack<T> {
+		internal sealed class EmptyStack<U> : IStack<U> {
 			private static readonly System.Int32 theHashCode;
 			static EmptyStack() {
 				unchecked {
-					theHashCode = typeof( EmptyStack<T> ).AssemblyQualifiedName.GetHashCode() + typeof( T ).AssemblyQualifiedName.GetHashCode();
+					theHashCode = typeof( EmptyStack<U> ).AssemblyQualifiedName.GetHashCode() + typeof( U ).AssemblyQualifiedName.GetHashCode();
 				}
 			}
 			internal EmptyStack() : base() {
@@ -25,42 +25,42 @@ namespace Icod.Wod {
 					return 0;
 				}
 			}
-			public T Peek() {
+			public U Peek() {
 				throw new System.InvalidOperationException();
 			}
-			public IStack<T> Pop() {
+			public IStack<U> Pop() {
 				throw new System.InvalidOperationException();
 			}
-			public IStack<T> Push( T value ) {
-				return new SingleStack<T>( value );
+			public IStack<U> Push( U value ) {
+				return new SingleStack<U>( value );
 			}
-			public IStack<T> Reverse() {
+			public IStack<U> Reverse() {
 				return this;
 			}
-			public IQueue<T> ToQueue() {
-				return Queue<T>.Empty;
+			public IQueue<U> ToQueue() {
+				return Queue<U>.Empty;
 			}
 
 			public sealed override System.Int32 GetHashCode() {
 				return theHashCode;
 			}
-			public System.Collections.Generic.IEnumerator<T> GetEnumerator() {
+			public System.Collections.Generic.IEnumerator<U> GetEnumerator() {
 				yield break;
 			}
 			System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() {
 				yield break;
 			}
 		}
-		internal sealed class SingleStack<T> : IStack<T> {
+		internal sealed class SingleStack<U> : IStack<U> {
 			private static readonly System.Int32 theHashCode;
-			private readonly T myValue;
+			private readonly U myValue;
 			private readonly System.Int32 myHashCode;
 			static SingleStack() {
 				unchecked {
-					theHashCode = typeof( SingleStack<T> ).AssemblyQualifiedName.GetHashCode() + typeof( T ).AssemblyQualifiedName.GetHashCode();
+					theHashCode = typeof( SingleStack<U> ).AssemblyQualifiedName.GetHashCode() + typeof( U ).AssemblyQualifiedName.GetHashCode();
 				}
 			}
-			internal SingleStack( T value ) : base() {
+			internal SingleStack( U value ) : base() {
 				myValue = value;
 				myHashCode = theHashCode;
 				if ( !System.Object.ReferenceEquals( value, null ) ) {
@@ -79,27 +79,27 @@ namespace Icod.Wod {
 					return 1;
 				}
 			}
-			public T Peek() {
+			public U Peek() {
 				return myValue;
 			}
-			public IStack<T> Pop() {
-				return Stack<T>.Empty;
+			public IStack<U> Pop() {
+				return Stack<U>.Empty;
 			}
-			public IStack<T> Push( T value ) {
-				return new Stack<T>( this, value );
+			public IStack<U> Push( U value ) {
+				return new Stack<U>( this, value );
 			}
-			public IStack<T> Reverse() {
+			public IStack<U> Reverse() {
 				return this;
 			}
-			public IQueue<T> ToQueue() {
-				return Queue<T>.Empty.Enqueue( myValue );
+			public IQueue<U> ToQueue() {
+				return Queue<U>.Empty.Enqueue( myValue );
 			}
 
 			public sealed override System.Int32 GetHashCode() {
 				return theHashCode;
 			}
 
-			public System.Collections.Generic.IEnumerator<T> GetEnumerator() {
+			public System.Collections.Generic.IEnumerator<U> GetEnumerator() {
 				yield return myValue;
 			}
 			System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() {

@@ -36,7 +36,6 @@ namespace Icod.Wod.File {
 			System.String fileName;
 			System.IO.Compression.ZipArchiveEntry entry;
 			var writeIfEmpty = this.WriteIfEmpty;
-			var isEmpty = true;
 			using ( System.IO.Stream buffer = new System.IO.MemoryStream() ) {
 				using ( var reader = handler.OpenReader( handler.PathCombine( this.ExpandedPath, this.ExpandedName ) ) ) {
 					reader.CopyTo( buffer );
@@ -57,7 +56,6 @@ namespace Icod.Wod.File {
 									) ?? zipArchive.CreateEntry( fileName, System.IO.Compression.CompressionLevel.Optimal );
 									using ( var writer = entry.Open() ) {
 										reader.CopyTo( writer );
-										isEmpty = false;
 									}
 								}
 							}

@@ -60,7 +60,6 @@ namespace Icod.Wod.File {
 		protected sealed override IQueue<System.String> ReadPositiveCount( FileHandlerBase fileHandler, System.String filePathName, System.Text.Encoding encoding ) {
 			var output = Queue<System.String>.Empty;
 			System.String line = null;
-			System.Int32 lineCount = 0;
 			using ( var stream = fileHandler.OpenReader( filePathName ) ) {
 				using ( var reader = new System.IO.StreamReader( stream, encoding, true, fileHandler.BufferLength ) ) {
 					var rs = this.RecordSeparator;

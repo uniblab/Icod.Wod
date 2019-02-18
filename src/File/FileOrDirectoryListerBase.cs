@@ -9,25 +9,16 @@ namespace Icod.Wod.File {
 	public abstract class FileOrDirectoryListerBase : BinaryFileOperationBase {
 
 		#region fields
-		private System.String myCodePage;
 		private System.Boolean myTruncateEntryName;
-		private System.Boolean myWriteIfEmpty;
-		private System.Int32 myBufferLength;
 		#endregion fields
 
 
 		#region .ctor
 		protected FileOrDirectoryListerBase() : base() {
-			myCodePage = "windows-1252";
 			myTruncateEntryName = true;
-			myWriteIfEmpty = true;
-			myBufferLength = 16384;
 		}
 		protected FileOrDirectoryListerBase( WorkOrder workOrder ) : base( workOrder ) {
-			myCodePage = "windows-1252";
 			myTruncateEntryName = true;
-			myWriteIfEmpty = true;
-			myBufferLength = 16384;
 		}
 		#endregion .ctor
 
