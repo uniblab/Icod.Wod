@@ -5,12 +5,13 @@ namespace Icod.Wod.Data {
 	[System.Serializable]
 	[System.Xml.Serialization.XmlInclude( typeof( TextFileBase ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( JsonFile ) )]
+	[System.Xml.Serialization.XmlInclude( typeof( ScalarFile ) )]
 	public abstract class DataFileBase : Icod.Wod.File.FileBase, ITableDestination, ITableSource {
 
 		#region fields
 		protected const System.Char SpaceChar = ' ';
 
-		private ColumnBase[ ] myColumns;
+		private ColumnBase[] myColumns;
 		private System.Boolean myAppend;
 		#endregion fields
 
@@ -79,7 +80,6 @@ namespace Icod.Wod.Data {
 			this.WriteRecords( workOrder, source.ReadTables( workOrder ).OfType<System.Data.DataTable>() );
 		}
 		protected virtual void WriteRecords( Icod.Wod.WorkOrder workOrder, System.Collections.Generic.IEnumerable<System.Data.DataTable> source ) {
-#if DEBUG
 			if ( ( null == source ) || !source.Any() ) {
 				if ( this.WriteIfEmpty ) {
 					throw new System.ArgumentNullException( "source" );
@@ -89,13 +89,12 @@ namespace Icod.Wod.Data {
 			} else if ( null == workOrder ) {
 				throw new System.ArgumentNullException( "workOrder" );
 			}
-#endif
+
 			using ( var table = source.FirstOrDefault() ) {
 				this.WriteRecords( workOrder, table );
 			}
 		}
 		protected virtual void WriteRecords( Icod.Wod.WorkOrder workOrder, System.Data.DataTable source ) {
-#if DEBUG
 			if ( null == source ) {
 				if ( this.WriteIfEmpty ) {
 					throw new System.ArgumentNullException( "source" );
@@ -105,7 +104,7 @@ namespace Icod.Wod.Data {
 			} else if ( null == workOrder ) {
 				throw new System.ArgumentNullException( "workOrder" );
 			}
-#endif
+
 			this.WriteRecords( workOrder, source.Columns.OfType<System.Data.DataColumn>(), source.Rows.OfType<System.Data.DataRow>() );
 		}
 		protected abstract void WriteRecords( Icod.Wod.WorkOrder workOrder, System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Collections.Generic.IEnumerable<System.Data.DataRow> rows );

@@ -75,6 +75,22 @@ namespace Icod.Wod {
 		}
 
 		[System.Xml.Serialization.XmlArray(
+			ElementName = "sfCredentials",
+			IsNullable = false,
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.Xml.Serialization.XmlArrayItem(
+			"sfCredential",
+			IsNullable = false,
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.ComponentModel.DefaultValue( null )]
+		public SalesForce.Credential[] SFCredentials {
+			get;
+			set;
+		}
+
+		[System.Xml.Serialization.XmlArray(
 			IsNullable = false,
 			Namespace = "http://Icod.Wod",
 			ElementName = "emails"
