@@ -142,8 +142,8 @@
           <xs:element minOccurs="0" maxOccurs="1" name="columnMapping" type="tns:ArrayOfColumnMap" />
         </xs:sequence>
         <xs:attribute default="1" name="updateBatchSize" type="xs:int" />
-        <xs:attribute default="Add" name="missingSchemaAction" type="tns:MissingSchemaAction" />
-        <xs:attribute default="Passthrough" name="missingMappingAction" type="tns:MissingMappingAction" />
+        <xs:attribute default="Ignore" name="missingSchemaAction" type="tns:MissingSchemaAction" />
+        <xs:attribute default="Ignore" name="missingMappingAction" type="tns:MissingMappingAction" />
         <xs:attribute name="tableName" type="xs:string" />
         <xs:attribute name="schemaQuery" type="xs:string" />
       </xs:extension>
@@ -476,8 +476,8 @@
   </xs:complexType>
   <xs:element name="columnMapping" type="tns:ArrayOfColumnMap" />
   <xs:attribute default="1" name="updateBatchSize" type="xs:int" />
-  <xs:attribute default="Add" name="missingSchemaAction" type="MissingSchemaAction" />
-  <xs:attribute default="Passthrough" name="missingMappingAction" type="MissingMappingAction" />
+  <xs:attribute default="Ignore" name="missingSchemaAction" type="MissingSchemaAction" />
+  <xs:attribute default="Ignore" name="missingMappingAction" type="MissingMappingAction" />
   <xs:attribute name="tableName" type="xs:string" />
   <xs:attribute name="schemaQuery" type="xs:string" />
   <xs:complexType name="command">
