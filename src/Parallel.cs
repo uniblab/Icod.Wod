@@ -47,6 +47,12 @@ namespace Icod.Wod {
 			IsNullable = false,
 			Namespace = "http://Icod.Wod"
 		)]
+		[System.Xml.Serialization.XmlArrayItem(
+			typeof( SalesForce.Rest.SFOperationBase ),
+			IsNullable = false,
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.ComponentModel.DefaultValue( null )]
 		public System.Object[] Steps {
 			get;
 			set;
@@ -61,21 +67,11 @@ namespace Icod.Wod {
 			get;
 			set;
 		}
-
-		[System.Xml.Serialization.XmlIgnore]
-		public IStack<ContextRecord> Context {
-			get;
-			set;
-		}
 		#endregion properties
 
 
 		#region methods
 		public void DoWork( WorkOrder workOrder ) {
-			this.DoWork( workOrder,  Stack<ContextRecord>.Empty );
-		}
-		public void DoWork( Icod.Wod.WorkOrder workOrder, IStack<ContextRecord> context ) {
-			this.Context = context ?? Stack<ContextRecord>.Empty;
 			var steps = ( this.Steps ?? new IStep[ 0 ] ).OfType<IStep>().Select<IStep, System.Action>(
 				x => () => x.DoWork( workOrder )
 			);

@@ -20,8 +20,7 @@ namespace Icod.Wod.File {
 
 
 		#region method
-		public sealed override void DoWork( WorkOrder workOrder, IStack<ContextRecord> context ) {
-			this.Context = context ?? Stack<ContextRecord>.Empty;
+		public sealed override void DoWork( WorkOrder workOrder ) {
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			var destD = this.Destination;
 			destD.WorkOrder = workOrder;

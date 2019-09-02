@@ -25,8 +25,7 @@ namespace Icod.Wod.File {
 			}
 			return source.List();
 		}
-		public sealed override void DoWork( WorkOrder workOrder, IStack<ContextRecord> context ) {
-			this.Context = context ?? Stack<ContextRecord>.Empty;
+		public sealed override void DoWork( WorkOrder workOrder ) {
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			var source = this.GetFileHandler( workOrder );
 			if ( null == source ) {

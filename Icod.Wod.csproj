@@ -40,7 +40,7 @@
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\Icod.Wod.Client\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\Icod.Wod.Client\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Renci.SshNet, Version=2016.1.0.0, Culture=neutral, PublicKeyToken=1cee9f8bde3db106, processorArchitecture=MSIL">
       <HintPath>..\Icod.Wod.Client\packages\SSH.NET.2016.1.0\lib\net40\Renci.SshNet.dll</HintPath>
@@ -93,14 +93,12 @@
     <Compile Include="src\Cofiguration\SalesForceCredentialElement.cs" />
     <Compile Include="src\Cofiguration\SalesForceCredentialSection.cs" />
     <Compile Include="src\ConnectionStringEntry.cs" />
-    <Compile Include="src\ContextRecord.cs" />
     <Compile Include="src\Data\ColumnBase.cs" />
-    <Compile Include="src\Data\DbFileBase.cs" />
+    <Compile Include="src\Data\DbIODescriptorBase.cs" />
     <Compile Include="src\Data\DbOperationBase.cs" />
     <Compile Include="src\Data\DbParameter.cs" />
     <Compile Include="src\Data\DelimitedFile.cs" />
     <Compile Include="src\Data\FixedWidthFile.cs" />
-    <Compile Include="src\Data\Foreach.cs" />
     <Compile Include="src\Data\Interfaces\IRecordSeparator.cs" />
     <Compile Include="src\Data\JsonFile.cs" />
     <Compile Include="src\Data\LiteralColumn.cs" />
@@ -127,11 +125,12 @@
     <Compile Include="src\Interfaces\IStack`1.cs" />
     <Compile Include="src\Queue`1.cs" />
     <Compile Include="src\SalesForce\Credential.cs" />
+    <Compile Include="src\SalesForce\DbDestination.cs" />
     <Compile Include="src\SalesForce\Interfaces\ICredential.cs" />
     <Compile Include="src\SalesForce\Rest\Login.cs" />
     <Compile Include="src\SalesForce\Rest\LoginResponse.cs" />
-    <Compile Include="src\SalesForce\Rest\RecordAttributes.cs" />
-    <Compile Include="src\SalesForce\Rest\RestResult.cs" />
+    <Compile Include="src\SalesForce\Rest\SFSelect.cs" />
+    <Compile Include="src\SalesForce\Rest\SFOperationBase.cs" />
     <Compile Include="src\Serial.cs" />
     <Compile Include="src\Parallel.cs" />
     <Compile Include="src\Stack`1.cs" />

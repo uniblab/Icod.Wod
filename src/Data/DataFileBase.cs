@@ -158,7 +158,9 @@ namespace Icod.Wod.Data {
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			foreach ( var file in this.GetFiles() ) {
 				using ( var stream = this.OpenReader( file ) ) {
-					yield return this.ReadFile( file.File, stream );
+					using ( var table = this.ReadFile( file.File, stream ) ) {
+						yield return table;
+					}
 				}
 			}
 		}

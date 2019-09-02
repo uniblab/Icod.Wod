@@ -111,19 +111,10 @@ namespace Icod.Wod.Data {
 
 			var table = new System.Data.DataTable();
 			try {
-				var assemblies = this.LoadAssemblies( this.WorkOrder );
-				var list = this.ExecuteMap( this.ReadFile( filePathName, assemblies ), assemblies );
-				var pi = list.GetType().GetGenericArguments().Last().GetProperties();
-				foreach ( var p in pi ) {
-					table.Columns.Add( new System.Data.DataColumn( p.Name ) );
-				}
-				System.Data.DataRow row = null;
-				foreach ( var record in list ) {
-					row = table.NewRow();
-					foreach ( var p in pi ) {
-						row[ p.Name ] = p.GetValue( record );
-					}
-					table.Rows.Add( row );
+				if ( System.String.IsNullOrEmpty( this.TypeName ) ) {
+					this.ReadFileAsJson( file, table );
+				} else {
+					this.ReadFileWithMap( file, table );
 				}
 				this.AddFileColumns( table, filePathName );
 			} catch ( System.Exception e ) {
@@ -142,6 +133,55 @@ namespace Icod.Wod.Data {
 
 			return table;
 		}
+		private void ReadFileWithMap( System.IO.StreamReader file, System.Data.DataTable table ) {
+			var assemblies = this.LoadAssemblies( this.WorkOrder );
+			var list = this.ExecuteMap( this.ReadFile( file, assemblies ), assemblies );
+			var pi = list.GetType().GetGenericArguments().Last().GetProperties();
+			foreach ( var p in pi ) {
+				table.Columns.Add( new System.Data.DataColumn( p.Name ) );
+			}
+			System.Data.DataRow row = null;
+			foreach ( var record in list ) {
+				row = table.NewRow();
+				foreach ( var p in pi ) {
+					row[ p.Name ] = p.GetValue( record );
+				}
+				table.Rows.Add( row );
+			}
+		}
+		private void ReadFileAsJson( System.IO.StreamReader file, System.Data.DataTable table ) {
+			var records = this.ReadFile( file );
+			System.Collections.Generic.ICollection<ColumnBase> cols = this.Columns;
+			if ( !( cols ?? new ColumnBase[ 0 ] ).Any() ) {
+				cols = new System.Collections.Generic.List<ColumnBase>();
+				dynamic record = records.First;
+				foreach ( var key in ( record as System.Collections.Generic.IDictionary<System.String, Newtonsoft.Json.Linq.JToken> ).Where(
+					x => !x.Value.HasValues
+				).Select(
+					x => x.Key
+				) ) {
+					cols.Add( new TextFileColumn( key ) );
+				}
+			}
+			foreach ( var column in cols ) {
+				var dataCol = new System.Data.DataColumn( column.Name );
+				if ( 0 < column.Length ) {
+					dataCol.MaxLength = column.Length;
+				}
+				table.Columns.Add( dataCol );
+			}
+			System.Data.DataRow row = null;
+			var colNames = cols.Select(
+				x => x.Name
+			);
+			foreach ( dynamic record in records ) {
+				row = table.NewRow();
+				foreach ( var colName in colNames ) {
+					row[ colName ] = record[ colName ].Value;
+				}
+				table.Rows.Add( row );
+			}
+		}
 		private System.Collections.Generic.IEnumerable<System.Object> ExecuteMap( System.Object obj, System.Collections.Generic.IEnumerable<System.Reflection.Assembly> collection ) {
 			var t = this.GetTypeFromName( this.MapWith, collection );
 			var mapper = (Icod.Wod.Map.IMapWith)System.Activator.CreateInstance( t );
@@ -158,16 +198,12 @@ namespace Icod.Wod.Data {
 				x => null != x
 			).FirstOrDefault();
 		}
-		private System.Object ReadFile( System.String fileName, System.Collections.Generic.IEnumerable<System.Reflection.Assembly> collection ) {
-			using ( var fileStream = System.IO.File.Open( fileName, System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.Read ) ) {
-				using ( var streamReader = new System.IO.StreamReader( fileStream, CodePageHelper.GetCodePage( this.CodePage ), true, this.BufferLength, true ) ) {
-					var engine = new Newtonsoft.Json.JsonSerializer();
-					using ( var reader = new Newtonsoft.Json.JsonTextReader( streamReader ) ) {
-						var output = engine.Deserialize( reader, this.GetTypeFromName( this.TypeName, collection ) );
-						return output;
-					}
-				}
-			}
+		private System.Object ReadFile( System.IO.StreamReader file, System.Collections.Generic.IEnumerable<System.Reflection.Assembly> collection ) {
+			var engine = new Newtonsoft.Json.JsonSerializer();
+			return engine.Deserialize( file, this.GetTypeFromName( this.TypeName, collection ) );
+		}
+		private Newtonsoft.Json.Linq.JObject ReadFile( System.IO.StreamReader file ) {
+			return Newtonsoft.Json.Linq.JObject.Parse( file.ReadToEnd() );
 		}
 		private System.Collections.Generic.IEnumerable<System.Reflection.Assembly> LoadAssemblies( WorkOrder workOrder ) {
 			System.Collections.Generic.ICollection<System.Reflection.Assembly> output = new System.Collections.Generic.List<System.Reflection.Assembly>();

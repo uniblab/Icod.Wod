@@ -2,6 +2,9 @@
 
 	public interface ICredential {
 
+		System.String Name {
+			get;
+		}
 		System.String ClientId {
 			get;
 			set;
@@ -22,9 +25,24 @@
 			get;
 			set;
 		}
-		System.Uri SiteUrl {
+		System.String Scheme {
 			get;
 			set;
+		}
+		System.String Host {
+			get;
+			set;
+		}
+		System.Int32 Port {
+			get;
+			set;
+		}
+		System.String Path {
+			get;
+			set;
+		}
+		System.Uri SiteUrl {
+			get;
 		}
 
 	}

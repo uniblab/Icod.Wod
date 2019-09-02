@@ -21,20 +21,9 @@ namespace Icod.Wod.File {
 		#endregion .ctor
 
 
-		#region properties
-		[System.Xml.Serialization.XmlIgnore]
-		public IStack<ContextRecord> Context {
-			get;
-			set;
-		}
-		#endregion properties
-
 
 		#region methods
-		public virtual void DoWork( WorkOrder workOrder ) {
-			this.DoWork( workOrder, Stack<ContextRecord>.Empty );
-		}
-		public abstract void DoWork( WorkOrder workOrder, IStack<ContextRecord> context );
+		public abstract void DoWork( WorkOrder workOrder );
 		#endregion methods
 
 	}

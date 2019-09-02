@@ -59,22 +59,6 @@ namespace Icod.Wod {
 		}
 
 		[System.Xml.Serialization.XmlArray(
-			ElementName = "variables",
-			IsNullable = false,
-			Namespace = "http://Icod.Wod"
-		)]
-		[System.Xml.Serialization.XmlArrayItem(
-			"variable",
-			IsNullable = false,
-			Namespace = "http://Icod.Wod"
-		)]
-		[System.ComponentModel.DefaultValue( null )]
-		public Variable[] Variables {
-			get;
-			set;
-		}
-
-		[System.Xml.Serialization.XmlArray(
 			ElementName = "sfCredentials",
 			IsNullable = false,
 			Namespace = "http://Icod.Wod"
@@ -86,6 +70,22 @@ namespace Icod.Wod {
 		)]
 		[System.ComponentModel.DefaultValue( null )]
 		public SalesForce.Credential[] SFCredentials {
+			get;
+			set;
+		}
+
+		[System.Xml.Serialization.XmlArray(
+			ElementName = "variables",
+			IsNullable = false,
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.Xml.Serialization.XmlArrayItem(
+			"variable",
+			IsNullable = false,
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.ComponentModel.DefaultValue( null )]
+		public Variable[] Variables {
 			get;
 			set;
 		}
@@ -143,6 +143,11 @@ namespace Icod.Wod {
 		)]
 		[System.Xml.Serialization.XmlArrayItem(
 			typeof( Data.DbOperationBase ),
+			IsNullable = false,
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.Xml.Serialization.XmlArrayItem(
+			typeof( SalesForce.Rest.SFOperationBase ),
 			IsNullable = false,
 			Namespace = "http://Icod.Wod"
 		)]
@@ -211,30 +216,6 @@ namespace Icod.Wod {
 			@string = this.ExpandWorkOrderVariables( @string );
 			@string = this.ExpandWodVariables( @string );
 			@string = this.ExpandEnvironmentVariables( @string );
-			return @string;
-		}
-		public System.String ExpandPseudoVariables( System.String @string, IStack<ContextRecord> context ) {
-			@string = @string.TrimToNull();
-			if ( System.String.IsNullOrEmpty( @string ) ) {
-				return null;
-			}
-			System.Collections.Generic.IEnumerable<System.Data.DataColumn> cols;
-			foreach ( var rec in ( context ?? Stack<ContextRecord>.Empty ).Where(
-				x => ( null != x.Record )
-			).Select(
-				x => x.Record
-			).Where(
-				x => ( null != x ) && ( null != x.Table ) && ( null != x.Table.Columns )
-			) ) {
-				cols = rec.Table.Columns.OfType<System.Data.DataColumn>();
-				if ( ( null == cols ) || !cols.Any() ) {
-					continue;
-				}
-				foreach ( var col in cols ) {
-					@string = @string.Replace( "%rec:" + col.ColumnName + "%", ( rec[ col ] ?? System.String.Empty ).ToString() );
-				}
-			}
-			@string = this.ExpandPseudoVariables( @string );
 			return @string;
 		}
 

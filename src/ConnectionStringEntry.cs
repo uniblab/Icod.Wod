@@ -4,9 +4,7 @@ namespace Icod.Wod {
 	public sealed class ConnectionStringEntry {
 
 		#region fields
-		private System.String myName;
 		private System.String myProviderName;
-		private System.String myConnectionString;
 		#endregion fields
 
 
@@ -23,12 +21,8 @@ namespace Icod.Wod {
 			Namespace = "http://Icod.Wod"
 		)]
 		public System.String Name {
-			get {
-				return myName;
-			}
-			set {
-				myName = value;
-			}
+			get;
+			set;
 		}
 
 		[System.Xml.Serialization.XmlAttribute(
@@ -50,12 +44,8 @@ namespace Icod.Wod {
 			Namespace = "http://Icod.Wod"
 		)]
 		public System.String ConnectionString {
-			get {
-				return myConnectionString;
-			}
-			set {
-				myConnectionString = value;
-			}
+			get;
+			set;
 		}
 		#endregion properties
 

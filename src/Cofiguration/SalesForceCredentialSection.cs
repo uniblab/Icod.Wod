@@ -3,6 +3,10 @@
 namespace Icod.Wod.Configuration {
 
 	[System.Serializable]
+	[System.Xml.Serialization.XmlType(
+		IncludeInSchema = false,
+		Namespace = "http://Icod.Wod"
+	)]
 	public sealed class SalesForceCredentialSection : System.Configuration.ConfigurationSection {
 
 		#region fields

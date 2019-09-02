@@ -21,7 +21,7 @@
 				throw new System.ArgumentNullException( "response" );
 			};
 			this.AccessToken = (System.String)response.access_token;
-			this.InstanceUrl = new System.Uri( (System.String)response.instance_url );
+			this.InstanceUrl = (System.String)response.instance_url;
 			this.Id = (System.String)response.id;
 			this.Issued = (System.Int64)response.issued_at;
 			this.Signature = response.signature;
@@ -34,7 +34,7 @@
 			get;
 			set;
 		}
-		public System.Uri InstanceUrl {
+		public System.String InstanceUrl {
 			get;
 			set;
 		}

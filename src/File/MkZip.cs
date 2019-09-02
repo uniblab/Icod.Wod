@@ -52,8 +52,7 @@ namespace Icod.Wod.File {
 
 
 		#region methods
-		public sealed override void DoWork( WorkOrder workOrder, IStack<ContextRecord> context ) {
-			this.Context = context ?? Stack<ContextRecord>.Empty;
+		public sealed override void DoWork( WorkOrder workOrder ) {
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			var sources = ( this.Source ?? new FileDescriptor[ 0 ] ).Select(
 				x => {

@@ -211,21 +211,11 @@ namespace Icod.Wod {
 				myAttachments = value;
 			}
 		}
-
-		[System.Xml.Serialization.XmlIgnore]
-		public IStack<ContextRecord> Context {
-			get;
-			set;
-		}
 		#endregion properties
 
 
 		#region methods
 		public void DoWork( Icod.Wod.WorkOrder workOrder ) {
-			this.DoWork( workOrder, Stack<ContextRecord>.Empty );
-		}
-		public void DoWork( Icod.Wod.WorkOrder workOrder, IStack<ContextRecord> context ) {
-			this.Context = context ?? Stack<ContextRecord>.Empty;
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			using ( var msg = new System.Net.Mail.MailMessage() ) {
 				msg.IsBodyHtml = this.BodyIsHtml;

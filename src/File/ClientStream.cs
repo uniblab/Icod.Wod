@@ -124,7 +124,7 @@ namespace Icod.Wod.File {
 			if ( null == myStream ) {
 				throw new System.ObjectDisposedException( null );
 			}
-			myStream.Read( buffer, offset, count );
+			myStream.Write( buffer, offset, count );
 		}
 		#endregion methods
 
