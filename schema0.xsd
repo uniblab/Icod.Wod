@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import namespace="http://Icod.Wod" schemaLocation=".\schema1.xsd" />
+  <xs:import namespace="http://Icod.Wod" schemaLocation="schema1.xsd" />
   <xs:element name="email" nillable="true" xmlns:q1="http://Icod.Wod" type="q1:email" />
   <xs:element name="serial" nillable="true" xmlns:q2="http://Icod.Wod" type="q2:serial" />
   <xs:complexType name="FileOrDirectoryListerBase" abstract="true">
@@ -17,28 +17,11 @@
           <xs:element minOccurs="0" maxOccurs="1" ref="q4:columnMapping" />
         </xs:sequence>
         <xs:attribute ref="q4:updateBatchSize" />
-        <xs:attribute ref="q4:missingSchemaAction" />
-        <xs:attribute ref="q4:missingMappingAction" />
         <xs:attribute ref="q4:tableName" />
         <xs:attribute ref="q4:schemaQuery" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:simpleType name="MissingSchemaAction">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="Add" />
-      <xs:enumeration value="Ignore" />
-      <xs:enumeration value="Error" />
-      <xs:enumeration value="AddWithKey" />
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:simpleType name="MissingMappingAction">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="Passthrough" />
-      <xs:enumeration value="Ignore" />
-      <xs:enumeration value="Error" />
-    </xs:restriction>
-  </xs:simpleType>
   <xs:element name="parallel" nillable="true" xmlns:q5="http://Icod.Wod" type="q5:parallel" />
   <xs:element name="variable" nillable="true" xmlns:q6="http://Icod.Wod" type="q6:variable" />
 </xs:schema>

@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://Icod.Wod" elementFormDefault="qualified" targetNamespace="http://Icod.Wod" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import />
   <xs:complexType name="email">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="1" name="body" type="xs:string" />
@@ -142,8 +141,6 @@
           <xs:element minOccurs="0" maxOccurs="1" name="columnMapping" type="tns:ArrayOfColumnMap" />
         </xs:sequence>
         <xs:attribute default="1" name="updateBatchSize" type="xs:int" />
-        <xs:attribute default="Ignore" name="missingSchemaAction" type="tns:MissingSchemaAction" />
-        <xs:attribute default="Ignore" name="missingMappingAction" type="tns:MissingMappingAction" />
         <xs:attribute name="tableName" type="xs:string" />
         <xs:attribute name="schemaQuery" type="xs:string" />
       </xs:extension>
@@ -159,21 +156,6 @@
     <xs:attribute name="from" type="xs:string" />
     <xs:attribute name="to" type="xs:string" />
   </xs:complexType>
-  <xs:simpleType name="MissingSchemaAction">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="Add" />
-      <xs:enumeration value="Ignore" />
-      <xs:enumeration value="Error" />
-      <xs:enumeration value="AddWithKey" />
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:simpleType name="MissingMappingAction">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="Passthrough" />
-      <xs:enumeration value="Ignore" />
-      <xs:enumeration value="Error" />
-    </xs:restriction>
-  </xs:simpleType>
   <xs:complexType name="DbDestination">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:DbIODescriptorBase" />
@@ -183,8 +165,10 @@
     <xs:complexContent mixed="false">
       <xs:extension base="tns:DbIODescriptorBase">
         <xs:sequence>
-          <xs:element minOccurs="0" maxOccurs="1" name="source" type="tns:DataFileBase" />
+          <xs:element minOccurs="1" maxOccurs="1" name="source" type="tns:DataFileBase" />
         </xs:sequence>
+        <xs:attribute default="Ignore" name="missingSchemaAction" type="tns:MissingSchemaAction" />
+        <xs:attribute default="Ignore" name="missingMappingAction" type="tns:MissingMappingAction" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -465,19 +449,34 @@
       <xs:element minOccurs="0" maxOccurs="unbounded" name="assembly" type="tns:fileDescriptor" />
     </xs:sequence>
   </xs:complexType>
+  <xs:simpleType name="MissingSchemaAction">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Add" />
+      <xs:enumeration value="Ignore" />
+      <xs:enumeration value="Error" />
+      <xs:enumeration value="AddWithKey" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="MissingMappingAction">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Passthrough" />
+      <xs:enumeration value="Ignore" />
+      <xs:enumeration value="Error" />
+    </xs:restriction>
+  </xs:simpleType>
   <xs:complexType name="fileExport">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:DbIODescriptorBase">
         <xs:sequence>
-          <xs:element minOccurs="0" maxOccurs="1" name="destination" type="tns:DataFileBase" />
+          <xs:element minOccurs="1" maxOccurs="1" name="destination" type="tns:DataFileBase" />
         </xs:sequence>
+        <xs:attribute default="Add" name="missingSchemaAction" type="tns:MissingSchemaAction" />
+        <xs:attribute default="Passthrough" name="missingMappingAction" type="tns:MissingMappingAction" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="columnMapping" type="tns:ArrayOfColumnMap" />
   <xs:attribute default="1" name="updateBatchSize" type="xs:int" />
-  <xs:attribute default="Ignore" name="missingSchemaAction" type="MissingSchemaAction" />
-  <xs:attribute default="Ignore" name="missingMappingAction" type="MissingMappingAction" />
   <xs:attribute name="tableName" type="xs:string" />
   <xs:attribute name="schemaQuery" type="xs:string" />
   <xs:complexType name="command">

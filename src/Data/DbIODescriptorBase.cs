@@ -20,10 +20,20 @@ namespace Icod.Wod.Data {
 			myMissingSchemaAction = System.Data.MissingSchemaAction.Ignore;
 			myMissingMappingAction = System.Data.MissingMappingAction.Ignore;
 		}
+		protected DbIODescriptorBase( System.Data.MissingSchemaAction missingSchemaAction, System.Data.MissingMappingAction missingMappingAction ) : base() {
+			myUpdateBatchSize = 1;
+			myMissingSchemaAction = missingSchemaAction;
+			myMissingMappingAction = missingMappingAction;
+		}
 		public DbIODescriptorBase( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
 			myUpdateBatchSize = 1;
 			myMissingSchemaAction = System.Data.MissingSchemaAction.Ignore;
 			myMissingMappingAction = System.Data.MissingMappingAction.Ignore;
+		}
+		protected DbIODescriptorBase( Icod.Wod.WorkOrder workOrder, System.Data.MissingSchemaAction missingSchemaAction, System.Data.MissingMappingAction missingMappingAction ) : base( workOrder ) {
+			myUpdateBatchSize = 1;
+			myMissingSchemaAction = missingSchemaAction;
+			myMissingMappingAction = missingMappingAction;
 		}
 		#endregion .ctor
 
@@ -43,12 +53,9 @@ namespace Icod.Wod.Data {
 			}
 		}
 
-		[System.Xml.Serialization.XmlAttribute(
-			"missingSchemaAction",
-			Namespace = "http://Icod.Wod"
-		)]
+		[System.Xml.Serialization.XmlIgnore]
 		[System.ComponentModel.DefaultValue( System.Data.MissingSchemaAction.Ignore )]
-		public System.Data.MissingSchemaAction MissingSchemaAction {
+		public virtual System.Data.MissingSchemaAction MissingSchemaAction {
 			get {
 				return myMissingSchemaAction;
 			}
@@ -56,12 +63,9 @@ namespace Icod.Wod.Data {
 				myMissingSchemaAction = value;
 			}
 		}
-		[System.Xml.Serialization.XmlAttribute(
-			"missingMappingAction",
-			Namespace = "http://Icod.Wod"
-		)]
+		[System.Xml.Serialization.XmlIgnore]
 		[System.ComponentModel.DefaultValue( System.Data.MissingMappingAction.Ignore )]
-		public System.Data.MissingMappingAction MissingMappingAction {
+		public virtual System.Data.MissingMappingAction MissingMappingAction {
 			get {
 				return myMissingMappingAction;
 			}
@@ -266,6 +270,9 @@ namespace Icod.Wod.Data {
 							var tableName = this.NamespaceTableName;
 							var dest = set.Tables[ tableName ];
 							foreach ( var t in source.ReadTables( workOrder ) ) {
+								if ( System.String.IsNullOrEmpty( t.TableName ) && !System.String.IsNullOrEmpty( dest.TableName ) ) {
+									t.TableName = dest.TableName;
+								}
 								amap.Clear();
 								tmap = amap.Add( "Table", t.TableName );
 								foreach ( var cmap in this.CreateDataColumnMapping( t, dest ) ) {
