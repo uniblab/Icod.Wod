@@ -7,11 +7,45 @@ namespace Icod.Wod.SalesForce {
 
 		#region .ctor
 		public DbDestination() : base() {
+			this.MissingMappingAction = System.Data.MissingMappingAction.Ignore;
+			this.MissingSchemaAction = System.Data.MissingSchemaAction.Ignore;
 		}
 		public DbDestination( WorkOrder workOrder ) : this() {
 			this.WorkOrder = workOrder;
+			this.MissingMappingAction = System.Data.MissingMappingAction.Ignore;
+			this.MissingSchemaAction = System.Data.MissingSchemaAction.Ignore;
 		}
 		#endregion .ctor
+
+
+		#region properties
+		[System.Xml.Serialization.XmlAttribute(
+			"missingSchemaAction",
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.ComponentModel.DefaultValue( System.Data.MissingSchemaAction.Ignore )]
+		public sealed override System.Data.MissingSchemaAction MissingSchemaAction {
+			get {
+				return base.MissingSchemaAction;
+			}
+			set {
+				base.MissingSchemaAction = value;
+			}
+		}
+		[System.Xml.Serialization.XmlAttribute(
+			"missingMappingAction",
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.ComponentModel.DefaultValue( System.Data.MissingMappingAction.Ignore )]
+		public sealed override System.Data.MissingMappingAction MissingMappingAction {
+			get {
+				return base.MissingMappingAction;
+			}
+			set {
+				base.MissingMappingAction = value;
+			}
+		}
+		#endregion properties
 
 
 		#region methods

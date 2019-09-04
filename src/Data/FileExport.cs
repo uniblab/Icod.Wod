@@ -49,7 +49,7 @@ namespace Icod.Wod.Data {
 			}
 		}
 
-		[System.Xml.Serialization.XmlElement( 
+		[System.Xml.Serialization.XmlElement(
 			"destination", 
 			Type = typeof( DataFileBase ), 
 			IsNullable = false, 

@@ -48,6 +48,12 @@ namespace Icod.Wod.SalesForce.Rest {
 			set;
 		}
 
+		[System.Xml.Serialization.XmlElement(
+			"destination",
+			Type = typeof( DbDestination ),
+			IsNullable = false,
+			Namespace = "http://Icod.Wod" )
+		]
 		public DbDestination Destination {
 			get;
 			set;
