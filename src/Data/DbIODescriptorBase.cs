@@ -278,17 +278,6 @@ namespace Icod.Wod.Data {
 								foreach ( var cmap in this.CreateDataColumnMapping( t, dest ) ) {
 									tmap.ColumnMappings.Add( cmap );
 								}
-								//foreach ( var col in dest.Columns.OfType<System.Data.DataColumn>().Where(
-								//	x => !t.Columns.OfType<System.Data.DataColumn>().Select(
-								//		y => y.ColumnName
-								//	).Contains( x.ColumnName, System.StringComparer.OrdinalIgnoreCase )
-								//) ) {
-								//	var q = new System.Data.DataColumn {
-								//		ColumnName = col.ColumnName,
-								//		DefaultValue = null
-								//	};
-								//	t.Columns.Add( q );
-								//}
 								adapter.Update( t );
 								t.Dispose();
 							}
