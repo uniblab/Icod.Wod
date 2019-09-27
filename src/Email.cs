@@ -242,13 +242,13 @@ namespace Icod.Wod {
 				}
 
 				msg.SubjectEncoding = CodePageHelper.GetCodePage( this.SubjectCodePage );
-				msg.Subject = workOrder.ExpandPseudoVariables( this.ExpandedSubject );
-				msg.To.Add( workOrder.ExpandPseudoVariables( this.ExpandedTo ) );
+				msg.Subject = this.ExpandedSubject;
+				msg.To.Add( this.ExpandedTo );
 				if ( !System.String.IsNullOrEmpty( this.CC ) ) {
-					msg.CC.Add( workOrder.ExpandPseudoVariables( this.ExpandedCC ) );
+					msg.CC.Add( this.ExpandedCC );
 				}
 				if ( !System.String.IsNullOrEmpty( this.Bcc ) ) {
-					msg.Bcc.Add( workOrder.ExpandPseudoVariables( this.ExpandedBcc ) );
+					msg.Bcc.Add( this.ExpandedBcc );
 				}
 				using ( var client = new System.Net.Mail.SmtpClient() ) {
 					client.Send( msg );

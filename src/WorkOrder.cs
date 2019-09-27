@@ -41,6 +41,12 @@ namespace Icod.Wod {
 			get;
 			set;
 		}
+		[System.Xml.Serialization.XmlIgnore]
+		private System.String ExpandedEmailTo {
+			get {
+				return this.ExpandPseudoVariables( this.EmailTo );
+			}
+		}
 
 		[System.Xml.Serialization.XmlArray(
 			IsNullable = false,
@@ -110,9 +116,20 @@ namespace Icod.Wod {
 		[System.Xml.Serialization.XmlIgnore]
 		public System.String EmailList {
 			get {
-				return System.String.Join( ",", ( this.Email ?? new System.String[ 0 ] ).Union( new System.String[ 1 ] { this.EmailTo ?? System.String.Empty } ).Where(
-					x => !System.String.IsNullOrEmpty( x )
-				) ) ?? System.String.Empty;
+				return System.String.Join(
+					",",
+					(
+						this.Email.Select(
+							x => this.ExpandPseudoVariables( x )
+						) ?? new System.String[ 0 ]
+					).Union(
+						new System.String[ 1 ] { this.ExpandedEmailTo ?? System.String.Empty }
+					).Where(
+						x => !System.String.IsNullOrEmpty( x )
+					).Distinct(
+						System.StringComparer.OrdinalIgnoreCase
+					)
+				) ?? System.String.Empty;
 			}
 		}
 
