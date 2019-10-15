@@ -243,11 +243,12 @@ namespace Icod.Wod.Data {
 					using ( var adapter = this.CreateDataAdapter( connection, workOrder, command ) ) {
 						using ( var set = new System.Data.DataSet() ) {
 							adapter.Fill( set );
-							foreach ( var table in set.Tables.OfType<System.Data.DataTable>() ) {
-								using ( var t = table ) {
-									yield return table;
-								}
-							}
+							return set.Tables.OfType<System.Data.DataTable>();
+							//foreach ( var table in set.Tables.OfType<System.Data.DataTable>() ) {
+							//	using ( var t = table ) {
+							//		yield return table;
+							//	}
+							//}
 						}
 					}
 				}

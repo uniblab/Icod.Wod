@@ -119,7 +119,7 @@ namespace Icod.Wod {
 				return System.String.Join(
 					",",
 					(
-						this.Email.Select(
+						( this.Email ?? new System.String[ 0 ] ).Select(
 							x => this.ExpandPseudoVariables( x )
 						) ?? new System.String[ 0 ]
 					).Union(
@@ -211,7 +211,7 @@ namespace Icod.Wod {
 			foreach ( System.Text.RegularExpressions.Match m in System.Text.RegularExpressions.Regex.Matches( @string, WorkOrder.DateTimeFormat ) ) {
 				@string = System.Text.RegularExpressions.Regex.Replace( @string, m.Value, System.DateTime.Now.ToString( m.Groups[ "dateTimeFormatString" ].Value ) );
 			}
-			@string = @string.Replace( "%wod:EmailTo%", this.EmailList );
+			@string = @string.Replace( "%wod:EmailTo%", this.EmailTo );
 			@string = @string.Replace( "%wod:JobName%", this.JobName );
 			return @string;
 		}
