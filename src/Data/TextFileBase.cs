@@ -291,8 +291,9 @@ namespace Icod.Wod.Data {
 			}
 			var skip = this.Skip;
 			var s = 0;
-			while ( ( ++s < skip ) && !file.EndOfStream ) {
+			while ( !file.EndOfStream && ( s < skip ) ) {
 				this.ReadRecord( file );
+				s++;
 			}
 		}
 		protected abstract System.Data.DataRow ReadRecord( System.Data.DataTable table, System.IO.StreamReader file );

@@ -381,12 +381,22 @@ namespace Icod.Wod.Data {
 				throw new System.ArgumentNullException( "writer" );
 			}
 			var qcs = this.QuoteCharString;
-			var fq = this.ForceQuote;
-			writer.Write( System.String.Join( this.FieldSeparatorString, dbColumns.Select(
-				x => x.ColumnName
-			).Select(
-				x => ( fq || x.Contains( this.FieldSeparatorString ) ) ? qcs + x + qcs : x
-			).ToArray() ) );
+			var fss = this.FieldSeparatorString;
+			var columnNameList = dbColumns.Select(
+				x => x.ColumnName.Replace( qcs, qcs + qcs )
+			);
+			var rs = this.RecordSeparator;
+			var list = this.ForceQuote
+				? columnNameList.Select(
+					x => qcs + x + qcs
+				)
+				: columnNameList.Select(
+					x => ( x.Contains( qcs ) || x.Contains( fss ) || ( !System.String.IsNullOrEmpty( rs ) && x.Contains( rs ) ) )
+						? qcs + x + qcs
+						: x
+				)
+			;
+			writer.Write( System.String.Join( fss, list ) );
 			this.EolWriter( writer );
 		}
 		protected sealed override System.String GetRow( System.Collections.Generic.IDictionary<System.Data.DataColumn, ColumnBase> formatMap, System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Data.DataRow row ) {
@@ -398,16 +408,23 @@ namespace Icod.Wod.Data {
 				throw new System.ArgumentNullException( "formatMap" );
 			}
 
-			var fq = this.ForceQuote;
 			var qcs = this.QuoteCharString;
-			var list = columns.Select(
-				x => this.GetColumn( formatMap[ x ], x, row )
-			).Select(
-				x => ( fq || x.Contains( this.FieldSeparatorString ) )
-					? qcs + x + qcs
-					: x
-			).ToArray();
-			return System.String.Join( this.FieldSeparatorString, list );
+			var fss = this.FieldSeparatorString;
+			var valueList = columns.Select(
+				x => this.GetColumn( formatMap[ x ], x, row ).Replace( qcs, qcs + qcs )
+			);
+			var rs = this.RecordSeparator;
+			var list = this.ForceQuote
+				? valueList.Select(
+					x => qcs + x + qcs
+				)
+				: valueList.Select(
+					x => ( x.Contains( qcs ) || x.Contains( fss ) || ( !System.String.IsNullOrEmpty( rs ) && x.Contains( rs ) ) )
+						? qcs + x + qcs
+						: x
+				)
+			;
+			return System.String.Join( fss, list );
 		}
 		#endregion methods
 
