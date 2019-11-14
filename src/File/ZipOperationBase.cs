@@ -98,7 +98,7 @@ namespace Icod.Wod.File {
 			if ( null == source ) {
 				throw new System.InvalidOperationException();
 			}
-			var regexPattern = source.WorkOrder.ExpandPseudoVariables( source.RegexPattern );
+			var regexPattern = source.ExpandedRegexPattern;
 			var regexMatch = System.String.IsNullOrEmpty( regexPattern )
 				? collection
 				: collection.Where(

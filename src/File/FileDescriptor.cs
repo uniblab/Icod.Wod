@@ -85,6 +85,12 @@ namespace Icod.Wod.File {
 				myRegexPattern = value;
 			}
 		}
+		[System.Xml.Serialization.XmlIgnore]
+		public virtual System.String ExpandedRegexPattern {
+			get {
+				return this.WorkOrder.ExpandPseudoVariables( myRegexPattern );
+			}
+		}
 
 		[System.Xml.Serialization.XmlAttribute(
 			"searchOption",
