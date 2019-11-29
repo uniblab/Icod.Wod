@@ -83,7 +83,7 @@ namespace Icod.Wod.File {
 			Namespace = "http://Icod.Wod"
 		)]
 		[System.ComponentModel.DefaultValue( DefaultRecordSeparator )]
-		public System.String RecordSeparator {
+		public virtual System.String RecordSeparator {
 			get {
 				return myRecordSeparator;
 			}

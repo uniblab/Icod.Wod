@@ -228,6 +228,24 @@ namespace Icod.Wod.Data {
 				myForceQuote = value;
 			}
 		}
+
+		[System.Xml.Serialization.XmlAttribute(
+			"recordSeparator",
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.ComponentModel.DefaultValue( DefaultRecordSeparator )]
+		public sealed override System.String RecordSeparator {
+			get {
+				return base.RecordSeparator;
+			}
+			set {
+				base.RecordSeparator = value;
+				this.EolWriter = System.String.IsNullOrEmpty( value )
+					? EmptyEolWriter
+					: x => x.Write( value );
+				;
+			}
+		}
 		#endregion properties
 
 
@@ -282,7 +300,7 @@ namespace Icod.Wod.Data {
 				throw new System.InvalidOperationException();
 			}
 
-			var line = file.ReadLine( this.RecordSeparator );
+			var line = file.ReadLine( this.RecordSeparator, this.QuoteChar );
 			if ( null == line ) {
 				yield break;
 			}

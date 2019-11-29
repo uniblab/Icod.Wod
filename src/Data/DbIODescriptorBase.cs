@@ -140,9 +140,21 @@ namespace Icod.Wod.Data {
 
 			var destNames = dest.Columns.OfType<System.Data.DataColumn>().Select(
 				x => x.ColumnName
+			).Where(
+				x => !( this.ColumnMapping ?? new ColumnMap[ 0 ] ).Where(
+					y => y.Skip
+				).Select(
+					y => y.ToName
+				).Contains( x, System.StringComparer.OrdinalIgnoreCase )
 			);
 			var sourceNames = source.Columns.OfType<System.Data.DataColumn>().Select(
 				x => x.ColumnName
+			).Where(
+				x => !( this.ColumnMapping ?? new ColumnMap[ 0 ] ).Where(
+					y => y.Skip
+				).Select(
+					y => y.FromName
+				).Contains( x, System.StringComparer.OrdinalIgnoreCase )
 			);
 
 			var originalMap = ( this.ColumnMapping ?? new ColumnMap[ 0 ] ).Where(
