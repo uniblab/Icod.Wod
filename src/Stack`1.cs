@@ -6,11 +6,12 @@ namespace Icod.Wod {
 	public sealed class Stack<T> : IStack<T> {
 
 		#region nested classes
-		internal sealed class EmptyStack<U> : IStack<U> {
+		internal sealed class EmptyStack<T> : IStack<T> {
 			private static readonly System.Int32 theHashCode;
 			static EmptyStack() {
+				theHashCode = typeof( EmptyStack<T> ).AssemblyQualifiedName.GetHashCode();
 				unchecked {
-					theHashCode = typeof( EmptyStack<U> ).AssemblyQualifiedName.GetHashCode() + typeof( U ).AssemblyQualifiedName.GetHashCode();
+					theHashCode += typeof( T ).AssemblyQualifiedName.GetHashCode();
 				}
 			}
 			internal EmptyStack() : base() {
@@ -25,44 +26,47 @@ namespace Icod.Wod {
 					return 0;
 				}
 			}
-			public U Peek() {
+			public T Peek() {
 				throw new System.InvalidOperationException();
 			}
-			public IStack<U> Pop() {
+			public IStack<T> Pop() {
 				throw new System.InvalidOperationException();
 			}
-			public IStack<U> Push( U value ) {
-				return new SingleStack<U>( value );
+			public IStack<T> Push( T value ) {
+				return new SingleStack<T>( value );
 			}
-			public IStack<U> Reverse() {
+			public IStack<T> Reverse() {
 				return this;
 			}
-			public IQueue<U> ToQueue() {
-				return Queue<U>.Empty;
+			public IQueue<T> ToQueue() {
+				return Queue<T>.Empty;
 			}
 
 			public sealed override System.Int32 GetHashCode() {
 				return theHashCode;
 			}
-			public System.Collections.Generic.IEnumerator<U> GetEnumerator() {
+			public System.Collections.Generic.IEnumerator<T> GetEnumerator() {
 				yield break;
 			}
 			System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() {
 				yield break;
 			}
 		}
-		internal sealed class SingleStack<U> : IStack<U> {
+		internal sealed class SingleStack<T> : IStack<T> {
 			private static readonly System.Int32 theHashCode;
-			private readonly U myValue;
+			private readonly T myValue;
 			private readonly System.Int32 myHashCode;
 			static SingleStack() {
+				theHashCode = typeof( SingleStack<T> ).AssemblyQualifiedName.GetHashCode();
 				unchecked {
-					theHashCode = typeof( SingleStack<U> ).AssemblyQualifiedName.GetHashCode() + typeof( U ).AssemblyQualifiedName.GetHashCode();
+					theHashCode += typeof( T ).AssemblyQualifiedName.GetHashCode();
 				}
 			}
-			internal SingleStack( U value ) : base() {
-				myValue = value;
+			private SingleStack() : base() {
 				myHashCode = theHashCode;
+			}
+			internal SingleStack( T value ) : this() {
+				myValue = value;
 				if ( !System.Object.ReferenceEquals( value, null ) ) {
 					unchecked {
 						myHashCode += value.GetHashCode();
@@ -79,27 +83,27 @@ namespace Icod.Wod {
 					return 1;
 				}
 			}
-			public U Peek() {
+			public T Peek() {
 				return myValue;
 			}
-			public IStack<U> Pop() {
-				return Stack<U>.Empty;
+			public IStack<T> Pop() {
+				return Stack<T>.Empty;
 			}
-			public IStack<U> Push( U value ) {
-				return new Stack<U>( this, value );
+			public IStack<T> Push( T value ) {
+				return new Stack<T>( this, value );
 			}
-			public IStack<U> Reverse() {
+			public IStack<T> Reverse() {
 				return this;
 			}
-			public IQueue<U> ToQueue() {
-				return Queue<U>.Empty.Enqueue( myValue );
+			public IQueue<T> ToQueue() {
+				return Queue<T>.Empty.Enqueue( myValue );
 			}
 
 			public sealed override System.Int32 GetHashCode() {
-				return theHashCode;
+				return myHashCode;
 			}
 
-			public System.Collections.Generic.IEnumerator<U> GetEnumerator() {
+			public System.Collections.Generic.IEnumerator<T> GetEnumerator() {
 				yield return myValue;
 			}
 			System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() {
@@ -123,8 +127,9 @@ namespace Icod.Wod {
 		#region .ctor
 		static Stack() {
 			theEmpty = new EmptyStack<T>();
+			theHashCode = typeof( Stack<T> ).AssemblyQualifiedName.GetHashCode();
 			unchecked {
-				theHashCode = typeof( SingleStack<T> ).AssemblyQualifiedName.GetHashCode() + typeof( T ).AssemblyQualifiedName.GetHashCode();
+				theHashCode += typeof( T ).AssemblyQualifiedName.GetHashCode();
 			}
 		}
 

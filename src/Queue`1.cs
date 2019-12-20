@@ -4,7 +4,15 @@
 	public sealed class Queue<T> : IQueue<T> {
 
 		#region nested classes
-		internal sealed class EmptyQueue<U> : IQueue<U> {
+		internal sealed class EmptyQueue<T> : IQueue<T> {
+			private static readonly System.Int32 theHashCode;
+			static EmptyQueue() {
+				theHashCode = typeof( EmptyQueue<T> ).AssemblyQualifiedName.GetHashCode();
+				unchecked {
+					theHashCode += typeof( T ).AssemblyQualifiedName.GetHashCode();
+				}
+			}
+
 			internal EmptyQueue() : base() {
 			}
 
@@ -19,22 +27,25 @@
 				}
 			}
 
-			public IQueue<U> Dequeue() {
+			public IQueue<T> Dequeue() {
 				throw new System.InvalidOperationException();
 			}
-			public U Peek() {
+			public T Peek() {
 				throw new System.InvalidOperationException();
 			}
-			public IQueue<U> Enqueue( U value ) {
-				return new SingleQueue<U>( value );
+			public IQueue<T> Enqueue( T value ) {
+				return new SingleQueue<T>( value );
 			}
-			public IQueue<U> Reverse() {
+			public IQueue<T> Reverse() {
 				throw new System.InvalidOperationException();
 			}
-			public IStack<U> ToStack() {
-				return Stack<U>.Empty;
+			public IStack<T> ToStack() {
+				return Stack<T>.Empty;
 			}
-			public System.Collections.Generic.IEnumerator<U> GetEnumerator() {
+			public sealed override System.Int32 GetHashCode() {
+				return theHashCode;
+			}
+			public System.Collections.Generic.IEnumerator<T> GetEnumerator() {
 				yield break;
 			}
 			System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() {
@@ -42,13 +53,27 @@
 			}
 		}
 
-		internal sealed class SingleQueue<U> : IQueue<U> {
-			private readonly U myValue;
+		internal sealed class SingleQueue<T> : IQueue<T> {
+			private static readonly System.Int32 theHashCode;
+			private readonly T myValue;
+			private readonly System.Int32 myHashCode;
 
-			internal SingleQueue() : base() {
+			static SingleQueue() {
+				theHashCode = typeof( SingleQueue<T> ).AssemblyQualifiedName.GetHashCode();
+				unchecked {
+					theHashCode += typeof( T ).AssemblyQualifiedName.GetHashCode();
+				}
 			}
-			internal SingleQueue( U value ) : this() {
+			private SingleQueue() : base() {
+				myHashCode = theHashCode;
+			}
+			internal SingleQueue( T value ) : this() {
 				myValue = value;
+				if ( !System.Object.ReferenceEquals( value, null ) ) {
+					unchecked {
+						myHashCode += value.GetHashCode();
+					}
+				}
 			}
 
 			public System.Int32 Count {
@@ -62,22 +87,25 @@
 				}
 			}
 
-			public IQueue<U> Dequeue() {
-				return Queue<U>.Empty;
+			public IQueue<T> Dequeue() {
+				return Queue<T>.Empty;
 			}
-			public U Peek() {
+			public T Peek() {
 				return myValue;
 			}
-			public IQueue<U> Enqueue( U value ) {
-				return new Queue<U>( Stack<U>.Empty.Push( myValue ), Stack<U>.Empty.Push( value ) );
+			public IQueue<T> Enqueue( T value ) {
+				return new Queue<T>( Stack<T>.Empty.Push( myValue ), Stack<T>.Empty.Push( value ) );
 			}
-			public IQueue<U> Reverse() {
+			public IQueue<T> Reverse() {
 				return this;
 			}
-			public IStack<U> ToStack() {
-				return Stack<U>.Empty.Push( myValue );
+			public IStack<T> ToStack() {
+				return Stack<T>.Empty.Push( myValue );
 			}
-			public System.Collections.Generic.IEnumerator<U> GetEnumerator() {
+			public sealed override System.Int32 GetHashCode() {
+				return myHashCode;
+			}
+			public System.Collections.Generic.IEnumerator<T> GetEnumerator() {
 				yield return myValue;
 			}
 			System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() {
@@ -88,9 +116,11 @@
 
 
 		#region fields
+		private static readonly System.Int32 theHashCode;
 		private static readonly IQueue<T> theEmpty;
 
 		private readonly System.Int32 myCount;
+		private readonly System.Int32 myHashCode;
 		private readonly IStack<T> myDrain;
 		private readonly IStack<T> mySource;
 		#endregion fields
@@ -99,9 +129,16 @@
 		#region .ctor
 		static Queue() {
 			theEmpty = new EmptyQueue<T>();
+			theHashCode = typeof( Queue<T> ).AssemblyQualifiedName.GetHashCode();
+			unchecked {
+				theHashCode += typeof( T ).AssemblyQualifiedName.GetHashCode();
+			}
 		}
 
-		internal Queue( IStack<T> drain, IStack<T> source ) {
+		private Queue() : base() {
+			myHashCode = theHashCode;
+		}
+		internal Queue( IStack<T> drain, IStack<T> source ) :this() {
 			source = source ?? Stack<T>.Empty;
 			if ( ( drain ?? Stack<T>.Empty ).IsEmpty ) {
 				drain = source.Reverse();
@@ -110,6 +147,10 @@
 			mySource = source;
 			myDrain = drain;
 			myCount = mySource.Count + myDrain.Count;
+			unchecked {
+				myHashCode += ( drain ?? Stack<T>.Empty ).GetHashCode();
+				myHashCode += ( source ?? Stack<T>.Empty ).GetHashCode();
+			}
 		}
 		#endregion .ctor
 
@@ -163,6 +204,9 @@
 		}
 
 
+		public sealed override System.Int32 GetHashCode() {
+			return myHashCode;
+		}
 		public System.Collections.Generic.IEnumerator<T> GetEnumerator() {
 			IQueue<T> probe = this;
 			while ( !probe.IsEmpty ) {

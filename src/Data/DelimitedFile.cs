@@ -404,16 +404,9 @@ namespace Icod.Wod.Data {
 				x => x.ColumnName.Replace( qcs, qcs + qcs )
 			);
 			var rs = this.RecordSeparator;
-			var list = this.ForceQuote
-				? columnNameList.Select(
-					x => qcs + x + qcs
-				)
-				: columnNameList.Select(
-					x => ( x.Contains( qcs ) || x.Contains( fss ) || ( !System.String.IsNullOrEmpty( rs ) && x.Contains( rs ) ) )
-						? qcs + x + qcs
-						: x
-				)
-			;
+			var list = columnNameList.Select(
+				x => qcs + x + qcs
+			);
 			writer.Write( System.String.Join( fss, list ) );
 			this.EolWriter( writer );
 		}
