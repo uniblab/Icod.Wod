@@ -9,6 +9,10 @@
 			get;
 			set;
 		}
+		SalesForce.LoginMode LoginMode {
+			get;
+			set;
+		}
 		System.String ClientSecret {
 			get;
 			set;
@@ -43,6 +47,15 @@
 		}
 		System.Uri SiteUrl {
 			get;
+		}
+
+		System.String CallbackUrl {
+			get;
+			set;
+		}
+		System.String RefreshToken {
+			get;
+			set;
 		}
 
 	}

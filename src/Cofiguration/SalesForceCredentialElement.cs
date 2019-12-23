@@ -42,6 +42,16 @@ namespace Icod.Wod.Configuration {
 				this[ "clientId" ] = value.TrimToNull();
 			}
 		}
+		[System.Configuration.ConfigurationProperty( "loginMode", IsRequired = true, IsKey = false, DefaultValue = SalesForce.LoginMode.RefreshToken )]
+		public SalesForce.LoginMode LoginMode {
+			get {
+				return (SalesForce.LoginMode)( this[ "loginMode" ] );
+			}
+			set {
+				this[ "loginMode" ] = value;
+			}
+		}
+
 		[System.Configuration.ConfigurationProperty( "clientSecret", IsRequired = true, IsKey = false, DefaultValue = (System.String)null )]
 		public System.String ClientSecret {
 			get {
@@ -51,7 +61,8 @@ namespace Icod.Wod.Configuration {
 				this[ "clientSecret" ] = value.TrimToNull();
 			}
 		}
-		[System.Configuration.ConfigurationProperty( "username", IsRequired = true, IsKey = false, DefaultValue = (System.String)null )]
+
+		[System.Configuration.ConfigurationProperty( "username", IsRequired = false, IsKey = false, DefaultValue = (System.String)null )]
 		public System.String Username {
 			get {
 				return ( this[ "username" ] as System.String ).TrimToNull();
@@ -60,7 +71,7 @@ namespace Icod.Wod.Configuration {
 				this[ "username" ] = value.TrimToNull();
 			}
 		}
-		[System.Configuration.ConfigurationProperty( "password", IsRequired = true, IsKey = false, DefaultValue = (System.String)null )]
+		[System.Configuration.ConfigurationProperty( "password", IsRequired = false, IsKey = false, DefaultValue = (System.String)null )]
 		public System.String Password {
 			get {
 				return ( this[ "password" ] as System.String ).TrimToNull();
@@ -69,7 +80,7 @@ namespace Icod.Wod.Configuration {
 				this[ "password" ] = value.TrimToNull();
 			}
 		}
-		[System.Configuration.ConfigurationProperty( "securityToken", IsRequired = true, IsKey = false, DefaultValue = (System.String)null )]
+		[System.Configuration.ConfigurationProperty( "securityToken", IsRequired = false, IsKey = false, DefaultValue = (System.String)null )]
 		public System.String SecurityToken {
 			get {
 				return ( this[ "securityToken" ] as System.String ).TrimToNull();
@@ -117,6 +128,25 @@ namespace Icod.Wod.Configuration {
 			set {
 				mySiteUrl = null;
 				this[ "path" ] = value;
+			}
+		}
+
+		[System.Configuration.ConfigurationProperty( "callbackUrl", IsRequired = false, IsKey = false, DefaultValue = (System.String)null )]
+		public System.String CallbackUrl {
+			get {
+				return (System.String)this[ "callbackUrl" ];
+			}
+			set {
+				this[ "callbackUrl" ] = value;
+			}
+		}
+		[System.Configuration.ConfigurationProperty( "refreshToken", IsRequired = false, IsKey = false, DefaultValue = (System.String)null )]
+		public System.String RefreshToken {
+			get {
+				return (System.String)this[ "refreshToken" ];
+			}
+			set {
+				this[ "refreshToken" ] = value;
 			}
 		}
 

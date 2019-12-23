@@ -1,4 +1,4 @@
-﻿namespace Icod.Wod.SalesForce.Rest {
+﻿namespace Icod.Wod.SalesForce {
 
 	[System.Serializable]
 	[System.Xml.Serialization.XmlInclude( typeof( SFSelect ) )]
@@ -72,30 +72,6 @@
 			System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
 #endif
 			return client;
-		}
-		protected System.String GunzipResponse( System.Byte[] response, System.Text.Encoding encoding ) {
-			using ( var input = new System.IO.MemoryStream( response, false ) ) {
-				using ( var gunzip = new System.IO.Compression.GZipStream( input, System.IO.Compression.CompressionMode.Decompress, true ) ) {
-					using ( var buffer = new System.IO.MemoryStream() ) {
-						gunzip.CopyTo( buffer );
-						buffer.Flush();
-						buffer.Seek( 0, System.IO.SeekOrigin.Begin );
-						return encoding.GetString( buffer.ToArray() );
-					}
-				}
-			}
-		}
-		protected System.Byte[] Gzip( System.String @string, System.Text.Encoding encoding ) {
-			using ( var input = new System.IO.MemoryStream( encoding.GetBytes( @string ), false ) ) {
-				using ( var gzip = new System.IO.Compression.GZipStream( input, System.IO.Compression.CompressionMode.Compress, true ) ) {
-					using ( var buffer = new System.IO.MemoryStream() ) {
-						gzip.CopyTo( buffer );
-						buffer.Flush();
-						buffer.Seek( 0, System.IO.SeekOrigin.Begin );
-						return buffer.ToArray();
-					}
-				}
-			}
 		}
 		#endregion static methods
 

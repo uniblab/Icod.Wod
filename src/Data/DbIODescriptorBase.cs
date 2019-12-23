@@ -256,11 +256,6 @@ namespace Icod.Wod.Data {
 						using ( var set = new System.Data.DataSet() ) {
 							adapter.Fill( set );
 							return set.Tables.OfType<System.Data.DataTable>();
-							//foreach ( var table in set.Tables.OfType<System.Data.DataTable>() ) {
-							//	using ( var t = table ) {
-							//		yield return table;
-							//	}
-							//}
 						}
 					}
 				}

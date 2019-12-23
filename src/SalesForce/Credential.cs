@@ -8,6 +8,7 @@ namespace Icod.Wod.SalesForce {
 		#region fields
 		private System.String myScheme;
 		private System.Int32 myPort;
+		private LoginMode myLoginMode;
 		[System.NonSerialized]
 		private System.Uri mySiteUrl;
 		#endregion fields
@@ -17,6 +18,7 @@ namespace Icod.Wod.SalesForce {
 		public Credential() : base() {
 			myScheme = "https";
 			myPort = -1;
+			myLoginMode = LoginMode.RefreshToken;
 		}
 		#endregion .ctor
 
@@ -37,6 +39,19 @@ namespace Icod.Wod.SalesForce {
 		public System.String ClientId {
 			get;
 			set;
+		}
+		[System.Xml.Serialization.XmlAttribute(
+			"loginMode",
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.ComponentModel.DefaultValue( LoginMode.RefreshToken )]
+		public LoginMode LoginMode {
+			get {
+				return myLoginMode;
+			}
+			set {
+				myLoginMode = value;
+			}
 		}
 		[System.Xml.Serialization.XmlAttribute(
 			"clientSecret",
@@ -124,6 +139,25 @@ namespace Icod.Wod.SalesForce {
 				}
 				return mySiteUrl;
 			}
+		}
+
+		[System.Xml.Serialization.XmlAttribute(
+			"callbackUrl",
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.ComponentModel.DefaultValue( (System.String)null )]
+		public System.String CallbackUrl {
+			get;
+			set;
+		}
+		[System.Xml.Serialization.XmlAttribute(
+			"refreshToken",
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.ComponentModel.DefaultValue( (System.String)null )]
+		public System.String RefreshToken {
+			get;
+			set;
 		}
 		#endregion properties
 

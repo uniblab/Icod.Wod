@@ -7,7 +7,7 @@ namespace Icod.Wod.SalesForce.Rest {
 		"restSelect",
 		Namespace = "http://Icod.Wod"
 	)]
-	public class SFSelect : SFOperationBase, Icod.Wod.Data.ITableSource, Icod.Wod.IStep {
+	public class RestSelect : SFOperationBase, Icod.Wod.Data.ITableSource, Icod.Wod.IStep {
 
 		#region fields
 		private System.Int32 myApiVersion;
@@ -15,10 +15,10 @@ namespace Icod.Wod.SalesForce.Rest {
 
 
 		#region .ctor
-		public SFSelect() : base() {
+		public RestSelect() : base() {
 			myApiVersion = 44;
 		}
-		public SFSelect( WorkOrder workOrder ) : base( workOrder ) {
+		public RestSelect( WorkOrder workOrder ) : base( workOrder ) {
 			myApiVersion = 44;
 		}
 		#endregion .ctor
@@ -91,7 +91,7 @@ namespace Icod.Wod.SalesForce.Rest {
 				do {
 					rawResponse = client.DownloadData( url );
 					json = ( client.ResponseHeaders.Keys.OfType<System.String>().Contains( "Content-Encoding" ) && client.ResponseHeaders[ "Content-Encoding" ].Equals( "gzip", System.StringComparison.OrdinalIgnoreCase ) )
-						? this.GunzipResponse( rawResponse, client.Encoding )
+						? StringHelper.Gunzip( rawResponse, client.Encoding )
 						: client.Encoding.GetString( rawResponse )
 					;
 					dynamic response = Newtonsoft.Json.Linq.JObject.Parse( json );

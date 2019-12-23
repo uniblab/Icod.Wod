@@ -1,4 +1,4 @@
-﻿namespace Icod.Wod.SalesForce.Rest {
+﻿namespace Icod.Wod.SalesForce {
 
 	[System.Serializable]
 	public sealed class LoginResponse {
