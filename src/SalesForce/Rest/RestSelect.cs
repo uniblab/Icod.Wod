@@ -75,10 +75,11 @@ namespace Icod.Wod.SalesForce.Rest {
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			var credential = Credential.GetCredential( this.InstanceName, workOrder );
 			var loginToken = new Login( workOrder ).GetLoginResponse( credential );
-			return this.ReadTables( credential, loginToken );
+			return this.ReadTables( loginToken );
 		}
-		public System.Collections.Generic.IEnumerable<System.Data.DataTable> ReadTables( ICredential credential, LoginResponse loginToken ) {
+		public System.Collections.Generic.IEnumerable<System.Data.DataTable> ReadTables( LoginResponse loginToken ) {
 			using ( var client = BuildClient( loginToken, this.WorkOrder.JobName ) ) {
+				client.Headers[ "Content-type" ] = "application/x-www-form-urlencoded";
 				var instanceUrl = new System.Uri( loginToken.InstanceUrl );
 				var nextRecordsUrl = this.GetServicePath();
 				var url = new System.UriBuilder( instanceUrl.Scheme, instanceUrl.Host, instanceUrl.Port, nextRecordsUrl ) {

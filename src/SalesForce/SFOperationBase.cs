@@ -1,7 +1,7 @@
 ﻿namespace Icod.Wod.SalesForce {
 
 	[System.Serializable]
-	[System.Xml.Serialization.XmlInclude( typeof( SFSelect ) )]
+	[System.Xml.Serialization.XmlInclude( typeof( Rest.RestSelect ) )]
 	[System.Xml.Serialization.XmlType(
 		"sfOperation",
 		Namespace = "http://Icod.Wod"
@@ -62,7 +62,6 @@
 				Encoding = System.Text.Encoding.UTF8
 			};
 			client.Headers[ "Authorization" ] = "Bearer " + token.AccessToken;
-			client.Headers[ "Content-type" ] = "application/x-www-form-urlencoded";
 			client.Headers[ "User-Agent" ] = userAgent.TrimToNull() ?? System.Reflection.Assembly.GetExecutingAssembly().FullName;
 #if DEBUG
 			client.Headers[ "Accept-Encoding" ] = "identity, gzip";

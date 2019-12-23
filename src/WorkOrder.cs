@@ -164,7 +164,7 @@ namespace Icod.Wod {
 			Namespace = "http://Icod.Wod"
 		)]
 		[System.Xml.Serialization.XmlArrayItem(
-			typeof( SalesForce.Rest.SFOperationBase ),
+			typeof( SalesForce.SFOperationBase ),
 			IsNullable = false,
 			Namespace = "http://Icod.Wod"
 		)]
