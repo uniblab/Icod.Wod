@@ -16,26 +16,6 @@ namespace Icod.Wod {
 			return @string;
 		}
 
-		public static System.String ExpandEnvironmentVariables( this System.String @string ) {
-			@string = @string.TrimToNull();
-			if ( System.String.IsNullOrEmpty( @string ) ) {
-				return null;
-			}
-			return System.Environment.ExpandEnvironmentVariables( @string );
-		}
-		public static System.String ExpandPseudoVariables( this System.String @string, WorkOrder workOrder ) {
-			@string = @string.TrimToNull();
-			if ( System.String.IsNullOrEmpty( @string ) ) {
-				return null;
-			}
-
-			if ( null != workOrder ) {
-				@string = workOrder.ExpandPseudoVariables( @string );
-			}
-			@string = @string.ExpandEnvironmentVariables();
-			return @string;
-		}
-
 		public static System.Byte[] Gzip( this System.String @string, System.Text.Encoding encoding ) {
 			using ( var input = new System.IO.MemoryStream( encoding.GetBytes( @string ), false ) ) {
 				using ( var gzip = new System.IO.Compression.GZipStream( input, System.IO.Compression.CompressionMode.Compress, true ) ) {
