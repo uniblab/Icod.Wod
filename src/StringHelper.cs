@@ -29,6 +29,9 @@ namespace Icod.Wod {
 			}
 		}
 
+		public static System.String GetString( this System.Byte[] response, System.Text.Encoding encoding ) {
+			return encoding.GetString( response );
+		}
 		public static System.String Decompress(
 			this System.Byte[] response,
 			System.Text.Encoding encoding,
@@ -56,10 +59,6 @@ namespace Icod.Wod {
 				encoding,
 				( stream, compressionMode, leaveOpen ) => new System.IO.Compression.DeflateStream( stream, compressionMode, leaveOpen )
 			);
-		}
-
-		public static System.String GetString( this System.Byte[] response, System.Text.Encoding encoding ) {
-			return encoding.GetString( response );
 		}
 
 		public static System.String GetWebString( this System.Byte[] response, System.Text.Encoding encoding, System.String contentEncoding ) {
