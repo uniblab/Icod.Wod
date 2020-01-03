@@ -7,6 +7,7 @@ add to the xs:import element the attribute=value schemaLocation="./schema1.xsd"
 
 schema1.xsd:
 set minOccurs="1" for source of fileImport
-set minOccurs="1" for destination of binaryFileOperation, fileExport, binaryZipOperation, and restSelect
+set minOccurs="1" for destination of binaryFileOperation, fileExport, binaryZipOperation, restSelect, bulkSelect
+set default="47.0" and use="optional" for the apiVersion attribute
 
 Rebuild project, and root Xsd's will be copied to the output directory.

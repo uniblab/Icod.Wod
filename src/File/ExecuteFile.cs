@@ -71,7 +71,7 @@ namespace Icod.Wod.File {
 		}
 		public System.String ExpandedWorkingDirectory {
 			get {
-				return this.WorkOrder.ExpandPseudoVariables( myWorkingDirectory.TrimToNull() ?? System.Environment.CurrentDirectory );
+				return this.WorkOrder.ExpandPseudoVariables( myWorkingDirectory.TrimToNull() ?? System.IO.Directory.GetCurrentDirectory() );
 			}
 		}
 

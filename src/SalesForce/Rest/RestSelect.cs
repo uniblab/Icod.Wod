@@ -9,35 +9,15 @@ namespace Icod.Wod.SalesForce.Rest {
 	)]
 	public class RestSelect : SFOperationBase, Icod.Wod.Data.ITableSource, Icod.Wod.IStep {
 
-		#region fields
-		private System.Int32 myApiVersion;
-		#endregion fiels
-
-
 		#region .ctor
 		public RestSelect() : base() {
-			myApiVersion = 44;
 		}
 		public RestSelect( WorkOrder workOrder ) : base( workOrder ) {
-			myApiVersion = 44;
 		}
 		#endregion .ctor
 
 
 		#region properties
-		[System.Xml.Serialization.XmlAttribute(
-			"apiVersion",
-			Namespace = "http://Icod.Wod"
-		)]
-		[System.ComponentModel.DefaultValue( 44 )]
-		public System.Int32 ApiVersion {
-			get {
-				return myApiVersion;
-			}
-			set {
-				myApiVersion = value;
-			}
-		}
 		[System.Xml.Serialization.XmlAttribute(
 			"soql",
 			Namespace = "http://Icod.Wod"
@@ -52,8 +32,8 @@ namespace Icod.Wod.SalesForce.Rest {
 			"destination",
 			Type = typeof( DbDestination ),
 			IsNullable = false,
-			Namespace = "http://Icod.Wod" )
-		]
+			Namespace = "http://Icod.Wod"
+		)]
 		public DbDestination Destination {
 			get;
 			set;
@@ -74,12 +54,12 @@ namespace Icod.Wod.SalesForce.Rest {
 		public System.Collections.Generic.IEnumerable<System.Data.DataTable> ReadTables( Icod.Wod.WorkOrder workOrder ) {
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			var credential = Credential.GetCredential( this.InstanceName, workOrder );
-			var loginToken = new Login( workOrder ).GetLoginResponse( credential );
+			var loginToken = new Login( workOrder ).GetLoginResponse( credential, System.Text.Encoding.UTF8 );
 			return this.ReadTables( loginToken );
 		}
 		public System.Collections.Generic.IEnumerable<System.Data.DataTable> ReadTables( LoginResponse loginToken ) {
 			using ( var client = BuildClient( loginToken, this.WorkOrder.JobName ) ) {
-				client.Headers[ "Content-type" ] = "application/x-www-form-urlencoded";
+				client.Headers[ "Content-type" ] = "application/x-www-form-urlencoded; charset=utf-8";
 				var instanceUrl = new System.Uri( loginToken.InstanceUrl );
 				var nextRecordsUrl = this.GetServicePath();
 				var url = new System.UriBuilder( instanceUrl.Scheme, instanceUrl.Host, instanceUrl.Port, nextRecordsUrl ) {
@@ -134,7 +114,7 @@ namespace Icod.Wod.SalesForce.Rest {
 			return "q=" + System.Web.HttpUtility.UrlEncode( soql, System.Text.Encoding.UTF8 );
 		}
 		private System.String GetServicePath() {
-			return System.String.Format( "/services/data/v{0}.0/query/", this.ApiVersion );
+			return System.String.Format( "/services/data/v{0:F1}/query/", this.ApiVersion );
 		}
 		#endregion methods
 

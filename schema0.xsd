@@ -46,5 +46,10 @@
 			<xs:enumeration value="RefreshToken" />
 		</xs:restriction>
 	</xs:simpleType>
-	<xs:element name="LoginMode" type="LoginMode" />
+	<xs:element name="Login" nillable="true" type="Login" />
+	<xs:complexType name="Login">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="WorkOrder" xmlns:q20="http://Icod.Wod" type="q20:WorkOrder" />
+		</xs:sequence>
+	</xs:complexType>
 </xs:schema>

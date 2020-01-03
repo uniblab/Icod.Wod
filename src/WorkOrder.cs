@@ -12,6 +12,7 @@ namespace Icod.Wod {
 
 		#region fields
 		private const System.String DateTimeFormat = @"(?<DateTimeFormat>%wod:DateTime\{(?<dateTimeFormatString>[^\}]+)\}%)";
+		private const System.String AppSetting = @"(?<AppSetting>%app:(?<AppKeyName>[^%]+)%)";
 		#endregion fields
 
 
@@ -196,12 +197,15 @@ namespace Icod.Wod {
 			}
 		}
 
-		private System.String ExpandEnvironmentVariables( System.String @string ) {
+		private System.String ExpandWorkOrderVariables( System.String @string ) {
 			@string = @string.TrimToNull();
 			if ( System.String.IsNullOrEmpty( @string ) ) {
 				return null;
 			}
-			return System.Environment.ExpandEnvironmentVariables( @string );
+			foreach ( var @var in ( this.Variables ?? new Variable[ 0 ] ) ) {
+				@string = @string.Replace( "%var:" + @var.Name + "%", @var.Value ?? System.String.Empty );
+			}
+			return @string;
 		}
 		private System.String ExpandWodVariables( System.String @string ) {
 			@string = @string.TrimToNull();
@@ -215,15 +219,23 @@ namespace Icod.Wod {
 			@string = @string.Replace( "%wod:JobName%", this.JobName );
 			return @string;
 		}
-		private System.String ExpandWorkOrderVariables( System.String @string ) {
+		private System.String ExpandAppVariables( System.String @string ) {
 			@string = @string.TrimToNull();
 			if ( System.String.IsNullOrEmpty( @string ) ) {
 				return null;
 			}
-			foreach ( var @var in ( this.Variables ?? new Variable[ 0 ] ) ) {
-				@string = @string.Replace( "%var:" + @var.Name + "%", @var.Value ?? System.String.Empty );
+			var settings = System.Configuration.ConfigurationManager.AppSettings;
+			foreach ( System.Text.RegularExpressions.Match m in System.Text.RegularExpressions.Regex.Matches( @string, WorkOrder.AppSetting ) ) {
+				@string = System.Text.RegularExpressions.Regex.Replace( @string, m.Value, settings[ m.Groups[ "AppKeyName" ].Value ] ?? System.String.Empty );
 			}
 			return @string;
+		}
+		private System.String ExpandEnvironmentVariables( System.String @string ) {
+			@string = @string.TrimToNull();
+			if ( System.String.IsNullOrEmpty( @string ) ) {
+				return null;
+			}
+			return System.Environment.ExpandEnvironmentVariables( @string );
 		}
 		public System.String ExpandPseudoVariables( System.String @string ) {
 			@string = @string.TrimToNull();
@@ -232,6 +244,7 @@ namespace Icod.Wod {
 			}
 			@string = this.ExpandWorkOrderVariables( @string );
 			@string = this.ExpandWodVariables( @string );
+			@string = this.ExpandAppVariables( @string );
 			@string = this.ExpandEnvironmentVariables( @string );
 			return @string;
 		}

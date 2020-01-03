@@ -37,11 +37,11 @@ namespace Icod.Wod.SalesForce {
 				throw new System.ArgumentNullException( "clientId" );
 			}
 			var credential = Credential.GetCredential( clientId, this.WorkOrder );
-			return this.GetLoginResponse( credential );
+			return this.GetLoginResponse( credential, System.Text.Encoding.UTF8 );
 		}
-		public LoginResponse GetLoginResponse( SalesForce.ICredential credential ) {
+		public LoginResponse GetLoginResponse( SalesForce.ICredential credential, System.Text.Encoding encoding ) {
 			if ( null == credential ) {
-				throw new System.ArgumentNullException( "element" );
+				throw new System.ArgumentNullException( "credential" );
 			} else if (
 				( LoginMode.RefreshToken == credential.LoginMode )
 				&& ( System.String.IsNullOrEmpty( credential.RefreshToken ) || System.String.IsNullOrEmpty( credential.CallbackUrl ) )
@@ -56,6 +56,30 @@ namespace Icod.Wod.SalesForce {
 			) {
 				throw new System.InvalidOperationException( "The specified credential is attempting Password authentication but does not have a username or password configured." );
 			}
+
+			return this.BuildLogin( credential, encoding );
+		}
+		private LoginResponse BuildLogin( SalesForce.ICredential credential, System.Text.Encoding encoding ) {
+			if ( null == credential ) {
+				throw new System.ArgumentNullException( "credential" );
+			}
+
+
+			var headers = new System.Collections.Generic.Dictionary<System.String, System.String>();
+			headers.Add( "Content-type", "application/x-www-form-urlencoded; charset=" + encoding.WebName );
+#if DEBUG
+			headers.Add( "Accept-Encoding", "identity" );
+#else
+			headers.Add( "Accept-Encoding", "gzip, deflate, identity" );
+#endif
+			var body = this.BuildBody( credential );
+			return this.BuildLogin( credential.SiteUrl, headers, body );
+		}
+		private System.String BuildBody( SalesForce.ICredential credential ) {
+			if ( null == credential ) {
+				throw new System.ArgumentNullException( "credential" );
+			}
+
 			var clientId = credential.ClientId;
 			var clientSecret = credential.ClientSecret;
 			var parameters = new System.Text.StringBuilder();
@@ -86,24 +110,28 @@ namespace Icod.Wod.SalesForce {
 				default:
 					throw new System.InvalidOperationException( "Unknown LoginMode configured for the specified credential." );
 			}
-			var body = parameters.ToString();
-
-			using ( var client = new System.Net.WebClient() ) {
-				client.Headers[ "User-Agent" ] = "Icod Work on Demand Framework, using .Net System.Net.WebClient";
-				client.Encoding = encoding;
-				client.Headers[ "Content-type" ] = "application/x-www-form-urlencoded";
+			return parameters.ToString();
+		}
+		private LoginResponse BuildLogin( System.Uri siteUrl, System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<System.String, System.String>> headers, System.String body ) {
+			var ssl = System.Net.SecurityProtocolType.Tls12;
+			System.Net.ServicePointManager.SecurityProtocol = ssl;
 #if DEBUG
-				client.Headers[ "Accept-Encoding" ] = "identity, gzip";
-				System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12 | System.Net.SecurityProtocolType.Tls11 | System.Net.SecurityProtocolType.Tls | System.Net.SecurityProtocolType.Ssl3;
-#else
-				client.Headers[ "Accept-Encoding" ] = "gzip, identity";
-				System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+			System.Net.ServicePointManager.SecurityProtocol = ssl | System.Net.SecurityProtocolType.Tls11 | System.Net.SecurityProtocolType.Tls | System.Net.SecurityProtocolType.Ssl3;
 #endif
-				var rawResponse = client.UploadData( credential.SiteUrl, System.Text.Encoding.UTF8.GetBytes( body ) );
-				var json = ( client.ResponseHeaders.Keys.OfType<System.String>().Contains( "Content-Encoding" ) && client.ResponseHeaders[ "Content-Encoding" ].Equals( "gzip", System.StringComparison.OrdinalIgnoreCase ) )
-					? StringHelper.Gunzip( rawResponse, client.Encoding )
-					: client.Encoding.GetString( rawResponse )
-				;
+
+			using ( var client = new System.Net.WebClient {
+				Encoding = System.Text.Encoding.UTF8
+			} ) {
+				foreach ( var header in headers ) {
+					client.Headers[ header.Key ] = header.Value;
+				}
+				var rawResponse = client.UploadData( siteUrl, System.Text.Encoding.UTF8.GetBytes( body ) );
+				var json = rawResponse.GetWebString(
+					client.Encoding,
+					client.ResponseHeaders.Keys.OfType<System.String>().Contains( "Content-Encoding" )
+						? client.ResponseHeaders[ "Content-Encoding" ].TrimToNull() ?? "identity"
+						: "identity"
+				);
 				dynamic respObj = Newtonsoft.Json.JsonConvert.DeserializeObject( json );
 				return new LoginResponse( respObj );
 			}

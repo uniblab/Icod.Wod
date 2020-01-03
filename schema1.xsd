@@ -490,6 +490,24 @@
   </xs:complexType>
   <xs:complexType name="sfOperation" abstract="true">
     <xs:attribute name="instanceName" type="xs:string" />
+    <xs:attribute name="apiVersion" type="xs:decimal" default="47.0" use="optional" />
+  </xs:complexType>
+  <xs:complexType name="BulkOperationBase" abstract="true">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:sfOperation">
+        <xs:attribute default="2000" name="batchSize" type="xs:int" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="bulkSelect">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:BulkOperationBase">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="destination" type="tns:DbDestination" />
+        </xs:sequence>
+        <xs:attribute name="soql" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
   <xs:complexType name="restSelect">
     <xs:complexContent mixed="false">
@@ -497,7 +515,6 @@
         <xs:sequence>
           <xs:element minOccurs="1" maxOccurs="1" name="destination" type="tns:DbDestination" />
         </xs:sequence>
-        <xs:attribute default="44" name="apiVersion" type="xs:int" />
         <xs:attribute name="soql" type="xs:string" />
       </xs:extension>
     </xs:complexContent>
