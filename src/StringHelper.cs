@@ -16,17 +16,33 @@ namespace Icod.Wod {
 			return @string;
 		}
 
-		public static System.Byte[] Gzip( this System.String @string, System.Text.Encoding encoding ) {
+		public static System.Byte[] Compress(
+			this System.String @string,
+			System.Text.Encoding encoding,
+			System.Func<System.IO.Stream, System.IO.Compression.CompressionMode, System.Boolean, System.IO.Stream> compressor
+		) {
 			using ( var input = new System.IO.MemoryStream( encoding.GetBytes( @string ), false ) ) {
-				using ( var gzip = new System.IO.Compression.GZipStream( input, System.IO.Compression.CompressionMode.Compress, true ) ) {
-					using ( var buffer = new System.IO.MemoryStream() ) {
-						gzip.CopyTo( buffer );
-						buffer.Flush();
-						buffer.Seek( 0, System.IO.SeekOrigin.Begin );
-						return buffer.ToArray();
+				using ( var worker = compressor( input, System.IO.Compression.CompressionMode.Compress, true ) ) {
+					using ( var output = new System.IO.MemoryStream() ) {
+						worker.CopyTo( output );
+						output.Flush();
+						output.Seek( 0, System.IO.SeekOrigin.Begin );
+						return output.ToArray();
 					}
 				}
 			}
+		}
+		public static System.Byte[] Gzip( this System.String @string, System.Text.Encoding encoding ) {
+			return @string.Compress(
+				encoding,
+				( stream, compressionMode, leaveOpen ) => new System.IO.Compression.GZipStream( stream, compressionMode, leaveOpen )
+			);
+		}
+		public static System.Byte[] Deflate( this System.String @string, System.Text.Encoding encoding ) {
+			return @string.Compress(
+				encoding,
+				( stream, compressionMode, leaveOpen ) => new System.IO.Compression.DeflateStream( stream, compressionMode, leaveOpen )
+			);
 		}
 
 		public static System.String GetString( this System.Byte[] response, System.Text.Encoding encoding ) {
@@ -62,13 +78,16 @@ namespace Icod.Wod {
 		}
 
 		public static System.String GetWebString( this System.Byte[] response, System.Text.Encoding encoding, System.String contentEncoding ) {
-			return System.String.IsNullOrEmpty( contentEncoding ) || contentEncoding.Equals( "identity", System.StringComparison.OrdinalIgnoreCase )
+			return ( contentEncoding.TrimToNull() ?? "identity" ).Equals( "identity", System.StringComparison.OrdinalIgnoreCase )
 				? response.GetString( encoding )
 				: contentEncoding.Equals( "gzip", System.StringComparison.OrdinalIgnoreCase )
 					? response.Gunzip( encoding )
 					: contentEncoding.Equals( "deflate", System.StringComparison.OrdinalIgnoreCase )
 						? response.Inflate( encoding )
-						: throw new System.InvalidOperationException( "Unknown Content-Encoding value received from server: " + contentEncoding )
+						: throw new System.InvalidOperationException( System.String.Format(
+							"Unknown Content-Encoding value received from server: {0}",
+							contentEncoding
+						) )
 			;
 		}
 
