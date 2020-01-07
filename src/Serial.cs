@@ -27,17 +27,47 @@ namespace Icod.Wod {
 			Namespace = "http://Icod.Wod"
 		)]
 		[System.Xml.Serialization.XmlArrayItem(
+			typeof( Parallel ),
+			IsNullable = false,
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.Xml.Serialization.XmlArrayItem(
+			typeof( Serial ),
+			IsNullable = false,
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.Xml.Serialization.XmlArrayItem(
 			typeof( File.FileOperationBase ),
 			IsNullable = false,
 			Namespace = "http://Icod.Wod"
 		)]
 		[System.Xml.Serialization.XmlArrayItem(
-			typeof( Data.DbOperationBase ),
+			typeof( Data.FileExport ),
+			ElementName = "dbFileExport",
 			IsNullable = false,
 			Namespace = "http://Icod.Wod"
 		)]
 		[System.Xml.Serialization.XmlArrayItem(
-			typeof( SalesForce.SFOperationBase ),
+			typeof( Data.FileImport ),
+			ElementName = "dbFileImport",
+			IsNullable = false,
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.Xml.Serialization.XmlArrayItem(
+			typeof( Data.Command ),
+			ElementName = "dbCommand",
+			IsNullable = false,
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.Xml.Serialization.XmlArrayItem(
+			typeof( SalesForce.Rest.RestSelect ),
+			ElementName = "sfRestSelect",
+			IsNullable = false,
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.Xml.Serialization.XmlArrayItem(
+			typeof( SalesForce.Bulk.BulkSelect ),
+			ElementName = "sfBulkSelect",
 			IsNullable = false,
 			Namespace = "http://Icod.Wod"
 		)]

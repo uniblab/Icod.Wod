@@ -5,7 +5,18 @@ namespace Icod.Wod.SalesForce.Bulk {
 	[System.Serializable]
 	public sealed class SelectResult {
 
+		#region internal classes
+		private enum ReadState {
+			StartOfText,
+			PlainText,
+			QuotedText,
+			EndOfLine,
+			EndOfFile
+		}
+		#endregion internal classes
+
 		#region fields
+		private const System.Int32 EOF = -1;
 		private static readonly System.Func<System.Text.StringBuilder, System.String> theValueToString;
 		private static readonly System.Func<System.Text.StringBuilder, System.String> theTrimToNullReader;
 
@@ -78,13 +89,17 @@ namespace Icod.Wod.SalesForce.Bulk {
 				throw new System.ArgumentNullException( "file" );
 			}
 
+			var lineNumber = 0;
 			var table = new System.Data.DataTable();
 			try {
 				this.BuildTable( file, table );
-				while ( -1 != file.Peek() ) {
-					this.ReadRecord( table, file );
+				foreach ( var record in this.ReadRecord( file ) ) {
+					lineNumber++;
+					var rowList = this.ReadColumns( record, COMMA, DQUOTE );
+					table.Rows.Add( rowList.ToArray() );
 				}
 			} catch ( System.Exception e ) {
+				e.Data.Add( "lineNumber", lineNumber );
 				throw;
 			}
 			return table;
@@ -98,37 +113,10 @@ namespace Icod.Wod.SalesForce.Bulk {
 			}
 #endif
 
-			foreach ( var column in this.BuildColumns( file ) ) {
-				table.Columns.Add( column );
+			var headerLine = file.ReadLine( CRLF, DQUOTE );
+			foreach ( var column in this.ReadColumns( headerLine, COMMA, DQUOTE ) ) {
+				table.Columns.Add( new System.Data.DataColumn( column, typeof( System.String ) ) );
 			}
-		}
-		protected System.Collections.Generic.IEnumerable<System.Data.DataColumn> BuildColumns( System.IO.StringReader file ) {
-			if ( null == file ) {
-				throw new System.ArgumentNullException( "file" );
-			}
-			return this.ReadHeaderLine( file ).Select(
-				x => new System.Data.DataColumn( x, typeof( System.String ) )
-			);
-		}
-		protected System.Data.DataRow ReadRecord( System.Data.DataTable table, System.IO.StringReader file ) {
-			if ( null == file ) {
-				throw new System.ArgumentNullException( "file" );
-			} else if ( null == table ) {
-				throw new System.ArgumentNullException( "table" );
-			}
-
-			var row = this.ReadRecord( file );
-			var rowList = row.ToArray();
-			return table.Rows.Add( rowList );
-		}
-		private System.Collections.Generic.IEnumerable<System.String> ReadHeaderLine( System.IO.StringReader file ) {
-#if DEBUG
-			if ( null == file ) {
-				throw new System.ArgumentNullException( "file" );
-			}
-#endif
-			var output = this.ReadRecord( file );
-			return output;
 		}
 		protected System.Collections.Generic.IEnumerable<System.String> ReadRecord( System.IO.StringReader file ) {
 #if DEBUG
@@ -137,90 +125,138 @@ namespace Icod.Wod.SalesForce.Bulk {
 			}
 #endif
 
-			var line = file.ReadLine( CRLF, DQUOTE );
-			if ( null == line ) {
-				yield break;
+			System.String line;
+			while ( EOF != file.Peek() ) {
+				line = file.ReadLine( CRLF, DQUOTE ).TrimToNull();
+				if ( !System.String.IsNullOrEmpty( line ) ) {
+					yield return line;
+				}
 			}
-			using ( var reader = new System.IO.StringReader( line ) ) {
-				System.Int32 i;
-				System.Char c;
-				System.String column;
-				var reading = true;
-				var qc = DQUOTE;
-				do {
-					i = reader.Peek();
-					if ( -1 == i ) {
-						reading = false;
-						break;
-					}
-					c = System.Convert.ToChar( i );
-					if ( qc.Equals( c ) ) {
-						reader.Read();
-						column = this.ReadColumn( reader, null, DQUOTE, true );
-						yield return column;
-					} else {
-						column = this.ReadColumn( reader, null, COMMA, false );
-						yield return column;
-					}
-				} while ( reading );
-			}
+
+			yield break;
 		}
-		private System.String ReadColumn( System.IO.StringReader reader, System.Nullable<System.Char> first, System.Char @break, System.Boolean readNextOnBreak ) {
-#if DEBUG
+		protected System.Collections.Generic.IEnumerable<System.String> ReadColumns( System.String line, System.Char fieldSeparator, System.Char quoteCharacter ) {
+			if ( System.String.IsNullOrEmpty( line ) ) {
+				throw new System.ArgumentNullException( line );
+			}
+
+
+			var cell = new System.Text.StringBuilder();
+			var readState = ReadState.PlainText;
+			System.Int32 p;
+			System.Char c;
+			System.Char pc;
+			using ( var reader = new System.IO.StringReader( line ) ) {
+				while ( readState != ReadState.EndOfLine ) {
+					p = reader.Peek();
+					switch ( readState ) {
+						case ReadState.PlainText:
+							if ( EOF == p ) {
+								readState = ReadState.EndOfFile;
+								yield return cell.ToString();
+								yield break;
+							}
+							c = System.Convert.ToChar( p );
+							if ( fieldSeparator == c ) {
+								reader.Read();
+								yield return cell.ToString();
+								cell = new System.Text.StringBuilder( cell.Capacity );
+							} else if ( quoteCharacter == c ) {
+								readState = ReadState.QuotedText;
+								reader.Read();
+							} else {
+								cell = cell.Append( c );
+							}
+							break;
+						case ReadState.QuotedText:
+							if ( EOF == p ) {
+								throw new System.InvalidOperationException();
+							}
+							c = System.Convert.ToChar( p );
+							if ( quoteCharacter == c ) {
+								p = reader.Peek();
+								if ( EOF == p ) {
+									throw new System.InvalidOperationException();
+								}
+								pc = System.Convert.ToChar( p );
+								if ( fieldSeparator == pc ) {
+									readState = ReadState.PlainText;
+									reader.Read();
+									yield return cell.ToString();
+									cell = new System.Text.StringBuilder( cell.Capacity );
+								} else {
+									cell = cell.Append( pc );
+									reader.Read();
+								}
+							} else {
+								cell = cell.Append( c );
+							}
+							break;
+						default:
+							throw new System.InvalidOperationException();
+					}
+				}
+			}
+
+			yield break;
+		}
+
+		private System.String ReadPlainTextCell( System.IO.StringReader reader, System.Char fieldSeparator ) {
 			if ( null == reader ) {
 				throw new System.ArgumentNullException( "reader" );
 			}
-#endif
-			var sb = new System.Text.StringBuilder( 128 );
-			if ( first.HasValue ) {
-				sb.Append( first.Value );
-			}
-			System.Nullable<System.Char> ch;
-			var reading = true;
-			do {
-				ch = this.ReadChar( reader, null, @break, readNextOnBreak );
-				if ( ch.HasValue ) {
-					sb = sb.Append( ch.Value );
-				} else {
-					reading = false;
+
+			var readState = ReadState.PlainText;
+
+			var cell = new System.Text.StringBuilder();
+			System.Int32 p;
+			System.Char c;
+			while ( ReadState.PlainText == readState ) {
+				p = reader.Read();
+				if ( EOF == p ) {
+					readState = ReadState.EndOfFile;
 					break;
 				}
-			} while ( reading );
-			return this.ColumnReader( sb );
+				c = System.Convert.ToChar( p );
+				if ( fieldSeparator.Equals( c ) ) {
+					readState = ReadState.EndOfFile;
+					break;
+				}
+				cell = cell.Append( c );
+			}
+
+			return cell.ToString();
 		}
-		private System.Nullable<System.Char> ReadChar( System.IO.StringReader reader, System.Nullable<System.Char> escape, System.Char @break, System.Boolean readNextOnBreak ) {
-#if DEBUG
+		private System.String ReadQuotedTextCell( System.IO.StringReader reader, System.Char quoteCharacter ) {
 			if ( null == reader ) {
 				throw new System.ArgumentNullException( "reader" );
 			}
-#endif
 
-			var p = reader.Peek();
-			if ( -1 == p ) {
-				return null;
-			}
-			var c = System.Convert.ToChar( reader.Read() );
-			if ( escape.HasValue && escape.Value.Equals( c ) ) {
-				p = reader.Peek();
-				if ( -1 == p ) {
-					return null;
+			var readState = ReadState.QuotedText;
+
+			var cell = new System.Text.StringBuilder();
+			System.Int32 p;
+			System.Char c;
+			while ( ReadState.QuotedText == readState ) {
+				p = reader.Read();
+				if ( EOF == p ) {
+					readState = ReadState.EndOfFile;
+					break;
 				}
-				return System.Convert.ToChar( reader.Read() );
-			}
-			if ( @break.Equals( c ) ) {
-				if ( readNextOnBreak ) {
-					p = reader.Peek();
-					if ( -1 == p ) {
-						return null;
-					} else if ( @break.Equals( System.Convert.ToChar( p ) ) ) {
-						return System.Convert.ToChar( reader.Read() );
-					} else {
-						reader.Read();
+				c = System.Convert.ToChar( p );
+				if ( quoteCharacter.Equals( c ) ) {
+					p = reader.Read();
+					if ( EOF == p ) {
+						throw new System.InvalidOperationException();
 					}
+					c = System.Convert.ToChar( p );
+	
+				} else {
+					cell = cell.Append( c );
 				}
-				return null;
 			}
-			return c;
+
+			return cell.ToString();
 		}
 		#endregion methods
 

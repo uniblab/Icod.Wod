@@ -97,7 +97,15 @@ namespace Icod.Wod.File {
 		}
 
 		public sealed override System.IO.Stream OpenReader( System.String filePathName ) {
-			var uri = new System.Uri( filePathName );
+			var ub = new System.UriBuilder( filePathName );
+			var fd = this.FileDescriptor;
+			if ( System.String.IsNullOrEmpty( ub.UserName ) ) {
+				ub.UserName = fd.Username ?? new System.UriBuilder( fd.ExpandedPath ).UserName;
+			}
+			if ( System.String.IsNullOrEmpty( ub.Password ) ) {
+				ub.Password = fd.Password ?? new System.UriBuilder( fd.ExpandedPath ).Password;
+			}
+			var uri = ub.Uri;
 			Renci.SshNet.SftpClient client = null;
 			System.IO.Stream stream = null;
 			try {

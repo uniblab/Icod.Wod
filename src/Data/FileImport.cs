@@ -4,7 +4,7 @@ namespace Icod.Wod.Data {
 
 	[System.Serializable]
 	[System.Xml.Serialization.XmlType(
-		"fileImport",
+		TypeName = "dbFileImport",
 		Namespace = "http://Icod.Wod"
 	)]
 	public sealed class FileImport : DbIODescriptorBase, Icod.Wod.IStep {

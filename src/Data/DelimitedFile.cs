@@ -11,6 +11,9 @@ namespace Icod.Wod.Data {
 	public sealed class DelimitedFile : TextFileBase {
 
 		#region fields
+		public const System.Char DefaultFieldSeparator = ',';
+		public const System.Char DefaultQuoteCharacter = '\"';
+
 		private static readonly System.Func<System.Text.StringBuilder, System.String> theValueToString;
 		private static readonly System.Func<System.Text.StringBuilder, System.String> theTrimToNullReader;
 		private static readonly System.Func<System.Text.StringBuilder, System.String> theTrimReader;
@@ -20,7 +23,6 @@ namespace Icod.Wod.Data {
 		private System.String myFieldSeparatorString;
 		private System.Char myQuoteChar;
 		private System.String myQuoteCharString;
-		private System.Nullable<System.Char> myEscapeChar;
 		private System.Int32 myEscapeCharNumber;
 		private System.Func<System.Text.StringBuilder, System.String> myColumnReader;
 		private System.Boolean myForceQuote;
@@ -42,22 +44,18 @@ namespace Icod.Wod.Data {
 		}
 
 		public DelimitedFile() : base() {
-			myFieldSeparator = '\t';
+			myFieldSeparator = ',';
 			myFieldSeparatorString = myFieldSeparator.ToString();
 			myQuoteChar = '\"';
 			myQuoteCharString = myQuoteChar.ToString();
-			myEscapeChar = null;
-			myEscapeCharNumber = -1;
 			myColumnReader = theDefaultColumnReader;
 			myForceQuote = true;
 		}
 		public DelimitedFile( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
-			myFieldSeparator = '\t';
+			myFieldSeparator = ',';
 			myFieldSeparatorString = myFieldSeparator.ToString();
 			myQuoteChar = '\"';
 			myQuoteCharString = myQuoteChar.ToString();
-			myEscapeChar = null;
-			myEscapeCharNumber = -1;
 			myColumnReader = theDefaultColumnReader;
 			myForceQuote = true;
 		}
@@ -69,7 +67,7 @@ namespace Icod.Wod.Data {
 			"fieldSeperator",
 			Namespace = "http://Icod.Wod"
 		)]
-		[System.ComponentModel.DefaultValue( 9 )]
+		[System.ComponentModel.DefaultValue( 44 )]
 		public System.Int32 FieldSeparatorNumber {
 			get {
 				return System.Convert.ToInt32( myFieldSeparator );
@@ -79,7 +77,7 @@ namespace Icod.Wod.Data {
 				myFieldSeparatorString = myFieldSeparator.ToString();
 			}
 		}
-		[System.ComponentModel.DefaultValue( '\t' )]
+		[System.ComponentModel.DefaultValue( ',' )]
 		[System.Xml.Serialization.XmlIgnore]
 		public System.Char FieldSeparator {
 			get {
@@ -91,7 +89,7 @@ namespace Icod.Wod.Data {
 			}
 		}
 		[System.Xml.Serialization.XmlIgnore]
-		[System.ComponentModel.DefaultValue( "\t" )]
+		[System.ComponentModel.DefaultValue( "," )]
 		public System.String FieldSeparatorString {
 			get {
 				return myFieldSeparatorString;
@@ -123,45 +121,11 @@ namespace Icod.Wod.Data {
 				myQuoteCharString = myQuoteChar.ToString();
 			}
 		}
-		[System.ComponentModel.DefaultValue( '\"' )]
+		[System.ComponentModel.DefaultValue( "\"" )]
 		[System.Xml.Serialization.XmlIgnore]
 		public System.String QuoteCharString {
 			get {
 				return myQuoteCharString;
-			}
-		}
-
-		[System.Xml.Serialization.XmlAttribute(
-			"escapeChar",
-			Namespace = "http://Icod.Wod"
-		)]
-		[System.ComponentModel.DefaultValue( -1 )]
-		public System.Int32 EscapeCharNumber {
-			get {
-				return myEscapeCharNumber;
-			}
-			set {
-				if ( value <= -2 ) {
-					throw new System.InvalidOperationException();
-				} else if ( -1 == value ) {
-					myEscapeChar = null;
-				} else {
-					myEscapeChar = System.Convert.ToChar( value );
-				}
-				myEscapeCharNumber = value;
-			}
-		}
-		[System.Xml.Serialization.XmlIgnore]
-		[System.ComponentModel.DefaultValue( null )]
-		public System.Nullable<System.Char> EscapeChar {
-			get {
-				return myEscapeChar;
-			}
-			set {
-				if ( !value.HasValue ) {
-					myEscapeCharNumber = -1;
-				}
-				myEscapeChar = value;
 			}
 		}
 
@@ -309,7 +273,7 @@ namespace Icod.Wod.Data {
 				System.Char c;
 				System.String column;
 				var reading = true;
-				var ec = this.EscapeChar;
+				System.Nullable<System.Char> ec = null;
 				var qc = this.QuoteChar;
 				do {
 					i = reader.Peek();
@@ -318,36 +282,28 @@ namespace Icod.Wod.Data {
 						break;
 					}
 					c = System.Convert.ToChar( i );
-					if ( ec.HasValue && ( ec.Value.Equals( c ) ) ) {
+					if ( qc.Equals( c ) ) {
 						reader.Read();
-						column = this.ReadColumn( reader, System.Convert.ToChar( reader.Read() ), this.FieldSeparator, false );
-						yield return column;
-					} else if ( qc.Equals( c ) ) {
-						reader.Read();
-						column = this.ReadColumn( reader, null, this.QuoteChar, true );
+						column = this.ReadColumn( reader, this.QuoteChar, true );
 						yield return column;
 					} else {
-						column = this.ReadColumn( reader, null, this.FieldSeparator, false );
+						column = this.ReadColumn( reader, this.FieldSeparator, false );
 						yield return column;
 					}
 				} while ( reading );
 			}
 		}
-		private System.String ReadColumn( System.IO.StringReader reader, System.Nullable<System.Char> first, System.Char @break, System.Boolean readNextOnBreak ) {
+		private System.String ReadColumn( System.IO.StringReader reader, System.Char @break, System.Boolean readNextOnBreak ) {
 #if DEBUG
 			if ( null == reader ) {
 				throw new System.ArgumentNullException( "reader" );
 			}
 #endif
 			var sb = new System.Text.StringBuilder( 128 );
-			if ( first.HasValue ) {
-				sb.Append( first.Value );
-			}
 			System.Nullable<System.Char> ch;
 			var reading = true;
-			var ec = this.EscapeChar;
 			do {
-				ch = this.ReadChar( reader, ec, @break, readNextOnBreak );
+				ch = this.ReadChar( reader, @break, readNextOnBreak );
 				if ( ch.HasValue ) {
 					sb = sb.Append( ch.Value );
 				} else {
@@ -357,7 +313,7 @@ namespace Icod.Wod.Data {
 			} while ( reading );
 			return this.ColumnReader( sb );
 		}
-		private System.Nullable<System.Char> ReadChar( System.IO.StringReader reader, System.Nullable<System.Char> escape, System.Char @break, System.Boolean readNextOnBreak ) {
+		private System.Nullable<System.Char> ReadChar( System.IO.StringReader reader, System.Char @break, System.Boolean readNextOnBreak ) {
 #if DEBUG
 			if ( null == reader ) {
 				throw new System.ArgumentNullException( "reader" );
@@ -369,13 +325,6 @@ namespace Icod.Wod.Data {
 				return null;
 			}
 			var c = System.Convert.ToChar( reader.Read() );
-			if ( escape.HasValue && escape.Value.Equals( c ) ) {
-				p = reader.Peek();
-				if ( -1 == p ) {
-					return null;
-				}
-				return System.Convert.ToChar( reader.Read() );
-			}
 			if ( @break.Equals( c ) ) {
 				if ( readNextOnBreak ) {
 					p = reader.Peek();

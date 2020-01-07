@@ -3,6 +3,11 @@
 namespace Icod.Wod.SalesForce {
 
 	[System.Serializable]
+	[System.Xml.Serialization.XmlType(
+		TypeName = "sfCredential",
+		IncludeInSchema = true, 
+		Namespace = "http://Icod.Wod"
+	)]
 	public sealed class Credential : SalesForce.ICredential {
 
 		#region fields

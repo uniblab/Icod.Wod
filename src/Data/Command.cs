@@ -4,7 +4,7 @@ namespace Icod.Wod.Data {
 
 	[System.Serializable]
 	[System.Xml.Serialization.XmlType(
-		"command",
+		TypeName = "dbCommand",
 		Namespace = "http://Icod.Wod",
 		IncludeInSchema = true
 	)]

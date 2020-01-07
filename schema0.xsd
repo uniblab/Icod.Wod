@@ -1,55 +1,71 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-	<xs:import namespace="http://Icod.Wod" schemaLocation="./schema1.xsd" />
-	<xs:element name="email" nillable="true" xmlns:q1="http://Icod.Wod" type="q1:email" />
-	<xs:element name="serial" nillable="true" xmlns:q2="http://Icod.Wod" type="q2:serial" />
-	<xs:complexType name="FileOrDirectoryListerBase" abstract="true">
-		<xs:complexContent mixed="false">
-			<xs:extension xmlns:q3="http://Icod.Wod" base="q3:binaryFileOperation">
-				<xs:attribute ref="q3:truncateEntryName" />
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:complexType name="DbIODescriptorBase" abstract="true">
-		<xs:complexContent mixed="false">
-			<xs:extension xmlns:q4="http://Icod.Wod" base="q4:dbOperation">
-				<xs:sequence>
-					<xs:element minOccurs="0" maxOccurs="1" ref="q4:columnMapping" />
-				</xs:sequence>
-				<xs:attribute ref="q4:updateBatchSize" />
-				<xs:attribute ref="q4:tableName" />
-				<xs:attribute ref="q4:schemaQuery" />
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:element name="parallel" nillable="true" xmlns:q5="http://Icod.Wod" type="q5:parallel" />
-	<xs:element name="variable" nillable="true" xmlns:q6="http://Icod.Wod" type="q6:variable" />
-	<xs:element name="Credential" nillable="true" type="Credential" />
-	<xs:complexType name="Credential">
-		<xs:attribute xmlns:q7="http://Icod.Wod" ref="q7:name" />
-		<xs:attribute xmlns:q8="http://Icod.Wod" ref="q8:clientId" />
-		<xs:attribute xmlns:q9="http://Icod.Wod" ref="q9:loginMode" />
-		<xs:attribute xmlns:q10="http://Icod.Wod" ref="q10:clientSecret" />
-		<xs:attribute xmlns:q11="http://Icod.Wod" ref="q11:username" />
-		<xs:attribute xmlns:q12="http://Icod.Wod" ref="q12:password" />
-		<xs:attribute xmlns:q13="http://Icod.Wod" ref="q13:securityToken" />
-		<xs:attribute xmlns:q14="http://Icod.Wod" ref="q14:scheme" />
-		<xs:attribute xmlns:q15="http://Icod.Wod" ref="q15:host" />
-		<xs:attribute xmlns:q16="http://Icod.Wod" ref="q16:port" />
-		<xs:attribute xmlns:q17="http://Icod.Wod" ref="q17:path" />
-		<xs:attribute xmlns:q18="http://Icod.Wod" ref="q18:callbackUrl" />
-		<xs:attribute xmlns:q19="http://Icod.Wod" ref="q19:refreshToken" />
-	</xs:complexType>
-	<xs:simpleType name="LoginMode">
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="Password" />
-			<xs:enumeration value="RefreshToken" />
-		</xs:restriction>
-	</xs:simpleType>
-	<xs:element name="Login" nillable="true" type="Login" />
-	<xs:complexType name="Login">
-		<xs:sequence>
-			<xs:element minOccurs="0" maxOccurs="1" name="WorkOrder" xmlns:q20="http://Icod.Wod" type="q20:WorkOrder" />
-		</xs:sequence>
-	</xs:complexType>
+  <xs:import namespace="http://Icod.Wod" schemaLocation="./schema1.xsd" />
+  <xs:element name="ConnectionStringEntry" nillable="true" type="ConnectionStringEntry" />
+  <xs:complexType name="ConnectionStringEntry">
+    <xs:attribute xmlns:q1="http://Icod.Wod" ref="q1:name" />
+    <xs:attribute xmlns:q2="http://Icod.Wod" ref="q2:providerName" />
+    <xs:attribute xmlns:q3="http://Icod.Wod" ref="q3:connectionString" />
+  </xs:complexType>
+  <xs:element name="email" nillable="true" xmlns:q4="http://Icod.Wod" type="q4:email" />
+  <xs:element name="serial" nillable="true" xmlns:q5="http://Icod.Wod" type="q5:serial" />
+  <xs:complexType name="DbIODescriptorBase" abstract="true">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q6="http://Icod.Wod" base="q6:dbOperation">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" ref="q6:columnMapping" />
+        </xs:sequence>
+        <xs:attribute ref="q6:updateBatchSize" />
+        <xs:attribute ref="q6:tableName" />
+        <xs:attribute ref="q6:schemaQuery" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FileOrDirectoryListerBase" abstract="true">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q7="http://Icod.Wod" base="q7:binaryFileOperation">
+        <xs:attribute ref="q7:truncateEntryName" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="parallel" nillable="true" xmlns:q8="http://Icod.Wod" type="q8:parallel" />
+  <xs:element name="variable" nillable="true" xmlns:q9="http://Icod.Wod" type="q9:variable" />
+  <xs:element name="sfCredential" nillable="true" xmlns:q10="http://Icod.Wod" type="q10:sfCredential" />
+  <xs:element name="LoginMode" type="LoginMode" />
+  <xs:simpleType name="LoginMode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="RefreshToken" />
+      <xs:enumeration value="Password" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="sfRestSelect" nillable="true" xmlns:q11="http://Icod.Wod" type="q11:sfRestSelect" />
+  <xs:element name="sfBulkSelect" nillable="true" xmlns:q12="http://Icod.Wod" type="q12:sfBulkSelect" />
+  <xs:element name="addZip" nillable="true" xmlns:q13="http://Icod.Wod" type="q13:addZip" />
+  <xs:element name="executeFile" nillable="true" xmlns:q14="http://Icod.Wod" type="q14:executeFile" />
+  <xs:element name="headFile" nillable="true" xmlns:q15="http://Icod.Wod" type="q15:headFile" />
+  <xs:element name="list" nillable="true" xmlns:q16="http://Icod.Wod" type="q16:list" />
+  <xs:element name="listDirectory" nillable="true" xmlns:q17="http://Icod.Wod" type="q17:listDirectory" />
+  <xs:element name="rebaseFile" nillable="true" xmlns:q18="http://Icod.Wod" type="q18:rebaseFile" />
+  <xs:element name="tailFile" nillable="true" xmlns:q19="http://Icod.Wod" type="q19:tailFile" />
+  <xs:element name="appendFile" nillable="true" xmlns:q20="http://Icod.Wod" type="q20:appendFile" />
+  <xs:element name="copyFile" nillable="true" xmlns:q21="http://Icod.Wod" type="q21:copyFile" />
+  <xs:element name="deleteFile" nillable="true" xmlns:q22="http://Icod.Wod" type="q22:deleteFile" />
+  <xs:element name="gzipFile" nillable="true" xmlns:q23="http://Icod.Wod" type="q23:gzipFile" />
+  <xs:element name="mkDir" nillable="true" xmlns:q24="http://Icod.Wod" type="q24:mkDir" />
+  <xs:element name="renameFile" nillable="true" xmlns:q25="http://Icod.Wod" type="q25:renameFile" />
+  <xs:element name="rmDir" nillable="true" xmlns:q26="http://Icod.Wod" type="q26:rmDir" />
+  <xs:element name="touchFile" nillable="true" xmlns:q27="http://Icod.Wod" type="q27:touchFile" />
+  <xs:element name="fromZip" nillable="true" xmlns:q28="http://Icod.Wod" type="q28:fromZip" />
+  <xs:element name="listFile" nillable="true" xmlns:q29="http://Icod.Wod" type="q29:listFile" />
+  <xs:element name="listZip" nillable="true" xmlns:q30="http://Icod.Wod" type="q30:listZip" />
+  <xs:element name="mkZip" nillable="true" xmlns:q31="http://Icod.Wod" type="q31:mkZip" />
+  <xs:element name="rmZip" nillable="true" xmlns:q32="http://Icod.Wod" type="q32:rmZip" />
+  <xs:element name="dbParameter" nillable="true" xmlns:q33="http://Icod.Wod" type="q33:dbParameter" />
+  <xs:element name="delimitedFile" nillable="true" xmlns:q34="http://Icod.Wod" type="q34:delimitedFile" />
+  <xs:element name="fixedWidthFile" nillable="true" xmlns:q35="http://Icod.Wod" type="q35:fixedWidthFile" />
+  <xs:element name="jsonFile" nillable="true" xmlns:q36="http://Icod.Wod" type="q36:jsonFile" />
+  <xs:element name="scalarFile" nillable="true" xmlns:q37="http://Icod.Wod" type="q37:scalarFile" />
+  <xs:element name="dbCommand" nillable="true" xmlns:q38="http://Icod.Wod" type="q38:dbCommand" />
+  <xs:element name="dbFileExport" nillable="true" xmlns:q39="http://Icod.Wod" type="q39:dbFileExport" />
+  <xs:element name="dbFileImport" nillable="true" xmlns:q40="http://Icod.Wod" type="q40:dbFileImport" />
 </xs:schema>

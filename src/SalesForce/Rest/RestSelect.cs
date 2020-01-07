@@ -4,7 +4,7 @@ namespace Icod.Wod.SalesForce.Rest {
 
 	[System.Serializable]
 	[System.Xml.Serialization.XmlType(
-		"restSelect",
+		"sfRestSelect",
 		Namespace = "http://Icod.Wod"
 	)]
 	public class RestSelect : SFOperationBase, Icod.Wod.Data.ITableSource, Icod.Wod.IStep {

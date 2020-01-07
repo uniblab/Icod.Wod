@@ -8,9 +8,9 @@ namespace Icod.Wod.File {
 	public abstract class FileBase : Icod.Wod.File.FileDescriptor {
 
 		#region fields
-		public const System.String DefaultRecordSeparator = "\r\n";
 		public const System.String DefaultCodePage = "windows-1252";
 		public const System.Int32 DefaultBufferLength = 16384;
+		public const System.String DefaultRecordSeparator = "\r\n";
 
 		private System.String myCodePage;
 		private System.Boolean myWriteIfEmpty;

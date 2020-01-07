@@ -6,16 +6,10 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 	[System.Serializable]
 	[System.Xml.Serialization.XmlType(
-		"bulkSelect",
+		"sfBulkSelect",
 		Namespace = "http://Icod.Wod"
 	)]
 	public sealed class BulkSelect : BulkOperationBase, Icod.Wod.Data.ITableSource {
-
-		#region fields
-		private const System.Int32 MaxSleepMiliseconds = 30000;
-		private const System.Int32 SleepIncrementMiliseconds = 1000;
-		#endregion fields
-
 
 		#region .ctor
 		public BulkSelect() : base() {
@@ -63,29 +57,55 @@ namespace Icod.Wod.SalesForce.Bulk {
 			var credential = Credential.GetCredential( this.InstanceName, workOrder );
 			var loginToken = new Login( workOrder ).GetLoginResponse( credential, System.Text.Encoding.UTF8 );
 			var job = this.CreateSelect( loginToken, this.Soql );
-			var sleepTime = 0;
-			while (
-				"UploadComplete".Equals( job.State )
-				|| "InProgress".Equals( job.State )
-			) {
-				if ( sleepTime < MaxSleepMiliseconds ) {
-					sleepTime = System.Math.Min( sleepTime + SleepIncrementMiliseconds, MaxSleepMiliseconds );
-				}
-				System.Threading.Thread.Sleep( sleepTime );
-				job = this.QueryJob( loginToken, job.Id );
-			}
-			if ( "JobComplete".Equals( job.State ) ) {
-				var result = new SelectResult();
-				do {
-					result = this.GetResults( loginToken, job.Id, result.Locator );
-					yield return result.ReadFile();
-				} while ( !System.String.IsNullOrEmpty( result.Locator ) );
-				this.DeleteJob( loginToken, job.Id );
-			} else {
+			if ( !(
+					"JobComplete".Equals( job.State, System.StringComparison.OrdinalIgnoreCase )
+					|| "UploadComplete".Equals( job.State, System.StringComparison.OrdinalIgnoreCase )
+					|| "InProgress".Equals( job.State, System.StringComparison.OrdinalIgnoreCase )
+			) ) {
 				var ex = new System.InvalidOperationException( "The bulk API job is in an unknown state: " + job.State ?? System.String.Empty );
 				ex.Data.Add( "Soql", this.Soql );
+				ex.Data.Add( "bulkOperation", job );
 				throw ex;
 			}
+			var wait = ( this.Wait ?? new Wait() );
+			var sleepTime = wait.Initial;
+			System.Threading.Thread.Sleep( sleepTime );
+			if ( !"JobComplete".Equals( job.State, System.StringComparison.OrdinalIgnoreCase ) ) {
+				job = this.QueryJob( loginToken, job.Id );
+			}
+			sleepTime = wait.Minimum;
+			var increment = wait.Increment;
+			var maximum = wait.Maximum;
+			System.String locator = null;
+			var result = new SelectResult();
+			do {
+#if TRACE
+				System.Console.Error.WriteLine( "{0} : {1}", job.Id, job.State );
+#endif
+				if ( "JobComplete".Equals( job.State, System.StringComparison.OrdinalIgnoreCase ) ) {
+					result = this.GetResults( loginToken, job.Id, result.Locator );
+					yield return result.ReadFile();
+					if ( System.String.IsNullOrEmpty( result.Locator ) ) {
+						this.DeleteJob( loginToken, job.Id );
+						break;
+					}
+				} else if (
+					"UploadComplete".Equals( job.State, System.StringComparison.OrdinalIgnoreCase )
+					|| "InProgress".Equals( job.State, System.StringComparison.OrdinalIgnoreCase )
+				) {
+					System.Threading.Thread.Sleep( sleepTime );
+					if ( sleepTime < maximum ) {
+						sleepTime = System.Math.Min( sleepTime + increment, maximum );
+					}
+				} else {
+					var ex = new System.InvalidOperationException( "The bulk API job is in an unknown state: " + job.State ?? System.String.Empty );
+					ex.Data.Add( "Soql", this.Soql );
+					ex.Data.Add( "bulkOperation", job );
+					throw ex;
+				}
+				job = this.QueryJob( loginToken, job.Id );
+			} while ( true );
+
 			yield break;
 		}
 
@@ -98,7 +118,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 			using ( var w = request.GetRequestStream() ) {
 				var jr = new {
 					operation = "query",
-					query =  this.Soql,
+					query = this.Soql,
 					contentType = "CSV",
 					columnDelimiter = "COMMA",
 					lineEnding = "CRLF"
@@ -109,8 +129,8 @@ namespace Icod.Wod.SalesForce.Bulk {
 			}
 			var response = (System.Net.HttpWebResponse)request.GetResponse();
 			var sc = response.StatusCode;
-			var failure = ( 
-				( System.Net.HttpStatusCode.OK != sc ) 
+			var failure = (
+				( System.Net.HttpStatusCode.OK != sc )
 				&& ( System.Net.HttpStatusCode.Created != sc )
 			);
 			if ( failure ) {

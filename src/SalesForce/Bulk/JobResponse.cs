@@ -2,6 +2,7 @@
 
 namespace Icod.Wod.SalesForce.Bulk {
 
+	[System.Serializable]
 	public sealed class JobResponse : JobInfoBase {
 
 		#region .ctor

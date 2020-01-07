@@ -4,7 +4,7 @@ namespace Icod.Wod.Data {
 
 	[System.Serializable]
 	[System.Xml.Serialization.XmlType(
-		"fileExport",
+		TypeName = "dbFileExport",
 		Namespace = "http://Icod.Wod"
 	)]
 	public sealed class FileExport : DbIODescriptorBase, Icod.Wod.IStep {

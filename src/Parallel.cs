@@ -43,12 +43,32 @@ namespace Icod.Wod {
 			Namespace = "http://Icod.Wod"
 		)]
 		[System.Xml.Serialization.XmlArrayItem(
-			typeof( Data.DbOperationBase ),
+			typeof( Data.FileExport ),
+			ElementName = "dbFileExport",
 			IsNullable = false,
 			Namespace = "http://Icod.Wod"
 		)]
 		[System.Xml.Serialization.XmlArrayItem(
-			typeof( SalesForce.SFOperationBase ),
+			typeof( Data.FileImport ),
+			ElementName = "dbFileImport",
+			IsNullable = false,
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.Xml.Serialization.XmlArrayItem(
+			typeof( Data.Command ),
+			ElementName = "dbCommand",
+			IsNullable = false,
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.Xml.Serialization.XmlArrayItem(
+			typeof( SalesForce.Rest.RestSelect ),
+			ElementName = "sfRestSelect",
+			IsNullable = false,
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.Xml.Serialization.XmlArrayItem(
+			typeof( SalesForce.Bulk.BulkSelect ),
+			ElementName = "sfBulkSelect",
 			IsNullable = false,
 			Namespace = "http://Icod.Wod"
 		)]
@@ -72,17 +92,42 @@ namespace Icod.Wod {
 
 		#region methods
 		public void DoWork( WorkOrder workOrder ) {
-			var steps = ( this.Steps ?? new IStep[ 0 ] ).OfType<IStep>().Select<IStep, System.Action>(
-				x => () => x.DoWork( workOrder )
-			);
-			if ( steps.Any() ) {
-				System.Threading.Tasks.Parallel.Invoke(
-					new System.Threading.Tasks.ParallelOptions {
-						MaxDegreeOfParallelism = this.MaxDegreeOfParallelism
-					},
-					steps.ToArray()
-				);
+			var steps = ( this.Steps ?? new IStep[ 0 ] ).OfType<IStep>();
+			if ( !steps.Any() ) {
+				return;
 			}
+			var tokenSource = new System.Threading.CancellationTokenSource();
+			var token = tokenSource.Token;
+			var tasks = steps.Select(
+				x => new System.Threading.Tasks.Task(
+					() => {
+						try {
+							x.DoWork( workOrder );
+						} catch {
+							tokenSource.Cancel( true );
+							throw;
+						}
+					},
+					token
+				)
+			);
+
+			System.Threading.Tasks.Parallel.Invoke(
+				new System.Threading.Tasks.ParallelOptions {
+					MaxDegreeOfParallelism = this.MaxDegreeOfParallelism,
+					CancellationToken = token
+				},
+				tasks.Select<System.Threading.Tasks.Task, System.Action>(
+					x => () => {
+						try {
+							x.RunSynchronously();
+						} catch {
+							tokenSource.Cancel( true );
+							throw;
+						}
+					}
+				).ToArray()
+			);
 		}
 		#endregion methods
 

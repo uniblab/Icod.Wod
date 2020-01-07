@@ -1,6 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://Icod.Wod" elementFormDefault="qualified" targetNamespace="http://Icod.Wod" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import />
+  <xs:attribute name="name" type="xs:string" />
+  <xs:attribute default="System.Data.SqlClient" name="providerName" type="xs:string" />
+  <xs:attribute name="connectionString" type="xs:string" />
   <xs:complexType name="email">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="1" name="body" type="xs:string" />
@@ -47,16 +49,72 @@
   </xs:simpleType>
   <xs:complexType name="serial">
     <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="1" name="steps" type="tns:ArrayOfChoice1" />
+      <xs:element minOccurs="0" maxOccurs="1" name="steps" type="tns:ArrayOfChoice2" />
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="ArrayOfChoice1">
+  <xs:complexType name="ArrayOfChoice2">
     <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:element minOccurs="0" maxOccurs="1" name="dbOperation" type="tns:dbOperation" />
+      <xs:element minOccurs="0" maxOccurs="1" name="sfRestSelect" type="tns:sfRestSelect" />
+      <xs:element minOccurs="0" maxOccurs="1" name="dbFileImport" type="tns:dbFileImport" />
+      <xs:element minOccurs="0" maxOccurs="1" name="sfBulkSelect" type="tns:sfBulkSelect" />
+      <xs:element minOccurs="0" maxOccurs="1" name="dbFileExport" type="tns:dbFileExport" />
       <xs:element minOccurs="0" maxOccurs="1" name="email" type="tns:email" />
-      <xs:element minOccurs="0" maxOccurs="1" name="sfOperation" type="tns:sfOperation" />
       <xs:element minOccurs="0" maxOccurs="1" name="fileOperation" type="tns:fileOperation" />
+      <xs:element minOccurs="0" maxOccurs="1" name="serial" type="tns:serial" />
+      <xs:element minOccurs="0" maxOccurs="1" name="parallel" type="tns:parallel" />
+      <xs:element minOccurs="0" maxOccurs="1" name="dbCommand" type="tns:dbCommand" />
     </xs:choice>
+  </xs:complexType>
+  <xs:complexType name="sfRestSelect">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:sfOperation">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="destination" type="tns:DbDestination" />
+        </xs:sequence>
+        <xs:attribute name="soql" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="sfOperation" abstract="true">
+    <xs:attribute name="instanceName" type="xs:string" />
+    <xs:attribute name="apiVersion" type="xs:decimal" use="optional" default="47.0" />
+  </xs:complexType>
+  <xs:complexType name="BulkOperationBase" abstract="true">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:sfOperation">
+        <xs:attribute default="10000" name="batchSize" type="xs:int" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="sfBulkSelect">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:BulkOperationBase">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="destination" type="tns:DbDestination" />
+        </xs:sequence>
+        <xs:attribute name="soql" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="DbDestination">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:DbIODescriptorBase">
+        <xs:attribute default="Ignore" name="missingSchemaAction" type="tns:MissingSchemaAction" />
+        <xs:attribute default="Ignore" name="missingMappingAction" type="tns:MissingMappingAction" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="DbIODescriptorBase" abstract="true">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:dbOperation">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="columnMapping" type="tns:ArrayOfColumnMap" />
+        </xs:sequence>
+        <xs:attribute default="1" name="updateBatchSize" type="xs:int" />
+        <xs:attribute name="tableName" type="xs:string" />
+        <xs:attribute name="schemaQuery" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
   <xs:complexType name="dbOperation" abstract="true">
     <xs:complexContent mixed="false">
@@ -135,18 +193,7 @@
       <xs:enumeration value="TableDirect" />
     </xs:restriction>
   </xs:simpleType>
-  <xs:complexType name="DbIODescriptorBase" abstract="true">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:dbOperation">
-        <xs:sequence>
-          <xs:element minOccurs="0" maxOccurs="1" name="columnMapping" type="tns:ArrayOfColumnMap" />
-        </xs:sequence>
-        <xs:attribute default="1" name="updateBatchSize" type="xs:int" />
-        <xs:attribute name="tableName" type="xs:string" />
-        <xs:attribute name="schemaQuery" type="xs:string" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
+  <xs:element name="columnMapping" type="tns:ArrayOfColumnMap" />
   <xs:complexType name="ArrayOfColumnMap">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="map" type="tns:ColumnMap" />
@@ -157,37 +204,22 @@
     <xs:attribute name="from" type="xs:string" />
     <xs:attribute name="to" type="xs:string" />
   </xs:complexType>
-  <xs:complexType name="DbDestination">
+  <xs:attribute default="1" name="updateBatchSize" type="xs:int" />
+  <xs:attribute name="tableName" type="xs:string" />
+  <xs:attribute name="schemaQuery" type="xs:string" />
+  <xs:complexType name="dbCommand">
     <xs:complexContent mixed="false">
-      <xs:extension base="tns:DbIODescriptorBase">
-        <xs:attribute default="Ignore" name="missingSchemaAction" type="tns:MissingSchemaAction" />
-        <xs:attribute default="Ignore" name="missingMappingAction" type="tns:MissingMappingAction" />
-      </xs:extension>
+      <xs:extension base="tns:dbOperation" />
     </xs:complexContent>
   </xs:complexType>
-  <xs:simpleType name="MissingSchemaAction">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="Add" />
-      <xs:enumeration value="Ignore" />
-      <xs:enumeration value="Error" />
-      <xs:enumeration value="AddWithKey" />
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:simpleType name="MissingMappingAction">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="Passthrough" />
-      <xs:enumeration value="Ignore" />
-      <xs:enumeration value="Error" />
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:complexType name="fileImport">
+  <xs:complexType name="dbFileExport">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:DbIODescriptorBase">
         <xs:sequence>
-          <xs:element minOccurs="1" maxOccurs="1" name="source" type="tns:DataFileBase" />
+          <xs:element minOccurs="1" maxOccurs="1" name="destination" type="tns:DataFileBase" />
         </xs:sequence>
-        <xs:attribute default="Ignore" name="missingSchemaAction" type="tns:MissingSchemaAction" />
-        <xs:attribute default="Ignore" name="missingMappingAction" type="tns:MissingMappingAction" />
+        <xs:attribute default="Add" name="missingSchemaAction" type="tns:MissingSchemaAction" />
+        <xs:attribute default="Passthrough" name="missingMappingAction" type="tns:MissingMappingAction" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -468,70 +500,48 @@
       <xs:element minOccurs="0" maxOccurs="unbounded" name="assembly" type="tns:fileDescriptor" />
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="fileExport">
+  <xs:simpleType name="MissingSchemaAction">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Add" />
+      <xs:enumeration value="Ignore" />
+      <xs:enumeration value="Error" />
+      <xs:enumeration value="AddWithKey" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="MissingMappingAction">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Passthrough" />
+      <xs:enumeration value="Ignore" />
+      <xs:enumeration value="Error" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="dbFileImport">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:DbIODescriptorBase">
         <xs:sequence>
-          <xs:element minOccurs="1" maxOccurs="1" name="destination" type="tns:DataFileBase" />
+          <xs:element minOccurs="1" maxOccurs="1" name="source" type="tns:DataFileBase" />
         </xs:sequence>
-        <xs:attribute default="Add" name="missingSchemaAction" type="tns:MissingSchemaAction" />
-        <xs:attribute default="Passthrough" name="missingMappingAction" type="tns:MissingMappingAction" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="columnMapping" type="tns:ArrayOfColumnMap" />
-  <xs:attribute default="1" name="updateBatchSize" type="xs:int" />
-  <xs:attribute name="tableName" type="xs:string" />
-  <xs:attribute name="schemaQuery" type="xs:string" />
-  <xs:complexType name="command">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:dbOperation" />
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="sfOperation" abstract="true">
-    <xs:attribute name="instanceName" type="xs:string" />
-    <xs:attribute name="apiVersion" type="xs:decimal" default="47.0" use="optional" />
-  </xs:complexType>
-  <xs:complexType name="BulkOperationBase" abstract="true">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:sfOperation">
-        <xs:attribute default="2000" name="batchSize" type="xs:int" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="bulkSelect">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:BulkOperationBase">
-        <xs:sequence>
-          <xs:element minOccurs="1" maxOccurs="1" name="destination" type="tns:DbDestination" />
-        </xs:sequence>
-        <xs:attribute name="soql" type="xs:string" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="restSelect">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:sfOperation">
-        <xs:sequence>
-          <xs:element minOccurs="1" maxOccurs="1" name="destination" type="tns:DbDestination" />
-        </xs:sequence>
-        <xs:attribute name="soql" type="xs:string" />
+        <xs:attribute default="Ignore" name="missingSchemaAction" type="tns:MissingSchemaAction" />
+        <xs:attribute default="Ignore" name="missingMappingAction" type="tns:MissingMappingAction" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
   <xs:complexType name="parallel">
     <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="1" name="steps" type="tns:ArrayOfChoice2" />
+      <xs:element minOccurs="0" maxOccurs="1" name="steps" type="tns:ArrayOfChoice1" />
     </xs:sequence>
     <xs:attribute default="-1" name="maxDegreeOfParallelism" type="xs:int" />
   </xs:complexType>
-  <xs:complexType name="ArrayOfChoice2">
+  <xs:complexType name="ArrayOfChoice1">
     <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:element minOccurs="0" maxOccurs="1" name="dbOperation" type="tns:dbOperation" />
+      <xs:element minOccurs="0" maxOccurs="1" name="sfRestSelect" type="tns:sfRestSelect" />
+      <xs:element minOccurs="0" maxOccurs="1" name="dbFileImport" type="tns:dbFileImport" />
+      <xs:element minOccurs="0" maxOccurs="1" name="sfBulkSelect" type="tns:sfBulkSelect" />
+      <xs:element minOccurs="0" maxOccurs="1" name="dbFileExport" type="tns:dbFileExport" />
+      <xs:element minOccurs="0" maxOccurs="1" name="fileOperation" type="tns:fileOperation" />
       <xs:element minOccurs="0" maxOccurs="1" name="email" type="tns:email" />
       <xs:element minOccurs="0" maxOccurs="1" name="serial" type="tns:serial" />
-      <xs:element minOccurs="0" maxOccurs="1" name="fileOperation" type="tns:fileOperation" />
-      <xs:element minOccurs="0" maxOccurs="1" name="sfOperation" type="tns:sfOperation" />
+      <xs:element minOccurs="0" maxOccurs="1" name="dbCommand" type="tns:dbCommand" />
     </xs:choice>
   </xs:complexType>
   <xs:complexType name="variable">
@@ -542,7 +552,7 @@
   <xs:complexType name="WorkOrder">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="1" name="connectionStrings" type="tns:ArrayOfConnectionStringEntry" />
-      <xs:element minOccurs="0" maxOccurs="1" name="sfCredentials" type="tns:ArrayOfCredential" />
+      <xs:element minOccurs="0" maxOccurs="1" name="sfCredentials" type="tns:ArrayOfSfCredential" />
       <xs:element minOccurs="0" maxOccurs="1" name="variables" type="tns:ArrayOfVariable" />
       <xs:element minOccurs="0" maxOccurs="1" name="steps" type="tns:ArrayOfChoice3" />
     </xs:sequence>
@@ -559,12 +569,12 @@
     <xs:attribute default="System.Data.SqlClient" name="providerName" type="xs:string" />
     <xs:attribute name="connectionString" type="xs:string" />
   </xs:complexType>
-  <xs:complexType name="ArrayOfCredential">
+  <xs:complexType name="ArrayOfSfCredential">
     <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="sfCredential" type="tns:Credential" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="sfCredential" type="tns:sfCredential" />
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="Credential">
+  <xs:complexType name="sfCredential">
     <xs:attribute name="name" type="xs:string" />
     <xs:attribute name="clientId" type="xs:string" />
     <xs:attribute default="RefreshToken" name="loginMode" type="tns:LoginMode" />
@@ -581,8 +591,8 @@
   </xs:complexType>
   <xs:simpleType name="LoginMode">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="Password" />
       <xs:enumeration value="RefreshToken" />
+      <xs:enumeration value="Password" />
     </xs:restriction>
   </xs:simpleType>
   <xs:complexType name="ArrayOfVariable">
@@ -592,25 +602,22 @@
   </xs:complexType>
   <xs:complexType name="ArrayOfChoice3">
     <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:element minOccurs="0" maxOccurs="1" name="dbOperation" type="tns:dbOperation" />
-      <xs:element minOccurs="0" maxOccurs="1" name="sfOperation" type="tns:sfOperation" />
+      <xs:element minOccurs="0" maxOccurs="1" name="sfRestSelect" type="tns:sfRestSelect" />
+      <xs:element minOccurs="0" maxOccurs="1" name="dbFileImport" type="tns:dbFileImport" />
+      <xs:element minOccurs="0" maxOccurs="1" name="sfBulkSelect" type="tns:sfBulkSelect" />
+      <xs:element minOccurs="0" maxOccurs="1" name="dbFileExport" type="tns:dbFileExport" />
       <xs:element minOccurs="0" maxOccurs="1" name="email" type="tns:email" />
       <xs:element minOccurs="0" maxOccurs="1" name="fileOperation" type="tns:fileOperation" />
       <xs:element minOccurs="0" maxOccurs="1" name="serial" type="tns:serial" />
       <xs:element minOccurs="0" maxOccurs="1" name="parallel" type="tns:parallel" />
+      <xs:element minOccurs="0" maxOccurs="1" name="dbCommand" type="tns:dbCommand" />
     </xs:choice>
   </xs:complexType>
-  <xs:attribute name="name" type="xs:string" />
-  <xs:attribute name="clientId" type="xs:string" />
-  <xs:attribute default="RefreshToken" name="loginMode" type="LoginMode" />
-  <xs:attribute name="clientSecret" type="xs:string" />
-  <xs:attribute name="username" type="xs:string" />
-  <xs:attribute name="password" type="xs:string" />
-  <xs:attribute name="securityToken" type="xs:string" />
-  <xs:attribute default="https" name="scheme" type="xs:string" />
-  <xs:attribute name="host" type="xs:string" />
-  <xs:attribute default="-1" name="port" type="xs:int" />
-  <xs:attribute name="path" type="xs:string" />
-  <xs:attribute name="callbackUrl" type="xs:string" />
-  <xs:attribute name="refreshToken" type="xs:string" />
+  <xs:complexType name="rebaseFile">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:fileOperation">
+        <xs:attribute default="windows-1252" name="outputCodePage" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
 </xs:schema>

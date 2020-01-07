@@ -5,7 +5,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 	public abstract class BulkOperationBase : SFOperationBase, Icod.Wod.IStep {
 
 		#region fields
-		public const System.Int32 DefaultBatchSize = 2000;
+		private const System.Int32 DefaultBatchSize = 10000;
 
 		private System.Int32 myBatchSize;
 		#endregion fields
@@ -13,10 +13,12 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 		#region .ctor
 		protected BulkOperationBase() : base() {
-			myBatchSize = 2000;
+			myBatchSize = DefaultBatchSize;
+			this.Wait = new Wait();
 		}
 		protected BulkOperationBase( WorkOrder workOrder ) : base( workOrder ) {
-			myBatchSize = 2000;
+			myBatchSize = DefaultBatchSize;
+			this.Wait = new Wait();
 		}
 		#endregion .ctor
 
@@ -34,6 +36,16 @@ namespace Icod.Wod.SalesForce.Bulk {
 			set {
 				myBatchSize = value;
 			}
+		}
+
+		[System.Xml.Serialization.XmlElement(
+			"wait",
+			Namespace = "http://Icod.Wod",
+			IsNullable = false
+		)]
+		public Wait Wait {
+			get;
+			set;
 		}
 		#endregion properties
 
