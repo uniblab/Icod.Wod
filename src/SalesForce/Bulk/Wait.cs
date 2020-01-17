@@ -5,10 +5,10 @@ namespace Icod.Wod.SalesForce.Bulk {
 	public sealed class Wait {
 
 		#region fields
-		private const System.Int32 InitialWaitMiliseconds = 3000;
-		private const System.Int32 MinimumWaitMiliseconds = 4000;
+		private const System.Int32 InitialWaitMiliseconds = 5000;
+		private const System.Int32 MinimumWaitMiliseconds = 5000;
 		private const System.Int32 IncrementMiliseconds = 1000;
-		private const System.Int32 MaxWaitMiliseconds = 30000;
+		private const System.Int32 MaxWaitMiliseconds = 45000;
 
 		private System.Int32 myInitial;
 		private System.Int32 myMinimum;

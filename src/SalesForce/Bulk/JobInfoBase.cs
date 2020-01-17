@@ -36,6 +36,10 @@ namespace Icod.Wod.SalesForce.Bulk {
 			get;
 			set;
 		}
+		public System.String state {
+			get;
+			set;
+		}
 		#endregion properties
 
 	}

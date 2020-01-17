@@ -21,7 +21,8 @@ namespace Icod.Wod.SalesForce {
 
 
 		#region properties
-		public WorkOrder WorkOrder {
+		[System.Xml.Serialization.XmlIgnore]
+		public Icod.Wod.WorkOrder WorkOrder {
 			get {
 				return myWorkOrder;
 			}
@@ -63,7 +64,6 @@ namespace Icod.Wod.SalesForce {
 			if ( null == credential ) {
 				throw new System.ArgumentNullException( "credential" );
 			}
-
 
 			var headers = new System.Collections.Generic.Dictionary<System.String, System.String>();
 			headers.Add( "Content-type", "application/x-www-form-urlencoded; charset=" + encoding.WebName );

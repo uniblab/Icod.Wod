@@ -66,12 +66,6 @@ namespace Icod.Wod {
 			IsNullable = false,
 			Namespace = "http://Icod.Wod"
 		)]
-		[System.Xml.Serialization.XmlArrayItem(
-			typeof( SalesForce.Bulk.BulkSelect ),
-			ElementName = "sfBulkSelect",
-			IsNullable = false,
-			Namespace = "http://Icod.Wod"
-		)]
 		[System.ComponentModel.DefaultValue( null )]
 		public System.Object[] Steps {
 			get;
@@ -87,11 +81,18 @@ namespace Icod.Wod {
 			get;
 			set;
 		}
+
+		[System.Xml.Serialization.XmlIgnore]
+		public WorkOrder WorkOrder {
+			get;
+			set;
+		}
 		#endregion properties
 
 
 		#region methods
 		public void DoWork( WorkOrder workOrder ) {
+			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			var steps = ( this.Steps ?? new IStep[ 0 ] ).OfType<IStep>();
 			if ( !steps.Any() ) {
 				return;

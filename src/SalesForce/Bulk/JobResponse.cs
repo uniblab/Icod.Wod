@@ -40,10 +40,6 @@ namespace Icod.Wod.SalesForce.Bulk {
 			get;
 			set;
 		}
-		public System.String State {
-			get;
-			set;
-		}
 		public System.DateTime SystemModstamp {
 			get;
 			set;

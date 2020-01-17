@@ -8,7 +8,7 @@ change xs:import element: add attribute schemaLocation="./schema1.xsd"
 schema1.xsd:
 set minOccurs="1" for source of dbFileImport
 set minOccurs="1" for destination of dbFileExport, binaryFileOperation, binaryZipOperation, sfRestSelect, sfBfulkSelect
-set default="47.0" and use="optional" for the apdbFileExportiVersion attribute
-set use="optional" to the apiVersion attribute of the BulkOperationBase
+set default="47.0" and use="optional" for the apiVersion attribute of both AggregateOperationBase and sfRestSelect
+make sure the AggregateOperationBase has default schema actions of "Ignore", much like the FileExport
 
 Rebuild project, and root Xsd's will be copied to the output directory.

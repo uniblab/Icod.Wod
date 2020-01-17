@@ -80,6 +80,7 @@
     <Compile Include="src\Email.cs" />
     <Compile Include="src\FileHelper.cs" />
     <Compile Include="src\File\AddZip.cs" />
+    <Compile Include="src\File\DeflateFile.cs" />
     <Compile Include="src\File\ExecuteFile.cs" />
     <Compile Include="src\File\FileBase.cs" />
     <Compile Include="src\File\FileOrDirectoryListerBase.cs" />
@@ -95,21 +96,34 @@
     <Compile Include="src\File\TailFile.cs" />
     <Compile Include="src\File\TouchZip.cs" />
     <Compile Include="src\File\XmlTransformFile.cs" />
+    <Compile Include="src\GuardedSemaphore.cs" />
     <Compile Include="src\Interfaces\IIsEmpty.cs" />
     <Compile Include="src\Interfaces\IQueue`1.cs" />
     <Compile Include="src\Interfaces\IStack`1.cs" />
     <Compile Include="src\Pair`2.cs" />
     <Compile Include="src\Queue`1.cs" />
-    <Compile Include="src\SalesForce\Bulk\BulkOperationBase.cs" />
-    <Compile Include="src\SalesForce\Bulk\BulkSelect.cs" />
+    <Compile Include="src\SalesForce\Bulk\AggregateMutationOperationBase.cs" />
+    <Compile Include="src\SalesForce\Bulk\BulkAggregateOperation.cs" />
+    <Compile Include="src\SalesForce\Bulk\ColumnDelimiterOption.cs" />
+    <Compile Include="src\SalesForce\Bulk\Delete.cs" />
+    <Compile Include="src\SalesForce\Bulk\Insert.cs" />
     <Compile Include="src\SalesForce\Bulk\JobInfoBase.cs" />
+    <Compile Include="src\SalesForce\Bulk\JobProcess.cs" />
     <Compile Include="src\SalesForce\Bulk\JobRequest.cs" />
     <Compile Include="src\SalesForce\Bulk\JobResponse.cs" />
+    <Compile Include="src\SalesForce\Bulk\JobState.cs" />
     <Compile Include="src\SalesForce\Bulk\JobType.cs" />
+    <Compile Include="src\SalesForce\Bulk\AggregateOperationBase.cs" />
+    <Compile Include="src\SalesForce\Bulk\LineEndingOption.cs" />
+    <Compile Include="src\SalesForce\Bulk\Query.cs" />
     <Compile Include="src\SalesForce\Bulk\SelectResult.cs" />
+    <Compile Include="src\SalesForce\Bulk\StateOption.cs" />
+    <Compile Include="src\SalesForce\Bulk\Update.cs" />
+    <Compile Include="src\SalesForce\Bulk\Upsert.cs" />
     <Compile Include="src\SalesForce\Bulk\Wait.cs" />
     <Compile Include="src\SalesForce\Credential.cs" />
     <Compile Include="src\SalesForce\DbDestination.cs" />
+    <Compile Include="src\SalesForce\Interfaces\IAggregateOperation.cs" />
     <Compile Include="src\SalesForce\Interfaces\ICredential.cs" />
     <Compile Include="src\SalesForce\LoginMode.cs" />
     <Compile Include="src\SalesForce\Login.cs" />
@@ -182,6 +196,7 @@
     </Content>
     <Content Include="Schema Updates.txt" />
     <None Include="app.config" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

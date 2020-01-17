@@ -9,15 +9,57 @@ namespace Icod.Wod.SalesForce.Rest {
 	)]
 	public class RestSelect : SFOperationBase, Icod.Wod.Data.ITableSource, Icod.Wod.IStep {
 
+		#region fields
+		public static readonly System.Decimal DefaultApiVersion;
+
+		private System.Decimal myApiVersion;
+		private System.String myInstanceName;
+		#endregion fields
+
+
 		#region .ctor
+		static RestSelect() {
+			DefaultApiVersion = new System.Decimal( 47.0 );
+		}
+
 		public RestSelect() : base() {
+			myApiVersion = DefaultApiVersion;
+			myInstanceName = null;
 		}
 		public RestSelect( WorkOrder workOrder ) : base( workOrder ) {
+			myApiVersion = DefaultApiVersion;
+			myInstanceName = null;
 		}
 		#endregion .ctor
 
 
 		#region properties
+		[System.Xml.Serialization.XmlAttribute(
+			"apiVersion",
+			Namespace = "http://Icod.Wod"
+		)]
+		public System.Decimal ApiVersion {
+			get {
+				return myApiVersion;
+			}
+			set {
+				myApiVersion = value;
+			}
+		}
+		[System.Xml.Serialization.XmlAttribute(
+			"instanceName",
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.ComponentModel.DefaultValue( (System.String)null )]
+		public System.String InstanceName {
+			get {
+				return myInstanceName;
+			}
+			set {
+				myInstanceName = value.TrimToNull();
+			}
+		}
+
 		[System.Xml.Serialization.XmlAttribute(
 			"soql",
 			Namespace = "http://Icod.Wod"
@@ -58,7 +100,7 @@ namespace Icod.Wod.SalesForce.Rest {
 			return this.ReadTables( loginToken );
 		}
 		public System.Collections.Generic.IEnumerable<System.Data.DataTable> ReadTables( LoginResponse loginToken ) {
-			using ( var client = BuildClient( loginToken, this.WorkOrder.JobName ) ) {
+			using ( var client = this.BuildClient( loginToken, this.WorkOrder.JobName ) ) {
 				client.Headers[ "Content-type" ] = "application/x-www-form-urlencoded; charset=utf-8";
 				var instanceUrl = new System.Uri( loginToken.InstanceUrl );
 				var nextRecordsUrl = this.GetServicePath();
@@ -115,6 +157,25 @@ namespace Icod.Wod.SalesForce.Rest {
 		}
 		private System.String GetServicePath() {
 			return System.String.Format( "/services/data/v{0:F1}/query/", this.ApiVersion );
+		}
+
+		private System.Net.WebClient BuildClient( LoginResponse token, System.String userAgent ) {
+			if ( null == token ) {
+				throw new System.ArgumentNullException( "token" );
+			}
+			var client = new System.Net.WebClient {
+				Encoding = System.Text.Encoding.UTF8
+			};
+			client.Headers[ "Authorization" ] = "Bearer " + token.AccessToken;
+			client.Headers[ "User-Agent" ] = userAgent.TrimToNull() ?? System.Reflection.Assembly.GetExecutingAssembly().FullName;
+#if DEBUG
+			client.Headers[ "Accept-Encoding" ] = "identity, gzip, deflate";
+			System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12 | System.Net.SecurityProtocolType.Tls11 | System.Net.SecurityProtocolType.Tls | System.Net.SecurityProtocolType.Ssl3;
+#else
+			client.Headers[ "Accept-Encoding" ] = "gzip, deflate, identity";
+			System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+#endif
+			return client;
 		}
 		#endregion methods
 

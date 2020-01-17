@@ -5,125 +5,111 @@ namespace Icod.Wod {
 	[System.Xml.Serialization.XmlType( IncludeInSchema = false )]
 	public static class FileHelper {
 
+		public const System.Int32 EOL = -1;
+
 		public static System.String ReadLine( this System.IO.StringReader file, System.String recordSeparator, System.Char quoteChar ) {
 			if ( System.String.IsNullOrEmpty( recordSeparator ) ) {
 				throw new System.ArgumentNullException( "recordSeparator" );
 			} else if ( null == file ) {
 				throw new System.ArgumentNullException( "file" );
-			} else if ( recordSeparator.Equals( quoteChar.ToString() ) ) {
+			} else if ( ( 1 == recordSeparator.Length ) && recordSeparator.Equals( quoteChar.ToString() ) ) {
 				throw new System.InvalidOperationException( "Quote character and record separator cannot be the same." );
 			}
 
-			System.Boolean isReading = true;
-			var rs = recordSeparator.ToCharArray();
+			var output = new System.Text.StringBuilder();
+			var leLen = recordSeparator.Length;
+			var lenStop = leLen - 1;
 			System.Int32 i = 0;
-			var maxI = rs.Length;
-			var line = new System.Text.StringBuilder();
-			System.Int32 j = 0;
-			System.Int32 c;
-			System.Boolean isNull = true;
-			System.Boolean isQuoted = false;
-			System.Char probe;
-			do {
-				c = file.Read();
-				if ( -1 == c ) {
-					maxI = 0;
-					isReading = false;
-					break;
-				}
-				isNull = false;
-				probe = System.Convert.ToChar( c );
-				line.Append( probe );
-				if ( quoteChar.Equals( probe ) ) {
-					c = file.Peek();
-					if ( -1 == c ) {
-						maxI = 0;
-						isReading = false;
-						break;
-					}
-					probe = System.Convert.ToChar( c );
-					if ( isQuoted ) {
-						if ( !quoteChar.Equals( probe ) ) {
-							isQuoted = false;
+			System.Char c;
+			System.Boolean isPlaintext = true;
+			System.Int32 p = file.Read();
+			System.Char q;
+			while ( EOL != p ) {
+				c = System.Convert.ToChar( p );
+				output = output.Append( c );
+				if ( isPlaintext ) {
+					if ( quoteChar.Equals( c ) ) {
+						isPlaintext = false;
+					} else if ( ( leLen <= output.Length ) && ( recordSeparator[ i ].Equals( output[ ( output.Length - leLen ) - i ] ) ) ) {
+						if ( lenStop <= ++i ) {
+							output.Remove( output.Length - leLen, leLen );
+							break;
 						}
 					} else {
-						isQuoted = true;
+						i = 0;
+					}
+				} else {
+					if ( quoteChar.Equals( c ) ) {
+						p = file.Peek();
+						if ( EOL == p ) {
+							throw new System.IO.EndOfStreamException();
+						}
+						c = System.Convert.ToChar( p );
+						if ( quoteChar.Equals( c ) ) {
+							file.Read();
+							output = output.Append( c );
+						} else {
+							i = 0;
+							isPlaintext = true;
+						}
 					}
 				}
-				if ( ( !isQuoted ) && ( line[ j ].Equals( rs[ i ] ) ) ) {
-					i++;
-				} else {
-					i = 0;
-				}
-				if ( i == maxI ) {
-					isReading = false;
-					break;
-				}
-				j++;
-			} while ( isReading );
-			line.Remove( line.Length - maxI, maxI );
-			return isNull ? null : line.ToString();
+				p = file.Read();
+			}
+
+			return output.ToString();
 		}
 		public static System.String ReadLine( this System.IO.StreamReader file, System.String recordSeparator, System.Char quoteChar ) {
 			if ( System.String.IsNullOrEmpty( recordSeparator ) ) {
 				throw new System.ArgumentNullException( "recordSeparator" );
 			} else if ( null == file ) {
 				throw new System.ArgumentNullException( "file" );
-			} else if ( file.EndOfStream ) {
-				return null;
-			} else if ( recordSeparator.Equals( quoteChar.ToString() ) ) {
+			} else if ( ( 1 == recordSeparator.Length ) && recordSeparator.Equals( quoteChar.ToString() ) ) {
 				throw new System.InvalidOperationException( "Quote character and record separator cannot be the same." );
 			}
 
-			System.Boolean isReading = true;
-			var rs = recordSeparator.ToCharArray();
+			var output = new System.Text.StringBuilder();
+			var leLen = recordSeparator.Length;
+			var lenStop = leLen - 1;
 			System.Int32 i = 0;
-			var maxI = rs.Length;
-			var line = new System.Text.StringBuilder();
-			System.Int32 j = 0;
-			System.Int32 c;
-			System.Boolean isNull = true;
-			System.Boolean isQuoted = false;
-			System.Char probe;
-			do {
-				c = file.Read();
-				if ( -1 == c ) {
-					maxI = 0;
-					isReading = false;
-					break;
-				}
-				isNull = false;
-				probe = System.Convert.ToChar( c );
-				line.Append( probe );
-				if ( quoteChar.Equals( probe ) ) {
-					c = file.Peek();
-					if ( -1 == c ) {
-						maxI = 0;
-						isReading = false;
-						break;
-					}
-					probe = System.Convert.ToChar( c );
-					if ( isQuoted ) {
-						if ( !quoteChar.Equals( probe ) ) {
-							isQuoted = false;
+			System.Char c;
+			System.Boolean isPlaintext = true;
+			System.Int32 p = file.Read();
+			System.Char q;
+			while ( EOL != p ) {
+				c = System.Convert.ToChar( p );
+				output = output.Append( c );
+				if ( isPlaintext ) {
+					if ( quoteChar.Equals( c ) ) {
+						isPlaintext = false;
+					} else if ( recordSeparator[ i ].Equals( output[ ( output.Length - leLen ) - i ] ) ) {
+						if ( lenStop <= ++i ) {
+							output.Remove( output.Length - leLen, leLen );
+							break;
 						}
 					} else {
-						isQuoted = true;
+						i = 0;
+					}
+				} else {
+					if ( quoteChar.Equals( c ) ) {
+						p = file.Peek();
+						if ( EOL == p ) {
+							throw new System.IO.EndOfStreamException();
+						}
+						c = System.Convert.ToChar( p );
+						if ( quoteChar.Equals( c ) ) {
+							file.Read();
+							output = output.Append( c );
+						} else {
+							i = 0;
+							isPlaintext = true;
+						}
 					}
 				}
-				if ( ( !isQuoted ) && ( line[ j ].Equals( rs[ i ] ) ) ) {
-					i++;
-				} else {
-					i = 0;
-				}
-				if ( i == maxI ) {
-					isReading = false;
-					break;
-				}
-				j++;
-			} while ( isReading );
-			line.Remove( line.Length - maxI, maxI );
-			return isNull ? null : line.ToString();
+				p = file.Read();
+			}
+
+			return output.ToString();
 		}
 		public static System.String ReadLine( this System.IO.StreamReader file, System.String recordSeparator ) {
 			if ( System.String.IsNullOrEmpty( recordSeparator ) ) {

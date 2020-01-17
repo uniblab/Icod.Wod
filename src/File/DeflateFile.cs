@@ -1,13 +1,13 @@
-using System.Linq;
+﻿using System.Linq;
 
 namespace Icod.Wod.File {
 
 	[System.Serializable]
 	[System.Xml.Serialization.XmlType(
-		"gzipFile",
+		"deflateFile",
 		Namespace = "http://Icod.Wod"
 	)]
-	public sealed class GZipFile : BinaryFileOperationBase {
+	public sealed class DeflateFile : BinaryFileOperationBase {
 
 		#region fields
 		private System.Boolean myDelete;
@@ -16,10 +16,10 @@ namespace Icod.Wod.File {
 
 
 		#region .ctor
-		public GZipFile() : base() {
+		public DeflateFile() : base() {
 			myCompressionMode = System.IO.Compression.CompressionMode.Decompress;
 		}
-		public GZipFile( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
+		public DeflateFile( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
 			myCompressionMode = System.IO.Compression.CompressionMode.Decompress;
 		}
 		#endregion .ctor
@@ -62,13 +62,13 @@ namespace Icod.Wod.File {
 			this.Destination.WorkOrder = workOrder;
 			System.Action<Icod.Wod.File.FileHandlerBase, System.String, Icod.Wod.File.FileHandlerBase> action = null;
 			switch ( this.CompressionMode ) {
-				case System.IO.Compression.CompressionMode.Decompress :
+				case System.IO.Compression.CompressionMode.Decompress:
 					action = this.Decompress;
 					break;
-				case System.IO.Compression.CompressionMode.Compress :
+				case System.IO.Compression.CompressionMode.Compress:
 					action = this.Compress;
 					break;
-				default :
+				default:
 					throw new System.InvalidOperationException();
 			}
 
@@ -94,12 +94,12 @@ namespace Icod.Wod.File {
 				throw new System.ArgumentNullException( "source" );
 			}
 #endif
-			if (System.String.IsNullOrEmpty(sourceFilePathName ) ) {
+			if ( System.String.IsNullOrEmpty( sourceFilePathName ) ) {
 				throw new System.ArgumentNullException( "sourceFilePathName" );
 			}
 			var dfd = dest.FileDescriptor;
 			using ( var reader = source.OpenReader( sourceFilePathName ) ) {
-				using ( var worker = new System.IO.Compression.GZipStream( reader, System.IO.Compression.CompressionMode.Decompress, true ) ) {
+				using ( var worker = new System.IO.Compression.DeflateStream( reader, System.IO.Compression.CompressionMode.Decompress, true ) ) {
 					using ( var buffer = new System.IO.MemoryStream() ) {
 						worker.CopyTo( buffer );
 						buffer.Flush();
@@ -123,7 +123,7 @@ namespace Icod.Wod.File {
 			}
 			var dfd = dest.FileDescriptor;
 			using ( var buffer = new System.IO.MemoryStream() ) {
-				using ( var worker = new System.IO.Compression.GZipStream( buffer, System.IO.Compression.CompressionMode.Compress, true ) ) {
+				using ( var worker = new System.IO.Compression.DeflateStream( buffer, System.IO.Compression.CompressionMode.Compress, true ) ) {
 					using ( var reader = source.OpenReader( sourceFilePathName ) ) {
 						reader.CopyTo( worker );
 						worker.Flush();
@@ -142,13 +142,13 @@ namespace Icod.Wod.File {
 #endif
 			System.String fn;
 			switch ( this.CompressionMode ) {
-				case System.IO.Compression.CompressionMode.Decompress :
+				case System.IO.Compression.CompressionMode.Decompress:
 					fn = System.IO.Path.GetFileNameWithoutExtension( source );
 					break;
-				case System.IO.Compression.CompressionMode.Compress :
+				case System.IO.Compression.CompressionMode.Compress:
 					fn = System.IO.Path.GetFileName( source ) + ".gzip";
 					break;
-				default :
+				default:
 					throw new System.InvalidOperationException();
 			}
 			return fn;

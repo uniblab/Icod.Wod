@@ -39,7 +39,7 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="sfRestSelect" nillable="true" xmlns:q11="http://Icod.Wod" type="q11:sfRestSelect" />
-  <xs:element name="sfBulkSelect" nillable="true" xmlns:q12="http://Icod.Wod" type="q12:sfBulkSelect" />
+  <xs:element name="bulkAggregateOperation" nillable="true" xmlns:q12="http://Icod.Wod" type="q12:bulkAggregateOperation" />
   <xs:element name="addZip" nillable="true" xmlns:q13="http://Icod.Wod" type="q13:addZip" />
   <xs:element name="executeFile" nillable="true" xmlns:q14="http://Icod.Wod" type="q14:executeFile" />
   <xs:element name="headFile" nillable="true" xmlns:q15="http://Icod.Wod" type="q15:headFile" />

@@ -184,8 +184,8 @@ namespace Icod.Wod {
 			Namespace = "http://Icod.Wod"
 		)]
 		[System.Xml.Serialization.XmlArrayItem(
-			typeof( SalesForce.Bulk.BulkSelect ),
-			ElementName = "sfBulkSelect",
+			typeof( SalesForce.Bulk.BulkAggregateOperation ),
+			ElementName = "sfBulkOperation",
 			IsNullable = false,
 			Namespace = "http://Icod.Wod"
 		)]
