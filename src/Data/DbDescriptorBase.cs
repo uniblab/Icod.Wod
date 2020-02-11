@@ -3,7 +3,6 @@ using System.Linq;
 namespace Icod.Wod.Data {
 
 	[System.Serializable]
-	[System.Xml.Serialization.XmlInclude( typeof( Command ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( DbIODescriptorBase ) )]
 	public abstract class DbDescriptorBase {
 
