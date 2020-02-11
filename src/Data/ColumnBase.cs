@@ -55,7 +55,7 @@ namespace Icod.Wod.Data {
 
 
 		#region methods
-		public abstract System.String GetColumnText( System.Object value );
+		public abstract System.String GetColumnText( WorkOrder workOrder, System.Object value );
 		#endregion methods
 
 	}

@@ -38,10 +38,10 @@ namespace Icod.Wod.Data {
 
 
 		#region methods
-		public sealed override System.String GetColumnText( System.Object value ) {
+		public sealed override System.String GetColumnText( WorkOrder workOrder, System.Object value ) {
 			return ( ( null == value ) || System.DBNull.Value.Equals( value ) )
 				? this.NullReplacementText
-				: System.String.Format( this.FormatString ?? "{0}", value )
+				: workOrder.ExpandPseudoVariables( System.String.Format( workOrder.ExpandPseudoVariables( this.FormatString ) ?? "{0}", value ) )
 			;
 		}
 		#endregion methods

@@ -320,7 +320,7 @@ namespace Icod.Wod.Data {
 				foreach ( var table in source.ReadTables( workOrder ) ) {
 					using ( var command = this.CreateCommand( connection ) ) {
 						foreach ( var parameter in ( this.Parameters ?? new DbParameter[ 0 ] ) ) {
-							command.Parameters.Add( parameter.ToDbParameter( command ) );
+							command.Parameters.Add( parameter.ToDbParameter( workOrder, command ) );
 						}
 						this.ExecuteCommand( command, table );
 					}

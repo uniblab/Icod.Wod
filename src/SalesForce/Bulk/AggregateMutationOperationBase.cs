@@ -90,6 +90,16 @@ namespace Icod.Wod.SalesForce.Bulk {
 		}
 
 		[System.Xml.Serialization.XmlAttribute(
+			"tag",
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.ComponentModel.DefaultValue( (System.String)null )]
+		public virtual System.String Tag {
+			get;
+			set;
+		}
+
+		[System.Xml.Serialization.XmlAttribute(
 			"object",
 			Namespace = "http://Icod.Wod"
 		)]
@@ -112,10 +122,18 @@ namespace Icod.Wod.SalesForce.Bulk {
 			}
 		}
 
+		[System.Xml.Serialization.XmlElement(
+			"success",
+			Namespace = "http://Icod.Wod"
+		)]
 		public DbDestination Success {
 			get;
 			set;
 		}
+		[System.Xml.Serialization.XmlElement(
+			"error",
+			Namespace = "http://Icod.Wod"
+		)]
 		public DbDestination Error {
 			get;
 			set;
@@ -134,7 +152,9 @@ namespace Icod.Wod.SalesForce.Bulk {
 			var semaphore = jobProcess.Semaphore;
 
 			foreach ( var file in this.BuildFiles(
-				this.ReadTables( workOrder ), ColumnDelimiterOption.Comma.Value, LineEndingOption.CRLF.Value, '"', this.BatchSize
+				this.ReadTables( workOrder ),
+				ColumnDelimiterOption.Comma.Value, LineEndingOption.CRLF.Value, '"',
+				this.BatchSize
 			) ) {
 				semaphore.Wait();
 				var jobResponse = this.CreateJob( loginResponse );
@@ -143,38 +163,32 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 				var wait = ( this.Wait ?? new Wait() );
 				var sleepTime = wait.Initial;
-				while (
+				if (
 					!StateOption.Open.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
 					&& !StateOption.Aborted.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
 					&& !StateOption.Failed.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
 				) {
 					System.Threading.Thread.Sleep( sleepTime );
-					sleepTime = System.Math.Min( wait.Maximum, sleepTime + wait.Increment );
 					semaphore.Wait();
 					jobResponse = this.QueryJob( loginResponse, id );
 					semaphore.Release();
+					sleepTime = wait.Minimum;
+					while (
+						!StateOption.Open.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
+						&& !StateOption.Aborted.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
+						&& !StateOption.Failed.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
+					) {
+						System.Threading.Thread.Sleep( sleepTime );
+						sleepTime = System.Math.Min( wait.Maximum, sleepTime + wait.Increment );
+						semaphore.Wait();
+						jobResponse = this.QueryJob( loginResponse, id );
+						semaphore.Release();
+					}
 				}
 
 				semaphore.Wait();
 				this.UploadData( loginResponse, jobResponse, file );
 				semaphore.Release();
-
-				semaphore.Wait();
-				jobResponse = this.QueryJob( loginResponse, id );
-				semaphore.Release();
-
-				sleepTime = wait.Initial;
-				while (
-					!StateOption.Open.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
-					&& !StateOption.Aborted.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
-					&& !StateOption.Failed.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
-				) {
-					System.Threading.Thread.Sleep( sleepTime );
-					sleepTime = System.Math.Min( wait.Maximum, sleepTime + wait.Increment );
-					semaphore.Wait();
-					jobResponse = this.QueryJob( loginResponse, id );
-					semaphore.Release();
-				}
 
 				semaphore.Wait();
 				this.CloseJob( loginResponse, id );
@@ -183,30 +197,40 @@ namespace Icod.Wod.SalesForce.Bulk {
 				semaphore.Wait();
 				jobResponse = this.QueryJob( loginResponse, id );
 				semaphore.Release();
-
 				sleepTime = wait.Initial;
-				while (
+				if (
 					!StateOption.JobComplete.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
 					&& !StateOption.Aborted.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
 					&& !StateOption.Failed.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
 				) {
 					System.Threading.Thread.Sleep( sleepTime );
-					sleepTime = System.Math.Min( wait.Maximum, sleepTime + wait.Increment );
 					semaphore.Wait();
 					jobResponse = this.QueryJob( loginResponse, id );
 					semaphore.Release();
+					sleepTime = wait.Minimum;
+					while (
+						!StateOption.JobComplete.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
+						&& !StateOption.Aborted.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
+						&& !StateOption.Failed.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
+					) {
+						System.Threading.Thread.Sleep( sleepTime );
+						sleepTime = System.Math.Min( wait.Maximum, sleepTime + wait.Increment );
+						semaphore.Wait();
+						jobResponse = this.QueryJob( loginResponse, id );
+						semaphore.Release();
+					}
 				}
 
 				if ( null != this.Error ) {
-					var error = this.GetResults( loginResponse, jobResponse, FailedResults );
+					var error = this.GetResults( workOrder, loginResponse, jobResponse, FailedResults );
 					if ( !System.String.IsNullOrEmpty( error.Body ) ) {
-						this.Error.WriteRecords( workOrder, this.GetResults( loginResponse, jobResponse, FailedResults ) );
+						this.Error.WriteRecords( workOrder, error );
 					}
 				}
 				if ( null != this.Success ) {
-					var success = this.GetResults( loginResponse, jobResponse, FailedResults );
+					var success = this.GetResults( workOrder, loginResponse, jobResponse, SuccessfulResults );
 					if ( !System.String.IsNullOrEmpty( success.Body ) ) {
-						this.Success.WriteRecords( workOrder, this.GetResults( loginResponse, jobResponse, SuccessfulResults ) );
+						this.Success.WriteRecords( workOrder, success );
 					}
 				}
 
@@ -216,7 +240,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 			}
 		}
 
-		private SelectResult GetResults( LoginResponse loginResponse, JobResponse jobResponse, System.String results ) {
+		private SelectResult GetResults( WorkOrder workOrder, LoginResponse loginResponse, JobResponse jobResponse, System.String results ) {
 			var id = jobResponse.Id;
 			var instanceUrl = new System.Uri( loginResponse.InstanceUrl );
 			var urib = new System.UriBuilder( instanceUrl.Scheme, instanceUrl.Host, instanceUrl.Port, this.GetServicePath() + "/" + id + "/" + results );
@@ -238,6 +262,29 @@ namespace Icod.Wod.SalesForce.Bulk {
 						Body = buffer.ToArray().GetWebString( System.Text.Encoding.UTF8, response.Headers[ "Content-Encoding" ].TrimToNull() ?? "identity" ),
 						ColumnDelimiter = ColumnDelimiterOption.FromName( jobResponse.columnDelimiter ).Value,
 						LineEnding = LineEndingOption.FromName( jobResponse.lineEnding ).Value,
+						AdditionalColumns = new System.Data.DataColumn[ 7 ] {
+							new System.Data.DataColumn( "%wod:sf_operation%", typeof( System.String ) ) {
+								DefaultValue = jobResponse.operation
+							},
+							new System.Data.DataColumn( "%wod:sf_object%", typeof( System.String ) ) {
+								DefaultValue = this.Object
+							},
+							new System.Data.DataColumn( "%wod:sf_jobType%", typeof( System.String ) ) {
+								DefaultValue = jobResponse.JobType.ToString()
+							},
+							new System.Data.DataColumn( "%wod:sf_resultType%", typeof( System.String ) ) {
+								DefaultValue = results
+							},
+							new System.Data.DataColumn( "%wod:sf_tag%", typeof( System.String ) ) {
+								DefaultValue = this.Tag
+							},
+							new System.Data.DataColumn( "%wod:EmailTo%", typeof( System.String ) ) {
+								DefaultValue = workOrder.EmailTo
+							},
+							new System.Data.DataColumn( "%wod:JobName%", typeof( System.String ) ) {
+								DefaultValue = workOrder.JobName
+							},
+						},
 					};
 				}
 			}

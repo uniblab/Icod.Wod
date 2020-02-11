@@ -101,7 +101,6 @@ namespace Icod.Wod.Data {
 			}
 		}
 
-
 		protected sealed override System.Data.DataTable ReadFile( System.String filePathName, System.IO.StreamReader file ) {
 			if ( null == file ) {
 				throw new System.ArgumentNullException( "file" );

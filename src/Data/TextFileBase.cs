@@ -160,7 +160,7 @@ namespace Icod.Wod.Data {
 			if ( null == format ) {
 				format = new TextFileColumn( column.ColumnName );
 			}
-			var output = format.GetColumnText( row[ column ] ) ?? this.NullReplacementText ?? System.String.Empty;
+			var output = format.GetColumnText( this.WorkOrder, row[ column ] ) ?? this.NullReplacementText ?? System.String.Empty;
 			if ( 0 < format.Length ) {
 				var l = format.Length;
 				var w = l - output.Length;

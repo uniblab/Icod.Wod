@@ -87,6 +87,7 @@
     <Compile Include="src\File\FileRedirection.cs" />
     <Compile Include="src\File\CountBinaryFileOperationBase.cs" />
     <Compile Include="src\File\HeadFile.cs" />
+    <Compile Include="src\File\JsonToXml.cs" />
     <Compile Include="src\File\List.cs" />
     <Compile Include="src\File\ListDirectory.cs" />
     <Compile Include="src\File\PrefixFile.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="src\File\SuffixFile.cs" />
     <Compile Include="src\File\TailFile.cs" />
     <Compile Include="src\File\TouchZip.cs" />
+    <Compile Include="src\File\XmlToJson.cs" />
     <Compile Include="src\File\XmlTransformFile.cs" />
     <Compile Include="src\GuardedSemaphore.cs" />
     <Compile Include="src\Interfaces\IIsEmpty.cs" />

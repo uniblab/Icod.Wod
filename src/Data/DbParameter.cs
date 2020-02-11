@@ -114,11 +114,24 @@ namespace Icod.Wod.Data {
 			get;
 			set;
 		}
+
+		[System.Xml.Serialization.XmlAttribute(
+			"defaultValue",
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.ComponentModel.DefaultValue( (System.String)null )]
+		public System.String DefaultValue {
+			get;
+			set;
+		}
 		#endregion properties
 
 
 		#region methods
-		public System.Data.Common.DbParameter ToDbParameter( System.Data.Common.DbCommand command ) {
+		public System.String GetExpandedDefaultValue( WorkOrder workOrder ) {
+			return workOrder.ExpandPseudoVariables( this.DefaultValue );
+		}
+		public System.Data.Common.DbParameter ToDbParameter( WorkOrder workOrder, System.Data.Common.DbCommand command ) {
 			if ( null == command ) {
 				throw new System.ArgumentNullException( "command" );
 			}
@@ -135,6 +148,9 @@ namespace Icod.Wod.Data {
 				if ( null != iDbDataParameter ) {
 					iDbDataParameter.Precision = this.Precision;
 					iDbDataParameter.Scale = this.Scale;
+				}
+				if ( !System.String.IsNullOrEmpty( this.DefaultValue ) ) {
+					output.Value = this.GetExpandedDefaultValue( workOrder );
 				}
 			}
 

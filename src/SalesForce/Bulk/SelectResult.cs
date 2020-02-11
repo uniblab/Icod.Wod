@@ -74,6 +74,12 @@ namespace Icod.Wod.SalesForce.Bulk {
 				return myColumnReader ?? theTrimToNullReader;
 			}
 		}
+
+		[System.Xml.Serialization.XmlIgnore]
+		public System.Collections.Generic.IEnumerable<System.Data.DataColumn> AdditionalColumns {
+			get;
+			set;
+		}
 		#endregion properties
 
 
@@ -84,7 +90,13 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 		public System.Data.DataTable ReadFile() {
 			using ( var reader = new System.IO.StringReader( this.Body ) ) {
-				return this.ReadFile( reader, this.ColumnDelimiter, this.LineEnding );
+				var output = this.ReadFile( reader, this.ColumnDelimiter, this.LineEnding );
+				if ( ( this.AdditionalColumns ?? new System.Data.DataColumn[ 0 ] ).Any() ) {
+					foreach ( var column in this.AdditionalColumns ) {
+						output.Columns.Add( column );
+					}
+				}
+				return output;
 			}
 		}
 		public System.Data.DataTable ReadFile( System.Char columDelimiter, System.String lineEnding ) {

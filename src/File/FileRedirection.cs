@@ -14,6 +14,19 @@ namespace Icod.Wod.File {
 		#endregion .ctor
 
 
+		#region properties
+		[System.Xml.Serialization.XmlAttribute(
+			"append",
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.ComponentModel.DefaultValue( false )]
+		public System.Boolean Append {
+			get;
+			set;
+		}
+		#endregion properties
+
+
 		#region methods
 		public void Write( WorkOrder workOrder, System.IO.Stream stream ) {
 			if ( null == stream ) {

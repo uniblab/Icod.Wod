@@ -6,7 +6,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 		#region fields
 		private const System.Int32 InitialWaitMiliseconds = 5000;
-		private const System.Int32 MinimumWaitMiliseconds = 5000;
+		private const System.Int32 MinimumWaitMiliseconds = 1000;
 		private const System.Int32 IncrementMiliseconds = 1000;
 		private const System.Int32 MaxWaitMiliseconds = 45000;
 

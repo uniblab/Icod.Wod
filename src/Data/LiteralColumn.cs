@@ -24,8 +24,8 @@ namespace Icod.Wod.Data {
 		#endregion properties
 
 		#region methods
-		public sealed override System.String GetColumnText( System.Object value ) {
-			return this.Value;
+		public sealed override System.String GetColumnText( WorkOrder workOrder, System.Object value ) {
+			return workOrder.ExpandPseudoVariables( this.Value );
 		}
 		#endregion methods
 

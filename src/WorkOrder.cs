@@ -13,6 +13,9 @@ namespace Icod.Wod {
 		#region fields
 		private const System.String DateTimeFormat = @"(?<DateTimeFormat>%wod:DateTime\{(?<dateTimeFormatString>[^\}]+)\}%)";
 		private const System.String AppSetting = @"(?<AppSetting>%app:(?<AppKeyName>[^%]+)%)";
+		private const System.String CmdArgFormat = @"(?<CmdArgFormat>%cmd:(?<CmdArgNumber>\d+)%)";
+
+		private static System.String[] theCmdArgs;
 		#endregion fields
 
 
@@ -199,6 +202,7 @@ namespace Icod.Wod {
 
 		#region methods
 		public void Run() {
+			theCmdArgs = System.Environment.GetCommandLineArgs() ?? new System.String[ 0 ];
 			System.Int32 i = 1;
 			IStep step = null;
 			try {
@@ -256,6 +260,17 @@ namespace Icod.Wod {
 				return null;
 			}
 			return System.Environment.ExpandEnvironmentVariables( @string );
+		}
+		private System.String ExpandCmdVariables( System.String @string ) {
+			@string = @string.TrimToNull();
+			if ( System.String.IsNullOrEmpty( @string ) ) {
+				return null;
+			}
+
+			foreach ( System.Text.RegularExpressions.Match m in System.Text.RegularExpressions.Regex.Matches( @string, WorkOrder.CmdArgFormat ) ) {
+				@string = System.Text.RegularExpressions.Regex.Replace( @string, m.Value, theCmdArgs[ System.Int32.Parse( m.Groups[ "CmdArgNumber" ].Value ) ] );
+			}
+			return @string;
 		}
 		public System.String ExpandPseudoVariables( System.String @string ) {
 			@string = @string.TrimToNull();

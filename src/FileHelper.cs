@@ -5,15 +5,22 @@ namespace Icod.Wod {
 	[System.Xml.Serialization.XmlType( IncludeInSchema = false )]
 	public static class FileHelper {
 
+		#region fields
 		public const System.Int32 EOL = -1;
+		public const System.Int32 EOF = EOL;
+		#endregion fields
 
-		public static System.String ReadLine( this System.IO.StringReader file, System.String recordSeparator, System.Char quoteChar ) {
+
+		#region methods
+		public static System.String ReadLine( this System.IO.TextReader file, System.String recordSeparator, System.Char quoteChar ) {
 			if ( System.String.IsNullOrEmpty( recordSeparator ) ) {
 				throw new System.ArgumentNullException( "recordSeparator" );
 			} else if ( null == file ) {
 				throw new System.ArgumentNullException( "file" );
 			} else if ( ( 1 == recordSeparator.Length ) && recordSeparator.Equals( quoteChar.ToString() ) ) {
 				throw new System.InvalidOperationException( "Quote character and record separator cannot be the same." );
+			} else if ( EOF == file.Peek() ) {
+				return null;
 			}
 
 			var output = new System.Text.StringBuilder();
@@ -59,64 +66,12 @@ namespace Icod.Wod {
 
 			return output.ToString();
 		}
-		public static System.String ReadLine( this System.IO.StreamReader file, System.String recordSeparator, System.Char quoteChar ) {
+		public static System.String ReadLine( this System.IO.TextReader file, System.String recordSeparator ) {
 			if ( System.String.IsNullOrEmpty( recordSeparator ) ) {
 				throw new System.ArgumentNullException( "recordSeparator" );
 			} else if ( null == file ) {
 				throw new System.ArgumentNullException( "file" );
-			} else if ( ( 1 == recordSeparator.Length ) && recordSeparator.Equals( quoteChar.ToString() ) ) {
-				throw new System.InvalidOperationException( "Quote character and record separator cannot be the same." );
-			}
-
-			var output = new System.Text.StringBuilder();
-			var leLen = recordSeparator.Length;
-			var lenStop = leLen - 1;
-			System.Int32 i = 0;
-			System.Char c;
-			System.Boolean isPlaintext = true;
-			System.Int32 p = file.Read();
-			System.Char q;
-			while ( EOL != p ) {
-				c = System.Convert.ToChar( p );
-				output = output.Append( c );
-				if ( isPlaintext ) {
-					if ( quoteChar.Equals( c ) ) {
-						isPlaintext = false;
-					} else if ( recordSeparator[ i ].Equals( output[ ( output.Length - leLen ) - i ] ) ) {
-						if ( lenStop <= ++i ) {
-							output.Remove( output.Length - leLen, leLen );
-							break;
-						}
-					} else {
-						i = 0;
-					}
-				} else {
-					if ( quoteChar.Equals( c ) ) {
-						p = file.Peek();
-						if ( EOL == p ) {
-							throw new System.IO.EndOfStreamException();
-						}
-						c = System.Convert.ToChar( p );
-						if ( quoteChar.Equals( c ) ) {
-							file.Read();
-							output = output.Append( c );
-						} else {
-							i = 0;
-							isPlaintext = true;
-						}
-					}
-				}
-				p = file.Read();
-			}
-
-			return output.ToString();
-		}
-		public static System.String ReadLine( this System.IO.StreamReader file, System.String recordSeparator ) {
-			if ( System.String.IsNullOrEmpty( recordSeparator ) ) {
-				throw new System.ArgumentNullException( "recordSeparator" );
-			} else if ( null == file ) {
-				throw new System.ArgumentNullException( "file" );
-			} else if ( file.EndOfStream ) {
+			} else if ( EOF == file.Peek() ) {
 				return null;
 			}
 
@@ -167,6 +122,7 @@ namespace Icod.Wod {
 			}
 			return path + sep + name;
 		}
+		#endregion methods
 
 	}
 

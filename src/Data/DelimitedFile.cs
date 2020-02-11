@@ -219,7 +219,7 @@ namespace Icod.Wod.Data {
 				throw new System.ArgumentNullException( "file" );
 			}
 			if ( !this.HasHeader ) {
-				if ( !( this.Columns ?? new TextFileColumn[ 0 ] ).Any() ) {
+				if ( !( this.Columns ?? new ColumnBase[ 0 ] ).Any() ) {
 					throw new System.InvalidOperationException();
 				}
 				return this.Columns.Select(

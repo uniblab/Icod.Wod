@@ -10,6 +10,8 @@
 	[System.Xml.Serialization.XmlInclude( typeof( CountBinaryFileOperationBase ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( PrefixFile ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( SuffixFile ) )]
+	[System.Xml.Serialization.XmlInclude( typeof( JsonToXml ) )]
+	[System.Xml.Serialization.XmlInclude( typeof( XmlToJson ) )]
 	[System.Xml.Serialization.XmlType(
 		"binaryFileOperation",
 		Namespace = "http://Icod.Wod"
