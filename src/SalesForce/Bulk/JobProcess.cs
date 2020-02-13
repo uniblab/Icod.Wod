@@ -7,12 +7,12 @@ namespace Icod.Wod.SalesForce.Bulk {
 		#region fields
 		private readonly LoginResponse myLoginResponse;
 		private readonly IStep myStep;
-		private readonly GuardedSemaphore mySemaphore;
+		private readonly Icod.Wod.Semaphore mySemaphore;
 		#endregion fields
 
 
 		#region .ctor
-		public JobProcess( LoginResponse loginResponse, IStep step, GuardedSemaphore semaphore ) : base() {
+		public JobProcess( LoginResponse loginResponse, IStep step, Icod.Wod.Semaphore semaphore ) : base() {
 			myLoginResponse = loginResponse;
 			myStep = step;
 			mySemaphore = semaphore;
@@ -31,7 +31,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 				return myStep;
 			}
 		}
-		public GuardedSemaphore Semaphore {
+		public Icod.Wod.Semaphore Semaphore {
 			get {
 				return mySemaphore;
 			}

@@ -77,6 +77,7 @@
     <Compile Include="src\Data\LiteralColumn.cs" />
     <Compile Include="src\Data\ScalarFile.cs" />
     <Compile Include="src\Data\TextFileBase.cs" />
+    <Compile Include="src\Semaphore.cs" />
     <Compile Include="src\Email.cs" />
     <Compile Include="src\FileHelper.cs" />
     <Compile Include="src\File\AddZip.cs" />
@@ -98,7 +99,6 @@
     <Compile Include="src\File\TouchZip.cs" />
     <Compile Include="src\File\XmlToJson.cs" />
     <Compile Include="src\File\XmlTransformFile.cs" />
-    <Compile Include="src\GuardedSemaphore.cs" />
     <Compile Include="src\Interfaces\IIsEmpty.cs" />
     <Compile Include="src\Interfaces\IQueue`1.cs" />
     <Compile Include="src\Interfaces\IStack`1.cs" />

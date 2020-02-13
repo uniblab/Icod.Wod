@@ -104,11 +104,13 @@ namespace Icod.Wod.SalesForce.Bulk {
 			if ( !operations.Any() ) {
 				return;
 			}
-
-			using ( var semaphore = new System.Threading.SemaphoreSlim( this.MaxDegreeOfParallelism, this.MaxDegreeOfParallelism ) ) {
-				var guarded = new GuardedSemaphore( semaphore );
+			var cred = Credential.GetCredential( this.InstanceName, workOrder );
+			var name = cred.ClientId + ( cred.Username ?? cred.RefreshToken ?? System.String.Empty );
+			using ( var semaphore = new Icod.Wod.Semaphore( this.MaxDegreeOfParallelism, this.MaxDegreeOfParallelism, name ) ) {
+				semaphore.Wait();
 				var loginResponse = new Login( workOrder ).GetLoginResponse( this.InstanceName );
-				var jobProcess = new JobProcess( loginResponse, this, guarded );
+				semaphore.Release();
+				var jobProcess = new JobProcess( loginResponse, this, semaphore );
 				var threads = new System.Collections.Generic.List<System.Threading.Thread>();
 				System.Threading.Thread thread = null;
 				foreach ( var operation in operations ) {
