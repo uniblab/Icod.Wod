@@ -32,6 +32,7 @@ namespace Icod.Wod.SalesForce {
 		}
 		#endregion properties
 
+
 		#region methods
 		public LoginResponse GetLoginResponse( System.String clientId ) {
 			if ( System.String.IsNullOrEmpty( clientId ) ) {
@@ -94,9 +95,9 @@ namespace Icod.Wod.SalesForce {
 					if ( System.String.IsNullOrEmpty( password ) ) {
 						throw new System.InvalidOperationException( "The specified credential is attempting Password authentication but does not have a password configured." );
 					}
+					parameters.Append( "&grant_type=password" );
 					parameters.Append( "&password=" );
 					parameters.Append( System.Web.HttpUtility.UrlEncode( password, encoding ) );
-					parameters.Append( "&grant_type=password" );
 					parameters.Append( "&username=" );
 					parameters.Append( System.Web.HttpUtility.UrlEncode( credential.Username, encoding ) );
 					break;
@@ -125,7 +126,7 @@ namespace Icod.Wod.SalesForce {
 				foreach ( var header in headers ) {
 					client.Headers[ header.Key ] = header.Value;
 				}
-				var rawResponse = client.UploadData( siteUrl, System.Text.Encoding.UTF8.GetBytes( body ) );
+				var rawResponse = client.UploadData( siteUrl, "POST", System.Text.Encoding.UTF8.GetBytes( body ) );
 				var json = rawResponse.GetWebString(
 					client.Encoding,
 					client.ResponseHeaders.Keys.OfType<System.String>().Contains( "Content-Encoding" )

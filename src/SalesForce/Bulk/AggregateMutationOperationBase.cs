@@ -19,7 +19,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 		#region  .ctor
 		static AggregateMutationOperationBase() {
-			DefaultApiVersion = new System.Decimal( 41.0 );
+			DefaultApiVersion = new System.Decimal( 47.0 );
 		}
 
 		protected AggregateMutationOperationBase() : base() {

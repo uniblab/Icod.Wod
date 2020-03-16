@@ -12,7 +12,6 @@ namespace Icod.Wod.SalesForce.Bulk {
 	public sealed class BulkAggregateOperation : SFOperationBase, IStep {
 
 		#region fields
-		public const System.Int32 DefaultMaxDegreeOfParallelism = 4;
 		private System.String myInstanceName;
 		#endregion fields
 
@@ -20,12 +19,9 @@ namespace Icod.Wod.SalesForce.Bulk {
 		#region .ctor
 		public BulkAggregateOperation() : base() {
 			myInstanceName = null;
-			this.MaxDegreeOfParallelism = DefaultMaxDegreeOfParallelism;
 		}
 		public BulkAggregateOperation( WorkOrder workOrder ) : base( workOrder ) {
-			myInstanceName = null;
-			this.MaxDegreeOfParallelism = DefaultMaxDegreeOfParallelism;
-		}
+			myInstanceName = null;		}
 		#endregion .ctor
 
 
@@ -84,16 +80,6 @@ namespace Icod.Wod.SalesForce.Bulk {
 			get;
 			set;
 		}
-
-		[System.Xml.Serialization.XmlAttribute(
-			"maxDegreeOfParallelism",
-			Namespace = "http://Icod.Wod"
-		)]
-		[System.ComponentModel.DefaultValue( DefaultMaxDegreeOfParallelism )]
-		public System.Int32 MaxDegreeOfParallelism {
-			get;
-			set;
-		}
 		#endregion properties
 
 
@@ -106,7 +92,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 			}
 			var cred = Credential.GetCredential( this.InstanceName, workOrder );
 			var name = cred.ClientId + ( cred.Username ?? cred.RefreshToken ?? System.String.Empty );
-			using ( var semaphore = new Icod.Wod.Semaphore( this.MaxDegreeOfParallelism, this.MaxDegreeOfParallelism, name ) ) {
+			using ( var semaphore = new Icod.Wod.Semaphore( cred.MaxDegreeOfParallelism, cred.MaxDegreeOfParallelism, name ) ) {
 				semaphore.Wait();
 				var loginResponse = new Login( workOrder ).GetLoginResponse( this.InstanceName );
 				semaphore.Release();

@@ -11,6 +11,8 @@ namespace Icod.Wod.SalesForce {
 	public sealed class Credential : SalesForce.ICredential {
 
 		#region fields
+		public const System.Int32 DefaultMaxDegreeOfParallelism = 4;
+
 		private System.String myScheme;
 		private System.Int32 myPort;
 		private LoginMode myLoginMode;
@@ -24,6 +26,7 @@ namespace Icod.Wod.SalesForce {
 			myScheme = "https";
 			myPort = -1;
 			myLoginMode = LoginMode.RefreshToken;
+			this.MaxDegreeOfParallelism = DefaultMaxDegreeOfParallelism;
 		}
 		#endregion .ctor
 
@@ -161,6 +164,11 @@ namespace Icod.Wod.SalesForce {
 		)]
 		[System.ComponentModel.DefaultValue( (System.String)null )]
 		public System.String RefreshToken {
+			get;
+			set;
+		}
+
+		public System.Int32 MaxDegreeOfParallelism {
 			get;
 			set;
 		}

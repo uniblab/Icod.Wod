@@ -10,6 +10,8 @@ namespace Icod.Wod.Configuration {
 	public sealed class SalesForceCredentialElement : System.Configuration.ConfigurationElement, SalesForce.ICredential {
 
 		#region fields
+		public const System.Int32 DefaultMaxDegreeOfParallelism = 4;
+
 		[System.NonSerialized]
 		[System.Xml.Serialization.XmlIgnore]
 		private System.Uri mySiteUrl;
@@ -19,6 +21,7 @@ namespace Icod.Wod.Configuration {
 		#region .ctor
 		public SalesForceCredentialElement() : base() {
 			mySiteUrl = null;
+			this.MaxDegreeOfParallelism = DefaultMaxDegreeOfParallelism;
 		}
 		#endregion .ctor
 
@@ -162,6 +165,16 @@ namespace Icod.Wod.Configuration {
 					System.Threading.Interlocked.CompareExchange<System.Uri>( ref mySiteUrl, probe, null );
 				}
 				return mySiteUrl;
+			}
+		}
+
+		[System.Configuration.ConfigurationProperty( "maxDegreeOfParallelism", IsRequired = false, IsKey = false, DefaultValue = 4 )]
+		public System.Int32 MaxDegreeOfParallelism {
+			get {
+				return (System.Int32)this[ "maxDegreeOfParallelism" ];
+			}
+			set {
+				this[ "maxDegreeOfParallelism" ] = value;
 			}
 		}
 		#endregion properties
