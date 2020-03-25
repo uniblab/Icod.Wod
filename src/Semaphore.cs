@@ -16,7 +16,7 @@
 		#region .ctor
 		public Semaphore( System.Int32 initialCount, System.Int32 maximumCount ) : this( initialCount, maximumCount, null ) {
 		}
-		public Semaphore( System.Int32 initialCount, System.Int32 maximumCount, System.String name ) {
+		public Semaphore( System.Int32 initialCount, System.Int32 maximumCount, System.String name ) : base() {
 			if ( System.String.IsNullOrEmpty( name ) ) {
 				mySemaphoreSlim = new System.Threading.SemaphoreSlim( initialCount, maximumCount );
 				myRelease = () => mySemaphoreSlim.Release();

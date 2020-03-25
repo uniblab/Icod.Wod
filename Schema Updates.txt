@@ -10,6 +10,6 @@ set minOccurs="1" for source of dbFileImport
 set minOccurs="1" for destination of dbFileExport, binaryFileOperation, binaryZipOperation, sfRestSelect
 set default="47.0" and use="optional" for the apiVersion attribute of both AggregateOperationBase and sfRestSelect
 make sure the AggregateOperationBase has default schema actions of "Ignore", much like the FileImport
-make sure the AggregateMutationOperationBase has default missingSchemaAction of "Add" and missingMappingAction of "Passthrough", much like the dbFileExport
+Addd to AggregateMutationOperationBase default missingSchemaAction of "Add" and missingMappingAction of "Passthrough", much like the dbFileExport
 
 Rebuild project, and root Xsd's will be copied to the output directory.
