@@ -8,7 +8,7 @@ namespace Icod.Wod.File {
 		Namespace = "http://Icod.Wod",
 		IncludeInSchema = true
 	)]
-	public sealed class RebaseFile : FileOperationBase {
+	public sealed class RebaseFile : BinaryFileOperationBase {
 
 		#region fields
 		private System.String myOutputCodePage;
@@ -49,6 +49,11 @@ namespace Icod.Wod.File {
 			if ( null == sourceHandler ) {
 				throw new System.InvalidOperationException();
 			}
+			var dest = this.Destination;
+			if ( null == dest ) {
+				dest = this;
+			}
+			var destHandler = dest.GetFileHandler( workOrder );
 
 			var sourceEncoding = CodePageHelper.GetCodePage( this.CodePage );
 			var destEncoding = CodePageHelper.GetCodePage( this.OutputCodePage );
@@ -72,7 +77,7 @@ namespace Icod.Wod.File {
 						}
 					}
 					buffer.Seek( 0, System.IO.SeekOrigin.Begin );
-					sourceHandler.Overwrite( buffer, file );
+					destHandler.Overwrite( buffer, file );
 				}
 			}
 		}

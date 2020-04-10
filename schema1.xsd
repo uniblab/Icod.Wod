@@ -116,10 +116,10 @@
 					<xs:element minOccurs="0" maxOccurs="1" name="success" type="tns:DbDestination" />
 					<xs:element minOccurs="0" maxOccurs="1" name="error" type="tns:DbDestination" />
 				</xs:sequence>
-				<xs:attribute name="tag" type="xs:string" />
 				<xs:attribute name="object" type="xs:string" />
 				<xs:attribute default="Add" name="missingSchemaAction" type="tns:MissingSchemaAction" />
 				<xs:attribute default="Passthrough" name="missingMappingAction" type="tns:MissingMappingAction" />
+				<xs:attribute name="batchSize" type="xs:int" use="optional" default="10000" />
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -133,6 +133,7 @@
 				<xs:attribute default="Ignore" name="missingMappingAction" type="tns:MissingMappingAction" />
 				<xs:attribute name="apiVersion" type="xs:decimal" use="optional" default="47.0" />
 				<xs:attribute name="batchSize" type="xs:int" use="required" />
+				<xs:attribute name="tag" type="xs:string" />
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -366,14 +367,14 @@
 	</xs:complexType>
 	<xs:complexType name="pruneFile">
 		<xs:complexContent mixed="false">
-			<xs:extension base="tns:fileOperation">
+			<xs:extension base="tns:binaryFileOperation">
 				<xs:attribute default="true" name="trimLines" type="xs:boolean" />
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="rebaseFile">
 		<xs:complexContent mixed="false">
-			<xs:extension base="tns:fileOperation">
+			<xs:extension base="tns:binaryFileOperation">
 				<xs:attribute default="windows-1252" name="outputCodePage" type="xs:string" />
 			</xs:extension>
 		</xs:complexContent>
@@ -660,6 +661,7 @@
 		<xs:complexContent mixed="false">
 			<xs:extension base="tns:AggregateOperationBase">
 				<xs:attribute name="soql" type="xs:string" />
+				<xs:attribute name="batchSize" type="xs:int" use="optional" default="10000" />
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>

@@ -90,16 +90,6 @@ namespace Icod.Wod.SalesForce.Bulk {
 		}
 
 		[System.Xml.Serialization.XmlAttribute(
-			"tag",
-			Namespace = "http://Icod.Wod"
-		)]
-		[System.ComponentModel.DefaultValue( (System.String)null )]
-		public virtual System.String Tag {
-			get;
-			set;
-		}
-
-		[System.Xml.Serialization.XmlAttribute(
 			"object",
 			Namespace = "http://Icod.Wod"
 		)]
@@ -162,13 +152,16 @@ namespace Icod.Wod.SalesForce.Bulk {
 				var id = jobResponse.Id;
 
 				var wait = ( this.Wait ?? new Wait() );
+				var max = wait.Maximum;
 				var sleepTime = wait.Initial;
 				if (
 					!StateOption.Open.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
 					&& !StateOption.Aborted.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
 					&& !StateOption.Failed.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
 				) {
-					System.Threading.Thread.Sleep( sleepTime );
+					if ( 0 < sleepTime ) {
+						System.Threading.Thread.Sleep( sleepTime );
+					}
 					semaphore.Wait();
 					jobResponse = this.QueryJob( loginResponse, id );
 					semaphore.Release();
@@ -177,9 +170,20 @@ namespace Icod.Wod.SalesForce.Bulk {
 						!StateOption.Open.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
 						&& !StateOption.Aborted.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
 						&& !StateOption.Failed.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
+						&& ( sleepTime < max )
 					) {
 						System.Threading.Thread.Sleep( sleepTime );
-						sleepTime = System.Math.Min( wait.Maximum, sleepTime + wait.Increment );
+						sleepTime = System.Math.Min( max, sleepTime + wait.Increment );
+						semaphore.Wait();
+						jobResponse = this.QueryJob( loginResponse, id );
+						semaphore.Release();
+					}
+					while (
+						!StateOption.Open.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
+						&& !StateOption.Aborted.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
+						&& !StateOption.Failed.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
+					) {
+						System.Threading.Thread.Sleep( max );
 						semaphore.Wait();
 						jobResponse = this.QueryJob( loginResponse, id );
 						semaphore.Release();
@@ -203,7 +207,9 @@ namespace Icod.Wod.SalesForce.Bulk {
 					&& !StateOption.Aborted.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
 					&& !StateOption.Failed.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
 				) {
-					System.Threading.Thread.Sleep( sleepTime );
+					if ( 0 < sleepTime ) {
+						System.Threading.Thread.Sleep( sleepTime );
+					}
 					semaphore.Wait();
 					jobResponse = this.QueryJob( loginResponse, id );
 					semaphore.Release();
@@ -212,9 +218,20 @@ namespace Icod.Wod.SalesForce.Bulk {
 						!StateOption.JobComplete.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
 						&& !StateOption.Aborted.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
 						&& !StateOption.Failed.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
+						&& ( sleepTime < max )
 					) {
 						System.Threading.Thread.Sleep( sleepTime );
-						sleepTime = System.Math.Min( wait.Maximum, sleepTime + wait.Increment );
+						sleepTime = System.Math.Min( max, sleepTime + wait.Increment );
+						semaphore.Wait();
+						jobResponse = this.QueryJob( loginResponse, id );
+						semaphore.Release();
+					}
+					while (
+						!StateOption.JobComplete.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
+						&& !StateOption.Aborted.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
+						&& !StateOption.Failed.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
+					) {
+						System.Threading.Thread.Sleep( max );
 						semaphore.Wait();
 						jobResponse = this.QueryJob( loginResponse, id );
 						semaphore.Release();

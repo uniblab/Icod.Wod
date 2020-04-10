@@ -138,16 +138,35 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 			var wait = ( this.Wait ?? new Wait() );
 			var sleepTime = wait.Initial;
+			if ( 0 < sleepTime ) {
+				System.Threading.Thread.Sleep( sleepTime );
+			}
+			sleepTime = wait.Minimum;
+			var max = wait.Maximum;
+			var state = jobResponse.state;
 			while (
-				!StateOption.JobComplete.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
-				&& !StateOption.Aborted.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
-				&& !StateOption.Failed.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
+				!StateOption.JobComplete.Value.Equals( state, System.StringComparison.OrdinalIgnoreCase )
+				&& !StateOption.Aborted.Value.Equals( state, System.StringComparison.OrdinalIgnoreCase )
+				&& !StateOption.Failed.Value.Equals( state, System.StringComparison.OrdinalIgnoreCase )
+				&& ( sleepTime < max )
 			) {
 				System.Threading.Thread.Sleep( sleepTime );
-				sleepTime = System.Math.Min( wait.Maximum, sleepTime + wait.Increment );
+				sleepTime = System.Math.Min( max, sleepTime + wait.Increment );
 				semaphore.Wait();
 				jobResponse = this.QueryJob( loginResponse, id );
 				semaphore.Release();
+				state = jobResponse.state;
+			}
+			while (
+				!StateOption.JobComplete.Value.Equals( state, System.StringComparison.OrdinalIgnoreCase )
+				&& !StateOption.Aborted.Value.Equals( state, System.StringComparison.OrdinalIgnoreCase )
+				&& !StateOption.Failed.Value.Equals( state, System.StringComparison.OrdinalIgnoreCase )
+			) {
+				System.Threading.Thread.Sleep( max );
+				semaphore.Wait();
+				jobResponse = this.QueryJob( loginResponse, id );
+				semaphore.Release();
+				state = jobResponse.state;
 			}
 
 			SelectResult result = null;

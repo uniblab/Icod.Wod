@@ -97,15 +97,20 @@ namespace Icod.Wod.SalesForce.Bulk {
 				var loginResponse = new Login( workOrder ).GetLoginResponse( this.InstanceName );
 				semaphore.Release();
 				var jobProcess = new JobProcess( loginResponse, this, semaphore );
-				var threads = new System.Collections.Generic.List<System.Threading.Thread>();
-				System.Threading.Thread thread = null;
-				foreach ( var operation in operations ) {
-					thread = new System.Threading.Thread( x => operation.PerformWork( x as JobProcess ) );
-					threads.Add( thread );
-					thread.Start( jobProcess );
-				}
-				foreach ( var t in threads ) {
-					t.Join();
+
+				using ( var tokenSource = new System.Threading.CancellationTokenSource() ) {
+					var token = tokenSource.Token;
+					System.Collections.Generic.ICollection<System.Threading.Tasks.Task> tasks = new System.Collections.Generic.List<System.Threading.Tasks.Task>();
+					var factory = new System.Threading.Tasks.TaskFactory( 
+						token,
+						System.Threading.Tasks.TaskCreationOptions.LongRunning,
+						System.Threading.Tasks.TaskContinuationOptions.LongRunning,
+						System.Threading.Tasks.TaskScheduler.Default
+					);
+					foreach ( var operation in operations ) {
+						tasks.Add( factory.StartNew( () => operation.PerformWork( jobProcess ), token ) );
+					}
+					System.Threading.Tasks.Task.WaitAll( tasks.ToArray(), token );
 				}
 			}
 		}

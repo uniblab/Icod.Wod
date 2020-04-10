@@ -97,38 +97,48 @@ namespace Icod.Wod {
 			if ( !steps.Any() ) {
 				return;
 			}
-			var tokenSource = new System.Threading.CancellationTokenSource();
-			var token = tokenSource.Token;
-			var tasks = steps.Select(
-				x => new System.Threading.Tasks.Task(
-					() => {
-						try {
-							x.DoWork( workOrder );
-						} catch {
-							tokenSource.Cancel( true );
-							throw;
-						}
-					},
+			using ( var tokenSource = new System.Threading.CancellationTokenSource() ) {
+				var token = tokenSource.Token;
+				var maxP = this.MaxDegreeOfParallelism;
+				if ( DefaultMaxDegreeOfParallelism == maxP ) {
+					this.DoUnlimitedWork( workOrder, steps, token );
+				} else {
+					this.DoLimitedWork( workOrder, steps, token, maxP );
+				}
+			}
+		}
+		private void DoUnlimitedWork( WorkOrder workOrder, System.Collections.Generic.IEnumerable<IStep> steps, System.Threading.CancellationToken token ) {
+			System.Collections.Generic.ICollection<System.Threading.Tasks.Task> tasks = new System.Collections.Generic.List<System.Threading.Tasks.Task>();
+			var factory = new System.Threading.Tasks.TaskFactory(
+				token,
+				System.Threading.Tasks.TaskCreationOptions.LongRunning,
+				System.Threading.Tasks.TaskContinuationOptions.LongRunning,
+				System.Threading.Tasks.TaskScheduler.Default
+			);
+			foreach ( var step in steps ) {
+				tasks.Add( factory.StartNew(
+					() => step.DoWork( workOrder ),
 					token
-				)
-			);
-
-			System.Threading.Tasks.Parallel.Invoke(
-				new System.Threading.Tasks.ParallelOptions {
-					MaxDegreeOfParallelism = this.MaxDegreeOfParallelism,
-					CancellationToken = token
-				},
-				tasks.Select<System.Threading.Tasks.Task, System.Action>(
-					x => () => {
-						try {
-							x.RunSynchronously();
-						} catch {
-							tokenSource.Cancel( true );
-							throw;
-						}
-					}
-				).ToArray()
-			);
+				) );
+			}
+			System.Threading.Tasks.Task.WaitAll( tasks.ToArray(), token );
+		}
+		private void DoLimitedWork( WorkOrder workOrder, System.Collections.Generic.IEnumerable<IStep> steps, System.Threading.CancellationToken token, System.Int32 MaxDegreeOfParallelism ) {
+			using ( var semaphore = new Semaphore( this.MaxDegreeOfParallelism, this.MaxDegreeOfParallelism ) ) {
+				System.Collections.Generic.ICollection<System.Threading.Tasks.Task> tasks = new System.Collections.Generic.List<System.Threading.Tasks.Task>();
+				var factory = new System.Threading.Tasks.TaskFactory( token );
+				foreach ( var step in steps ) {
+					tasks.Add( factory.StartNew(
+						() => {
+							semaphore.Wait();
+							step.DoWork( workOrder );
+							semaphore.Release();
+						},
+						token
+					) );
+				}
+				System.Threading.Tasks.Task.WaitAll( tasks.ToArray(), token );
+			}
 		}
 		#endregion methods
 

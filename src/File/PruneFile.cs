@@ -8,7 +8,7 @@ namespace Icod.Wod.File {
 		Namespace = "http://Icod.Wod",
 		IncludeInSchema = true
 	)]
-	public sealed class PruneFile : FileOperationBase {
+	public sealed class PruneFile : BinaryFileOperationBase {
 
 		#region .ctor
 		public PruneFile() : base() {
@@ -40,12 +40,15 @@ namespace Icod.Wod.File {
 			if ( null == sourceHandler ) {
 				throw new System.InvalidOperationException();
 			}
+			var dest = this.Destination;
+			if ( null == dest ) {
+				dest = this;
+			}
+			var destHandler = dest.GetFileHandler( workOrder );
 
 			var sourceEncoding = CodePageHelper.GetCodePage( this.CodePage );
 			var destEncoding = CodePageHelper.GetCodePage( this.CodePage );
-			if ( sourceEncoding.Equals( destEncoding ) ) {
-				return;
-			}
+
 			System.Func<System.String, System.String> trim = null;
 			if ( this.TrimLines ) {
 				trim = x => x.TrimToNull();
@@ -72,7 +75,7 @@ namespace Icod.Wod.File {
 						}
 					}
 					buffer.Seek( 0, System.IO.SeekOrigin.Begin );
-					sourceHandler.Overwrite( buffer, file );
+					destHandler.Overwrite( buffer, file );
 				}
 			}
 		}

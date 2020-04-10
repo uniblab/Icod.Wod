@@ -82,6 +82,16 @@ namespace Icod.Wod.SalesForce.Bulk {
 			get;
 			set;
 		}
+
+		[System.Xml.Serialization.XmlAttribute(
+			"tag",
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.ComponentModel.DefaultValue( (System.String)null )]
+		public virtual System.String Tag {
+			get;
+			set;
+		}
 		#endregion properties
 
 

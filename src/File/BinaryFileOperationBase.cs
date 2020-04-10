@@ -9,6 +9,8 @@
 	[System.Xml.Serialization.XmlInclude( typeof( XmlTransformFile ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( CountBinaryFileOperationBase ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( PrefixFile ) )]
+	[System.Xml.Serialization.XmlInclude( typeof( PruneFile ) )]
+	[System.Xml.Serialization.XmlInclude( typeof( RebaseFile ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( SuffixFile ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( JsonToXml ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( XmlToJson ) )]
