@@ -1,6 +1,6 @@
 using System.Linq;
 
-namespace Icod.Wod.File {
+namespace Icod.Wod {
 
 	[System.Xml.Serialization.XmlType( IncludeInSchema = false )]
 	public sealed class ChainedDisposer : System.IDisposable {

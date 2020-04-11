@@ -124,7 +124,7 @@ namespace Icod.Wod.Data {
 
 		#region methods
 		protected System.String GenerateSchemaQuery() {
-			var sq = this.SchemaQuery;
+			var sq = this.SchemaQuery.TrimToNull();
 			return !System.String.IsNullOrEmpty( sq )
 				? sq
 				: "select top 0 * from " + this.NamespaceTableName
@@ -203,10 +203,7 @@ namespace Icod.Wod.Data {
 				throw new System.ArgumentNullException( "connection" );
 			}
 
-			schemaQuery = schemaQuery.TrimToNull();
-			if ( System.String.IsNullOrEmpty( schemaQuery ) ) {
-				schemaQuery = this.GenerateSchemaQuery();
-			}
+			schemaQuery = this.GenerateSchemaQuery();
 			var cn = this.ConnectionStringName;
 			var here = ( workOrder.ConnectionStrings ?? new Icod.Wod.ConnectionStringEntry[ 0 ] ).FirstOrDefault(
 				x => x.Name.Equals( cn, System.StringComparison.OrdinalIgnoreCase )

@@ -143,7 +143,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\File\AppendFile.cs" />
-    <Compile Include="src\File\ChainedDisposer.cs" />
+    <Compile Include="src\ChainedDisposer.cs" />
     <Compile Include="src\File\ClientStream.cs" />
     <Compile Include="src\File\CopyFile.cs" />
     <Compile Include="src\File\DeleteFile.cs" />

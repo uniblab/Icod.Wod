@@ -109,12 +109,7 @@ namespace Icod.Wod {
 		}
 		private void DoUnlimitedWork( WorkOrder workOrder, System.Collections.Generic.IEnumerable<IStep> steps, System.Threading.CancellationToken token ) {
 			System.Collections.Generic.ICollection<System.Threading.Tasks.Task> tasks = new System.Collections.Generic.List<System.Threading.Tasks.Task>();
-			var factory = new System.Threading.Tasks.TaskFactory(
-				token,
-				System.Threading.Tasks.TaskCreationOptions.LongRunning,
-				System.Threading.Tasks.TaskContinuationOptions.LongRunning,
-				System.Threading.Tasks.TaskScheduler.Default
-			);
+			var factory = new System.Threading.Tasks.TaskFactory( token );
 			foreach ( var step in steps ) {
 				tasks.Add( factory.StartNew(
 					() => step.DoWork( workOrder ),
