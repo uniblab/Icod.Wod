@@ -173,6 +173,21 @@ namespace Icod.Wod.Data {
 				throw new System.ArgumentNullException( "table" );
 			}
 
+			var filePathNameColumn = new System.Data.DataColumn( "%wod:FilePathName%", typeof( System.String ) ) {
+				AllowDBNull = false,
+				ReadOnly = true,
+				DefaultValue = filePathName
+			};
+			table.Columns.Add( filePathNameColumn );
+
+			var directoryName = System.IO.Path.GetDirectoryName( filePathName );
+			var directoryNameColumn = new System.Data.DataColumn( "%wod:DirectoryName%", typeof( System.String ) ) {
+				AllowDBNull = false,
+				ReadOnly = true,
+				DefaultValue = directoryName
+			};
+			table.Columns.Add( directoryNameColumn );
+
 			var fileName = System.IO.Path.GetFileName( filePathName );
 			var fileNameColumn = new System.Data.DataColumn( "%wod:FileName%", typeof( System.String ) ) {
 				AllowDBNull = false,
@@ -188,21 +203,6 @@ namespace Icod.Wod.Data {
 				DefaultValue = fileNameWithoutExtension
 			};
 			table.Columns.Add( fileNameWithoutExtensionColumn );
-
-			var filePathNameColumn = new System.Data.DataColumn( "%wod:FilePathName%", typeof( System.String ) ) {
-				AllowDBNull = false,
-				ReadOnly = true,
-				DefaultValue = filePathName
-			};
-			table.Columns.Add( filePathNameColumn );
-
-			var directoryName = System.IO.Path.GetDirectoryName( filePathName );
-			var directoryNameColumn = new System.Data.DataColumn( "%wod:DirectoryName%", typeof( System.String ) ) {
-				AllowDBNull = false,
-				ReadOnly = true,
-				DefaultValue = directoryName
-			};
-			table.Columns.Add( directoryNameColumn );
 
 			table.TableName = fileName;
 		}
