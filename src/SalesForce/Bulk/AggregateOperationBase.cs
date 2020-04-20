@@ -5,22 +5,36 @@ namespace Icod.Wod.SalesForce.Bulk {
 	[System.Serializable]
 	public abstract class AggregateOperationBase : Data.DbIODescriptorBase, IAggregateOperation {
 
+		#region fields
+		public const System.Int32 DefaultBatchSize = 10000;
+		public static readonly System.Decimal DefaultApiVersion;
+		#endregion fields
+
+
 		#region  .ctor
+		static AggregateOperationBase() {
+			DefaultApiVersion = new System.Decimal( 47 );
+		}
+
 		protected AggregateOperationBase() : base() {
 			this.MissingMappingAction = System.Data.MissingMappingAction.Ignore;
 			this.MissingSchemaAction = System.Data.MissingSchemaAction.Ignore;
+			this.BatchSize = DefaultBatchSize;
 		}
 		protected AggregateOperationBase( WorkOrder workOrder ) : base( workOrder ) {
 			this.MissingMappingAction = System.Data.MissingMappingAction.Ignore;
 			this.MissingSchemaAction = System.Data.MissingSchemaAction.Ignore;
+			this.BatchSize = DefaultBatchSize;
 		}
 		protected AggregateOperationBase( System.Data.MissingSchemaAction missingSchemaAction, System.Data.MissingMappingAction missingMappingAction ) : base( missingSchemaAction, missingMappingAction ) {
 			this.MissingMappingAction = System.Data.MissingMappingAction.Ignore;
 			this.MissingSchemaAction = System.Data.MissingSchemaAction.Ignore;
+			this.BatchSize = DefaultBatchSize;
 		}
 		protected AggregateOperationBase( WorkOrder workOrder, System.Data.MissingSchemaAction missingSchemaAction, System.Data.MissingMappingAction missingMappingAction ) : base( workOrder, missingSchemaAction, missingMappingAction ) {
 			this.MissingMappingAction = System.Data.MissingMappingAction.Ignore;
 			this.MissingSchemaAction = System.Data.MissingSchemaAction.Ignore;
+			this.BatchSize = DefaultBatchSize;
 		}
 		#endregion .ctor
 
@@ -78,6 +92,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 			"batchSize",
 			Namespace = "http://Icod.Wod"
 		)]
+		[System.ComponentModel.DefaultValue( DefaultBatchSize )]
 		public virtual System.Int32 BatchSize {
 			get;
 			set;

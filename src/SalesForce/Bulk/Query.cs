@@ -18,7 +18,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 		#region .ctor
 		static Query() {
-			DefaultApiVersion = new System.Decimal( 47.0 );
+			DefaultApiVersion = new System.Decimal( 47 );
 		}
 
 		public Query() : base() {

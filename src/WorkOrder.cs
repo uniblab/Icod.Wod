@@ -15,7 +15,7 @@ namespace Icod.Wod {
 		private const System.String AppSetting = @"(?<AppSetting>%app:(?<AppKeyName>[^%]+)%)";
 		private const System.String CmdArgFormat = @"(?<CmdArgFormat>%cmd:(?<CmdArgNumber>\d+)%)";
 
-		private static System.String[] theCmdArgs;
+		private System.String[] myCmdArgs;
 		#endregion fields
 
 
@@ -202,7 +202,7 @@ namespace Icod.Wod {
 
 		#region methods
 		public void Run() {
-			theCmdArgs = System.Environment.GetCommandLineArgs() ?? new System.String[ 0 ];
+			myCmdArgs = System.Environment.GetCommandLineArgs() ?? new System.String[ 0 ];
 			System.Int32 i = 1;
 			IStep step = null;
 			try {
@@ -268,7 +268,7 @@ namespace Icod.Wod {
 			}
 
 			foreach ( System.Text.RegularExpressions.Match m in System.Text.RegularExpressions.Regex.Matches( @string, WorkOrder.CmdArgFormat ) ) {
-				@string = System.Text.RegularExpressions.Regex.Replace( @string, m.Value, theCmdArgs[ System.Int32.Parse( m.Groups[ "CmdArgNumber" ].Value ) ] );
+				@string = System.Text.RegularExpressions.Regex.Replace( @string, m.Value, myCmdArgs[ System.Int32.Parse( m.Groups[ "CmdArgNumber" ].Value ) ] );
 			}
 			return @string;
 		}
@@ -280,7 +280,12 @@ namespace Icod.Wod {
 			@string = this.ExpandWorkOrderVariables( @string );
 			@string = this.ExpandWodVariables( @string );
 			@string = this.ExpandAppVariables( @string );
+			@string = this.ExpandCmdVariables( @string );
 			@string = this.ExpandEnvironmentVariables( @string );
+			@string = this.ExpandCmdVariables( @string );
+			@string = this.ExpandAppVariables( @string );
+			@string = this.ExpandWodVariables( @string );
+			@string = this.ExpandWorkOrderVariables( @string );
 			return @string;
 		}
 

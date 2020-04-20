@@ -1,6 +1,7 @@
 ﻿Run the mkXsd shell script against an Icod.Wod.dll build.
 Copy both Xsd files over to the core Xsd files in the project directory.
 
+Sometimes xsd will cross the 0 and 1 in the filenames.  You might need to rename them.
 Then perform some edits:
 schema0.xsd:
 change xs:import element: add attribute schemaLocation="./schema1.xsd"

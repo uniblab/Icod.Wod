@@ -66,6 +66,7 @@
     <Compile Include="src\Cofiguration\SalesForceCredentialElement.cs" />
     <Compile Include="src\Cofiguration\SalesForceCredentialSection.cs" />
     <Compile Include="src\ConnectionStringEntry.cs" />
+    <Compile Include="src\Data\XmlFile.cs" />
     <Compile Include="src\Data\ColumnBase.cs" />
     <Compile Include="src\Data\DbIODescriptorBase.cs" />
     <Compile Include="src\Data\DbOperationBase.cs" />

@@ -5,6 +5,7 @@ namespace Icod.Wod.Data {
 	[System.Serializable]
 	[System.Xml.Serialization.XmlInclude( typeof( TextFileBase ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( JsonFile ) )]
+	[System.Xml.Serialization.XmlInclude( typeof( XmlFile ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( ScalarFile ) )]
 	public abstract class DataFileBase : Icod.Wod.File.FileBase, ITableDestination, ITableSource {
 

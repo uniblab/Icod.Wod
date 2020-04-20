@@ -52,9 +52,42 @@ namespace Icod.Wod.SalesForce {
 		public sealed override void WriteRecords( Icod.Wod.WorkOrder workOrder, Icod.Wod.Data.ITableSource source ) {
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			if ( System.String.IsNullOrEmpty( this.CommandText ) ) {
-				base.WriteRecords( workOrder, source );
+				this.WriteRecordsOverride( workOrder, source );
 			} else {
 				this.ExecuteCommand( workOrder, source );
+			}
+		}
+		private void WriteRecordsOverride( Icod.Wod.WorkOrder workOrder, Icod.Wod.Data.ITableSource source ) {
+			if ( null == source ) {
+				throw new System.ArgumentNullException( "source" );
+			} else if ( null == workOrder ) {
+				throw new System.ArgumentNullException( "workOrder" );
+			}
+
+			using ( var cnxn = this.CreateConnection( workOrder ) ) {
+				using ( var adapter = this.CreateDataAdapter( cnxn, workOrder ) ) {
+					var amap = adapter.TableMappings;
+					using ( var cb = this.CreateCommandBuilder( workOrder, adapter ) ) {
+						System.Data.Common.DataTableMapping tmap;
+						using ( var set = new System.Data.DataSet() ) {
+							this.FillSchema( adapter, set );
+							var tableName = this.NamespaceTableName;
+							var dest = set.Tables[ tableName ];
+							foreach ( var t in source.ReadTables( workOrder ) ) {
+								if ( System.String.IsNullOrEmpty( t.TableName ) && !System.String.IsNullOrEmpty( dest.TableName ) ) {
+									t.TableName = dest.TableName;
+								}
+								amap.Clear();
+								tmap = amap.Add( "Table", t.TableName );
+								foreach ( var cmap in this.CreateDataColumnMapping( t, dest ) ) {
+									tmap.ColumnMappings.Add( cmap );
+								}
+								adapter.Update( t );
+								t.Dispose();
+							}
+						}
+					}
+				}
 			}
 		}
 		#endregion methods

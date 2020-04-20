@@ -24,13 +24,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 		#region methods
 		protected sealed override JobResponse CreateJob( LoginResponse loginResponse ) {
-			throw new System.NotImplementedException();
-		}
-		public sealed override void PerformWork( JobProcess jobProcess ) {
-			var loginResponse = jobProcess.LoginResponse;
-			var semaphore = jobProcess.Semaphore;
-
-			throw new System.NotImplementedException();
+			return this.CreateJob( loginResponse, "insert" );
 		}
 		#endregion methods
 

@@ -283,7 +283,16 @@ namespace Icod.Wod.Data {
 								foreach ( var cmap in this.CreateDataColumnMapping( t, dest ) ) {
 									tmap.ColumnMappings.Add( cmap );
 								}
-								adapter.Update( t );
+								if ( !System.String.IsNullOrEmpty( this.SchemaQuery ) ) {
+									using ( var ic = cb.GetInsertCommand() ) {
+										var ct = this.CommandTimeout;
+										ic.CommandTimeout = ( -2 == ct ) ? cnxn.ConnectionTimeout : ct;
+										adapter.InsertCommand = ic;
+										adapter.Update( t );
+									}
+								} else {
+									adapter.Update( t );
+								}
 								t.Dispose();
 							}
 						}

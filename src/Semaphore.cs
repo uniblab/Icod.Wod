@@ -3,6 +3,7 @@
 	public sealed class Semaphore : System.IDisposable {
 
 		#region fields
+		public const System.Int32 Unlimited = -1;
 		private readonly System.Threading.Semaphore mySemaphore;
 		private readonly System.Threading.SemaphoreSlim mySemaphoreSlim;
 
@@ -17,7 +18,14 @@
 		public Semaphore( System.Int32 initialCount, System.Int32 maximumCount ) : this( initialCount, maximumCount, null ) {
 		}
 		public Semaphore( System.Int32 initialCount, System.Int32 maximumCount, System.String name ) : base() {
-			if ( System.String.IsNullOrEmpty( name ) ) {
+			if ( Unlimited == maximumCount ) {
+				myRelease = () => System.Int32.MaxValue;
+				myWait = () => {
+					;
+				};
+				myWaitTimeSpan = timeout => true;
+				myWaitMilliseconds = millisecondsTimeout => true;
+			} else if ( System.String.IsNullOrEmpty( name ) ) {
 				mySemaphoreSlim = new System.Threading.SemaphoreSlim( initialCount, maximumCount );
 				myRelease = () => mySemaphoreSlim.Release();
 				myWait = () => mySemaphoreSlim.Wait();

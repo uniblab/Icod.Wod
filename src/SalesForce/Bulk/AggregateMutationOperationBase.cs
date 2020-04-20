@@ -6,68 +6,47 @@ namespace Icod.Wod.SalesForce.Bulk {
 	public abstract class AggregateMutationOperationBase : AggregateOperationBase {
 
 		#region  fields
+		public const System.Data.MissingMappingAction DefaultMissingMappingAction = System.Data.MissingMappingAction.Passthrough;
+		public const System.Data.MissingSchemaAction DefaultMissingSchemaAction = System.Data.MissingSchemaAction.Add;
 		public const System.Int32 EOF = -1;
+		public const System.Int32 MinimumMaxFileSize = 1048576;
 		public const System.Int32 MaxFileSize = 103809024;
-		public const System.Int32 DefaultBatchSize = 10000;
 
 		private const System.String FailedResults = "failedResults";
 		private const System.String SuccessfulResults = "successfulResults";
-
-		public static readonly System.Decimal DefaultApiVersion;
 		#endregion  fields
 
 
 		#region  .ctor
-		static AggregateMutationOperationBase() {
-			DefaultApiVersion = new System.Decimal( 47.0 );
-		}
-
 		protected AggregateMutationOperationBase() : base() {
-			this.MissingMappingAction = System.Data.MissingMappingAction.Passthrough;
-			this.MissingSchemaAction = System.Data.MissingSchemaAction.Add;
+			this.MissingMappingAction = DefaultMissingMappingAction;
+			this.MissingSchemaAction = DefaultMissingSchemaAction;
 			this.ApiVersion = DefaultApiVersion;
-			this.BatchSize = DefaultBatchSize;
 		}
 		protected AggregateMutationOperationBase( WorkOrder workOrder ) : base( workOrder ) {
-			this.MissingMappingAction = System.Data.MissingMappingAction.Passthrough;
-			this.MissingSchemaAction = System.Data.MissingSchemaAction.Add;
+			this.MissingMappingAction = DefaultMissingMappingAction;
+			this.MissingSchemaAction = DefaultMissingSchemaAction;
 			this.ApiVersion = DefaultApiVersion;
-			this.BatchSize = DefaultBatchSize;
 		}
 		protected AggregateMutationOperationBase( System.Data.MissingSchemaAction missingSchemaAction, System.Data.MissingMappingAction missingMappingAction ) : base( missingSchemaAction, missingMappingAction ) {
-			this.MissingMappingAction = System.Data.MissingMappingAction.Passthrough;
-			this.MissingSchemaAction = System.Data.MissingSchemaAction.Add;
+			this.MissingMappingAction = DefaultMissingMappingAction;
+			this.MissingSchemaAction = DefaultMissingSchemaAction;
 			this.ApiVersion = DefaultApiVersion;
-			this.BatchSize = DefaultBatchSize;
 		}
 		protected AggregateMutationOperationBase( WorkOrder workOrder, System.Data.MissingSchemaAction missingSchemaAction, System.Data.MissingMappingAction missingMappingAction ) : base( workOrder, missingSchemaAction, missingMappingAction ) {
-			this.MissingMappingAction = System.Data.MissingMappingAction.Passthrough;
-			this.MissingSchemaAction = System.Data.MissingSchemaAction.Add;
+			this.MissingMappingAction = DefaultMissingMappingAction;
+			this.MissingSchemaAction = DefaultMissingSchemaAction;
 			this.ApiVersion = DefaultApiVersion;
-			this.BatchSize = DefaultBatchSize;
 		}
 		#endregion .ctor
 
 
 		#region properties
 		[System.Xml.Serialization.XmlAttribute(
-			"missingSchemaAction",
-			Namespace = "http://Icod.Wod"
-		)]
-		[System.ComponentModel.DefaultValue( System.Data.MissingSchemaAction.Add )]
-		public sealed override System.Data.MissingSchemaAction MissingSchemaAction {
-			get {
-				return base.MissingSchemaAction;
-			}
-			set {
-				base.MissingSchemaAction = value;
-			}
-		}
-		[System.Xml.Serialization.XmlAttribute(
 			"missingMappingAction",
 			Namespace = "http://Icod.Wod"
 		)]
-		[System.ComponentModel.DefaultValue( System.Data.MissingMappingAction.Passthrough )]
+		[System.ComponentModel.DefaultValue( DefaultMissingMappingAction )]
 		public sealed override System.Data.MissingMappingAction MissingMappingAction {
 			get {
 				return base.MissingMappingAction;
@@ -77,15 +56,16 @@ namespace Icod.Wod.SalesForce.Bulk {
 			}
 		}
 		[System.Xml.Serialization.XmlAttribute(
-			"apiVersion",
+			"missingSchemaAction",
 			Namespace = "http://Icod.Wod"
 		)]
-		public override System.Decimal ApiVersion {
+		[System.ComponentModel.DefaultValue( DefaultMissingSchemaAction )]
+		public sealed override System.Data.MissingSchemaAction MissingSchemaAction {
 			get {
-				return base.ApiVersion;
+				return base.MissingSchemaAction;
 			}
 			set {
-				base.ApiVersion = value;
+				base.MissingSchemaAction = value;
 			}
 		}
 
@@ -96,20 +76,6 @@ namespace Icod.Wod.SalesForce.Bulk {
 		public virtual System.String Object {
 			get;
 			set;
-		}
-
-		[System.Xml.Serialization.XmlAttribute(
-			"batchSize",
-			Namespace = "http://Icod.Wod"
-		)]
-		[System.ComponentModel.DefaultValue( DefaultBatchSize )]
-		public sealed override System.Int32 BatchSize {
-			get {
-				return base.BatchSize;
-			}
-			set {
-				base.BatchSize = value;
-			}
 		}
 
 		[System.Xml.Serialization.XmlElement(
@@ -413,6 +379,18 @@ namespace Icod.Wod.SalesForce.Bulk {
 			if ( ( null == dbColumns ) || !dbColumns.Any() ) {
 				throw new System.ArgumentNullException( "dbColumns" );
 			}
+			var mapping = ( this.ColumnMapping ?? new Data.ColumnMap[ 0 ] );
+			foreach ( var skip in mapping.Where(
+				x => x.Skip
+			).Join(
+				dataTable.Columns.OfType<System.Data.DataColumn>(),
+				outer => outer.FromName,
+				inner => inner.ColumnName,
+				( outer, inner ) => outer.FromName,
+				System.StringComparer.OrdinalIgnoreCase
+			) ) {
+				dataTable.Columns.Remove( skip );
+			}
 
 			var qcs = quoteChar.ToString();
 			var columnNameList = dbColumns.Select(
@@ -482,8 +460,8 @@ namespace Icod.Wod.SalesForce.Bulk {
 		protected static System.Collections.Generic.IEnumerable<System.String> BreakFile( System.Int32 maxSize, System.String file ) {
 			if ( System.String.IsNullOrEmpty( file ) ) {
 				throw new System.ArgumentNullException( "file" );
-			} else if ( maxSize <= 1048576 ) {
-				throw new System.ArgumentOutOfRangeException( "maxSize", "maxSize parameter must be at least 1048576." );
+			} else if ( maxSize <= MinimumMaxFileSize ) {
+				throw new System.ArgumentOutOfRangeException( "maxSize", System.String.Format( "maxSize parameter must be equal to or greater than the MinimumMaxFileSize, {0}.", MinimumMaxFileSize ) );
 			}
 
 			var maxCharSize = file.Length << 2;
