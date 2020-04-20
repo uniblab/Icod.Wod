@@ -35,11 +35,12 @@ namespace Icod.Wod.Data {
 					}
 				}
 				foreach ( var column in columns ) {
-					table.Columns.Add( column );
+					table.Columns.Add( column.ColumnName );
 				}
 				foreach ( var row in rows ) {
 					table.Rows.Add( row.ItemArray );
 				}
+				set.Tables.Add( table );
 				using ( var buffer = new System.IO.MemoryStream() ) {
 					set.WriteXml( buffer );
 					buffer.Flush();
