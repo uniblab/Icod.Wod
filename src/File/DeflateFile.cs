@@ -7,53 +7,14 @@ namespace Icod.Wod.File {
 		"deflateFile",
 		Namespace = "http://Icod.Wod"
 	)]
-	public sealed class DeflateFile : BinaryFileOperationBase {
-
-		#region fields
-		private System.Boolean myDelete;
-		private System.IO.Compression.CompressionMode myCompressionMode;
-		#endregion fields
-
+	public sealed class DeflateFile : BinaryCompressedFileOperationBase {
 
 		#region .ctor
 		public DeflateFile() : base() {
-			myCompressionMode = System.IO.Compression.CompressionMode.Decompress;
 		}
 		public DeflateFile( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
-			myCompressionMode = System.IO.Compression.CompressionMode.Decompress;
 		}
 		#endregion .ctor
-
-
-		#region properties
-		[System.Xml.Serialization.XmlAttribute(
-			"delete",
-			Namespace = "http://Icod.Wod"
-		)]
-		[System.ComponentModel.DefaultValue( false )]
-		public System.Boolean Delete {
-			get {
-				return myDelete;
-			}
-			set {
-				myDelete = value;
-			}
-		}
-
-		[System.Xml.Serialization.XmlAttribute(
-			"compressionMode",
-			Namespace = "http://Icod.Wod"
-		)]
-		[System.ComponentModel.DefaultValue( System.IO.Compression.CompressionMode.Decompress )]
-		public System.IO.Compression.CompressionMode CompressionMode {
-			get {
-				return myCompressionMode;
-			}
-			set {
-				myCompressionMode = value;
-			}
-		}
-		#endregion properties
 
 
 		#region methods
