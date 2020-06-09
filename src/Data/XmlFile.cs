@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Data;
-using System.Linq;
+﻿using System.Linq;
 
 namespace Icod.Wod.Data {
 
@@ -20,7 +18,7 @@ namespace Icod.Wod.Data {
 		#endregion .ctor
 
 		#region methods
-		protected sealed override void WriteRecords( WorkOrder workOrder, IEnumerable<DataColumn> columns, IEnumerable<DataRow> rows ) {
+		protected sealed override void WriteRecords( WorkOrder workOrder, System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Collections.Generic.IEnumerable<System.Data.DataRow> rows ) {
 #if DEBUG
 			if ( null == workOrder ) {
 				throw new System.ArgumentNullException( "workOrder" );
@@ -52,12 +50,13 @@ namespace Icod.Wod.Data {
 			}
 		}
 		protected sealed override System.Data.DataTable ReadFile( System.String filePathName, System.IO.StreamReader file ) {
+#if DEBUG
 			if ( null == file ) {
 				throw new System.ArgumentNullException( "file" );
 			} else if ( System.String.IsNullOrEmpty( filePathName ) ) {
 				throw new System.ArgumentNullException( "filePathName" );
 			}
-
+#endif
 			System.Data.DataTable table = null;
 			try {
 				var set = new System.Data.DataSet();

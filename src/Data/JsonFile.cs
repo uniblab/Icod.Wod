@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.Linq;
 
 namespace Icod.Wod.Data {
 
@@ -19,41 +16,6 @@ namespace Icod.Wod.Data {
 		public JsonFile( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
 		}
 		#endregion .ctor
-
-
-		#region properties
-		[System.Xml.Serialization.XmlAttribute(
-			"typeName",
-			Namespace = "http://Icod.Wod"
-		)]
-		public System.String TypeName {
-			get;
-			set;
-		}
-		[System.Xml.Serialization.XmlAttribute(
-			"mapWith",
-			Namespace = "http://Icod.Wod"
-		)]
-		public System.String MapWith {
-			get;
-			set;
-		}
-
-		[System.Xml.Serialization.XmlArray(
-			IsNullable = false,
-			Namespace = "http://Icod.Wod",
-			ElementName = "assemblies"
-		)]
-		[System.Xml.Serialization.XmlArrayItem(
-			"assembly",
-			IsNullable = false,
-			Namespace = "http://Icod.Wod"
-		)]
-		public File.FileDescriptor[] Assemblies {
-			get;
-			set;
-		}
-		#endregion properties
 
 
 		#region methods
@@ -95,7 +57,7 @@ namespace Icod.Wod.Data {
 						writer.Flush();
 					}
 					buffer.Flush();
-					buffer.Seek( 0, SeekOrigin.Begin );
+					buffer.Seek( 0, System.IO.SeekOrigin.Begin );
 					this.WriteFile( buffer );
 				}
 			}

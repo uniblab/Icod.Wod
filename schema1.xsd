@@ -639,13 +639,7 @@
 	</xs:complexType>
 	<xs:complexType name="jsonFile">
 		<xs:complexContent mixed="false">
-			<xs:extension base="tns:DataFileBase">
-				<xs:sequence>
-					<xs:element minOccurs="0" maxOccurs="1" name="assemblies" type="tns:ArrayOfFileDescriptor1" />
-				</xs:sequence>
-				<xs:attribute name="typeName" type="xs:string" />
-				<xs:attribute name="mapWith" type="xs:string" />
-			</xs:extension>
+			<xs:extension base="tns:DataFileBase" />
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="ArrayOfFileDescriptor1">

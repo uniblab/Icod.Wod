@@ -19,7 +19,7 @@
 		}
 		public Semaphore( System.Int32 initialCount, System.Int32 maximumCount, System.String name ) : base() {
 			if ( Unlimited == maximumCount ) {
-				myRelease = () => System.Int32.MaxValue;
+				myRelease = () => 1;
 				myWait = () => {
 					;
 				};

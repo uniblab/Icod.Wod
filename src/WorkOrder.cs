@@ -15,12 +15,20 @@ namespace Icod.Wod {
 		private const System.String AppSetting = @"(?<AppSetting>%app:(?<AppKeyName>[^%]+)%)";
 		private const System.String CmdArgFormat = @"(?<CmdArgFormat>%cmd:(?<CmdArgNumber>\d+)%)";
 
+		private readonly System.Func<System.String, System.String>[] myFuncs;
 		private System.String[] myCmdArgs;
 		#endregion fields
 
 
 		#region .ctor
 		public WorkOrder() : base() {
+			myFuncs = new System.Func<System.String, System.String>[ 5 ] {
+				this.ExpandWorkOrderVariables,
+				this.ExpandWodVariables,
+				this.ExpandAppVariables,
+				this.ExpandCmdVariables,
+				this.ExpandEnvironmentVariables
+			};
 		}
 		#endregion .ctor
 
@@ -277,15 +285,10 @@ namespace Icod.Wod {
 			if ( System.String.IsNullOrEmpty( @string ) ) {
 				return null;
 			}
-			@string = this.ExpandWorkOrderVariables( @string );
-			@string = this.ExpandWodVariables( @string );
-			@string = this.ExpandAppVariables( @string );
-			@string = this.ExpandCmdVariables( @string );
-			@string = this.ExpandEnvironmentVariables( @string );
-			@string = this.ExpandCmdVariables( @string );
-			@string = this.ExpandAppVariables( @string );
-			@string = this.ExpandWodVariables( @string );
-			@string = this.ExpandWorkOrderVariables( @string );
+			System.Int32 i = 0;
+			while ( ( 120 < i ) && !System.String.IsNullOrEmpty( @string ) && @string.Contains( "%" ) ) {
+				@string = myFuncs[ i++ ]( @string );
+			}
 			return @string;
 		}
 

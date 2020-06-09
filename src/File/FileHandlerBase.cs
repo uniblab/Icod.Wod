@@ -5,6 +5,8 @@ namespace Icod.Wod.File {
 	public abstract class FileHandlerBase {
 
 		#region fields
+		public const System.Int32 DefaultBufferLength = 16384;
+
 		private System.Int32 myBufferLength;
 		private FileDescriptor myFileDescriptor;
 		[System.NonSerialized]
@@ -14,10 +16,10 @@ namespace Icod.Wod.File {
 
 		#region .ctor
 		protected FileHandlerBase() : base() {
+			myFileDescriptor = null;
+			myBufferLength = DefaultBufferLength;
 		}
 		protected FileHandlerBase( Icod.Wod.WorkOrder workOrder ) : this() {
-			myFileDescriptor = null;
-			myBufferLength = 16384;
 			myWorkOrder = workOrder;
 		}
 		protected FileHandlerBase( Icod.Wod.WorkOrder workOrder, FileDescriptor descriptor ) : this( workOrder ) {
@@ -39,7 +41,7 @@ namespace Icod.Wod.File {
 			}
 		}
 
-		[System.ComponentModel.DefaultValue( 16384 )]
+		[System.ComponentModel.DefaultValue( DefaultBufferLength )]
 		public System.Int32 BufferLength {
 			get {
 				return myBufferLength;

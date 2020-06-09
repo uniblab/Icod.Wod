@@ -38,6 +38,7 @@ namespace Icod.Wod.File {
 				}
 				buffer.Seek( 0, System.IO.SeekOrigin.Begin );
 				using ( var zipArchive = this.GetZipArchive( buffer, System.IO.Compression.ZipArchiveMode.Update ) ) {
+					// it is faster to remove files from last-to-first, because files in a Zip archive are stored one after another, much like a Tar archive.
 					entries = ( this.MatchEntries( zipArchive.Entries ) ?? new System.IO.Compression.ZipArchiveEntry[ 0 ] ).Reverse();
 					foreach ( var e in entries ) {
 						e.Delete();

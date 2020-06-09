@@ -31,25 +31,51 @@ namespace Icod.Wod.File {
 			Namespace = "http://Icod.Wod"
 		)]
 		[System.Xml.Serialization.XmlArrayItem(
+			typeof( Parallel ),
+			IsNullable = false,
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.Xml.Serialization.XmlArrayItem(
+			typeof( Serial ),
+			IsNullable = false,
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.Xml.Serialization.XmlArrayItem(
 			typeof( File.FileOperationBase ),
 			IsNullable = false,
 			Namespace = "http://Icod.Wod"
 		)]
 		[System.Xml.Serialization.XmlArrayItem(
 			typeof( Data.FileExport ),
+			ElementName = "dbFileExport",
 			IsNullable = false,
 			Namespace = "http://Icod.Wod"
 		)]
 		[System.Xml.Serialization.XmlArrayItem(
 			typeof( Data.FileImport ),
+			ElementName = "dbFileImport",
 			IsNullable = false,
 			Namespace = "http://Icod.Wod"
 		)]
 		[System.Xml.Serialization.XmlArrayItem(
 			typeof( Data.Command ),
+			ElementName = "dbCommand",
 			IsNullable = false,
 			Namespace = "http://Icod.Wod"
 		)]
+		[System.Xml.Serialization.XmlArrayItem(
+			typeof( SalesForce.Rest.RestSelect ),
+			ElementName = "sfRestSelect",
+			IsNullable = false,
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.Xml.Serialization.XmlArrayItem(
+			typeof( SalesForce.Bulk.BulkAggregateOperation ),
+			ElementName = "sfBulkOperation",
+			IsNullable = false,
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.ComponentModel.DefaultValue( null )]
 		public System.Object[] Steps {
 			get;
 			set;
@@ -65,9 +91,9 @@ namespace Icod.Wod.File {
 				throw new System.InvalidOperationException();
 			}
 
-			if ( handler.ListFiles().Where(
-				x => FileType.File.Equals( x.FileType )
-			).Any() ) {
+			if ( handler.ListFiles().Any(
+				x => x.FileType.Equals( FileType.File )
+			) ) {
 				var steps = ( this.Steps ?? new System.Object[ 0 ] ).OfType<IStep>().ToArray();
 				foreach ( var s in steps ) {
 					s.DoWork( workOrder );

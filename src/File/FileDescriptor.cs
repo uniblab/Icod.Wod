@@ -21,10 +21,10 @@ namespace Icod.Wod.File {
 
 
 		#region .ctor
-		protected FileDescriptor() : base() {
+		public FileDescriptor() : base() {
 			myUsePassive = true;
 		}
-		protected FileDescriptor( Icod.Wod.WorkOrder workOrder ) : this() {
+		public FileDescriptor( Icod.Wod.WorkOrder workOrder ) : this() {
 			myWorkOrder = workOrder;
 		}
 		#endregion .ctor

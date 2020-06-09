@@ -87,14 +87,14 @@ namespace Icod.Wod.SalesForce {
 			var encoding = System.Text.Encoding.UTF8;
 			parameters.Append( "client_id=" );
 			parameters.Append( System.Web.HttpUtility.UrlEncode( clientId, encoding ) );
-			parameters.Append( "&client_secret=" );
-			parameters.Append( System.Web.HttpUtility.UrlEncode( clientSecret, encoding ) );
 			switch ( credential.LoginMode ) {
 				case LoginMode.Password:
 					var password = ( credential.Password ?? System.String.Empty ) + ( credential.SecurityToken ?? System.String.Empty );
 					if ( System.String.IsNullOrEmpty( password ) ) {
 						throw new System.InvalidOperationException( "The specified credential is attempting Password authentication but does not have a password configured." );
 					}
+					parameters.Append( "&client_secret=" );
+					parameters.Append( System.Web.HttpUtility.UrlEncode( clientSecret, encoding ) );
 					parameters.Append( "&grant_type=password" );
 					parameters.Append( "&password=" );
 					parameters.Append( System.Web.HttpUtility.UrlEncode( password, encoding ) );

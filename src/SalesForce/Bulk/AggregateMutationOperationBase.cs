@@ -107,9 +107,10 @@ namespace Icod.Wod.SalesForce.Bulk {
 			var loginResponse = jobProcess.LoginResponse;
 			var semaphore = jobProcess.Semaphore;
 
+			System.String lineEnding = LineEndingOption.CRLF.Value;
 			foreach ( var file in this.BuildFiles(
 				this.ReadTables( workOrder ),
-				ColumnDelimiterOption.Comma.Value, LineEndingOption.CRLF.Value, '"',
+				ColumnDelimiterOption.Comma.Value, lineEnding, '"',
 				this.BatchSize
 			) ) {
 				semaphore.Wait();
@@ -396,7 +397,6 @@ namespace Icod.Wod.SalesForce.Bulk {
 			var columnNameList = dbColumns.Select(
 				x => x.ColumnName.Replace( qcs, qcs + qcs )
 			);
-			var rs = lineEnding;
 			var list = columnNameList.Select(
 				x => qcs + x + qcs
 			);
@@ -421,11 +421,8 @@ namespace Icod.Wod.SalesForce.Bulk {
 			var valueList = columns.Select(
 				x => System.String.Format( "{0}", row[ x ] ).Replace( qcs, qcs + qcs )
 			);
-			var rs = lineEnding;
 			var list = valueList.Select(
-				x => ( x.Contains( qcs ) || x.Contains( fss ) || x.Contains( rs ) )
-					? qcs + x + qcs
-					: x
+				x => qcs + x + qcs
 			);
 			return System.String.Join( fss, list );
 		}
