@@ -4,8 +4,8 @@ namespace Icod.Wod.File {
 
 	[System.Serializable]
 	[System.Xml.Serialization.XmlInclude( typeof( List ) )]
-	[System.Xml.Serialization.XmlInclude( typeof( ListFile ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( ListDirectory ) )]
+	[System.Xml.Serialization.XmlInclude( typeof( ListFile ) )]
 	public abstract class FileOrDirectoryListerBase : BinaryFileOperationBase {
 
 		#region fields

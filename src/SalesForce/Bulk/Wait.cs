@@ -2,6 +2,7 @@
 
 namespace Icod.Wod.SalesForce.Bulk {
 
+	[System.Serializable]
 	public sealed class Wait {
 
 		#region fields
@@ -18,16 +19,25 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 
 		#region .ctor
-		public Wait() : base() {
-			myInitial = InitialWaitMiliseconds;
-			myMinimum = MinimumWaitMiliseconds;
-			myIncrement = IncrementMiliseconds;
-			myMaximum = MaxWaitMiliseconds;
+		public Wait( System.Int32 initial, System.Int32 minimum, System.Int32 increment, System.Int32 maximum ) : base() {
+			myInitial = initial;
+			myMinimum = minimum;
+			myIncrement = increment;
+			myMaximum = maximum;
+		}
+		public Wait() : this( InitialWaitMiliseconds, MinimumWaitMiliseconds, IncrementMiliseconds, MaxWaitMiliseconds ) {
 		}
 		#endregion .ctor
 
 
 		#region properties
+		[System.Xml.Serialization.XmlIgnore]
+		public static Wait Default {
+			get {
+				return new Wait( InitialWaitMiliseconds, MinimumWaitMiliseconds, IncrementMiliseconds, MaxWaitMiliseconds );
+			}
+		}
+
 		[System.Xml.Serialization.XmlAttribute(
 			"initial",
 			Namespace = "http://Icod.Wod"

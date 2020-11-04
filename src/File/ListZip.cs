@@ -4,7 +4,6 @@ using System.Linq;
 namespace Icod.Wod.File {
 
 	[System.Serializable]
-	[System.Xml.Serialization.XmlInclude( typeof( FromZip ) )]
 	[System.Xml.Serialization.XmlType(
 		"listZip",
 		Namespace = "http://Icod.Wod",
