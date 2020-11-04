@@ -37,34 +37,6 @@ namespace Icod.Wod.File {
 
 		#region properties
 		[System.Xml.Serialization.XmlAttribute(
-			"codePage",
-			Namespace = "http://Icod.Wod"
-		)]
-		[System.ComponentModel.DefaultValue( DefaultCodePage )]
-		public System.String CodePage {
-			get {
-				return myCodePage;
-			}
-			set {
-				myCodePage = value;
-			}
-		}
-
-		[System.Xml.Serialization.XmlAttribute(
-			"writeIfEmpty",
-			Namespace = "http://Icod.Wod"
-		)]
-		[System.ComponentModel.DefaultValue( false )]
-		public System.Boolean WriteIfEmpty {
-			get {
-				return myWriteIfEmpty;
-			}
-			set {
-				myWriteIfEmpty = value;
-			}
-		}
-
-		[System.Xml.Serialization.XmlAttribute(
 			"bufferLength",
 			Namespace = "http://Icod.Wod"
 		)]
@@ -79,6 +51,20 @@ namespace Icod.Wod.File {
 		}
 
 		[System.Xml.Serialization.XmlAttribute(
+			"codePage",
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.ComponentModel.DefaultValue( DefaultCodePage )]
+		public System.String CodePage {
+			get {
+				return myCodePage;
+			}
+			set {
+				myCodePage = value;
+			}
+		}
+
+		[System.Xml.Serialization.XmlAttribute(
 			"recordSeparator",
 			Namespace = "http://Icod.Wod"
 		)]
@@ -89,6 +75,20 @@ namespace Icod.Wod.File {
 			}
 			set {
 				myRecordSeparator = value;
+			}
+		}
+
+		[System.Xml.Serialization.XmlAttribute(
+			"writeIfEmpty",
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.ComponentModel.DefaultValue( false )]
+		public System.Boolean WriteIfEmpty {
+			get {
+				return myWriteIfEmpty;
+			}
+			set {
+				myWriteIfEmpty = value;
 			}
 		}
 		#endregion properties
