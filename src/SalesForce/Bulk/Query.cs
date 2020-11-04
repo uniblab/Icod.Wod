@@ -10,10 +10,6 @@ namespace Icod.Wod.SalesForce.Bulk {
 	public sealed class Query : AggregateOperationBase {
 
 		#region .ctor
-		static Query() {
-			DefaultApiVersion = new System.Decimal( 47 );
-		}
-
 		public Query() : base() {
 			this.ApiVersion = DefaultApiVersion;
 			this.BatchSize = DefaultBatchSize;
@@ -35,19 +31,6 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 		#region properties
 		[System.Xml.Serialization.XmlAttribute(
-			"apiVersion",
-			Namespace = "http://Icod.Wod"
-		)]
-		public sealed override System.Decimal ApiVersion {
-			get {
-				return base.ApiVersion;
-			}
-			set {
-				base.ApiVersion = value;
-			}
-		}
-
-		[System.Xml.Serialization.XmlAttribute(
 			"soql",
 			Namespace = "http://Icod.Wod"
 		)]
@@ -55,20 +38,6 @@ namespace Icod.Wod.SalesForce.Bulk {
 		public System.String Soql {
 			get;
 			set;
-		}
-
-		[System.Xml.Serialization.XmlAttribute(
-			"batchSize",
-			Namespace = "http://Icod.Wod"
-		)]
-		[System.ComponentModel.DefaultValue( DefaultBatchSize )]
-		public sealed override System.Int32 BatchSize {
-			get {
-				return base.BatchSize;
-			}
-			set {
-				base.BatchSize = value;
-			}
 		}
 		#endregion properties
 
