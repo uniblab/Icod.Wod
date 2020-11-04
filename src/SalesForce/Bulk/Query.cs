@@ -9,13 +9,6 @@ namespace Icod.Wod.SalesForce.Bulk {
 	)]
 	public sealed class Query : AggregateOperationBase {
 
-		#region  fields
-		public const System.Int32 DefaultBatchSize = 10000;
-
-		public static readonly System.Decimal DefaultApiVersion;
-		#endregion  fields
-
-
 		#region .ctor
 		static Query() {
 			DefaultApiVersion = new System.Decimal( 47 );

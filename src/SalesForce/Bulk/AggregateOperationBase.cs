@@ -41,6 +41,25 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 		#region properties
 		[System.Xml.Serialization.XmlAttribute(
+			"apiVersion",
+			Namespace = "http://Icod.Wod"
+		)]
+		public virtual System.Decimal ApiVersion {
+			get;
+			set;
+		}
+
+		[System.Xml.Serialization.XmlAttribute(
+			"batchSize",
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.ComponentModel.DefaultValue( DefaultBatchSize )]
+		public virtual System.Int32 BatchSize {
+			get;
+			set;
+		}
+
+		[System.Xml.Serialization.XmlAttribute(
 			"missingSchemaAction",
 			Namespace = "http://Icod.Wod"
 		)]
@@ -67,6 +86,16 @@ namespace Icod.Wod.SalesForce.Bulk {
 			}
 		}
 
+		[System.Xml.Serialization.XmlAttribute(
+			"tag",
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.ComponentModel.DefaultValue( (System.String)null )]
+		public virtual System.String Tag {
+			get;
+			set;
+		}
+
 		[System.Xml.Serialization.XmlElement(
 			"wait",
 			Namespace = "http://Icod.Wod",
@@ -74,36 +103,6 @@ namespace Icod.Wod.SalesForce.Bulk {
 		)]
 		[System.ComponentModel.DefaultValue( null )]
 		public Wait Wait {
-			get;
-			set;
-		}
-
-		[System.Xml.Serialization.XmlAttribute(
-			"apiVersion",
-			Namespace = "http://Icod.Wod"
-		)]
-		public virtual System.Decimal ApiVersion {
-			get;
-			set;
-		}
-
-
-		[System.Xml.Serialization.XmlAttribute(
-			"batchSize",
-			Namespace = "http://Icod.Wod"
-		)]
-		[System.ComponentModel.DefaultValue( DefaultBatchSize )]
-		public virtual System.Int32 BatchSize {
-			get;
-			set;
-		}
-
-		[System.Xml.Serialization.XmlAttribute(
-			"tag",
-			Namespace = "http://Icod.Wod"
-		)]
-		[System.ComponentModel.DefaultValue( (System.String)null )]
-		public virtual System.String Tag {
 			get;
 			set;
 		}

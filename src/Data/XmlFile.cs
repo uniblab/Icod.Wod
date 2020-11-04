@@ -17,6 +17,7 @@ namespace Icod.Wod.Data {
 		}
 		#endregion .ctor
 
+
 		#region methods
 		protected sealed override void WriteRecords( WorkOrder workOrder, System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Collections.Generic.IEnumerable<System.Data.DataRow> rows ) {
 #if DEBUG

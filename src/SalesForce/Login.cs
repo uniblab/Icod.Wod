@@ -82,13 +82,13 @@ namespace Icod.Wod.SalesForce {
 			}
 
 			var clientId = credential.ClientId;
-			var clientSecret = credential.ClientSecret;
 			var parameters = new System.Text.StringBuilder();
 			var encoding = System.Text.Encoding.UTF8;
 			parameters.Append( "client_id=" );
 			parameters.Append( System.Web.HttpUtility.UrlEncode( clientId, encoding ) );
 			switch ( credential.LoginMode ) {
 				case LoginMode.Password:
+					var clientSecret = credential.ClientSecret;
 					var password = ( credential.Password ?? System.String.Empty ) + ( credential.SecurityToken ?? System.String.Empty );
 					if ( System.String.IsNullOrEmpty( password ) ) {
 						throw new System.InvalidOperationException( "The specified credential is attempting Password authentication but does not have a password configured." );
