@@ -16,3 +16,7 @@ You can whip up a simple Xml file, called a WoD Schematic, and then use the clie
  <nowiki>
  C:\users\tbruce\bin\Icod.Wod\Icod.Wod.Client.exe .\someSchematic.xml
 </nowiki>
+
+== Do you have an example I could take a look at? ==
+Sure! Here is the schematic I used to rebase all the source code files to code page 1252, and then prepend each with a copyright notice.
+[https://pastebin.com/ruG9g3Jb]
