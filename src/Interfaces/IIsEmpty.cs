@@ -1,4 +1,4 @@
-﻿namespace Icod.Wod {
+namespace Icod.Wod {
 
 	public interface IIsEmpty {
 

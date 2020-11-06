@@ -4,26 +4,26 @@ namespace Icod.Wod.File {
 
 	[System.Serializable]
 	[System.Xml.Serialization.XmlType(
-		"prefixFile",
+		"preambleFile",
 		Namespace = "http://Icod.Wod",
 		IncludeInSchema = true
 	)]
-	public sealed class PrefixFile : BinaryFileOperationBase {
+	public sealed class PreambleFile : BinaryFileOperationBase {
 
 		#region .ctor
-		public PrefixFile() : base() {
+		public PreambleFile() : base() {
 		}
-		public PrefixFile( WorkOrder workOrder ) : base( workOrder ) {
+		public PreambleFile( WorkOrder workOrder ) : base( workOrder ) {
 		}
 		#endregion  .ctor
 
 
 		#region properties
 		[System.Xml.Serialization.XmlAttribute(
-			"prefix",
+			"preamble",
 			Namespace = "http://Icod.Wod"
 		)]
-		public System.String Prefix {
+		public System.String Preamble {
 			get;
 			set;
 		}
@@ -37,8 +37,8 @@ namespace Icod.Wod.File {
 			if ( null == sourceHandler ) {
 				throw new System.InvalidOperationException();
 			}
-			var prefix = this.Prefix;
-			if ( System.String.IsNullOrEmpty( prefix ) ) {
+			var preamble = this.Preamble;
+			if ( System.String.IsNullOrEmpty( preamble ) ) {
 				throw new System.InvalidOperationException();
 			}
 			var dest = this.Destination;
@@ -47,13 +47,7 @@ namespace Icod.Wod.File {
 			}
 			var destHandler = dest.GetFileHandler( workOrder );
 
-			var rs = this.RecordSeparator;
-			System.Action<System.IO.StreamWriter, System.IO.StreamReader, System.String> worker = null;
-			if ( System.String.IsNullOrEmpty( rs ) ) {
-				worker = this.PrefixOnce;
-			} else {
-				worker = this.PrefixEach;
-			}
+			System.Action<System.IO.StreamWriter, System.IO.StreamReader, System.String> worker = this.PrefixOnce;
 			var sourceEncoding = this.GetEncoding();
 			foreach ( var file in sourceHandler.ListFiles().Select(
 				x => x.File
@@ -62,7 +56,7 @@ namespace Icod.Wod.File {
 					using ( var writer = new System.IO.StreamWriter( buffer, sourceEncoding, this.BufferLength, true ) ) {
 						using ( var original = sourceHandler.OpenReader( file) ) {
 							using ( var reader = new System.IO.StreamReader( original, this.GetEncoding(), true, this.BufferLength, true ) ) {
-								worker( writer, reader, prefix );
+								worker( writer, reader, preamble );
 							}
 						}
 						writer.Flush();
@@ -72,37 +66,21 @@ namespace Icod.Wod.File {
 				}
 			}
 		}
-		private void PrefixOnce( System.IO.StreamWriter destination, System.IO.StreamReader source, System.String prefix ) {
-			if ( System.String.IsNullOrEmpty( prefix ) ) {
-				throw new System.ArgumentException( "prefix" );
+		private void PrefixOnce( System.IO.StreamWriter destination, System.IO.StreamReader source, System.String preamble ) {
+			if ( System.String.IsNullOrEmpty( preamble ) ) {
+				throw new System.ArgumentException( "preamble" );
 			} else if ( null == source ) {
 				throw new System.ArgumentNullException( "source" );
 			} else if ( null == destination ) {
 				throw new System.ArgumentNullException( "destination" );
 			}
-			destination.Write( prefix );
+			destination.Write( preamble );
+			var rs = this.RecordSeparator;
+			if ( !System.String.IsNullOrEmpty( rs ) ) {
+				destination.Write( rs );
+			}
 			destination.Flush();
 			source.BaseStream.CopyTo( destination.BaseStream );
-		}
-		private void PrefixEach( System.IO.StreamWriter destination, System.IO.StreamReader source, System.String prefix ) {
-			if ( System.String.IsNullOrEmpty( prefix ) ) {
-				throw new System.ArgumentException( "prefix" );
-			} else if ( null == source ) {
-				throw new System.ArgumentNullException( "source" );
-			} else if ( null == destination ) {
-				throw new System.ArgumentNullException( "destination" );
-			}
-
-			var rs = this.RecordSeparator;
-			System.String line;
-			while ( !source.EndOfStream ) {
-				line = source.ReadLine( rs );
-				if ( !System.String.IsNullOrEmpty( line ) ) {
-					destination.Write( prefix );
-					destination.Write( line );
-					destination.Write( rs );
-				}
-			}
 		}
 		#endregion methods
 
