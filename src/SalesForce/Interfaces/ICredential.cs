@@ -58,10 +58,6 @@
 			set;
 		}
 
-		System.Int32 MaxDegreeOfParallelism {
-			get;
-		}
-
 	}
 
 }

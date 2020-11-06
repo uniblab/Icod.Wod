@@ -98,14 +98,13 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 
 		#region methods
-		public override void PerformWork( JobProcess jobProcess ) {
-			var step = jobProcess.Step;
+		public override void PerformWork( Pair<LoginResponse, IStep> jobProcess ) {
+			var step = jobProcess.Second;
 			if ( null == step ) {
 				throw new System.ArgumentException();
 			}
 			var workOrder = step.WorkOrder;
-			var loginResponse = jobProcess.LoginResponse;
-			var semaphore = jobProcess.Semaphore;
+			var loginResponse = jobProcess.First;
 
 			System.String lineEnding = LineEndingOption.CRLF.Value;
 			foreach ( var file in this.BuildFiles(
@@ -113,9 +112,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 				ColumnDelimiterOption.Comma.Value, lineEnding, '"',
 				this.BatchSize
 			) ) {
-				semaphore.Wait();
 				var jobResponse = this.CreateJob( loginResponse );
-				semaphore.Release();
 				var id = jobResponse.Id;
 
 				var wait = ( this.Wait ?? new Wait() );
@@ -129,9 +126,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 					if ( 0 < sleepTime ) {
 						System.Threading.Thread.Sleep( sleepTime );
 					}
-					semaphore.Wait();
 					jobResponse = this.QueryJob( loginResponse, id );
-					semaphore.Release();
 					sleepTime = wait.Minimum;
 					while (
 						!StateOption.Open.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
@@ -141,9 +136,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 					) {
 						System.Threading.Thread.Sleep( sleepTime );
 						sleepTime = System.Math.Min( max, sleepTime + wait.Increment );
-						semaphore.Wait();
 						jobResponse = this.QueryJob( loginResponse, id );
-						semaphore.Release();
 					}
 					while (
 						!StateOption.Open.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
@@ -151,23 +144,15 @@ namespace Icod.Wod.SalesForce.Bulk {
 						&& !StateOption.Failed.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
 					) {
 						System.Threading.Thread.Sleep( max );
-						semaphore.Wait();
 						jobResponse = this.QueryJob( loginResponse, id );
-						semaphore.Release();
 					}
 				}
 
-				semaphore.Wait();
 				this.UploadData( loginResponse, jobResponse, file );
-				semaphore.Release();
 
-				semaphore.Wait();
 				this.CloseJob( loginResponse, id );
-				semaphore.Release();
 
-				semaphore.Wait();
 				jobResponse = this.QueryJob( loginResponse, id );
-				semaphore.Release();
 				sleepTime = wait.Initial;
 				if (
 					!StateOption.JobComplete.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
@@ -177,9 +162,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 					if ( 0 < sleepTime ) {
 						System.Threading.Thread.Sleep( sleepTime );
 					}
-					semaphore.Wait();
 					jobResponse = this.QueryJob( loginResponse, id );
-					semaphore.Release();
 					sleepTime = wait.Minimum;
 					while (
 						!StateOption.JobComplete.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
@@ -189,9 +172,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 					) {
 						System.Threading.Thread.Sleep( sleepTime );
 						sleepTime = System.Math.Min( max, sleepTime + wait.Increment );
-						semaphore.Wait();
 						jobResponse = this.QueryJob( loginResponse, id );
-						semaphore.Release();
 					}
 					while (
 						!StateOption.JobComplete.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
@@ -199,9 +180,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 						&& !StateOption.Failed.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
 					) {
 						System.Threading.Thread.Sleep( max );
-						semaphore.Wait();
 						jobResponse = this.QueryJob( loginResponse, id );
-						semaphore.Release();
 					}
 				}
 
@@ -218,9 +197,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 					}
 				}
 
-				semaphore.Wait();
 				this.DeleteJob( loginResponse, id );
-				semaphore.Release();
 			}
 		}
 

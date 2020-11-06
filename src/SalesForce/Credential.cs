@@ -26,7 +26,6 @@ namespace Icod.Wod.SalesForce {
 			myScheme = "https";
 			myPort = -1;
 			myLoginMode = LoginMode.RefreshToken;
-			this.MaxDegreeOfParallelism = DefaultMaxDegreeOfParallelism;
 		}
 		#endregion .ctor
 
@@ -164,11 +163,6 @@ namespace Icod.Wod.SalesForce {
 		)]
 		[System.ComponentModel.DefaultValue( (System.String)null )]
 		public System.String RefreshToken {
-			get;
-			set;
-		}
-
-		public System.Int32 MaxDegreeOfParallelism {
 			get;
 			set;
 		}

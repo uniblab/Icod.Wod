@@ -2,7 +2,7 @@
 
 	public interface IAggregateOperation {
 
-		void PerformWork( JobProcess jobProcess );
+		void PerformWork( Pair<LoginResponse, IStep> jobProcess );
 
 	}
 

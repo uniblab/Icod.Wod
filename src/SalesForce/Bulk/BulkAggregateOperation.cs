@@ -92,26 +92,22 @@ namespace Icod.Wod.SalesForce.Bulk {
 			}
 			var cred = Credential.GetCredential( this.InstanceName, workOrder );
 			var name = cred.ClientId + ( cred.Username ?? cred.RefreshToken ?? System.String.Empty );
-			using ( var semaphore = new Icod.Wod.Semaphore( cred.MaxDegreeOfParallelism, cred.MaxDegreeOfParallelism, name ) ) {
-				semaphore.Wait();
-				var loginResponse = new Login( workOrder ).GetLoginResponse( this.InstanceName );
-				semaphore.Release();
-				var jobProcess = new JobProcess( loginResponse, this, semaphore );
+			var loginResponse = new Login( workOrder ).GetLoginResponse( this.InstanceName );
+			var jobProcess = new Pair<LoginResponse, IStep>( loginResponse, this );
 
-				using ( var tokenSource = new System.Threading.CancellationTokenSource() ) {
-					var token = tokenSource.Token;
-					System.Collections.Generic.ICollection<System.Threading.Tasks.Task> tasks = new System.Collections.Generic.List<System.Threading.Tasks.Task>();
-					var factory = new System.Threading.Tasks.TaskFactory(
-						token,
-						System.Threading.Tasks.TaskCreationOptions.LongRunning,
-						System.Threading.Tasks.TaskContinuationOptions.LongRunning,
-						System.Threading.Tasks.TaskScheduler.Default
-					);
-					foreach ( var operation in operations ) {
-						tasks.Add( factory.StartNew( () => operation.PerformWork( jobProcess ), token ) );
-					}
-					System.Threading.Tasks.Task.WaitAll( tasks.ToArray(), token );
+			using ( var tokenSource = new System.Threading.CancellationTokenSource() ) {
+				var token = tokenSource.Token;
+				System.Collections.Generic.ICollection<System.Threading.Tasks.Task> tasks = new System.Collections.Generic.List<System.Threading.Tasks.Task>();
+				var factory = new System.Threading.Tasks.TaskFactory(
+					token,
+					System.Threading.Tasks.TaskCreationOptions.LongRunning,
+					System.Threading.Tasks.TaskContinuationOptions.LongRunning,
+					System.Threading.Tasks.TaskScheduler.Default
+				);
+				foreach ( var operation in operations ) {
+					tasks.Add( factory.StartNew( () => operation.PerformWork( jobProcess ), token ) );
 				}
+				System.Threading.Tasks.Task.WaitAll( tasks.ToArray(), token );
 			}
 		}
 		#endregion methods

@@ -84,18 +84,15 @@ namespace Icod.Wod.SalesForce.Bulk {
 			}
 		}
 
-		public sealed override void PerformWork( JobProcess jobProcess ) {
-			var step = jobProcess.Step;
+		public sealed override void PerformWork( Pair<LoginResponse, IStep> jobProcess ) {
+			var step = jobProcess.Second;
 			if ( null == step ) {
 				throw new System.ArgumentException();
 			}
 			var workOrder = step.WorkOrder;
-			var loginResponse = jobProcess.LoginResponse;
-			var semaphore = jobProcess.Semaphore;
+			var loginResponse = jobProcess.First;
 
-			semaphore.Wait();
 			var jobResponse = this.CreateJob( loginResponse );
-			semaphore.Release();
 			var id = jobResponse.Id;
 
 			var wait = ( this.Wait ?? new Wait() );
@@ -114,9 +111,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 			) {
 				System.Threading.Thread.Sleep( sleepTime );
 				sleepTime = System.Math.Min( max, sleepTime + wait.Increment );
-				semaphore.Wait();
 				jobResponse = this.QueryJob( loginResponse, id );
-				semaphore.Release();
 				state = jobResponse.state;
 			}
 			while (
@@ -125,25 +120,19 @@ namespace Icod.Wod.SalesForce.Bulk {
 				&& !StateOption.Failed.Value.Equals( state, System.StringComparison.OrdinalIgnoreCase )
 			) {
 				System.Threading.Thread.Sleep( max );
-				semaphore.Wait();
 				jobResponse = this.QueryJob( loginResponse, id );
-				semaphore.Release();
 				state = jobResponse.state;
 			}
 
 			SelectResult result = null;
 			System.String locator = null;
 			do {
-				semaphore.Wait();
 				result = this.GetResults( loginResponse, id, locator, ColumnDelimiterOption.FromName( jobResponse.columnDelimiter ).Value, LineEndingOption.FromName( jobResponse.lineEnding ).Value );
-				semaphore.Release();
 				this.WriteRecords( workOrder, result );
 				locator = result.Locator;
 			} while ( !System.String.IsNullOrEmpty( locator ) );
 
-			semaphore.Wait();
 			this.DeleteJob( loginResponse, id );
-			semaphore.Release();
 		}
 
 		private SelectResult GetResults( LoginResponse loginResponse, System.String id, System.String locator, System.Char columnDelimiter, System.String lineEnding ) {

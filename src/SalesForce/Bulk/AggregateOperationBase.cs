@@ -110,7 +110,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 
 		#region methods
-		public abstract void PerformWork( JobProcess jobProcess );
+		public abstract void PerformWork( Pair<LoginResponse, IStep> jobProcess );
 
 		protected abstract System.String GetServicePath();
 		protected abstract JobResponse CreateJob( LoginResponse loginResponse );
