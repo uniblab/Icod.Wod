@@ -1,4 +1,4 @@
-﻿namespace Icod.Wod.File {
+namespace Icod.Wod.File {
 
 	[System.Serializable]
 	[System.Xml.Serialization.XmlType(

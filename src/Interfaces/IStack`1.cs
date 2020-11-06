@@ -1,4 +1,4 @@
-﻿namespace Icod.Wod {
+namespace Icod.Wod {
 
 	public interface IStack<T> : System.Collections.Generic.IEnumerable<T>, IIsEmpty {
 

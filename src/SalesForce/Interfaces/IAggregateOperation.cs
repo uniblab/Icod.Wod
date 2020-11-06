@@ -1,4 +1,4 @@
-﻿namespace Icod.Wod.SalesForce.Bulk {
+namespace Icod.Wod.SalesForce.Bulk {
 
 	public interface IAggregateOperation {
 

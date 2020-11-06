@@ -1,4 +1,4 @@
-﻿namespace Icod.Wod.File {
+namespace Icod.Wod.File {
 
 	public interface IDestination {
 

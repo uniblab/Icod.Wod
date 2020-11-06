@@ -1,4 +1,4 @@
-﻿namespace Icod.Wod.SalesForce {
+namespace Icod.Wod.SalesForce {
 
 	public interface ICredential {
 

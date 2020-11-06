@@ -1,4 +1,4 @@
-﻿namespace Icod.Wod.File {
+namespace Icod.Wod.File {
 
 	[System.Xml.Serialization.XmlInclude( typeof( AppendFile ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( CopyFile ) )]

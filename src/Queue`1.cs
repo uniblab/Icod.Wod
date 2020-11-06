@@ -1,4 +1,4 @@
-﻿namespace Icod.Wod {
+namespace Icod.Wod {
 
 	[System.Serializable]
 	public sealed class Queue<T> : IQueue<T> {

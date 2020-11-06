@@ -1,4 +1,4 @@
-﻿using System.Data.Common;
+using System.Data.Common;
 using System.Linq;
 
 namespace Icod.Wod.SalesForce.Bulk {

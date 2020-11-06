@@ -19,7 +19,7 @@ namespace Icod.Wod.File {
 		[System.Xml.Serialization.XmlIgnore]
 		public sealed override System.Char PathSeparator {
 			get {
-				return System.IO.Path.PathSeparator;
+				return System.IO.Path.DirectorySeparatorChar;
 			}
 		}
 		#endregion properties

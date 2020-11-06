@@ -1,4 +1,4 @@
-﻿namespace Icod.Wod.Data {
+namespace Icod.Wod.Data {
 
 	[System.Serializable]
 	[System.Xml.Serialization.XmlInclude( typeof( DbCommand ) )]

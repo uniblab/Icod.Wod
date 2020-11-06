@@ -1,4 +1,4 @@
-﻿namespace Icod.Wod.SalesForce {
+namespace Icod.Wod.SalesForce {
 
 	[System.Serializable]
 	[System.Xml.Serialization.XmlInclude( typeof( Rest.RestSelect ) )]
