@@ -81,6 +81,7 @@
     <Compile Include="src\File\BinaryCompressedFileOperationBase.cs" />
     <Compile Include="src\File\Interfaces\IDestination.cs" />
     <Compile Include="src\File\Interfaces\IMove.cs" />
+    <Compile Include="src\File\Interfaces\ITruncateEntryName.cs" />
     <Compile Include="src\File\PreambleFile.cs" />
     <Compile Include="src\File\PruneFile.cs" />
     <Compile Include="src\Semaphore.cs" />

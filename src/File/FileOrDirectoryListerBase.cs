@@ -6,7 +6,7 @@ namespace Icod.Wod.File {
 	[System.Xml.Serialization.XmlInclude( typeof( List ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( ListDirectory ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( ListFile ) )]
-	public abstract class FileOrDirectoryListerBase : BinaryFileOperationBase {
+	public abstract class FileOrDirectoryListerBase : BinaryFileOperationBase, ITruncateEntryName {
 
 		#region fields
 		private System.Boolean myTruncateEntryName;

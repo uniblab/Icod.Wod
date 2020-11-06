@@ -14,7 +14,7 @@ namespace Icod.Wod.File {
 		Namespace = "http://Icod.Wod",
 		IncludeInSchema = true
 	)]
-	public abstract class ZipOperationBase : FileOperationBase {
+	public abstract class ZipOperationBase : FileOperationBase, ITruncateEntryName {
 
 		#region fields
 		private static readonly System.Func<FileEntry, System.String, System.String> theTruncatedGetFileName;
