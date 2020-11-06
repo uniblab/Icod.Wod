@@ -9,7 +9,7 @@ The Icod Work on Demand Framework, or WoD, is a class library and corresponding 
 Yes, I know.  It's easier to use too.
 
 == Does it need some sort of cloud? ==
-No.  It'll run on any computer which supports the .Net Framework 4.7.
+No.  It'll run on any computer which supports the .Net Framework 4.7.2.
 
 == How do I use it? ==
 Some collection of tasks, a Work Order, is represented by an Xml file, called a Schematic.  A separate client is used to interpret the Schematic and execute the corresponding functions of the WoD Framework.  Typical use would be along the lines of:
