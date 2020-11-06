@@ -1,3 +1,4 @@
+// Copyright 2020, Timothy J. Bruce
 namespace Icod.Wod.File {
 
 	[System.Xml.Serialization.XmlInclude( typeof( DeleteFile ) )]

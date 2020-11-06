@@ -1,3 +1,4 @@
+// Copyright 2020, Timothy J. Bruce
 using System.Linq;
 using System.Net;
 

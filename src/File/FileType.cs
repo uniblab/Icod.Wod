@@ -1,3 +1,4 @@
+// Copyright 2020, Timothy J. Bruce
 namespace Icod.Wod.File {
 
 	[System.Serializable]
