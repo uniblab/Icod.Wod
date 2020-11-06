@@ -18,7 +18,7 @@
 		"binaryFileOperation",
 		Namespace = "http://Icod.Wod"
 	)]
-	public abstract class BinaryFileOperationBase : FileOperationBase {
+	public abstract class BinaryFileOperationBase : FileOperationBase, IDestination {
 
 		#region .ctor
 		protected BinaryFileOperationBase() : base() {

@@ -11,7 +11,7 @@ namespace Icod.Wod.File {
 		Namespace = "http://Icod.Wod",
 		IncludeInSchema = true
 	)]
-	public abstract class BinaryZipOperationBase : ZipOperationBase {
+	public abstract class BinaryZipOperationBase : ZipOperationBase, IDestination {
 
 		#region .ctor
 		protected BinaryZipOperationBase() : base() {

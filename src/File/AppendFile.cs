@@ -8,7 +8,7 @@ namespace Icod.Wod.File {
 		Namespace = "http://Icod.Wod",
 		IncludeInSchema = true
 	)]
-	public sealed class AppendFile : BinaryFileOperationBase {
+	public sealed class AppendFile : BinaryFileOperationBase, IMove {
 
 		#region fields
 		private System.Boolean myMove;

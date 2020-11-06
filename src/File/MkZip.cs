@@ -9,7 +9,7 @@ namespace Icod.Wod.File {
 		Namespace = "http://Icod.Wod",
 		IncludeInSchema = true
 	)]
-	public sealed class MkZip : ZipOperationBase {
+	public sealed class MkZip : ZipOperationBase, IMove {
 
 		#region fields
 		private System.Boolean myMove;
