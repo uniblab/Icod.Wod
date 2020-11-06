@@ -55,7 +55,7 @@ namespace Icod.Wod {
 			Namespace = "http://Icod.Wod"
 		)]
 		[System.Xml.Serialization.XmlArrayItem(
-			typeof( Data.Command ),
+			typeof( Data.DbCommand ),
 			ElementName = "dbCommand",
 			IsNullable = false,
 			Namespace = "http://Icod.Wod"

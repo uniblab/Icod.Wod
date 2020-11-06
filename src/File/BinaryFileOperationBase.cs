@@ -3,6 +3,7 @@
 	[System.Xml.Serialization.XmlInclude( typeof( AppendFile ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( CopyFile ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( JsonToXml ) )]
+	[System.Xml.Serialization.XmlInclude( typeof( PreambleFile ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( PrefixFile ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( PruneFile ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( RebaseFile ) )]

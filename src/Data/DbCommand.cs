@@ -8,10 +8,10 @@ namespace Icod.Wod.Data {
 		Namespace = "http://Icod.Wod",
 		IncludeInSchema = true
 	)]
-	public sealed class Command : DbOperationBase, Icod.Wod.IStep {
+	public sealed class DbCommand : DbOperationBase, Icod.Wod.IStep {
 
 		#region .ctor
-		public Command() : base() {
+		public DbCommand() : base() {
 		}
 		#endregion .ctor
 

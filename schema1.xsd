@@ -413,6 +413,13 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
+	<xs:complexType name="preambleFile">
+		<xs:complexContent mixed="false">
+			<xs:extension base="tns:binaryFileOperation">
+				<xs:attribute name="preamble" type="xs:string" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 	<xs:complexType name="prefixFile">
 		<xs:complexContent mixed="false">
 			<xs:extension base="tns:binaryFileOperation">

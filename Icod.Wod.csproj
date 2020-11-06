@@ -179,7 +179,7 @@
   <ItemGroup>
     <Compile Include="src\Data\ColumnMap.cs" />
     <Compile Include="src\Data\ColumnMapValueComparer.cs" />
-    <Compile Include="src\Data\Command.cs" />
+    <Compile Include="src\Data\DbCommand.cs" />
     <Compile Include="src\Data\DbDescriptorBase.cs" />
     <Compile Include="src\Data\DbHelper.cs" />
     <Compile Include="src\Data\DataFileBase.cs" />
