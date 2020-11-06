@@ -133,6 +133,20 @@ namespace Icod.Wod.Configuration {
 				this[ "path" ] = value;
 			}
 		}
+		[System.Xml.Serialization.XmlIgnore]
+		public System.Uri SiteUrl {
+			get {
+				if ( null == mySiteUrl ) {
+					var host = this.Host;
+					System.Uri probe = System.String.IsNullOrEmpty( host )
+						? null
+						: new System.UriBuilder( this.Scheme, host, this.Port, this.Path ?? System.String.Empty ).Uri
+					;
+					System.Threading.Interlocked.CompareExchange<System.Uri>( ref mySiteUrl, probe, null );
+				}
+				return mySiteUrl;
+			}
+		}
 
 		[System.Configuration.ConfigurationProperty( "callbackUrl", IsRequired = false, IsKey = false, DefaultValue = (System.String)null )]
 		public System.String CallbackUrl {
@@ -150,21 +164,6 @@ namespace Icod.Wod.Configuration {
 			}
 			set {
 				this[ "refreshToken" ] = value;
-			}
-		}
-
-		[System.Xml.Serialization.XmlIgnore]
-		public System.Uri SiteUrl {
-			get {
-				if ( null == mySiteUrl ) {
-					var host = this.Host;
-					System.Uri probe = System.String.IsNullOrEmpty( host )
-						? null
-						: new System.UriBuilder( this.Scheme, host, this.Port, this.Path ?? System.String.Empty ).Uri
-					;
-					System.Threading.Interlocked.CompareExchange<System.Uri>( ref mySiteUrl, probe, null );
-				}
-				return mySiteUrl;
 			}
 		}
 
