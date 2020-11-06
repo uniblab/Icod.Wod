@@ -18,7 +18,7 @@ Some collection of tasks, a Work Order, is represented by an Xml file, called a 
 </nowiki>
 
 == Is it hard to write a WoD Schematic? ==
-It's rather easy, IMHO.  Since we like intellisense and autocomplete there is a pair of Xsd schema files which Visual Studio, Glade, and Notepad++ will use.  Thanks to intellisense  and autocomplete you can focus on ''what'' you want to do rather than ''how'' to do it.  The fundamental tasks are dbCommand, dbFileImport, dbFileImport, fileOperation, and email.  If what you want done can't be done with those then give me a ring and we'll see how your task fits into things.  Or better yet, extend the framework and submit your contribution!
+It's rather easy, IMHO.  Since we like intellisense and autocomplete there is a pair of Xsd schema files which Visual Studio, Glade, and Notepad++ will use.  Thanks to intellisense  and autocomplete you can focus on ''what'' you want to do rather than ''how'' to do it.  The fundamental tasks are dbCommand, dbFileExport, dbFileImport, fileOperation, and email.  If what you want done can't be done with those then give me a ring and we'll see how your task fits into things.  Or better yet, extend the framework and submit your contribution!
 
 == Do you have an example I could take a look at? ==
 Sure! Here is the schematic I used to rebase all the source code files to code page 1252, and then prepend each with a copyright notice.
