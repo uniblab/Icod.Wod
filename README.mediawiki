@@ -1,0 +1,18 @@
+Welcome to the\ Icod Work on Demand Framework project site!
+
+= Icod Work on Demand Framework =
+
+== What the Hell is this thing? ==
+The Icod Work on Demand Framework, or WoD, is a class library and corresponding client program (Icod.Wod.Client, [https://github.com/uniblab/Icod.Wod.Client]) intended to automate a great variety of tasks.  Some tasks might be downloading a delimited file via Sftp, inserting that file into a database, and exporting some data to your SalesForce cloud.  Another option might be pulling data, exposed as Json feed, and importing into your own database, manipulating it, and then exporting a CSV report to a group via email.  Or maybe you just need something to archive a bunch of daily log files into a set of ZIP archives.  There is an extremely good chance the WoD has the functionality you need, even if that need is emptying a directory and then downloading a few hundred PDF's from an Ftp site back into that directory.
+
+== How do I use it? ==
+You can whip up a simple Xml file, called a WoD Schematic, and then use the client to execute the steps described by that schematic.  Since we like intellisense and autocomplete there is a pair of Xsd schema files which Visual Studio, Glade, and Notepad++ will use. Typical use would be along the lines of:
+ <nowiki>
+ C:\users\tbruce\bin\Icod.Wod\Icod.Wod.Client.exe .\someSchematic.xml
+</nowiki>
+
+== Does it need some sort of cloud? ==
+No.  It'll run on any computer which supports the .Net Framework 4.7.
+
+== Wow! This does more than Dell's Boomi. ==
+Yes, I know.  It's easier to use too.
