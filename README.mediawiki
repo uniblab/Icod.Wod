@@ -12,10 +12,13 @@ Yes, I know.  It's easier to use too.
 No.  It'll run on any computer which supports the .Net Framework 4.7.
 
 == How do I use it? ==
-You can whip up a simple Xml file, called a WoD Schematic, and then use the client to execute the steps described by that schematic.  Since we like intellisense and autocomplete there is a pair of Xsd schema files which Visual Studio, Glade, and Notepad++ will use. Typical use would be along the lines of:
+Some collection of tasks, a Work Order, is represented by an Xml file, called a Schematic.  A separate client is used to interpret the Schematic and execute the corresponding functions of the WoD Framework.  Typical use would be along the lines of:
  <nowiki>
  C:\users\tbruce\bin\Icod.Wod\Icod.Wod.Client.exe .\someSchematic.xml
 </nowiki>
+
+== Is it hard to write a WoD Schematic? ==
+It's rather easy, IMHO.  Since we like intellisense and autocomplete there is a pair of Xsd schema files which Visual Studio, Glade, and Notepad++ will use.  Thanks to intellisnse and autocomplete you can focus on ''what'' you want to do rather than ''how'' to do it.  The fundamental tasks are dbCommand, dbFileImport, dbFileImport, fileOperation, and email.  If what you want done can't be done with those then give me a ring and we'll see how your task fits into things.  Or better yet, extend the framework and submit your contribution!
 
 == Do you have an example I could take a look at? ==
 Sure! Here is the schematic I used to rebase all the source code files to code page 1252, and then prepend each with a copyright notice.
