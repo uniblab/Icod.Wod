@@ -219,7 +219,7 @@ namespace Icod.Wod {
 		}
 
 
-		public static System.Collections.Generic.IEnumerable<System.String> ReadRecord( System.IO.TextReader file, System.String recordSeparator, System.Char quoteChar, System.Char fieldSeparator ) {
+		public static System.Collections.Generic.IEnumerable<System.String> ReadRecord( this System.IO.TextReader file, System.String recordSeparator, System.Char quoteChar, System.Char fieldSeparator ) {
 			if ( null == file ) {
 				throw new System.ArgumentNullException( "file" );
 			} else if ( System.String.IsNullOrEmpty( recordSeparator ) ) {
@@ -255,7 +255,7 @@ namespace Icod.Wod {
 				} while ( reading );
 			}
 		}
-		public static System.Collections.Generic.IEnumerable<System.String> ReadRecord( System.IO.StreamReader file, System.String recordSeparator, System.Char quoteChar, System.Char fieldSeparator ) {
+		public static System.Collections.Generic.IEnumerable<System.String> ReadRecord( this System.IO.StreamReader file, System.String recordSeparator, System.Char quoteChar, System.Char fieldSeparator ) {
 			if ( null == file ) {
 				throw new System.ArgumentNullException( "file" );
 			} else if ( file.EndOfStream ) {
@@ -293,7 +293,7 @@ namespace Icod.Wod {
 				} while ( reading );
 			}
 		}
-		public static System.String ReadColumn( System.IO.StringReader reader, System.Char @break, System.Boolean readNextOnBreak ) {
+		public static System.String ReadColumn( this System.IO.StringReader reader, System.Char @break, System.Boolean readNextOnBreak ) {
 #if DEBUG
 			if ( null == reader ) {
 				throw new System.ArgumentNullException( "reader" );
@@ -313,7 +313,7 @@ namespace Icod.Wod {
 			} while ( reading );
 			return sb.ToString().TrimToNull();
 		}
-		public static System.Nullable<System.Char> ReadChar( System.IO.StringReader reader, System.Char @break, System.Boolean readNextOnBreak ) {
+		public static System.Nullable<System.Char> ReadChar( this System.IO.StringReader reader, System.Char @break, System.Boolean readNextOnBreak ) {
 #if DEBUG
 			if ( null == reader ) {
 				throw new System.ArgumentNullException( "reader" );
