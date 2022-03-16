@@ -1,4 +1,4 @@
-// Copyright 2020, Timothy J. Bruce
+// Copyright 2022, Timothy J. Bruce
 using System;
 using System.Collections.Generic;
 using System.Data;
