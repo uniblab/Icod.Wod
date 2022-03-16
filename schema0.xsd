@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import namespace="http://Icod.Wod" schemaLocation="./schema1.xsd" />
+  <xs:import namespace="http://Icod.Wod" schemaLocation="./schema1.xsd"/>
   <xs:complexType name="DbIODescriptorBase" abstract="true">
     <xs:complexContent mixed="false">
       <xs:extension xmlns:q1="http://Icod.Wod" base="q1:dbOperation">
@@ -16,10 +16,10 @@
   <xs:complexType name="FileBase" abstract="true">
     <xs:complexContent mixed="false">
       <xs:extension xmlns:q2="http://Icod.Wod" base="q2:fileDescriptor">
-        <xs:attribute ref="q2:codePage" />
-        <xs:attribute ref="q2:writeIfEmpty" />
         <xs:attribute ref="q2:bufferLength" />
+        <xs:attribute ref="q2:codePage" />
         <xs:attribute ref="q2:recordSeparator" />
+        <xs:attribute ref="q2:writeIfEmpty" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
