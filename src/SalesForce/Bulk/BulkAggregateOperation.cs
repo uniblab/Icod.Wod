@@ -1,4 +1,4 @@
-// Copyright 2022, Timothy J. Bruce
+// Copyright 2023, Timothy J. Bruce
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
