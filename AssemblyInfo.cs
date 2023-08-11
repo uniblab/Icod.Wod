@@ -1,4 +1,4 @@
-// Copyright 2023, Timothy J. Bruce
+
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
