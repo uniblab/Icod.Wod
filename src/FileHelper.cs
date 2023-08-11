@@ -56,7 +56,7 @@ namespace Icod.Wod {
 						isPlaintext = false;
 					} else if ( ( leLen <= output.Length ) && ( recordSeparator[ i ].Equals( output[ ( output.Length - leLen ) - i ] ) ) ) {
 						if ( lenStop <= ++i ) {
-							output.Remove( output.Length - leLen, leLen );
+							_ = output.Remove( output.Length - leLen, leLen );
 							break;
 						}
 					} else {
@@ -70,7 +70,7 @@ namespace Icod.Wod {
 						}
 						c = System.Convert.ToChar( p );
 						if ( quoteChar.Equals( c ) ) {
-							file.Read();
+							_ = file.Read();
 							output = output.Append( c );
 						} else {
 							i = 0;
@@ -92,7 +92,6 @@ namespace Icod.Wod {
 				return null;
 			}
 
-			System.Boolean isReading = true;
 			var rs = recordSeparator.ToCharArray();
 			System.Int32 i = 0;
 			var maxI = rs.Length;
@@ -104,23 +103,21 @@ namespace Icod.Wod {
 				c = file.Read();
 				if ( -1 == c ) {
 					maxI = 0;
-					isReading = false;
 					break;
 				}
 				isNull = false;
-				line.Append( System.Convert.ToChar( c ) );
+				_ = line.Append( System.Convert.ToChar( c ) );
 				if ( line[ j ].Equals( rs[ i ] ) ) {
 					i++;
 				} else {
 					i = 0;
 				}
 				if ( i == maxI ) {
-					isReading = false;
 					break;
 				}
 				j++;
-			} while ( isReading );
-			line.Remove( line.Length - maxI, maxI );
+			} while ( true );
+			_ = line.Remove( line.Length - maxI, maxI );
 			return isNull ? null : line.ToString();
 		}
 		public static System.String ReadLine( this System.IO.StreamReader file, System.String recordSeparator, System.Char quoteChar ) {
@@ -150,7 +147,7 @@ namespace Icod.Wod {
 						isPlaintext = false;
 					} else if ( ( leLen <= output.Length ) && ( recordSeparator[ i ].Equals( output[ ( output.Length - leLen ) - i ] ) ) ) {
 						if ( lenStop <= ++i ) {
-							output.Remove( output.Length - leLen, leLen );
+							_ = output.Remove( output.Length - leLen, leLen );
 							break;
 						}
 					} else {
@@ -164,7 +161,7 @@ namespace Icod.Wod {
 						}
 						c = System.Convert.ToChar( p );
 						if ( quoteChar.Equals( c ) ) {
-							file.Read();
+							_ = file.Read();
 							output = output.Append( c );
 						} else {
 							i = 0;
@@ -186,7 +183,6 @@ namespace Icod.Wod {
 				return null;
 			}
 
-			System.Boolean isReading = true;
 			var rs = recordSeparator.ToCharArray();
 			System.Int32 i = 0;
 			var maxI = rs.Length;
@@ -198,23 +194,21 @@ namespace Icod.Wod {
 				c = file.Read();
 				if ( -1 == c ) {
 					maxI = 0;
-					isReading = false;
 					break;
 				}
 				isNull = false;
-				line.Append( System.Convert.ToChar( c ) );
+				_ = line.Append( System.Convert.ToChar( c ) );
 				if ( line[ j ].Equals( rs[ i ] ) ) {
 					i++;
 				} else {
 					i = 0;
 				}
 				if ( i == maxI ) {
-					isReading = false;
 					break;
 				}
 				j++;
-			} while ( isReading );
-			line.Remove( line.Length - maxI, maxI );
+			} while ( true );
+			_ = line.Remove( line.Length - maxI, maxI );
 			return isNull ? null : line.ToString();
 		}
 
@@ -234,25 +228,23 @@ namespace Icod.Wod {
 				System.Int32 i;
 				System.Char c;
 				System.String column;
-				var reading = true;
 				System.Nullable<System.Char> ec = null;
 				var qc = quoteChar;
 				do {
 					i = reader.Peek();
 					if ( -1 == i ) {
-						reading = false;
 						break;
 					}
 					c = System.Convert.ToChar( i );
 					if ( qc.Equals( c ) ) {
-						reader.Read();
+						_ = reader.Read();
 						column = ReadColumn( reader, quoteChar, true );
 						yield return column;
 					} else {
 						column = ReadColumn( reader, fieldSeparator, false );
 						yield return column;
 					}
-				} while ( reading );
+				} while ( true );
 			}
 		}
 		public static System.Collections.Generic.IEnumerable<System.String> ReadRecord( this System.IO.StreamReader file, System.String recordSeparator, System.Char quoteChar, System.Char fieldSeparator ) {
@@ -272,25 +264,23 @@ namespace Icod.Wod {
 				System.Int32 i;
 				System.Char c;
 				System.String column;
-				var reading = true;
 				System.Nullable<System.Char> ec = null;
 				var qc = quoteChar;
 				do {
 					i = reader.Peek();
 					if ( -1 == i ) {
-						reading = false;
 						break;
 					}
 					c = System.Convert.ToChar( i );
 					if ( qc.Equals( c ) ) {
-						reader.Read();
+						_ = reader.Read();
 						column = ReadColumn( reader, quoteChar, true );
 						yield return column;
 					} else {
 						column = ReadColumn( reader, fieldSeparator, false );
 						yield return column;
 					}
-				} while ( reading );
+				} while ( true );
 			}
 		}
 		public static System.String ReadColumn( this System.IO.StringReader reader, System.Char @break, System.Boolean readNextOnBreak ) {

@@ -382,12 +382,12 @@ namespace Icod.Wod.SalesForce.Bulk {
 				writer.Write( System.String.Join( columnDelimiter.ToString(), list ) );
 				writer.Write( lineEnding );
 				foreach ( var row in dataTable.Rows.OfType<System.Data.DataRow>() ) {
-					writer.Write( this.GetRow( dbColumns, row, columnDelimiter, lineEnding, quoteChar ) + lineEnding );
+					writer.Write( this.GetRow( dbColumns, row, columnDelimiter, quoteChar ) + lineEnding );
 				}
 				return writer.ToString();
 			}
 		}
-		protected System.String GetRow( System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Data.DataRow row, System.Char columnDelimiter, System.String lineEnding, System.Char quoteChar ) {
+		protected System.String GetRow( System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Data.DataRow row, System.Char columnDelimiter, System.Char quoteChar ) {
 			if ( null == row ) {
 				throw new System.ArgumentNullException( "row" );
 			} else if ( ( null == columns ) || !columns.Any() ) {

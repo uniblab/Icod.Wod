@@ -20,18 +20,18 @@ namespace Icod.Wod.Data {
 			return output;
 		}
 
-		public static System.Data.Common.DbDataAdapter CreateDataAdapter( System.String providerName, System.Data.Common.DbCommand command, System.Data.Common.DbConnection connection ) {
+		public static System.Data.Common.DbDataAdapter CreateDataAdapter( System.String providerName, System.Data.Common.DbCommand command ) {
 			var output = System.Data.Common.DbProviderFactories.GetFactory(
 				providerName
 			).CreateDataAdapter();
 			output.SelectCommand = command;
 			return output;
 		}
-		public static System.Data.Common.DbDataAdapter CreateDataAdapter( this Icod.Wod.ConnectionStringEntry connectionString, System.Data.Common.DbCommand command, System.Data.Common.DbConnection connection ) {
-			return CreateDataAdapter( connectionString.ProviderName, command, connection );
+		public static System.Data.Common.DbDataAdapter CreateDataAdapter( this Icod.Wod.ConnectionStringEntry connectionString, System.Data.Common.DbCommand command ) {
+			return CreateDataAdapter( connectionString.ProviderName, command );
 		}
-		public static System.Data.Common.DbDataAdapter CreateDataAdapter( this System.Configuration.ConnectionStringSettings connectionString, System.Data.Common.DbCommand command, System.Data.Common.DbConnection connection ) {
-			return CreateDataAdapter( connectionString.ProviderName, command, connection );
+		public static System.Data.Common.DbDataAdapter CreateDataAdapter( this System.Configuration.ConnectionStringSettings connectionString, System.Data.Common.DbCommand command ) {
+			return CreateDataAdapter( connectionString.ProviderName, command );
 		}
 
 		public static System.Data.Common.DbDataAdapter CreateDataAdapter( System.String providerName, System.String selectCommand, System.Data.Common.DbConnection connection ) {

@@ -90,24 +90,22 @@ namespace Icod.Wod.SalesForce.Bulk {
 		#region methods
 		public sealed override System.String ToString() {
 			if ( null == myString ) {
-				System.Threading.Interlocked.CompareExchange<System.String>( ref myString, new System.String( myValue, 1 ), null );
+				_ = System.Threading.Interlocked.CompareExchange<System.String>( ref myString, new System.String( myValue, 1 ), null );
 			}
 			return myString;
 		}
 		public System.Boolean Equals( ColumnDelimiterOption other ) {
-			return ( null == other )
-				? false
-				: System.Object.ReferenceEquals( this, other )
-					? true
-					: this.Value.Equals( other.Value )
+			return  !( other is null ) 
+				&& ( 
+					ReferenceEquals( this, other ) || this.Value.Equals( other.Value )
+				)
 			;
 		}
 		public sealed override System.Boolean Equals( System.Object obj ) {
-			return ( null == obj )
-				? false
-				: System.Object.ReferenceEquals( this, obj )
-					? true
-					: this.Equals( ( obj as ColumnDelimiterOption ) );
+			return !( obj is null ) 
+				&& ( 
+					ReferenceEquals( this, obj ) || this.Equals( obj as ColumnDelimiterOption )
+				)
 			;
 		}
 		public sealed override System.Int32 GetHashCode() {
@@ -140,12 +138,13 @@ namespace Icod.Wod.SalesForce.Bulk {
 		}
 
 		public static System.Boolean operator ==( ColumnDelimiterOption left, ColumnDelimiterOption right ) {
-			return ( ( null == (System.Object)left ) && ( null == (System.Object)right ) )
-				? true
-				: ( null != (System.Object)left )
-					? left.Equals( right )
-					: right.Equals( left )
-			;
+			if ( ( left is null ) && ( right is null ) ) {
+				return true;
+			} else if ( ( left is null ) || ( right is null ) ) {
+				return false;
+			} else {
+				return left.Equals( right );
+			}
 		}
 		public static System.Boolean operator !=( ColumnDelimiterOption left, ColumnDelimiterOption right ) {
 			return !( left == right );

@@ -23,7 +23,7 @@ namespace Icod.Wod.File {
 		static CopyFile() {
 			theMoveFile = ( sourceFilePathName, destFilePathName ) => {
 				var f = new System.IO.FileInfo( sourceFilePathName );
-				f.CopyTo( destFilePathName, true );
+				_ = f.CopyTo( destFilePathName, true );
 				f.Delete();
 			};
 			theCopyFile = ( sourceFilePathName, destFilePathName ) => new System.IO.FileInfo( sourceFilePathName ).CopyTo( destFilePathName, true );

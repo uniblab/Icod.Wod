@@ -104,7 +104,7 @@ namespace Icod.Wod {
 				if ( DefaultMaxDegreeOfParallelism == maxP ) {
 					this.DoUnlimitedWork( workOrder, steps, token );
 				} else {
-					this.DoLimitedWork( workOrder, steps, token, maxP );
+					this.DoLimitedWork( workOrder, steps, token );
 				}
 			}
 		}
@@ -119,7 +119,7 @@ namespace Icod.Wod {
 			}
 			System.Threading.Tasks.Task.WaitAll( tasks.ToArray(), token );
 		}
-		private void DoLimitedWork( WorkOrder workOrder, System.Collections.Generic.IEnumerable<IStep> steps, System.Threading.CancellationToken token, System.Int32 MaxDegreeOfParallelism ) {
+		private void DoLimitedWork( WorkOrder workOrder, System.Collections.Generic.IEnumerable<IStep> steps, System.Threading.CancellationToken token ) {
 			using ( var semaphore = new Semaphore( this.MaxDegreeOfParallelism, this.MaxDegreeOfParallelism ) ) {
 				System.Collections.Generic.ICollection<System.Threading.Tasks.Task> tasks = new System.Collections.Generic.List<System.Threading.Tasks.Task>();
 				var factory = new System.Threading.Tasks.TaskFactory( token );
@@ -128,7 +128,7 @@ namespace Icod.Wod {
 						() => {
 							semaphore.Wait();
 							step.DoWork( workOrder );
-							semaphore.Release();
+							_= semaphore.Release();
 						},
 						token
 					) );

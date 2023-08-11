@@ -234,8 +234,8 @@ namespace Icod.Wod.Data {
 			);
 			var there = System.Configuration.ConfigurationManager.ConnectionStrings[ cn ];
 			var output = ( null == here )
-				? there.CreateDataAdapter( command, connection )
-				: here.CreateDataAdapter( command, connection )
+				? there.CreateDataAdapter( command )
+				: here.CreateDataAdapter( command )
 			;
 			output.UpdateBatchSize = this.UpdateBatchSize;
 			output.MissingMappingAction = this.MissingMappingAction;
@@ -252,7 +252,7 @@ namespace Icod.Wod.Data {
 				using ( var command = this.CreateCommand( connection ) ) {
 					using ( var adapter = this.CreateDataAdapter( connection, workOrder, command ) ) {
 						using ( var set = new System.Data.DataSet() ) {
-							adapter.Fill( set );
+							_ = adapter.Fill( set );
 							return set.Tables.OfType<System.Data.DataTable>();
 						}
 					}
@@ -282,17 +282,17 @@ namespace Icod.Wod.Data {
 								amap.Clear();
 								tmap = amap.Add( "Table", t.TableName );
 								foreach ( var cmap in this.CreateDataColumnMapping( t, dest ) ) {
-									tmap.ColumnMappings.Add( cmap );
+									_ = tmap.ColumnMappings.Add( cmap );
 								}
 								if ( !System.String.IsNullOrEmpty( this.SchemaQuery ) ) {
 									using ( var ic = cb.GetInsertCommand() ) {
 										var ct = this.CommandTimeout;
 										ic.CommandTimeout = ( -2 == ct ) ? cnxn.ConnectionTimeout : ct;
 										adapter.InsertCommand = ic;
-										adapter.Update( t );
+										_ = adapter.Update( t );
 									}
 								} else {
-									adapter.Update( t );
+									_ = adapter.Update( t );
 								}
 								t.Dispose();
 							}
@@ -309,7 +309,7 @@ namespace Icod.Wod.Data {
 				throw new System.ArgumentNullException( "adapter" );
 			}
 
-			adapter.FillSchema( set, System.Data.SchemaType.Source, this.NamespaceTableName );
+			_ = adapter.FillSchema( set, System.Data.SchemaType.Source, this.NamespaceTableName );
 		}
 		protected virtual void FillSchema( System.Data.Common.DbDataAdapter adapter, System.Data.DataTable table ) {
 			if ( null == table ) {
@@ -318,7 +318,7 @@ namespace Icod.Wod.Data {
 				throw new System.ArgumentNullException( "adapter" );
 			}
 
-			adapter.FillSchema( table, System.Data.SchemaType.Source );
+			_ = adapter.FillSchema( table, System.Data.SchemaType.Source );
 		}
 
 		public void ExecuteCommand( Icod.Wod.WorkOrder workOrder, ITableSource source ) {
@@ -327,7 +327,7 @@ namespace Icod.Wod.Data {
 				foreach ( var table in source.ReadTables( workOrder ) ) {
 					using ( var command = this.CreateCommand( connection ) ) {
 						foreach ( var parameter in ( this.Parameters ?? new DbParameter[ 0 ] ) ) {
-							command.Parameters.Add( parameter.ToDbParameter( workOrder, command ) );
+							_ = command.Parameters.Add( parameter.ToDbParameter( workOrder, command ) );
 						}
 						this.ExecuteCommand( command, table );
 					}
@@ -422,7 +422,7 @@ namespace Icod.Wod.Data {
 				foreach ( var kvp in columnParameterMap ) {
 					command.Parameters[ kvp.Value.ParameterName ].Value = row[ kvp.Key.ColumnName ] ?? System.DBNull.Value;
 				}
-				command.ExecuteNonQuery();
+				_ = command.ExecuteNonQuery();
 			}
 		}
 		#endregion methods

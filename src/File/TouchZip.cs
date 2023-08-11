@@ -30,12 +30,12 @@ namespace Icod.Wod.File {
 			).FirstOrDefault();
 			var zipName = handler.PathCombine( this.ExpandedPath, this.ExpandedName );
 			using ( var buffer = new System.IO.MemoryStream() ) {
-				if ( null == file ) {
+				if ( file is null ) {
 					using ( var zipArchive = this.GetZipArchive( buffer, System.IO.Compression.ZipArchiveMode.Create ) ) {
 						;
 					}
 					buffer.Flush();
-					buffer.Seek( 0, System.IO.SeekOrigin.Begin );
+					_ = buffer.Seek( 0, System.IO.SeekOrigin.Begin );
 					handler.Overwrite( buffer, zipName );
 				} else {
 					handler.Append( buffer, zipName );

@@ -187,7 +187,7 @@ namespace Icod.Wod.Data {
 				if ( !file.EndOfStream ) {
 					this.ReadPreamble( file );
 					while ( !file.EndOfStream ) {
-						this.ReadRecord( table, file );
+						_ = this.ReadRecord( table, file );
 					}
 				}
 				this.AddFileColumns( table, filePathName );
@@ -253,17 +253,6 @@ namespace Icod.Wod.Data {
 			if ( this.HasHeader ) {
 				this.WriteHeader( writer, sourceColumns, this.Columns );
 			}
-		}
-		private void WriteHeader( System.IO.StreamWriter writer, System.Data.DataTable table ) {
-#if DEBUG
-			if ( null == table ) {
-				throw new System.ArgumentNullException( "table" );
-			} else if ( null == writer ) {
-				throw new System.ArgumentNullException( "writer" );
-			}
-#endif
-
-			this.WriteHeader( writer, table.Columns.OfType<System.Data.DataColumn>(), this.Columns );
 		}
 		protected abstract void WriteHeader( System.IO.StreamWriter writer, System.Collections.Generic.IEnumerable<System.Data.DataColumn> dbColumns, System.Collections.Generic.IEnumerable<ColumnBase> fileColumns );
 		protected void WriteRow( System.IO.StreamWriter writer, System.Collections.Generic.IDictionary<System.Data.DataColumn, ColumnBase> formatMap, System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Data.DataRow row ) {

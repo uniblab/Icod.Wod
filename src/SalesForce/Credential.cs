@@ -143,7 +143,7 @@ namespace Icod.Wod.SalesForce {
 						? null
 						: new System.UriBuilder( this.Scheme, host, this.Port, this.Path ?? System.String.Empty ).Uri
 					;
-					System.Threading.Interlocked.CompareExchange<System.Uri>( ref mySiteUrl, probe, null );
+					_ = System.Threading.Interlocked.CompareExchange<System.Uri>( ref mySiteUrl, probe, null );
 				}
 				return mySiteUrl;
 			}

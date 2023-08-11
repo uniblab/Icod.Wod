@@ -50,7 +50,7 @@ namespace Icod.Wod.File {
 				throw new System.InvalidOperationException();
 			}
 
-			System.Func<FileEntry, System.String> getFileName = null;
+			System.Func<FileEntry, System.String> getFileName;
 			if ( this.TruncateEntryName ) {
 				getFileName = x => System.IO.Path.GetFileName( x.File );
 			} else {
@@ -69,7 +69,7 @@ namespace Icod.Wod.File {
 						}
 						writer.Flush();
 					}
-					buffer.Seek( 0, System.IO.SeekOrigin.Begin );
+					_ = buffer.Seek( 0, System.IO.SeekOrigin.Begin );
 					dh.Overwrite( buffer, dh.PathCombine( dest.ExpandedPath, dest.ExpandedName ) );
 				}
 			}

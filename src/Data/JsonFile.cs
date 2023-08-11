@@ -71,7 +71,7 @@ namespace Icod.Wod.Data {
 				throw new System.ArgumentNullException( "filePathName" );
 			}
 
-			System.Data.DataTable table = null;
+			System.Data.DataTable table;
 			try {
 				var set = Newtonsoft.Json.JsonConvert.DeserializeObject<System.Data.DataSet>( file.ReadToEnd() );
 				table = set.Tables[ 0 ];
