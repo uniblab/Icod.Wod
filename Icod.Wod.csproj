@@ -21,6 +21,7 @@
 		<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 		<NuGetPackageImportStamp>
 		</NuGetPackageImportStamp>
+		<Configurations>Debug;Staging;Release</Configurations>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
 		<PlatformTarget>AnyCPU</PlatformTarget>
