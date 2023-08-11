@@ -1,4 +1,4 @@
-// Icod.Wod is the Work on Demand framework.
+// Icod.Wod.dll is the Work on Demand framework.
 // Copyright (C) 2023  Timothy J. Bruce
 
 /*
@@ -55,7 +55,6 @@ namespace Icod.Wod.File {
 			"path",
 			Namespace = "http://Icod.Wod"
 		)]
-		[System.IO.IODescription( "The directory of interest" )]
 		public virtual System.String Path {
 			get {
 				return myPath;
@@ -75,7 +74,6 @@ namespace Icod.Wod.File {
 			"name",
 			Namespace = "http://Icod.Wod"
 		)]
-		[System.IO.IODescription( "File name filter pattern" )]
 		public virtual System.String Name {
 			get {
 				return myName;
@@ -96,7 +94,6 @@ namespace Icod.Wod.File {
 			Namespace = "http://Icod.Wod"
 		)]
 		[System.ComponentModel.DefaultValue( null )]
-		[System.IO.IODescription( "File name or path regular expression pattern" )]
 		public virtual System.String RegexPattern {
 			get {
 				return myRegexPattern;

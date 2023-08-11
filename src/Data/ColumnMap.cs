@@ -1,5 +1,5 @@
 
-// Icod.Wod is the Work on Demand framework.
+// Icod.Wod.dll is the Work on Demand framework.
 // Copyright (C) 2023  Timothy J. Bruce
 
 /*
