@@ -93,20 +93,10 @@ namespace Icod.Wod.SalesForce.Bulk {
 			return myValue;
 		}
 		public System.Boolean Equals( StateOption other ) {
-			return ( null == other )
-				? false
-				: System.Object.ReferenceEquals( this, other )
-					? true
-					: this.Value.Equals( other.Value, System.StringComparison.OrdinalIgnoreCase )
-			;
+			return !( other is null ) && ( ReferenceEquals( this, other ) || this.Value.Equals( other.Value, System.StringComparison.OrdinalIgnoreCase ) );
 		}
 		public sealed override System.Boolean Equals( System.Object obj ) {
-			return ( null == obj )
-				? false
-				: System.Object.ReferenceEquals( this, obj )
-					? true
-					: this.Equals( ( obj as StateOption ) );
-			;
+			return !( obj is null ) && ( ReferenceEquals( this, obj ) || this.Equals( obj as StateOption ) );
 		}
 		public sealed override System.Int32 GetHashCode() {
 			return myHashcode;
@@ -138,12 +128,13 @@ namespace Icod.Wod.SalesForce.Bulk {
 		}
 
 		public static System.Boolean operator ==( StateOption left, StateOption right ) {
-			return ( ( null == (System.Object)left ) && ( null == (System.Object)right ) )
-				? true
-				: ( null != (System.Object)left )
-					? left.Equals( right )
-					: right.Equals( left )
-			;
+			if ( ( left is null ) && ( right is null ) ) {
+				return true;
+			} else if ( ( left is null ) || ( right is null ) ) {
+				return false;
+			} else {
+				return left.Equals( right );
+			}
 		}
 		public static System.Boolean operator !=( StateOption left, StateOption right ) {
 			return !( left == right );

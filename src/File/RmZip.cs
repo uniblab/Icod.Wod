@@ -37,7 +37,7 @@ namespace Icod.Wod.File {
 				using ( var a = handler.OpenReader( file ) ) {
 					a.CopyTo( buffer );
 				}
-				buffer.Seek( 0, System.IO.SeekOrigin.Begin );
+				_ = buffer.Seek( 0, System.IO.SeekOrigin.Begin );
 				using ( var zipArchive = this.GetZipArchive( buffer, System.IO.Compression.ZipArchiveMode.Update ) ) {
 					// it is faster to remove files from last-to-first, because files in a Zip archive are stored one after another, much like a Tar archive.
 					entries = ( this.MatchEntries( zipArchive.Entries ) ?? new System.IO.Compression.ZipArchiveEntry[ 0 ] ).Reverse();
@@ -49,7 +49,7 @@ namespace Icod.Wod.File {
 				if ( isEmpty && deleteIfEmpty ) {
 					handler.DeleteFile( file );
 				} else {
-					buffer.Seek( 0, System.IO.SeekOrigin.Begin );
+					_ = buffer.Seek( 0, System.IO.SeekOrigin.Begin );
 					handler.Overwrite( buffer, file );
 				}
 			}

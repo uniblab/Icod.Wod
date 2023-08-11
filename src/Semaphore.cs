@@ -54,10 +54,10 @@ namespace Icod.Wod {
 		}
 		protected void Dispose( System.Boolean disposing ) {
 			if ( disposing ) {
-				if ( null != mySemaphore ) {
+				if ( mySemaphore is object ) {
 					mySemaphore.Dispose();
 				}
-				if ( null != mySemaphoreSlim ) {
+				if ( mySemaphoreSlim is object ) {
 					mySemaphoreSlim.Dispose();
 				}
 			}

@@ -1,5 +1,8 @@
 // Copyright 2023, Timothy J. Bruce
 using System.Linq;
+using System.Security.Policy;
+using System.Text;
+using System.Web.UI;
 
 namespace Icod.Wod {
 
@@ -68,7 +71,7 @@ namespace Icod.Wod {
 			}
 			internal SingleStack( T value ) : this() {
 				myValue = value;
-				if ( !System.Object.ReferenceEquals( value, null ) ) {
+				if ( value is object ) {
 					unchecked {
 						myHashCode += value.GetHashCode();
 					}
@@ -143,7 +146,7 @@ namespace Icod.Wod {
 			myCount = 1 + myTail.Count;
 			unchecked {
 				myHashCode += myTail.GetHashCode();
-				if ( !System.Object.ReferenceEquals( value, null ) ) {
+				if ( value is object ) {
 					myHashCode += value.GetHashCode();
 				}
 			}
@@ -209,6 +212,34 @@ namespace Icod.Wod {
 				output = output.Enqueue( item );
 			}
 			return output;
+		}
+
+		public sealed override System.Int32 GetHashCode() {
+			return myHashCode;
+		}
+		public sealed override System.Boolean Equals( object obj ) {
+			if ( obj is null ) { 
+				return false;
+			} else if ( System.Object.ReferenceEquals( this, obj ) ) {
+				return true;
+			} else if (!( obj is Stack<T> )) {
+				return false;
+			}
+			var other = (IStack<T>)obj;
+			if ( this.Count != other.Count ) {
+				return false;
+			} else if ( myHashCode != other.GetHashCode() ) {
+				return false;
+			}
+			IStack<T> probe = this;
+			while ( !probe.IsEmpty ) {
+				if ( !probe.Peek().Equals( other.Peek() ) ) {
+					return false;
+				}
+				probe = probe.Pop();
+				other = other.Pop();
+			}
+			return true;
 		}
 		#endregion methods
 

@@ -8,29 +8,15 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 		#region fields
 		private const System.Int32 EOF = -1;
-		private static readonly System.Func<System.Text.StringBuilder, System.String> theValueToString;
-		private static readonly System.Func<System.Text.StringBuilder, System.String> theTrimToNullReader;
 
 		private const System.Char DQUOTE = '"';
 
 		private System.String myLocator;
-		private System.Func<System.Text.StringBuilder, System.String> myColumnReader;
 		#endregion fields
 
 
 		#region .ctor
-		static SelectResult() {
-			theValueToString = a => ( null == a )
-				? null
-				: ( System.DBNull.Value.Equals( a ) )
-					? null
-					: a.ToString()
-			;
-			theTrimToNullReader = a => theValueToString( a ).TrimToNull();
-		}
-
 		public SelectResult() : base() {
-			myColumnReader = theTrimToNullReader;
 		}
 		#endregion .ctor
 
@@ -67,13 +53,6 @@ namespace Icod.Wod.SalesForce.Bulk {
 		public System.String LineEnding {
 			get;
 			set;
-		}
-
-		[System.Xml.Serialization.XmlIgnore]
-		private System.Func<System.Text.StringBuilder, System.String> ColumnReader {
-			get {
-				return myColumnReader ?? theTrimToNullReader;
-			}
 		}
 
 		[System.Xml.Serialization.XmlIgnore]
@@ -118,7 +97,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 					lineNumber++;
 					var rowList = this.ReadColumns( record, columDelimiter, DQUOTE );
 					try {
-						table.Rows.Add( rowList.ToArray() );
+						_= table.Rows.Add( rowList.ToArray() );
 					} catch {
 						throw;
 					}
@@ -177,10 +156,10 @@ namespace Icod.Wod.SalesForce.Bulk {
 					}
 					c = System.Convert.ToChar( p );
 					if ( quoteCharacter.Equals( c ) ) {
-						reader.Read();
+						_ = reader.Read();
 						yield return this.ReadQuotedTextCell( reader, fieldSeparator, quoteCharacter );
 					} else if ( fieldSeparator.Equals( c ) ) {
-						reader.Read();
+						_ = reader.Read();
 						yield return null;
 					} else {
 						yield return this.ReadPlainTextCell( reader, fieldSeparator );
@@ -233,10 +212,10 @@ namespace Icod.Wod.SalesForce.Bulk {
 					}
 					c = System.Convert.ToChar( p );
 					if ( quoteCharacter.Equals( c ) ) {
-						reader.Read();
+						_ = reader.Read();
 						cell = cell.Append( c );
 					} else if ( fieldSeparator.Equals( c ) ) {
-						reader.Read();
+						_ = reader.Read();
 						break;
 					} else {
 						throw new System.InvalidOperationException();

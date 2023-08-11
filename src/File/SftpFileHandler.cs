@@ -53,7 +53,7 @@ namespace Icod.Wod.File {
 						using ( var keySource = kffd.OpenReader( fe.File ) ) {
 							keySource.CopyTo( kfs );
 						}
-						kfs.Seek( 0, System.IO.SeekOrigin.Begin );
+						_ = kfs.Seek( 0, System.IO.SeekOrigin.Begin );
 						return kfs;
 					}
 				).Select(
@@ -116,13 +116,13 @@ namespace Icod.Wod.File {
 				try {
 					stream = client.Open( absolutePath, System.IO.FileMode.Open, System.IO.FileAccess.Read );
 				} catch ( System.Exception ) {
-					if ( null != stream ) {
+					if ( stream is object ) {
 						stream.Dispose();
 					}
 					throw;
 				}
 			} catch ( System.Exception ) {
-				if  ( null != client ) {
+				if  ( client is object ) {
 					client.Dispose();
 				}
 				throw;

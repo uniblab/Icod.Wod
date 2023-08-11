@@ -32,9 +32,9 @@ namespace Icod.Wod.Data {
 
 		#region methods
 		public System.Boolean Equals( ColumnMap x, ColumnMap y ) {
-			if ( ( null == (System.Object)x ) && ( null == (System.Object)y ) ) {
+			if ( ( x is null ) && ( y is null ) ) {
 				return true;
-			} else if ( null != (System.Object)x ) {
+			} else if ( x is object ) {
 				return x.Equals( y );
 			} else {
 				return y.Equals( x );

@@ -24,7 +24,6 @@ namespace Icod.Wod.Data {
 		private System.String myFieldSeparatorString;
 		private System.Char myQuoteChar;
 		private System.String myQuoteCharString;
-		private System.Int32 myEscapeCharNumber;
 		private System.Func<System.Text.StringBuilder, System.String> myColumnReader;
 		private System.Boolean myForceQuote;
 		#endregion fields

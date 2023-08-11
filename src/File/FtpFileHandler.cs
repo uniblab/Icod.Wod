@@ -59,7 +59,7 @@ namespace Icod.Wod.File {
 						using ( var keySource = kffd.OpenReader( fe.File ) ) {
 							keySource.CopyTo( kfs );
 						}
-						kfs.Seek( 0, System.IO.SeekOrigin.Begin );
+						_ = kfs.Seek( 0, System.IO.SeekOrigin.Begin );
 						return action( kfs.ToArray(), kfpasswd );
 					}
 				).ToArray() );
@@ -171,9 +171,7 @@ namespace Icod.Wod.File {
 					Handler = this
 				}
 			).Where(
-				x => System.String.IsNullOrEmpty( regexPattern )
-					? true
-					: System.Text.RegularExpressions.Regex.IsMatch( x.File, regexPattern )
+				x => System.String.IsNullOrEmpty( regexPattern ) || System.Text.RegularExpressions.Regex.IsMatch( x.File, regexPattern )
 			);
 		}
 		private System.String StripNameFromList( System.String listLine ) {

@@ -8,8 +8,7 @@ namespace Icod.Wod {
 		public static System.Text.Encoding GetCodePage( System.String codePage ) {
 			System.Text.Encoding output = null;
 
-			System.Int32 cpNumber;
-			if ( System.Int32.TryParse( codePage, out cpNumber ) ) {
+			if ( System.Int32.TryParse( codePage, out var cpNumber ) ) {
 				output = System.Text.Encoding.GetEncoding( cpNumber );
 			}
 			if ( null == output ) {

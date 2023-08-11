@@ -24,7 +24,7 @@ namespace Icod.Wod.Data {
 					cnxn.Open();
 				}
 				using ( var cmd = this.CreateCommand( cnxn ) ) {
-					cmd.ExecuteNonQuery();
+					_ = cmd.ExecuteNonQuery();
 				}
 			}
 		}

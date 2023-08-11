@@ -81,9 +81,9 @@ namespace Icod.Wod.SalesForce {
 								amap.Clear();
 								tmap = amap.Add( "Table", t.TableName );
 								foreach ( var cmap in this.CreateDataColumnMapping( t, dest ) ) {
-									tmap.ColumnMappings.Add( cmap );
+									_ = tmap.ColumnMappings.Add( cmap );
 								}
-								adapter.Update( t );
+								_ = adapter.Update( t );
 								t.Dispose();
 							}
 						}

@@ -136,7 +136,7 @@ namespace Icod.Wod.Data {
 			}
 			var handler = this.GetFileHandler( this.WorkOrder );
 			var dfpn = handler.PathCombine( this.ExpandedPath, this.ExpandedName );
-			stream.Seek( 0, System.IO.SeekOrigin.Begin );
+			_ = stream.Seek( 0, System.IO.SeekOrigin.Begin );
 			if ( this.Append ) {
 				handler.Append( stream, dfpn );
 			} else {

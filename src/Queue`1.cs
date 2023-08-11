@@ -70,7 +70,7 @@ namespace Icod.Wod {
 			}
 			internal SingleQueue( T value ) : this() {
 				myValue = value;
-				if ( !System.Object.ReferenceEquals( value, null ) ) {
+				if ( value is object ) {
 					unchecked {
 						myHashCode += value.GetHashCode();
 					}
@@ -207,6 +207,30 @@ namespace Icod.Wod {
 
 		public sealed override System.Int32 GetHashCode() {
 			return myHashCode;
+		}
+		public sealed override System.Boolean Equals( object obj ) {
+			if ( obj is null ) {
+				return false;
+			} else if ( System.Object.ReferenceEquals( this, obj ) ) {
+				return true;
+			} else if ( !( obj is Queue<T> ) ) {
+				return false;
+			}
+			var other = (IQueue<T>)obj;
+			if ( this.Count != other.Count ) {
+				return false;
+			} else if ( myHashCode != other.GetHashCode() ) {
+				return false;
+			}
+			IQueue<T> probe = this;
+			while ( !probe.IsEmpty ) {
+				if ( !probe.Peek().Equals( other.Peek() ) ) {
+					return false;
+				}
+				probe = probe.Dequeue();
+				other = other.Dequeue();
+			}
+			return true;
 		}
 		public System.Collections.Generic.IEnumerator<T> GetEnumerator() {
 			IQueue<T> probe = this;

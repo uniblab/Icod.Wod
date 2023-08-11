@@ -74,7 +74,7 @@ namespace Icod.Wod.Data {
 		public sealed override System.Boolean Equals( System.Object obj ) {
 			if ( System.Object.ReferenceEquals( this, obj ) ) {
 				return true;
-			} else if ( null == (System.Object)obj ) {
+			} else if ( obj is null ) {
 				return false;
 			}
 			return this.Equals( obj as ColumnMap );
@@ -91,13 +91,13 @@ namespace Icod.Wod.Data {
 				;
 			}
 		}
-		public static System.Boolean operator ==( ColumnMap x, ColumnMap y ) {
-			if ( ( null == (System.Object)x ) && ( null == (System.Object)y ) ) {
+		public static System.Boolean operator ==( ColumnMap left, ColumnMap right ) {
+			if ( ( left is null ) && ( right is null ) ) {
 				return true;
-			} else if ( null != (System.Object)x ) {
-				return x.Equals( y );
+			} else if ( ( left is null ) || ( right is null ) ) {
+				return false;
 			} else {
-				return y.Equals( x );
+				return left.Equals( right );
 			}
 		}
 		public static System.Boolean operator !=( ColumnMap x, ColumnMap y ) {
