@@ -58,7 +58,7 @@ namespace Icod.Wod.File {
 						}
 						writer.Flush();
 					}
-					buffer.Seek( 0, System.IO.SeekOrigin.Begin );
+					_ = buffer.Seek( 0, System.IO.SeekOrigin.Begin );
 					dest.Overwrite( buffer, dest.PathCombine( destD.ExpandedPath, destD.ExpandedName ) );
 				}
 			}

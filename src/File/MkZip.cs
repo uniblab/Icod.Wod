@@ -97,7 +97,7 @@ namespace Icod.Wod.File {
 					}
 				}
 				if ( !isEmpty || writeIfEmpty ) {
-					buffer.Seek( 0, System.IO.SeekOrigin.Begin );
+					_ = buffer.Seek( 0, System.IO.SeekOrigin.Begin );
 					handler.Overwrite( buffer, handler.PathCombine( this.ExpandedPath, this.ExpandedName ) );
 				}
 			}

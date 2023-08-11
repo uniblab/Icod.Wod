@@ -52,7 +52,7 @@ namespace Icod.Wod.File {
 						}
 						writer.Flush();
 					}
-					buffer.Seek( 0, System.IO.SeekOrigin.Begin );
+					_ = buffer.Seek( 0, System.IO.SeekOrigin.Begin );
 					dh.Overwrite( buffer, dh.PathCombine( dest.ExpandedPath, dest.ExpandedName ) );
 				}
 			}
