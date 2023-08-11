@@ -35,7 +35,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 		private readonly System.Char myValue;
 		private readonly System.String myName;
-		private System.String myString;
+		private System.String? myString;
 		private readonly System.Int32 myHashcode;
 		#endregion fields
 
@@ -108,20 +108,20 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 		#region methods
 		public sealed override System.String ToString() {
-			if ( null == myString ) {
-				_ = System.Threading.Interlocked.CompareExchange<System.String>( ref myString, new System.String( myValue, 1 ), null );
+			if ( myString is null ) {
+				_ = System.Threading.Interlocked.CompareExchange<System.String?>( ref myString, new System.String( myValue, 1 ), null );
 			}
 			return myString;
 		}
-		public System.Boolean Equals( ColumnDelimiterOption other ) {
-			return  !( other is null ) 
+		public System.Boolean Equals( ColumnDelimiterOption? other ) {
+			return  ( other is not null )
 				&& ( 
 					ReferenceEquals( this, other ) || this.Value.Equals( other.Value )
 				)
 			;
 		}
-		public sealed override System.Boolean Equals( System.Object obj ) {
-			return !( obj is null ) 
+		public sealed override System.Boolean Equals( System.Object? obj ) {
+			return ( obj is not null ) 
 				&& ( 
 					ReferenceEquals( this, obj ) || this.Equals( obj as ColumnDelimiterOption )
 				)
@@ -134,7 +134,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 
 		#region static methods
-		public static ColumnDelimiterOption FromName( System.String name ) {
+		public static ColumnDelimiterOption FromName( System.String? name ) {
 			name = name.TrimToNull();
 			if ( System.String.IsNullOrEmpty( name ) ) {
 				throw new System.ArgumentNullException( "name" );

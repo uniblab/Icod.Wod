@@ -47,7 +47,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 			"externalIdFieldName",
 			Namespace = "http://Icod.Wod"
 		)]
-		[System.ComponentModel.DefaultValue( (System.String)null )]
+		[System.ComponentModel.DefaultValue( null )]
 		public System.String ExternalIdFieldName {
 			get;
 			set;

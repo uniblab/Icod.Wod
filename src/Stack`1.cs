@@ -27,12 +27,12 @@ namespace Icod.Wod {
 	public sealed class Stack<T> : IStack<T> {
 
 		#region nested classes
-		internal sealed class EmptyStack<T> : IStack<T> {
+		internal sealed class EmptyStack : IStack<T> {
 			private static readonly System.Int32 theHashCode;
 			static EmptyStack() {
-				theHashCode = typeof( EmptyStack<T> ).AssemblyQualifiedName.GetHashCode();
+				theHashCode = typeof( EmptyStack ).AssemblyQualifiedName!.GetHashCode();
 				unchecked {
-					theHashCode += typeof( T ).AssemblyQualifiedName.GetHashCode();
+					theHashCode += typeof( T ).AssemblyQualifiedName!.GetHashCode();
 				}
 			}
 			internal EmptyStack() : base() {
@@ -54,7 +54,7 @@ namespace Icod.Wod {
 				throw new System.InvalidOperationException();
 			}
 			public IStack<T> Push( T value ) {
-				return new SingleStack<T>( value );
+				return new SingleStack( value );
 			}
 			public IStack<T> Reverse() {
 				return this;
@@ -73,24 +73,21 @@ namespace Icod.Wod {
 				yield break;
 			}
 		}
-		internal sealed class SingleStack<T> : IStack<T> {
+		internal sealed class SingleStack : IStack<T> {
 			private static readonly System.Int32 theHashCode;
 			private readonly T myValue;
 			private readonly System.Int32 myHashCode;
 			static SingleStack() {
-				theHashCode = typeof( SingleStack<T> ).AssemblyQualifiedName.GetHashCode();
+				theHashCode = typeof( SingleStack ).AssemblyQualifiedName!.GetHashCode();
 				unchecked {
-					theHashCode += typeof( T ).AssemblyQualifiedName.GetHashCode();
+					theHashCode += typeof( T ).AssemblyQualifiedName!.GetHashCode();
 				}
 			}
-			private SingleStack() : base() {
-				myHashCode = theHashCode;
-			}
-			internal SingleStack( T value ) : this() {
+			internal SingleStack( T value ) : base() {
 				myValue = value;
 				if ( value is object ) {
 					unchecked {
-						myHashCode += value.GetHashCode();
+						myHashCode = theHashCode + value.GetHashCode();
 					}
 				}
 			}
@@ -147,21 +144,19 @@ namespace Icod.Wod {
 
 		#region .ctor
 		static Stack() {
-			theEmpty = new EmptyStack<T>();
-			theHashCode = typeof( Stack<T> ).AssemblyQualifiedName.GetHashCode();
+			theEmpty = new EmptyStack();
+			theHashCode = typeof( Stack<T> ).AssemblyQualifiedName!.GetHashCode();
 			unchecked {
-				theHashCode += typeof( T ).AssemblyQualifiedName.GetHashCode();
+				theHashCode += typeof( T ).AssemblyQualifiedName!.GetHashCode();
 			}
 		}
 
-		private Stack() : base() {
-			myHashCode = theHashCode;
-		}
-		private Stack( IStack<T> tail, T value ) : this() {
+		private Stack( IStack<T> tail, T value ) : base() {
 			myValue = value;
 			myTail = tail ?? Stack<T>.Empty;
 			myCount = 1 + myTail.Count;
 			unchecked {
+				myHashCode = theHashCode;
 				myHashCode += myTail.GetHashCode();
 				if ( value is object ) {
 					myHashCode += value.GetHashCode();
@@ -234,7 +229,7 @@ namespace Icod.Wod {
 		public sealed override System.Int32 GetHashCode() {
 			return myHashCode;
 		}
-		public sealed override System.Boolean Equals( object obj ) {
+		public sealed override System.Boolean Equals( System.Object? obj ) {
 			if ( obj is null ) { 
 				return false;
 			} else if ( System.Object.ReferenceEquals( this, obj ) ) {
@@ -250,7 +245,7 @@ namespace Icod.Wod {
 			}
 			IStack<T> probe = this;
 			while ( !probe.IsEmpty ) {
-				if ( !probe.Peek().Equals( other.Peek() ) ) {
+				if ( !Equals( probe.Peek(), other.Peek() ) ) {
 					return false;
 				}
 				probe = probe.Pop();

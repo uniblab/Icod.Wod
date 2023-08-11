@@ -60,7 +60,7 @@ namespace Icod.Wod.File {
 			"args",
 			Namespace = "http://Icod.Wod"
 		)]
-		[System.ComponentModel.DefaultValue( (System.String)null )]
+		[System.ComponentModel.DefaultValue( null )]
 		public System.String Args {
 			get {
 				return myArgs;
@@ -80,7 +80,7 @@ namespace Icod.Wod.File {
 			"workingDirectory",
 			Namespace = "http://Icod.Wod"
 		)]
-		[System.ComponentModel.DefaultValue( (System.String)null )]
+		[System.ComponentModel.DefaultValue( null )]
 		public System.String WorkingDirectory {
 			get {
 				return myWorkingDirectory;

@@ -56,7 +56,7 @@ namespace Icod.Wod.Configuration {
 
 
 		#region static methods
-		public static SalesForceCredentialSection GetSection() {
+		public static SalesForceCredentialSection? GetSection() {
 			return ( System.Configuration.ConfigurationManager.GetSection( SalesForceCredentialSection.DefaultSectionName ) as SalesForceCredentialSection );
 		}
 		#endregion static methods

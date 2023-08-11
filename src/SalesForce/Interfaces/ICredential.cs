@@ -22,10 +22,10 @@ namespace Icod.Wod.SalesForce {
 
 	public interface ICredential {
 
-		System.String Name {
+		System.String? Name {
 			get;
 		}
-		System.String ClientId {
+		System.String? ClientId {
 			get;
 			set;
 		}
@@ -33,19 +33,19 @@ namespace Icod.Wod.SalesForce {
 			get;
 			set;
 		}
-		System.String ClientSecret {
+		System.String? ClientSecret {
 			get;
 			set;
 		}
-		System.String Username {
+		System.String? Username {
 			get;
 			set;
 		}
-		System.String Password {
+		System.String? Password {
 			get;
 			set;
 		}
-		System.String SecurityToken {
+		System.String? SecurityToken {
 			get;
 			set;
 		}
@@ -65,7 +65,7 @@ namespace Icod.Wod.SalesForce {
 			get;
 			set;
 		}
-		System.Uri SiteUrl {
+		System.Uri? SiteUrl {
 			get;
 		}
 

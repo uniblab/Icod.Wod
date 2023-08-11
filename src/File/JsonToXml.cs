@@ -45,7 +45,7 @@ namespace Icod.Wod.File {
 			"rootElementName",
 			Namespace = "http://Icod.Wod"
 		)]
-		[System.ComponentModel.DefaultValue( (System.String)null )]
+		[System.ComponentModel.DefaultValue( null )]
 		public System.String RootElementName {
 			get;
 			set;
@@ -55,7 +55,7 @@ namespace Icod.Wod.File {
 			"elementName",
 			Namespace = "http://Icod.Wod"
 		)]
-		[System.ComponentModel.DefaultValue( (System.String)null )]
+		[System.ComponentModel.DefaultValue( null )]
 		public System.String ElementName {
 			get;
 			set;

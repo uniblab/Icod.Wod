@@ -54,7 +54,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 			"soql",
 			Namespace = "http://Icod.Wod"
 		)]
-		[System.ComponentModel.DefaultValue( (System.String)null )]
+		[System.ComponentModel.DefaultValue( null )]
 		public System.String Soql {
 			get;
 			set;

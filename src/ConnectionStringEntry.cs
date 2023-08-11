@@ -40,7 +40,7 @@ namespace Icod.Wod {
 			"name",
 			Namespace = "http://Icod.Wod"
 		)]
-		public System.String Name {
+		public System.String? Name {
 			get;
 			set;
 		}
@@ -63,7 +63,7 @@ namespace Icod.Wod {
 			"connectionString",
 			Namespace = "http://Icod.Wod"
 		)]
-		public System.String ConnectionString {
+		public System.String? ConnectionString {
 			get;
 			set;
 		}

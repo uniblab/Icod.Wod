@@ -110,7 +110,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 			"tag",
 			Namespace = "http://Icod.Wod"
 		)]
-		[System.ComponentModel.DefaultValue( (System.String)null )]
+		[System.ComponentModel.DefaultValue( null )]
 		public virtual System.String Tag {
 			get;
 			set;

@@ -50,7 +50,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 			"instanceName",
 			Namespace = "http://Icod.Wod"
 		)]
-		[System.ComponentModel.DefaultValue( (System.String)null )]
+		[System.ComponentModel.DefaultValue( null )]
 		public System.String InstanceName {
 			get {
 				return myInstanceName;

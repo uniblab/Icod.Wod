@@ -70,7 +70,7 @@ namespace Icod.Wod.SalesForce.Rest {
 			"instanceName",
 			Namespace = "http://Icod.Wod"
 		)]
-		[System.ComponentModel.DefaultValue( (System.String)null )]
+		[System.ComponentModel.DefaultValue( null )]
 		public System.String InstanceName {
 			get {
 				return myInstanceName;
@@ -84,7 +84,7 @@ namespace Icod.Wod.SalesForce.Rest {
 			"soql",
 			Namespace = "http://Icod.Wod"
 		)]
-		[System.ComponentModel.DefaultValue( (System.String)null )]
+		[System.ComponentModel.DefaultValue( null )]
 		public System.String Soql {
 			get;
 			set;
