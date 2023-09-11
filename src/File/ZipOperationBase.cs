@@ -94,7 +94,7 @@ namespace Icod.Wod.File {
 
 
 		#region methods
-		protected virtual System.Collections.Generic.IEnumerable<System.IO.Compression.ZipArchiveEntry> MatchEntries( System.Collections.Generic.IEnumerable<System.IO.Compression.ZipArchiveEntry> collection ) {
+		protected System.Collections.Generic.IEnumerable<System.IO.Compression.ZipArchiveEntry> MatchEntries( System.Collections.Generic.IEnumerable<System.IO.Compression.ZipArchiveEntry> collection ) {
 			return ( this.Source ?? System.Array.Empty<FileDescriptor>() ).Select(
 				x => {
 					x.WorkOrder = this.WorkOrder;
@@ -104,7 +104,7 @@ namespace Icod.Wod.File {
 				x => this.MatchEntries( collection, x )
 			);
 		}
-		protected virtual System.Collections.Generic.IEnumerable<System.IO.Compression.ZipArchiveEntry> MatchEntries( System.Collections.Generic.IEnumerable<System.IO.Compression.ZipArchiveEntry> collection, FileDescriptor source ) {
+		protected System.Collections.Generic.IEnumerable<System.IO.Compression.ZipArchiveEntry> MatchEntries( System.Collections.Generic.IEnumerable<System.IO.Compression.ZipArchiveEntry> collection, FileDescriptor source ) {
 			var regexPattern = source.ExpandedRegexPattern;
 			var regexMatch = System.String.IsNullOrEmpty( regexPattern )
 				? collection
@@ -129,7 +129,7 @@ namespace Icod.Wod.File {
 			return nameMatch;
 		}
 
-		protected virtual System.IO.Compression.ZipArchive GetZipArchive( System.IO.Stream stream, System.IO.Compression.ZipArchiveMode zipArchiveMode ) {
+		protected System.IO.Compression.ZipArchive GetZipArchive( System.IO.Stream stream, System.IO.Compression.ZipArchiveMode zipArchiveMode ) {
 			return new System.IO.Compression.ZipArchive( stream, zipArchiveMode, true, this.GetEncoding() );
 		}
 

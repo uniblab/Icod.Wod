@@ -40,9 +40,10 @@ namespace Icod.Wod.File {
 		[System.Xml.Serialization.XmlElement(
 			"destination",
 			Namespace = "http://Icod.Wod",
-			IsNullable = false
+			IsNullable = true
 		)]
-		public virtual FileDescriptor Destination {
+		[System.ComponentModel.DefaultValue( null )]
+		public virtual FileDescriptor? Destination {
 			get;
 			set;
 		}
