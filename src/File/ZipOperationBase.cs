@@ -95,7 +95,7 @@ namespace Icod.Wod.File {
 
 		#region methods
 		protected virtual System.Collections.Generic.IEnumerable<System.IO.Compression.ZipArchiveEntry> MatchEntries( System.Collections.Generic.IEnumerable<System.IO.Compression.ZipArchiveEntry> collection ) {
-			return ( this.Source ?? new FileDescriptor[ 0 ] ).Select(
+			return ( this.Source ?? System.Array.Empty<FileDescriptor>() ).Select(
 				x => {
 					x.WorkOrder = this.WorkOrder;
 					return x;
@@ -105,13 +105,6 @@ namespace Icod.Wod.File {
 			);
 		}
 		protected virtual System.Collections.Generic.IEnumerable<System.IO.Compression.ZipArchiveEntry> MatchEntries( System.Collections.Generic.IEnumerable<System.IO.Compression.ZipArchiveEntry> collection, FileDescriptor source ) {
-			if ( null == collection ) {
-				throw new System.ArgumentNullException( "collection" );
-			}
-
-			if ( null == source ) {
-				throw new System.InvalidOperationException();
-			}
 			var regexPattern = source.ExpandedRegexPattern;
 			var regexMatch = System.String.IsNullOrEmpty( regexPattern )
 				? collection
@@ -137,16 +130,13 @@ namespace Icod.Wod.File {
 		}
 
 		protected virtual System.IO.Compression.ZipArchive GetZipArchive( System.IO.Stream stream, System.IO.Compression.ZipArchiveMode zipArchiveMode ) {
-			if ( null == stream ) {
-				throw new System.ArgumentNullException( "stream" );
-			}
 			return new System.IO.Compression.ZipArchive( stream, zipArchiveMode, true, this.GetEncoding() );
 		}
 
 		protected virtual System.String ProcessFileName( FileEntry file, System.String sourceExpandedPath ) {
 			var output = myGetFileName( file, sourceExpandedPath ).Replace( '\\', '/' );
 			while ( !System.String.IsNullOrEmpty( output ) && output.StartsWith( "/", StringComparison.OrdinalIgnoreCase ) ) {
-				output = output.Substring( 1 );
+				output = output[ 1.. ];
 			}
 			return output;
 		}
