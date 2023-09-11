@@ -32,8 +32,8 @@ namespace Icod.Wod.File {
 
 		#region fields
 		private System.Int32 mySuccessExitCode;
-		private System.String myArgs;
-		private System.String myWorkingDirectory;
+		private System.String? myArgs;
+		private System.String? myWorkingDirectory;
 		private FileRedirection myStdErr;
 		private FileRedirection myStdOut;
 		#endregion fields
@@ -61,7 +61,7 @@ namespace Icod.Wod.File {
 			Namespace = "http://Icod.Wod"
 		)]
 		[System.ComponentModel.DefaultValue( null )]
-		public System.String Args {
+		public System.String? Args {
 			get {
 				return myArgs;
 			}
@@ -70,7 +70,7 @@ namespace Icod.Wod.File {
 			}
 		}
 
-		public System.String ExpandedArgs {
+		public System.String? ExpandedArgs {
 			get {
 				return this.WorkOrder.ExpandPseudoVariables( myArgs.TrimToNull() );
 			}
@@ -81,7 +81,7 @@ namespace Icod.Wod.File {
 			Namespace = "http://Icod.Wod"
 		)]
 		[System.ComponentModel.DefaultValue( null )]
-		public System.String WorkingDirectory {
+		public System.String? WorkingDirectory {
 			get {
 				return myWorkingDirectory;
 			}
@@ -89,7 +89,7 @@ namespace Icod.Wod.File {
 				myWorkingDirectory = value.TrimToNull();
 			}
 		}
-		public System.String ExpandedWorkingDirectory {
+		public System.String? ExpandedWorkingDirectory {
 			get {
 				return this.WorkOrder.ExpandPseudoVariables( myWorkingDirectory.TrimToNull() ?? System.IO.Directory.GetCurrentDirectory() );
 			}

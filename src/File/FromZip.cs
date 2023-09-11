@@ -36,12 +36,12 @@ namespace Icod.Wod.File {
 
 		#region method
 		public sealed override void DoWork( WorkOrder workOrder ) {
-			var destD = this.Destination;
+			var handler = this.GetFileHandler( workOrder );
+			var destD = this.Destination!;
 			destD.WorkOrder = workOrder;
 			System.String ePath = destD.ExpandedPath!;
 			var dest = destD.GetFileHandler( workOrder );
 
-			var handler = this.GetFileHandler( workOrder );
 			System.String file;
 			System.IO.Stream buffer;
 			System.String eDir;

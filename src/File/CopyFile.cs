@@ -49,9 +49,6 @@ namespace Icod.Wod.File {
 		public CopyFile() : base() {
 			myMove = false;
 		}
-		public CopyFile( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
-			myMove = false;
-		}
 		#endregion .ctor
 
 

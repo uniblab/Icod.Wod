@@ -64,7 +64,7 @@ namespace Icod.Wod.File {
 			}
 		}
 		[System.Xml.Serialization.XmlIgnore]
-		public virtual System.String ExpandedPath {
+		public virtual System.String? ExpandedPath {
 			get {
 				return this.WorkOrder.ExpandPseudoVariables( myPath );
 			}
@@ -83,7 +83,7 @@ namespace Icod.Wod.File {
 			}
 		}
 		[System.Xml.Serialization.XmlIgnore]
-		public virtual System.String ExpandedName {
+		public virtual System.String? ExpandedName {
 			get {
 				return this.WorkOrder.ExpandPseudoVariables( myName );
 			}
@@ -103,7 +103,7 @@ namespace Icod.Wod.File {
 			}
 		}
 		[System.Xml.Serialization.XmlIgnore]
-		public virtual System.String ExpandedRegexPattern {
+		public virtual System.String? ExpandedRegexPattern {
 			get {
 				return this.WorkOrder.ExpandPseudoVariables( myRegexPattern );
 			}
@@ -198,9 +198,6 @@ namespace Icod.Wod.File {
 			} else {
 				var uri = new System.Uri( ep );
 				switch ( uri.Scheme.ToLower() ) {
-					case "file":
-						output = new LocalFileHandler( workOrder, this );
-						break;
 					case "ftp":
 					case "ftps":
 						output = new FtpFileHandler( workOrder, this );
@@ -212,26 +209,28 @@ namespace Icod.Wod.File {
 					case "sftp":
 						output = new SftpFileHandler( workOrder, this );
 						break;
+					case "file":
 					default:
-						throw new System.NotSupportedException();
+						output = new LocalFileHandler( workOrder, this );
+						break;
 				}
 			}
 			return output;
 		}
 
-		public virtual System.String GetFileName( System.String alternateName ) {
+		public virtual System.String? GetFileName( System.String alternateName ) {
 			var output = this.ExpandedName.TrimToNull();
-			alternateName = alternateName.TrimToNull();
-			if ( !System.String.IsNullOrEmpty( alternateName ) ) {
-				output = output ?? System.IO.Path.GetFileName( alternateName );
+			var aName = alternateName.TrimToNull();
+			if ( !System.String.IsNullOrEmpty( aName ) ) {
+				output ??= System.IO.Path.GetFileName( aName );
 			}
 			return output;
 		}
 		public virtual System.String GetFilePathName( FileHandlerBase handler, System.String alternateName ) {
-			if ( null == handler ) {
-				throw new System.ArgumentNullException( "handler" );
+			if ( handler is null ) {
+				throw new System.ArgumentNullException( nameof( handler ) );
 			}
-			return handler.PathCombine( this.ExpandedPath, this.GetFileName( alternateName ) );
+			return handler.PathCombine( this.ExpandedPath, this.GetFileName( alternateName )! );
 		}
 		#endregion methods
 

@@ -115,7 +115,7 @@ namespace Icod.Wod.File {
 
 
 		#region methods
-		public System.Text.Encoding GetEncoding() {
+		public System.Text.Encoding? GetEncoding() {
 			return CodePageHelper.GetCodePage( this.CodePage );
 		}
 		#endregion methods

@@ -35,9 +35,6 @@ namespace Icod.Wod.File {
 		protected FileOrDirectoryListerBase() : base() {
 			myTruncateEntryName = true;
 		}
-		protected FileOrDirectoryListerBase( WorkOrder workOrder ) : base( workOrder ) {
-			myTruncateEntryName = true;
-		}
 		#endregion .ctor
 
 

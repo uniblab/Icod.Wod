@@ -38,9 +38,6 @@ namespace Icod.Wod.File {
 		protected CountBinaryFileOperationBase() : base() {
 			myCount = 0;
 		}
-		protected CountBinaryFileOperationBase( WorkOrder workOrder ) : base( workOrder ) {
-			myCount = 0;
-		}
 		#endregion .ctor
 
 
