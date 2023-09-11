@@ -64,7 +64,7 @@ namespace Icod.Wod.File {
 		#region methods
 		public sealed override void DoWork( WorkOrder workOrder ) {
 			var sourceHandler = this.GetFileHandler( workOrder );
-			var dest = this.Destination;
+			var dest = this.Destination!;
 			var destHandler = dest.GetFileHandler( workOrder );
 
 			System.Func<FileHandlerBase, System.String, System.Text.Encoding, IQueue<System.String>> reader;

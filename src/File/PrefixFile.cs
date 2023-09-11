@@ -18,8 +18,6 @@
     USA
 */
 
-using System.Linq;
-
 namespace Icod.Wod.File {
 
 	[System.Serializable]
@@ -52,7 +50,6 @@ namespace Icod.Wod.File {
 
 		#region methods
 		public sealed override void DoWork( WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			var sourceHandler = this.GetFileHandler( workOrder );
 			if ( null == sourceHandler ) {
 				throw new System.InvalidOperationException();
@@ -94,11 +91,7 @@ namespace Icod.Wod.File {
 		}
 		private void PrefixOnce( System.IO.StreamWriter destination, System.IO.StreamReader source, System.String prefix ) {
 			if ( System.String.IsNullOrEmpty( prefix ) ) {
-				throw new System.ArgumentException( "prefix" );
-			} else if ( null == source ) {
-				throw new System.ArgumentNullException( "source" );
-			} else if ( null == destination ) {
-				throw new System.ArgumentNullException( "destination" );
+				throw new System.ArgumentNullException( nameof( prefix ) );
 			}
 			destination.Write( prefix );
 			destination.Flush();
@@ -106,15 +99,11 @@ namespace Icod.Wod.File {
 		}
 		private void PrefixEach( System.IO.StreamWriter destination, System.IO.StreamReader source, System.String prefix ) {
 			if ( System.String.IsNullOrEmpty( prefix ) ) {
-				throw new System.ArgumentException( "prefix" );
-			} else if ( null == source ) {
-				throw new System.ArgumentNullException( "source" );
-			} else if ( null == destination ) {
-				throw new System.ArgumentNullException( "destination" );
+				throw new System.ArgumentNullException( nameof( prefix ) );
 			}
 
 			var rs = this.RecordSeparator;
-			System.String line;
+			System.String? line;
 			while ( !source.EndOfStream ) {
 				line = source.ReadLine( rs );
 				if ( !System.String.IsNullOrEmpty( line ) ) {

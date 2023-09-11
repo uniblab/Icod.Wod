@@ -18,8 +18,6 @@
     USA
 */
 
-using System.Linq;
-
 namespace Icod.Wod.File {
 
 	[System.Serializable]
@@ -53,12 +51,11 @@ namespace Icod.Wod.File {
 
 		#region  methods
 		public sealed override void DoWork( WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
-			var source = this.GetFileHandler( workOrder ) ?? throw new System.InvalidOperationException();
-			this.Destination.WorkOrder = workOrder;
-			var dest = this.Destination.GetFileHandler( workOrder ) ?? throw new System.InvalidOperationException();
+			var source = this.GetFileHandler( workOrder );
+			this.Destination!.WorkOrder = workOrder;
+			var dest = this.Destination.GetFileHandler( workOrder );
 			this.XsltFile.WorkOrder = workOrder;
-			var xslt = this.XsltFile.GetFileHandler( workOrder ) ?? throw new System.InvalidOperationException();
+			var xslt = this.XsltFile.GetFileHandler( workOrder );
 
 			var xform = new System.Xml.Xsl.XslCompiledTransform();
 			using ( var xsltFileReader = xslt.OpenReader( xslt.ListFiles().First().File ) ) {

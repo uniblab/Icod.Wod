@@ -86,7 +86,7 @@ namespace Icod.Wod.File {
 
 		#region methods
 		public override void DoWork( Icod.Wod.WorkOrder workOrder ) {
-			this.Destination.WorkOrder = workOrder;
+			this.Destination!.WorkOrder = workOrder;
 			System.Action<Icod.Wod.File.FileHandlerBase, System.String, Icod.Wod.File.FileHandlerBase, System.Func<System.IO.Stream, System.IO.Compression.CompressionMode, System.Boolean, System.IO.Stream>> action;
 			switch ( this.CompressionMode ) {
 				case System.IO.Compression.CompressionMode.Decompress:

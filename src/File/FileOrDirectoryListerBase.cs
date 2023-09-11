@@ -72,7 +72,7 @@ namespace Icod.Wod.File {
 
 			var list = this.GetEntries( source );
 			if ( this.WriteIfEmpty || list.Any() ) {
-				var dest = this.Destination;
+				var dest = this.Destination!;
 				dest.WorkOrder = workOrder;
 				var dh = dest.GetFileHandler( workOrder );
 				using ( var buffer = new System.IO.MemoryStream() ) {

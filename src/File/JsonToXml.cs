@@ -18,8 +18,6 @@
     USA
 */
 
-using System.Linq;
-
 namespace Icod.Wod.File {
 
 	[System.Serializable]
@@ -95,12 +93,11 @@ namespace Icod.Wod.File {
 
 		#region methods
 		public sealed override void DoWork( WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
-			this.Destination.WorkOrder = workOrder;
+			this.Destination!.WorkOrder = workOrder;
 			var dest = this.Destination.GetFileHandler( workOrder );
 			var source = this.GetFileHandler( workOrder );
 
-			System.Func<System.String, System.String> correctedFileName = null;
+			System.Func<System.String, System.String> correctedFileName;
 			if ( this.ChangeFileExtension ) {
 				correctedFileName = x => System.IO.Path.GetFileNameWithoutExtension( x ) + ".xml";
 			} else {
@@ -117,7 +114,7 @@ namespace Icod.Wod.File {
 							? json.ReadToEnd()
 							: "{\"" + this.ElementName + "\":" + json.ReadToEnd() + "}"
 						;
-						var doc = (System.Xml.XmlDocument)Newtonsoft.Json.JsonConvert.DeserializeXmlNode( jsonString, this.RootElementName, this.WriteArrayAttribute, this.EncodeSpecialCharacters );
+						var doc = (Newtonsoft.Json.JsonConvert.DeserializeXmlNode( jsonString, this.RootElementName, this.WriteArrayAttribute, this.EncodeSpecialCharacters ) as System.Xml.XmlDocument)!;
 #if DEBUG
 						doc.PreserveWhitespace = true;
 #else
