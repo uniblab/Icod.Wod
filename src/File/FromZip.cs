@@ -18,9 +18,6 @@
     USA
 */
 
-using System;
-using System.Linq;
-
 namespace Icod.Wod.File {
 
 	[System.Serializable]
