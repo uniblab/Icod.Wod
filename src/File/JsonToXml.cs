@@ -32,9 +32,6 @@ namespace Icod.Wod.File {
 		public JsonToXml() : base() {
 			this.ChangeFileExtension = true;
 		}
-		public JsonToXml( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
-			this.ChangeFileExtension = true;
-		}
 		#endregion .ctor
 
 
@@ -44,7 +41,7 @@ namespace Icod.Wod.File {
 			Namespace = "http://Icod.Wod"
 		)]
 		[System.ComponentModel.DefaultValue( null )]
-		public System.String RootElementName {
+		public System.String? RootElementName {
 			get;
 			set;
 		}
@@ -54,7 +51,7 @@ namespace Icod.Wod.File {
 			Namespace = "http://Icod.Wod"
 		)]
 		[System.ComponentModel.DefaultValue( null )]
-		public System.String ElementName {
+		public System.String? ElementName {
 			get;
 			set;
 		}
@@ -63,7 +60,7 @@ namespace Icod.Wod.File {
 			"encodeSpecialCharacters",
 			Namespace = "http://Icod.Wod"
 		)]
-		[System.ComponentModel.DefaultValue( false  )]
+		[System.ComponentModel.DefaultValue( false )]
 		public System.Boolean EncodeSpecialCharacters {
 			get;
 			set;

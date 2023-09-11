@@ -37,11 +37,7 @@ namespace Icod.Wod.File {
 		#region methods
 		public sealed override void DoWork( WorkOrder workOrder ) {
 			var handler = this.GetFileHandler( workOrder );
-			if ( null == handler ) {
-				throw new System.InvalidOperationException();
-			}
-
-			var destD = this.Destination;
+			var destD = this.Destination!;
 			destD.WorkOrder = workOrder;
 			var dest = destD.GetFileHandler( workOrder );
 			if ( null == dest ) {

@@ -31,8 +31,6 @@ namespace Icod.Wod.File {
 		#region .ctor
 		public ListFile() : base() {
 		}
-		public ListFile( WorkOrder workOrder ) : base( workOrder ) {
-		}
 		#endregion .ctor
 
 

@@ -31,8 +31,6 @@ namespace Icod.Wod.File {
 		#region .ctor
 		public XmlTransformFile() : base() {
 		}
-		public XmlTransformFile( WorkOrder workOrder ) : base( workOrder ) {
-		}
 		#endregion .ctor
 
 
@@ -40,9 +38,10 @@ namespace Icod.Wod.File {
 		[System.Xml.Serialization.XmlElement(
 			"xsltFile",
 			Namespace = "http://Icod.Wod",
-			IsNullable = false
+			IsNullable = true
 		)]
-		public FileDescriptor XsltFile {
+		[System.ComponentModel.DefaultValue( null )]
+		public FileDescriptor? XsltFile {
 			get;
 			set;
 		}
@@ -54,7 +53,7 @@ namespace Icod.Wod.File {
 			var source = this.GetFileHandler( workOrder );
 			this.Destination!.WorkOrder = workOrder;
 			var dest = this.Destination.GetFileHandler( workOrder );
-			this.XsltFile.WorkOrder = workOrder;
+			this.XsltFile!.WorkOrder = workOrder;
 			var xslt = this.XsltFile.GetFileHandler( workOrder );
 
 			var xform = new System.Xml.Xsl.XslCompiledTransform();
