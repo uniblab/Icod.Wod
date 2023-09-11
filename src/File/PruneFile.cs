@@ -32,9 +32,6 @@ namespace Icod.Wod.File {
 		public PruneFile() : base() {
 			this.TrimLines = true;
 		}
-		public PruneFile( WorkOrder workOrder ) : base( workOrder ) {
-			this.TrimLines = true;
-		}
 		#endregion .ctor
 
 

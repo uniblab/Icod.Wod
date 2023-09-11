@@ -31,8 +31,6 @@ namespace Icod.Wod.File {
 		#region .ctor
 		public RenameFile() : base() {
 		}
-		public RenameFile( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
-		}
 		#endregion .ctor
 
 

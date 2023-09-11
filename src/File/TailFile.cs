@@ -31,8 +31,6 @@ namespace Icod.Wod.File {
 		#region .ctor
 		public TailFile() : base() {
 		}
-		public TailFile( WorkOrder workOrder ) : base( workOrder ) {
-		}
 		#endregion .ctor
 
 

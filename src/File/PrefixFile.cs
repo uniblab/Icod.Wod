@@ -31,8 +31,6 @@ namespace Icod.Wod.File {
 		#region .ctor
 		public PrefixFile() : base() {
 		}
-		public PrefixFile( WorkOrder workOrder ) : base( workOrder ) {
-		}
 		#endregion  .ctor
 
 
@@ -65,7 +63,7 @@ namespace Icod.Wod.File {
 			var destHandler = dest.GetFileHandler( workOrder );
 
 			var rs = this.RecordSeparator;
-			System.Action<System.IO.StreamWriter, System.IO.StreamReader, System.String> worker = null;
+			System.Action<System.IO.StreamWriter, System.IO.StreamReader, System.String> worker;
 			if ( System.String.IsNullOrEmpty( rs ) ) {
 				worker = this.PrefixOnce;
 			} else {
