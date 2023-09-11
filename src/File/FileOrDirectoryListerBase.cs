@@ -61,15 +61,11 @@ namespace Icod.Wod.File {
 		#region methods
 		protected abstract System.Collections.Generic.IEnumerable<FileEntry> GetEntries( FileHandlerBase source );
 		public override void DoWork( WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			var source = this.GetFileHandler( workOrder );
-			if ( null == source ) {
-				throw new System.InvalidOperationException();
-			}
 
 			System.Func<FileEntry, System.String> getFileName;
 			if ( this.TruncateEntryName ) {
-				getFileName = x => System.IO.Path.GetFileName( x.File );
+				getFileName = x => System.IO.Path.GetFileName( x.File )!;
 			} else {
 				getFileName = x => x.File;
 			}
@@ -87,7 +83,7 @@ namespace Icod.Wod.File {
 						writer.Flush();
 					}
 					_ = buffer.Seek( 0, System.IO.SeekOrigin.Begin );
-					dh.Overwrite( buffer, dh.PathCombine( dest.ExpandedPath, dest.ExpandedName ) );
+					dh.Overwrite( buffer, dh.PathCombine( dest.ExpandedPath!, dest.ExpandedName! ) );
 				}
 			}
 		}
