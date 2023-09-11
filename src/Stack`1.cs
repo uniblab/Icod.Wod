@@ -234,7 +234,7 @@ namespace Icod.Wod {
 				return false;
 			} else if ( System.Object.ReferenceEquals( this, obj ) ) {
 				return true;
-			} else if (!( obj is Stack<T> )) {
+			} else if (obj is not Stack<T> ) {
 				return false;
 			}
 			var other = (IStack<T>)obj;

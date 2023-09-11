@@ -48,7 +48,7 @@ namespace Icod.Wod {
 			return path + sep + name;
 		}
 
-		public static System.String ReadLine( this System.IO.TextReader file, System.String recordSeparator, System.Char quoteChar ) {
+		public static System.String? ReadLine( this System.IO.TextReader file, System.String recordSeparator, System.Char quoteChar ) {
 			if ( System.String.IsNullOrEmpty( recordSeparator ) ) {
 				throw new System.ArgumentNullException( "recordSeparator" );
 			} else if ( null == file ) {
@@ -66,7 +66,6 @@ namespace Icod.Wod {
 			System.Char c;
 			System.Boolean isPlaintext = true;
 			System.Int32 p = file.Read();
-			System.Char q;
 			while ( EOL != p ) {
 				c = System.Convert.ToChar( p );
 				output = output.Append( c );
@@ -102,7 +101,7 @@ namespace Icod.Wod {
 
 			return output.ToString();
 		}
-		public static System.String ReadLine( this System.IO.TextReader file, System.String recordSeparator ) {
+		public static System.String? ReadLine( this System.IO.TextReader file, System.String recordSeparator ) {
 			if ( System.String.IsNullOrEmpty( recordSeparator ) ) {
 				throw new System.ArgumentNullException( "recordSeparator" );
 			} else if ( null == file ) {
@@ -139,7 +138,7 @@ namespace Icod.Wod {
 			_ = line.Remove( line.Length - maxI, maxI );
 			return isNull ? null : line.ToString();
 		}
-		public static System.String ReadLine( this System.IO.StreamReader file, System.String recordSeparator, System.Char quoteChar ) {
+		public static System.String? ReadLine( this System.IO.StreamReader file, System.String recordSeparator, System.Char quoteChar ) {
 			if ( System.String.IsNullOrEmpty( recordSeparator ) ) {
 				throw new System.ArgumentNullException( "recordSeparator" );
 			} else if ( null == file ) {
@@ -157,7 +156,6 @@ namespace Icod.Wod {
 			System.Char c;
 			System.Boolean isPlaintext = true;
 			System.Int32 p = file.Read();
-			System.Char q;
 			while ( EOL != p ) {
 				c = System.Convert.ToChar( p );
 				output = output.Append( c );
@@ -193,7 +191,7 @@ namespace Icod.Wod {
 
 			return output.ToString();
 		}
-		public static System.String ReadLine( this System.IO.StreamReader file, System.String recordSeparator ) {
+		public static System.String? ReadLine( this System.IO.StreamReader file, System.String recordSeparator ) {
 			if ( System.String.IsNullOrEmpty( recordSeparator ) ) {
 				throw new System.ArgumentNullException( "recordSeparator" );
 			} else if ( null == file ) {
@@ -232,7 +230,7 @@ namespace Icod.Wod {
 		}
 
 
-		public static System.Collections.Generic.IEnumerable<System.String> ReadRecord( this System.IO.TextReader file, System.String recordSeparator, System.Char quoteChar, System.Char fieldSeparator ) {
+		public static System.Collections.Generic.IEnumerable<System.String?> ReadRecord( this System.IO.TextReader file, System.String recordSeparator, System.Char quoteChar, System.Char fieldSeparator ) {
 			if ( null == file ) {
 				throw new System.ArgumentNullException( "file" );
 			} else if ( System.String.IsNullOrEmpty( recordSeparator ) ) {
@@ -247,7 +245,6 @@ namespace Icod.Wod {
 				System.Int32 i;
 				System.Char c;
 				System.String column;
-				System.Nullable<System.Char> ec = null;
 				var qc = quoteChar;
 				do {
 					i = reader.Peek();
@@ -266,7 +263,7 @@ namespace Icod.Wod {
 				} while ( true );
 			}
 		}
-		public static System.Collections.Generic.IEnumerable<System.String> ReadRecord( this System.IO.StreamReader file, System.String recordSeparator, System.Char quoteChar, System.Char fieldSeparator ) {
+		public static System.Collections.Generic.IEnumerable<System.String?> ReadRecord( this System.IO.StreamReader file, System.String recordSeparator, System.Char quoteChar, System.Char fieldSeparator ) {
 			if ( null == file ) {
 				throw new System.ArgumentNullException( "file" );
 			} else if ( file.EndOfStream ) {
@@ -283,7 +280,6 @@ namespace Icod.Wod {
 				System.Int32 i;
 				System.Char c;
 				System.String column;
-				System.Nullable<System.Char> ec = null;
 				var qc = quoteChar;
 				do {
 					i = reader.Peek();
@@ -302,7 +298,7 @@ namespace Icod.Wod {
 				} while ( true );
 			}
 		}
-		public static System.String ReadColumn( this System.IO.StringReader reader, System.Char @break, System.Boolean readNextOnBreak ) {
+		public static System.String? ReadColumn( this System.IO.StringReader reader, System.Char @break, System.Boolean readNextOnBreak ) {
 #if DEBUG
 			if ( null == reader ) {
 				throw new System.ArgumentNullException( "reader" );

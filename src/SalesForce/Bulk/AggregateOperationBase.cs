@@ -134,7 +134,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 		protected abstract System.String GetServicePath();
 		protected abstract JobResponse CreateJob( LoginResponse loginResponse );
-		protected virtual JobResponse GetJobResponse( System.Net.HttpWebResponse response ) {
+		protected virtual JobResponse? GetJobResponse( System.Net.HttpWebResponse response ) {
 			using ( var buffer = new System.IO.MemoryStream() ) {
 				using ( var source = response.GetResponseStream() ) {
 					source.CopyTo( buffer );
@@ -156,7 +156,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 				}
 			}
 		}
-		protected virtual JobResponse AbortJob( LoginResponse loginResponse, System.String id ) {
+		protected virtual JobResponse? AbortJob( LoginResponse loginResponse, System.String id ) {
 			var instanceUrl = new System.Uri( loginResponse.InstanceUrl );
 			var uri = new System.UriBuilder( instanceUrl.Scheme, instanceUrl.Host, instanceUrl.Port, this.GetServicePath() + "/" + id ).Uri;
 			var request = System.Net.WebRequest.CreateHttp( uri );
@@ -186,7 +186,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 			}
 		}
 
-		protected virtual JobResponse QueryJob( LoginResponse loginResponse, System.String id ) {
+		protected virtual JobResponse? QueryJob( LoginResponse loginResponse, System.String id ) {
 			var instanceUrl = new System.Uri( loginResponse.InstanceUrl );
 			var uri = new System.UriBuilder( instanceUrl.Scheme, instanceUrl.Host, instanceUrl.Port, this.GetServicePath() + "/" + id ).Uri;
 			var request = System.Net.WebRequest.CreateHttp( uri );
@@ -201,7 +201,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 			}
 		}
 
-		protected JobResponse SendRequest( LoginResponse loginResponse, System.String id, System.String method, JobRequest data ) {
+		protected JobResponse? SendRequest( LoginResponse loginResponse, System.String id, System.String method, JobRequest data ) {
 			var instanceUrl = new System.Uri( loginResponse.InstanceUrl );
 			var uri = new System.UriBuilder( instanceUrl.Scheme, instanceUrl.Host, instanceUrl.Port, this.GetServicePath() ).Uri;
 			var request = System.Net.WebRequest.CreateHttp( uri );

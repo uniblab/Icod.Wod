@@ -158,11 +158,10 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 			yield break;
 		}
-		protected System.Collections.Generic.IEnumerable<System.String> ReadColumns( System.String line, System.Char fieldSeparator, System.Char quoteCharacter ) {
+		protected System.Collections.Generic.IEnumerable<System.String?> ReadColumns( System.String line, System.Char fieldSeparator, System.Char quoteCharacter ) {
 			if ( System.String.IsNullOrEmpty( line ) ) {
 				throw new System.ArgumentNullException( line );
 			}
-
 
 			var cell = new System.Text.StringBuilder();
 			System.Int32 p;
@@ -176,19 +175,19 @@ namespace Icod.Wod.SalesForce.Bulk {
 					c = System.Convert.ToChar( p );
 					if ( quoteCharacter.Equals( c ) ) {
 						_ = reader.Read();
-						yield return this.ReadQuotedTextCell( reader, fieldSeparator, quoteCharacter );
+						yield return ReadQuotedTextCell( reader, fieldSeparator, quoteCharacter );
 					} else if ( fieldSeparator.Equals( c ) ) {
 						_ = reader.Read();
 						yield return null;
 					} else {
-						yield return this.ReadPlainTextCell( reader, fieldSeparator );
+						yield return ReadPlainTextCell( reader, fieldSeparator );
 					}
 				} while ( true );
 			}
 
 		}
 
-		private System.String ReadPlainTextCell( System.IO.StringReader reader, System.Char fieldSeparator ) {
+		private static System.String? ReadPlainTextCell( System.IO.StringReader reader, System.Char fieldSeparator ) {
 			if ( null == reader ) {
 				throw new System.ArgumentNullException( "reader" );
 			}
@@ -210,7 +209,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 			return cell.ToString().TrimToNull();
 		}
-		private System.String ReadQuotedTextCell( System.IO.StringReader reader, System.Char fieldSeparator, System.Char quoteCharacter ) {
+		private static System.String? ReadQuotedTextCell( System.IO.StringReader reader, System.Char fieldSeparator, System.Char quoteCharacter ) {
 			if ( null == reader ) {
 				throw new System.ArgumentNullException( "reader" );
 			}

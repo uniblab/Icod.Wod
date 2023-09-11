@@ -56,7 +56,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 
 		#region methods
-		protected sealed override JobResponse CreateJob( LoginResponse loginResponse ) {
+		protected sealed override JobResponse? CreateJob( LoginResponse loginResponse ) {
 			var instanceUrl = new System.Uri( loginResponse.InstanceUrl );
 			var uri = new System.UriBuilder( instanceUrl.Scheme, instanceUrl.Host, instanceUrl.Port, this.GetServicePath() ).Uri;
 			var request = System.Net.WebRequest.CreateHttp( uri );
@@ -89,7 +89,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 				return this.GetJobResponse( response );
 			}
 		}
-		protected sealed override JobResponse CreateJob( LoginResponse loginResponse, System.String operation ) {
+		protected sealed override JobResponse? CreateJob( LoginResponse loginResponse, System.String operation ) {
 			return this.CreateJob( loginResponse );
 		}
 		#endregion methods
