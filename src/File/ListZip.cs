@@ -53,14 +53,14 @@ namespace Icod.Wod.File {
 				throw new System.InvalidOperationException();
 			}
 
-			System.Func<System.IO.Compression.ZipArchiveEntry, System.String> getFileName = null;
+			System.Func<System.IO.Compression.ZipArchiveEntry, System.String> getFileName;
 			if ( this.TruncateEntryName ) {
-				getFileName = x => System.IO.Path.GetFileName( x.Name );
+				getFileName = x => System.IO.Path.GetFileName( x.Name )!;
 			} else {
 				getFileName = x => x.FullName;
 			}
 
-			System.Collections.Generic.IEnumerable<System.IO.Compression.ZipArchiveEntry> list = null;
+			System.Collections.Generic.IEnumerable<System.IO.Compression.ZipArchiveEntry> list;
 			using ( var reader = handler.OpenReader( handler.PathCombine( this.ExpandedPath!, this.ExpandedName! ) ) ) {
 				using ( var zip = this.GetZipArchive( reader, System.IO.Compression.ZipArchiveMode.Read ) ) {
 					list = this.MatchEntries( zip.Entries );
