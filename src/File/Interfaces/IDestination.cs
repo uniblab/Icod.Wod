@@ -22,7 +22,7 @@ namespace Icod.Wod.File {
 
 	public interface IDestination {
 
-		FileDescriptor Destination {
+		FileDescriptor? Destination {
 			get;
 			set;
 		}
