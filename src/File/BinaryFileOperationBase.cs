@@ -54,7 +54,8 @@ namespace Icod.Wod.File {
 			Namespace = "http://Icod.Wod",
 			IsNullable = false
 		)]
-		public FileDescriptor Destination {
+		[System.ComponentModel.DefaultValue( null )]
+		public FileDescriptor? Destination {
 			get;
 			set;
 		}

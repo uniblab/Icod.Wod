@@ -101,8 +101,8 @@ namespace Icod.Wod {
 
 		#region methods
 		public void DoWork( Icod.Wod.WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
-			foreach ( var step in ( this.Steps ?? new IStep[ 0 ] ).OfType<IStep>() ) {
+			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
+			foreach ( var step in ( this.Steps ?? System.Array.Empty<IStep>() ).OfType<IStep>() ) {
 				step.DoWork( workOrder );
 			}
 		}

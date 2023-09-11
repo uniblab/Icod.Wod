@@ -129,9 +129,9 @@ namespace Icod.Wod.Data {
 		}
 		protected sealed override System.Data.DataRow ReadRecord( System.Data.DataTable table, System.IO.StreamReader file ) {
 			if ( null == file ) {
-				throw new System.ArgumentNullException( "file" );
+				throw new System.ArgumentNullException( nameof( file ) );
 			} else if ( null == table ) {
-				throw new System.ArgumentNullException( "table" );
+				throw new System.ArgumentNullException( nameof( table ) );
 			}
 			return table.Rows.Add( this.ReadRecord( file ).ToArray() );
 		}
@@ -165,12 +165,12 @@ namespace Icod.Wod.Data {
 		}
 
 		protected sealed override void WriteHeader( System.IO.StreamWriter writer, System.Collections.Generic.IEnumerable<System.Data.DataColumn> dbColumns, System.Collections.Generic.IEnumerable<ColumnBase> fileColumns ) {
-			if ( ( null == fileColumns ) || !fileColumns.Any() ) {
-				throw new System.ArgumentNullException( "fileColumns" );
+			if ( ( fileColumns is null ) || !fileColumns.Any() ) {
+				throw new System.ArgumentNullException( nameof( fileColumns ) );
 			} else if ( ( null == dbColumns ) || !dbColumns.Any() ) {
-				throw new System.ArgumentNullException( "dbColumns" );
+				throw new System.ArgumentNullException( nameof( dbColumns ) );
 			} else if ( null == writer ) {
-				throw new System.ArgumentNullException( "writer" );
+				throw new System.ArgumentNullException( nameof( writer ) );
 			}
 
 			var line = dbColumns.Select(

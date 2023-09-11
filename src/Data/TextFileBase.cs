@@ -87,7 +87,7 @@ namespace Icod.Wod.Data {
 			}
 			set {
 				if ( value < 0 ) {
-					throw new System.ArgumentOutOfRangeException( "value", "Parameter cannot be negative." );
+					throw new System.ArgumentOutOfRangeException( nameof( value ), "Parameter cannot be negative." );
 				}
 				mySkip = value;
 			}
@@ -276,13 +276,13 @@ namespace Icod.Wod.Data {
 		protected abstract void WriteHeader( System.IO.StreamWriter writer, System.Collections.Generic.IEnumerable<System.Data.DataColumn> dbColumns, System.Collections.Generic.IEnumerable<ColumnBase> fileColumns );
 		protected void WriteRow( System.IO.StreamWriter writer, System.Collections.Generic.IDictionary<System.Data.DataColumn, ColumnBase> formatMap, System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Data.DataRow row ) {
 			if ( null == row ) {
-				throw new System.ArgumentNullException( "row" );
+				throw new System.ArgumentNullException( nameof( row ) );
 			} else if ( ( null == columns ) || !columns.Any() ) {
-				throw new System.ArgumentNullException( "columns" );
+				throw new System.ArgumentNullException( nameof( columns ) );
 			} else if ( ( null == formatMap ) || !formatMap.Any() ) {
-				throw new System.ArgumentNullException( "formatMap" );
+				throw new System.ArgumentNullException( nameof( formatMap ) );
 			} else if ( null == writer ) {
-				throw new System.ArgumentNullException( "writer" );
+				throw new System.ArgumentNullException( nameof( writer ) );
 			}
 			writer.Write( this.GetRow( formatMap, columns, row ) );
 			this.EolWriter( writer );

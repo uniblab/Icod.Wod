@@ -18,8 +18,6 @@
     USA
 */
 
-using System.Linq;
-
 namespace Icod.Wod.File {
 
 	[System.Serializable]
@@ -34,9 +32,6 @@ namespace Icod.Wod.File {
 		public JsonToXml() : base() {
 			this.ChangeFileExtension = true;
 		}
-		public JsonToXml( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
-			this.ChangeFileExtension = true;
-		}
 		#endregion .ctor
 
 
@@ -45,8 +40,8 @@ namespace Icod.Wod.File {
 			"rootElementName",
 			Namespace = "http://Icod.Wod"
 		)]
-		[System.ComponentModel.DefaultValue( (System.String)null )]
-		public System.String RootElementName {
+		[System.ComponentModel.DefaultValue( null )]
+		public System.String? RootElementName {
 			get;
 			set;
 		}
@@ -55,8 +50,8 @@ namespace Icod.Wod.File {
 			"elementName",
 			Namespace = "http://Icod.Wod"
 		)]
-		[System.ComponentModel.DefaultValue( (System.String)null )]
-		public System.String ElementName {
+		[System.ComponentModel.DefaultValue( null )]
+		public System.String? ElementName {
 			get;
 			set;
 		}
@@ -65,7 +60,7 @@ namespace Icod.Wod.File {
 			"encodeSpecialCharacters",
 			Namespace = "http://Icod.Wod"
 		)]
-		[System.ComponentModel.DefaultValue( false  )]
+		[System.ComponentModel.DefaultValue( false )]
 		public System.Boolean EncodeSpecialCharacters {
 			get;
 			set;
@@ -95,12 +90,11 @@ namespace Icod.Wod.File {
 
 		#region methods
 		public sealed override void DoWork( WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
-			this.Destination.WorkOrder = workOrder;
+			this.Destination!.WorkOrder = workOrder;
 			var dest = this.Destination.GetFileHandler( workOrder );
 			var source = this.GetFileHandler( workOrder );
 
-			System.Func<System.String, System.String> correctedFileName = null;
+			System.Func<System.String, System.String> correctedFileName;
 			if ( this.ChangeFileExtension ) {
 				correctedFileName = x => System.IO.Path.GetFileNameWithoutExtension( x ) + ".xml";
 			} else {
@@ -117,7 +111,7 @@ namespace Icod.Wod.File {
 							? json.ReadToEnd()
 							: "{\"" + this.ElementName + "\":" + json.ReadToEnd() + "}"
 						;
-						var doc = (System.Xml.XmlDocument)Newtonsoft.Json.JsonConvert.DeserializeXmlNode( jsonString, this.RootElementName, this.WriteArrayAttribute, this.EncodeSpecialCharacters );
+						var doc = (Newtonsoft.Json.JsonConvert.DeserializeXmlNode( jsonString, this.RootElementName, this.WriteArrayAttribute, this.EncodeSpecialCharacters ) as System.Xml.XmlDocument)!;
 #if DEBUG
 						doc.PreserveWhitespace = true;
 #else

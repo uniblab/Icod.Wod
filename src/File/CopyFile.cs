@@ -18,8 +18,6 @@
     USA
 */
 
-using System.Linq;
-
 namespace Icod.Wod.File {
 
 	[System.Serializable]
@@ -51,9 +49,6 @@ namespace Icod.Wod.File {
 		public CopyFile() : base() {
 			myMove = false;
 		}
-		public CopyFile( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
-			myMove = false;
-		}
 		#endregion .ctor
 
 
@@ -76,14 +71,13 @@ namespace Icod.Wod.File {
 
 		#region methods
 		public sealed override void DoWork( WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
-			this.Destination.WorkOrder = workOrder;
+			this.Destination!.WorkOrder = workOrder;
 			var dest = this.Destination.GetFileHandler( workOrder );
 			var source = this.GetFileHandler( workOrder );
-			if ( ( null == dest ) || ( null == source ) ) {
+			if ( ( dest is null ) || ( source is null ) ) {
 				throw new System.InvalidOperationException();
 			} else if ( ( source is LocalFileHandler ) && ( dest is LocalFileHandler ) ) {
-				this.DoWork( source as LocalFileHandler, dest as LocalFileHandler );
+				this.DoWork( (source as LocalFileHandler)!, (dest as LocalFileHandler)! );
 				return;
 			}
 			System.Action<FileHandlerBase, System.String> delFile;
@@ -107,13 +101,6 @@ namespace Icod.Wod.File {
 		}
 
 		private void DoWork( LocalFileHandler source, LocalFileHandler dest ) {
-#if DEBUG
-			if ( null == dest ) {
-				throw new System.ArgumentNullException( "dest" );
-			} else if ( null == source ) {
-				throw new System.ArgumentNullException( "source" );
-			}
-#endif
 			var dfd = dest.FileDescriptor;
 			System.String file;
 			var files = source.ListFiles();

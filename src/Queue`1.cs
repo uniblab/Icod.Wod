@@ -24,12 +24,12 @@ namespace Icod.Wod {
 	public sealed class Queue<T> : IQueue<T> {
 
 		#region nested classes
-		internal sealed class EmptyQueue<T> : IQueue<T> {
+		internal sealed class EmptyQueue : IQueue<T> {
 			private static readonly System.Int32 theHashCode;
 			static EmptyQueue() {
-				theHashCode = typeof( EmptyQueue<T> ).AssemblyQualifiedName.GetHashCode();
+				theHashCode = typeof( EmptyQueue ).AssemblyQualifiedName!.GetHashCode();
 				unchecked {
-					theHashCode += typeof( T ).AssemblyQualifiedName.GetHashCode();
+					theHashCode += typeof( T ).AssemblyQualifiedName!.GetHashCode();
 				}
 			}
 
@@ -54,7 +54,7 @@ namespace Icod.Wod {
 				throw new System.InvalidOperationException();
 			}
 			public IQueue<T> Enqueue( T value ) {
-				return new SingleQueue<T>( value );
+				return new SingleQueue( value );
 			}
 			public IQueue<T> Reverse() {
 				throw new System.InvalidOperationException();
@@ -73,25 +73,22 @@ namespace Icod.Wod {
 			}
 		}
 
-		internal sealed class SingleQueue<T> : IQueue<T> {
+		internal sealed class SingleQueue : IQueue<T> {
 			private static readonly System.Int32 theHashCode;
 			private readonly T myValue;
 			private readonly System.Int32 myHashCode;
 
 			static SingleQueue() {
-				theHashCode = typeof( SingleQueue<T> ).AssemblyQualifiedName.GetHashCode();
+				theHashCode = typeof( SingleQueue ).AssemblyQualifiedName!.GetHashCode();
 				unchecked {
-					theHashCode += typeof( T ).AssemblyQualifiedName.GetHashCode();
+					theHashCode += typeof( T ).AssemblyQualifiedName!.GetHashCode();
 				}
 			}
-			private SingleQueue() : base() {
-				myHashCode = theHashCode;
-			}
-			internal SingleQueue( T value ) : this() {
+			internal SingleQueue( T value ) : base() {
 				myValue = value;
 				if ( value is object ) {
 					unchecked {
-						myHashCode += value.GetHashCode();
+						myHashCode = theHashCode + value.GetHashCode();
 					}
 				}
 			}
@@ -148,26 +145,24 @@ namespace Icod.Wod {
 
 		#region .ctor
 		static Queue() {
-			theEmpty = new EmptyQueue<T>();
-			theHashCode = typeof( Queue<T> ).AssemblyQualifiedName.GetHashCode();
+			theEmpty = new EmptyQueue();
+			theHashCode = typeof( Queue<T> ).AssemblyQualifiedName!.GetHashCode();
 			unchecked {
-				theHashCode += typeof( T ).AssemblyQualifiedName.GetHashCode();
+				theHashCode += typeof( T ).AssemblyQualifiedName!.GetHashCode();
 			}
 		}
 
-		private Queue() : base() {
-			myHashCode = theHashCode;
-		}
-		internal Queue( IStack<T> drain, IStack<T> source ) :this() {
+		internal Queue( IStack<T> drain, IStack<T> source ) : base() {
 			source = source ?? Stack<T>.Empty;
 			if ( ( drain ?? Stack<T>.Empty ).IsEmpty ) {
 				drain = source.Reverse();
 				source = Stack<T>.Empty;
 			}
 			mySource = source;
-			myDrain = drain;
-			myCount = mySource.Count + myDrain.Count;
+			myDrain = drain!;
+			myCount = mySource.Count + myDrain!.Count;
 			unchecked {
+				myHashCode = theHashCode;
 				myHashCode += ( drain ?? Stack<T>.Empty ).GetHashCode();
 				myHashCode += ( source ?? Stack<T>.Empty ).GetHashCode();
 			}
@@ -227,12 +222,12 @@ namespace Icod.Wod {
 		public sealed override System.Int32 GetHashCode() {
 			return myHashCode;
 		}
-		public sealed override System.Boolean Equals( object obj ) {
+		public sealed override System.Boolean Equals( System.Object? obj ) {
 			if ( obj is null ) {
 				return false;
-			} else if ( System.Object.ReferenceEquals( this, obj ) ) {
+			} else if ( ReferenceEquals( this, obj ) ) {
 				return true;
-			} else if ( !( obj is Queue<T> ) ) {
+			} else if ( obj is not Queue<T> ) {
 				return false;
 			}
 			var other = (IQueue<T>)obj;
@@ -243,7 +238,7 @@ namespace Icod.Wod {
 			}
 			IQueue<T> probe = this;
 			while ( !probe.IsEmpty ) {
-				if ( !probe.Peek().Equals( other.Peek() ) ) {
+				if ( !Equals( probe.Peek(), other.Peek() ) ) {
 					return false;
 				}
 				probe = probe.Dequeue();

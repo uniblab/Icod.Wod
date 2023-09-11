@@ -84,7 +84,7 @@ namespace Icod.Wod.Configuration {
 				Name = name
 			};
 		}
-		protected sealed override System.Object GetElementKey( System.Configuration.ConfigurationElement element ) {
+		protected sealed override System.Object? GetElementKey( System.Configuration.ConfigurationElement element ) {
 			return ( (SalesForceCredentialElement)element ).Name;
 		}
 

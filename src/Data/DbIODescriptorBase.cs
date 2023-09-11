@@ -240,11 +240,11 @@ namespace Icod.Wod.Data {
 		}
 		protected virtual System.Data.Common.DbDataAdapter CreateDataAdapter( System.Data.Common.DbConnection connection, Icod.Wod.WorkOrder workOrder, System.Data.Common.DbCommand command ) {
 			if ( null == command ) {
-				throw new System.ArgumentNullException( "command" );
+				throw new System.ArgumentNullException( nameof( command ) );
 			} else if ( null == workOrder ) {
-				throw new System.ArgumentNullException( "workOrder" );
+				throw new System.ArgumentNullException( nameof( workOrder ) );
 			} else if ( null == connection ) {
-				throw new System.ArgumentNullException( "connection" );
+				throw new System.ArgumentNullException( nameof( connection ) );
 			}
 
 			var cn = this.ConnectionStringName;
@@ -280,9 +280,9 @@ namespace Icod.Wod.Data {
 		}
 		public virtual void WriteRecords( Icod.Wod.WorkOrder workOrder, ITableSource source ) {
 			if ( null == source ) {
-				throw new System.ArgumentNullException( "source" );
+				throw new System.ArgumentNullException( nameof( source ) );
 			} else if ( null == workOrder ) {
-				throw new System.ArgumentNullException( "workOrder" );
+				throw new System.ArgumentNullException( nameof( workOrder ) );
 			}
 
 			using ( var cnxn = this.CreateConnection( workOrder ) ) {
@@ -295,12 +295,12 @@ namespace Icod.Wod.Data {
 							var tableName = this.NamespaceTableName;
 							var dest = set.Tables[ tableName ];
 							foreach ( var t in source.ReadTables( workOrder ) ) {
-								if ( System.String.IsNullOrEmpty( t.TableName ) && !System.String.IsNullOrEmpty( dest.TableName ) ) {
+								if ( System.String.IsNullOrEmpty( t.TableName ) && !System.String.IsNullOrEmpty( dest!.TableName ) ) {
 									t.TableName = dest.TableName;
 								}
 								amap.Clear();
 								tmap = amap.Add( "Table", t.TableName );
-								foreach ( var cmap in this.CreateDataColumnMapping( t, dest ) ) {
+								foreach ( var cmap in this.CreateDataColumnMapping( t, dest! ) ) {
 									_ = tmap.ColumnMappings.Add( cmap );
 								}
 								if ( !System.String.IsNullOrEmpty( this.SchemaQuery ) ) {
@@ -323,18 +323,18 @@ namespace Icod.Wod.Data {
 
 		protected virtual void FillSchema( System.Data.Common.DbDataAdapter adapter, System.Data.DataSet set ) {
 			if ( null == set ) {
-				throw new System.ArgumentNullException( "set" );
+				throw new System.ArgumentNullException( nameof( set ) );
 			} else if ( null == adapter ) {
-				throw new System.ArgumentNullException( "adapter" );
+				throw new System.ArgumentNullException( nameof( adapter ) );
 			}
 
 			_ = adapter.FillSchema( set, System.Data.SchemaType.Source, this.NamespaceTableName );
 		}
 		protected virtual void FillSchema( System.Data.Common.DbDataAdapter adapter, System.Data.DataTable table ) {
 			if ( null == table ) {
-				throw new System.ArgumentNullException( "table" );
+				throw new System.ArgumentNullException( nameof( table ) );
 			} else if ( null == adapter ) {
-				throw new System.ArgumentNullException( "adapter" );
+				throw new System.ArgumentNullException( nameof( adapter ) );
 			}
 
 			_ = adapter.FillSchema( table, System.Data.SchemaType.Source );
@@ -356,18 +356,18 @@ namespace Icod.Wod.Data {
 		}
 		private void ExecuteCommand( System.Data.Common.DbCommand command, System.Data.DataTable source ) {
 			if ( null == source ) {
-				throw new System.ArgumentNullException( "source" );
+				throw new System.ArgumentNullException( nameof( source ) );
 			} else if ( null == command ) {
-				throw new System.ArgumentNullException( "command" );
+				throw new System.ArgumentNullException( nameof( command ) );
 			}
 			this.ExecuteCommand( command, source, this.BuildSourceToParameter( source ) );
 		}
 
 		protected System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<System.Data.DataColumn, DbParameter>> BuildSourceToParameter( System.Data.DataTable source ) {
 			if ( null == source ) {
-				throw new System.ArgumentNullException( "source" );
+				throw new System.ArgumentNullException( nameof( source ) );
 			}
-			var parameters = this.Parameters ?? new DbParameter[ 0 ];
+			var parameters = this.Parameters ?? System.Array.Empty<DbParameter>();
 			if ( !parameters.Any() ) {
 				return null;
 			}
@@ -375,9 +375,9 @@ namespace Icod.Wod.Data {
 			if ( !sourceColumns.Any() ) {
 				throw new System.InvalidOperationException();
 			}
-			var columnMaps = this.ColumnMapping ?? new ColumnMap[ 0 ];
+			var columnMaps = this.ColumnMapping ?? System.Array.Empty<ColumnMap>();
 
-			var sourceToColMap = new System.Collections.Generic.Dictionary<System.Data.DataColumn, ColumnMap>( System.Math.Max( sourceColumns.Count(), columnMaps.Count() ) );
+			var sourceToColMap = new System.Collections.Generic.Dictionary<System.Data.DataColumn, ColumnMap>( System.Math.Max( sourceColumns.Count(), columnMaps.Length ) );
 			foreach ( var pair in sourceColumns.Join(
 				columnMaps.Where(
 					x => !x.Skip

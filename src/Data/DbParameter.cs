@@ -153,7 +153,7 @@ namespace Icod.Wod.Data {
 		}
 		public System.Data.Common.DbParameter ToDbParameter( WorkOrder workOrder, System.Data.Common.DbCommand command ) {
 			if ( null == command ) {
-				throw new System.ArgumentNullException( "command" );
+				throw new System.ArgumentNullException( nameof( command ) );
 			}
 
 			var output = command.CreateParameter();
@@ -174,7 +174,7 @@ namespace Icod.Wod.Data {
 				}
 			}
 
-			return output;
+			return output!;
 		}
 		#endregion methods
 

@@ -42,7 +42,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 
 		#region methods
-		protected sealed override JobResponse CreateJob( LoginResponse loginResponse ) {
+		protected sealed override JobResponse? CreateJob( LoginResponse loginResponse ) {
 			return this.CreateJob( loginResponse, "delete" );
 		}
 		#endregion methods

@@ -68,7 +68,7 @@ namespace Icod.Wod {
 				myTo = value;
 			}
 		}
-		public System.String ExpandedTo {
+		public System.String? ExpandedTo {
 			get {
 				return this.WorkOrder.ExpandPseudoVariables( this.To );
 			}
@@ -85,7 +85,7 @@ namespace Icod.Wod {
 				myCc = value;
 			}
 		}
-		public System.String ExpandedCC {
+		public System.String? ExpandedCC {
 			get {
 				return this.WorkOrder.ExpandPseudoVariables( this.CC );
 			}
@@ -102,7 +102,7 @@ namespace Icod.Wod {
 				myBcc = value;
 			}
 		}
-		public System.String ExpandedBcc {
+		public System.String? ExpandedBcc {
 			get {
 				return this.WorkOrder.ExpandPseudoVariables( this.Bcc );
 			}
@@ -119,7 +119,7 @@ namespace Icod.Wod {
 				mySubject = value;
 			}
 		}
-		public System.String ExpandedSubject {
+		public System.String? ExpandedSubject {
 			get {
 				return this.WorkOrder.ExpandPseudoVariables( this.Subject );
 			}
@@ -137,7 +137,7 @@ namespace Icod.Wod {
 				myBodyCodePage = value;
 			}
 		}
-		public System.String ExpandedBodyCodePage {
+		public System.String? ExpandedBodyCodePage {
 			get {
 				return this.WorkOrder.ExpandPseudoVariables( this.BodyCodePage );
 			}
@@ -155,7 +155,7 @@ namespace Icod.Wod {
 				mySubjectCodePage = value;
 			}
 		}
-		public System.String ExpandedSubjectCodePage {
+		public System.String? ExpandedSubjectCodePage {
 			get {
 				return this.WorkOrder.ExpandPseudoVariables( this.SubjectCodePage );
 			}

@@ -58,7 +58,7 @@ namespace Icod.Wod.Data {
 
 	
 		#region methods
-		public sealed override System.String GetColumnText( WorkOrder workOrder, System.Object value ) {
+		public sealed override System.String? GetColumnText( WorkOrder workOrder, System.Object value ) {
 			return ( ( null == value ) || System.DBNull.Value.Equals( value ) )
 				? this.NullReplacementText
 				: workOrder.ExpandPseudoVariables( System.String.Format( workOrder.ExpandPseudoVariables( this.FormatString ) ?? "{0}", value ) )

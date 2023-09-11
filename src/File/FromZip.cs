@@ -18,9 +18,6 @@
     USA
 */
 
-using System;
-using System.Linq;
-
 namespace Icod.Wod.File {
 
 	[System.Serializable]
@@ -34,20 +31,17 @@ namespace Icod.Wod.File {
 		#region .ctor
 		public FromZip() : base() {
 		}
-		public FromZip( WorkOrder workOrder ) : base( workOrder ) {
-		}
 		#endregion .ctor
 
 
 		#region method
 		public sealed override void DoWork( WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
-			var destD = this.Destination;
+			var handler = this.GetFileHandler( workOrder );
+			var destD = this.Destination!;
 			destD.WorkOrder = workOrder;
-			System.String ePath = destD.ExpandedPath;
+			System.String ePath = destD.ExpandedPath!;
 			var dest = destD.GetFileHandler( workOrder );
 
-			var handler = this.GetFileHandler( workOrder );
 			System.String file;
 			System.IO.Stream buffer;
 			System.String eDir;
@@ -64,7 +58,7 @@ namespace Icod.Wod.File {
 					foreach ( var entry in this.MatchEntries( zipArchive.Entries ) ) {
 						eDir = ( this.TruncateEntryName )
 							? ePath
-							: dest.PathCombine( ePath, System.IO.Path.GetDirectoryName( entry.FullName ) )
+							: dest.PathCombine( ePath, System.IO.Path.GetDirectoryName( entry.FullName )! )
 						;
 						using ( var entryStream = entry.Open() ) {
 							dest.Overwrite( entryStream, dest.PathCombine( eDir, entry.Name ) );

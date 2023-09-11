@@ -70,7 +70,7 @@ namespace Icod.Wod.SalesForce.Rest {
 			"instanceName",
 			Namespace = "http://Icod.Wod"
 		)]
-		[System.ComponentModel.DefaultValue( (System.String)null )]
+		[System.ComponentModel.DefaultValue( null )]
 		public System.String InstanceName {
 			get {
 				return myInstanceName;
@@ -84,7 +84,7 @@ namespace Icod.Wod.SalesForce.Rest {
 			"soql",
 			Namespace = "http://Icod.Wod"
 		)]
-		[System.ComponentModel.DefaultValue( (System.String)null )]
+		[System.ComponentModel.DefaultValue( null )]
 		public System.String Soql {
 			get;
 			set;
@@ -105,7 +105,7 @@ namespace Icod.Wod.SalesForce.Rest {
 
 		#region methods
 		public void DoWork( WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
+			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
 			var dest = this.Destination;
 			if ( null == dest ) {
 				throw new System.InvalidOperationException();
@@ -114,7 +114,7 @@ namespace Icod.Wod.SalesForce.Rest {
 		}
 
 		public System.Collections.Generic.IEnumerable<System.Data.DataTable> ReadTables( Icod.Wod.WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
+			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
 			var credential = Credential.GetCredential( this.InstanceName, workOrder );
 			var loginToken = new Login( workOrder ).GetLoginResponse( credential, System.Text.Encoding.UTF8 );
 			return this.ReadTables( loginToken );
@@ -181,7 +181,7 @@ namespace Icod.Wod.SalesForce.Rest {
 
 		private System.Net.WebClient BuildClient( LoginResponse token, System.String userAgent ) {
 			if ( null == token ) {
-				throw new System.ArgumentNullException( "token" );
+				throw new System.ArgumentNullException(	nameof( token) );
 			}
 			var client = new System.Net.WebClient {
 				Encoding = System.Text.Encoding.UTF8

@@ -18,8 +18,6 @@
     USA
 */
 
-using System.Linq;
-
 namespace Icod.Wod.File {
 
 	[System.Serializable]
@@ -32,9 +30,6 @@ namespace Icod.Wod.File {
 
 		#region .ctor
 		public PruneFile() : base() {
-			this.TrimLines = true;
-		}
-		public PruneFile( WorkOrder workOrder ) : base( workOrder ) {
 			this.TrimLines = true;
 		}
 		#endregion .ctor
@@ -55,11 +50,7 @@ namespace Icod.Wod.File {
 
 		#region methods
 		public sealed override void DoWork( WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			var sourceHandler = this.GetFileHandler( workOrder );
-			if ( null == sourceHandler ) {
-				throw new System.InvalidOperationException();
-			}
 			var dest = this.Destination;
 			if ( null == dest ) {
 				dest = this;
@@ -69,7 +60,7 @@ namespace Icod.Wod.File {
 			var sourceEncoding = CodePageHelper.GetCodePage( this.CodePage );
 			var destEncoding = CodePageHelper.GetCodePage( this.CodePage );
 
-			System.Func<System.String, System.String> trim = null;
+			System.Func<System.String, System.String?> trim;
 			if ( this.TrimLines ) {
 				trim = x => x.TrimToNull();
 			} else {
@@ -83,8 +74,8 @@ namespace Icod.Wod.File {
 						using ( var reader = new System.IO.StreamReader( source, sourceEncoding, true, this.BufferLength, true ) ) {
 							using ( var writer = new System.IO.StreamWriter( buffer, destEncoding, this.BufferLength, true ) ) {
 								var rs = this.RecordSeparator;
-								System.String line = reader.ReadLine( rs );
-								while ( null != line ) {
+								System.String? line = reader.ReadLine( rs );
+								while ( line is not null ) {
 									line = trim( line );
 									if ( !System.String.IsNullOrEmpty( line ) ) {
 										writer.Write( line + rs );

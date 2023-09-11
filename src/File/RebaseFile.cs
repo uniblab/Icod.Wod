@@ -18,8 +18,6 @@
     USA
 */
 
-using System.Linq;
-
 namespace Icod.Wod.File {
 
 	[System.Serializable]
@@ -37,9 +35,6 @@ namespace Icod.Wod.File {
 
 		#region .ctor
 		public RebaseFile() : base() {
-			myOutputCodePage = DefaultCodePage;
-		}
-		public RebaseFile( WorkOrder workOrder ) : base( workOrder ) {
 			myOutputCodePage = DefaultCodePage;
 		}
 		#endregion .ctor
@@ -64,11 +59,7 @@ namespace Icod.Wod.File {
 
 		#region methods
 		public sealed override void DoWork( WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			var sourceHandler = this.GetFileHandler( workOrder );
-			if ( null == sourceHandler ) {
-				throw new System.InvalidOperationException();
-			}
 			var dest = this.Destination;
 			if ( null == dest ) {
 				dest = this;
@@ -85,7 +76,7 @@ namespace Icod.Wod.File {
 						using ( var reader = new System.IO.StreamReader( source, sourceEncoding, true, this.BufferLength, true ) ) {
 							using ( var writer = new System.IO.StreamWriter( buffer, destEncoding, this.BufferLength, true ) ) {
 								var rs = this.RecordSeparator;
-								System.String line = reader.ReadLine( rs );
+								System.String? line = reader.ReadLine( rs );
 								while ( null != line ) {
 									writer.Write( line + rs );
 									line = reader.ReadLine( rs );

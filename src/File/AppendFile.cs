@@ -18,8 +18,6 @@
     USA
 */
 
-using System.Linq;
-
 namespace Icod.Wod.File {
 
 	[System.Serializable]
@@ -37,9 +35,6 @@ namespace Icod.Wod.File {
 
 		#region .ctor
 		public AppendFile() : base() {
-			myMove = false;
-		}
-		public AppendFile( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
 			myMove = false;
 		}
 		#endregion .ctor
@@ -64,8 +59,7 @@ namespace Icod.Wod.File {
 
 		#region methods
 		public sealed override void DoWork( WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
-			this.Destination.WorkOrder = workOrder;
+			this.Destination!.WorkOrder = workOrder;
 			var dest = this.Destination.GetFileHandler( workOrder );
 			var dfd = dest.FileDescriptor;
 			var source = this.GetFileHandler( workOrder );

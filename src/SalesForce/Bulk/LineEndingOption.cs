@@ -83,16 +83,16 @@ namespace Icod.Wod.SalesForce.Bulk {
 		public sealed override System.String ToString() {
 			return myValue;
 		}
-		public System.Boolean Equals( LineEndingOption other ) {
-			return !( other is null ) 
+		public System.Boolean Equals( LineEndingOption? other ) {
+			return ( other is not null ) 
 				&& ( 
 					ReferenceEquals( this, other ) 
 					|| this.Value.Equals( other.Value, System.StringComparison.OrdinalIgnoreCase )
 				)
 			;
 		}
-		public sealed override System.Boolean Equals( System.Object obj ) {
-			return !( obj is null ) 
+		public sealed override System.Boolean Equals( System.Object? obj ) {
+			return ( obj is not null ) 
 				&& ( 
 					ReferenceEquals( this, obj ) || this.Equals( obj as LineEndingOption ) 
 				)

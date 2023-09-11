@@ -18,8 +18,6 @@
     USA
 */
 
-using System.Linq;
-
 namespace Icod.Wod.File {
 
 	[System.Serializable]
@@ -52,7 +50,6 @@ namespace Icod.Wod.File {
 
 		#region methods
 		public sealed override void DoWork( WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			var sourceHandler = this.GetFileHandler( workOrder );
 			if ( null == sourceHandler ) {
 				throw new System.InvalidOperationException();
@@ -68,7 +65,7 @@ namespace Icod.Wod.File {
 			var destHandler = dest.GetFileHandler( workOrder );
 
 			var rs = this.RecordSeparator;
-			System.Action<System.IO.StreamWriter, System.IO.StreamReader, System.String> worker = null;
+			System.Action<System.IO.StreamWriter, System.IO.StreamReader, System.String> worker;
 			if ( System.String.IsNullOrEmpty( rs ) ) {
 				worker = this.SuffixOnce;
 			} else {
@@ -94,11 +91,7 @@ namespace Icod.Wod.File {
 		}
 		private void SuffixOnce( System.IO.StreamWriter destination, System.IO.StreamReader source, System.String suffix ) {
 			if ( System.String.IsNullOrEmpty( suffix ) ) {
-				throw new System.ArgumentException( "suffix" );
-			} else if ( null == source ) {
-				throw new System.ArgumentNullException( "source" );
-			} else if ( null == destination ) {
-				throw new System.ArgumentNullException( "destination" );
+				throw new System.ArgumentNullException( nameof( suffix ) );
 			}
 			source.BaseStream.CopyTo( destination.BaseStream );
 			destination.Flush();
@@ -106,13 +99,9 @@ namespace Icod.Wod.File {
 		}
 		private void SuffixEach( System.IO.StreamWriter destination, System.IO.StreamReader source, System.String suffix ) {
 			if ( System.String.IsNullOrEmpty( suffix ) ) {
-				throw new System.ArgumentException( "suffix" );
-			} else if ( null == source ) {
-				throw new System.ArgumentNullException( "source" );
-			} else if ( null == destination ) {
-				throw new System.ArgumentNullException( "destination" );
+				throw new System.ArgumentNullException( nameof( suffix ) );
 			}
-			System.String line;
+			System.String? line;
 			while ( !source.EndOfStream ) {
 				line = source.ReadLine( this.RecordSeparator );
 				if ( !System.String.IsNullOrEmpty( line ) ) {

@@ -18,9 +18,6 @@
     USA
 */
 
-using System;
-using System.Linq;
-
 namespace Icod.Wod.File {
 
 	[System.Serializable]
@@ -35,19 +32,16 @@ namespace Icod.Wod.File {
 		#region .ctor
 		public TouchZip() : base() {
 		}
-		public TouchZip( WorkOrder workOrder ) : base( workOrder ) {
-		}
 		#endregion .ctor
 
 
 		#region methods
 		public sealed override void DoWork( WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			var handler = this.GetFileHandler( workOrder );
 			var file = handler.ListFiles().Select(
 				x => x.File
 			).FirstOrDefault();
-			var zipName = handler.PathCombine( this.ExpandedPath, this.ExpandedName );
+			var zipName = handler.PathCombine( this.ExpandedPath!, this.ExpandedName! );
 			using ( var buffer = new System.IO.MemoryStream() ) {
 				if ( file is null ) {
 					using ( var zipArchive = this.GetZipArchive( buffer, System.IO.Compression.ZipArchiveMode.Create ) ) {

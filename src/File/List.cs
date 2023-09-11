@@ -18,8 +18,6 @@
     USA
 */
 
-using System.Linq;
-
 namespace Icod.Wod.File {
 
 	[System.Serializable]
@@ -33,28 +31,19 @@ namespace Icod.Wod.File {
 		#region .ctor
 		public List() : base() {
 		}
-		public List( WorkOrder workOrder ) : base( workOrder ) {
-		}
 		#endregion .ctor
 
 
 		#region methods
 		protected sealed override System.Collections.Generic.IEnumerable<FileEntry> GetEntries( FileHandlerBase source ) {
-			if ( null == source ) {
-				throw new System.ArgumentNullException( "source" );
-			}
 			return source.List();
 		}
 		public sealed override void DoWork( WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			var source = this.GetFileHandler( workOrder );
-			if ( null == source ) {
-				throw new System.InvalidOperationException();
-			}
 
 			System.Func<FileEntry, System.String> getFileName;
 			if ( this.TruncateEntryName ) {
-				getFileName = x => System.IO.Path.GetFileName( x.File );
+				getFileName = x => System.IO.Path.GetFileName( x.File )!;
 			} else {
 				getFileName = x => x.File;
 			}
@@ -72,7 +61,7 @@ namespace Icod.Wod.File {
 						writer.Flush();
 					}
 					_ = buffer.Seek( 0, System.IO.SeekOrigin.Begin );
-					dh.Overwrite( buffer, dh.PathCombine( dest.ExpandedPath, dest.ExpandedName ) );
+					dh.Overwrite( buffer, dh.PathCombine( dest.ExpandedPath!, dest.ExpandedName! ) );
 				}
 			}
 		}

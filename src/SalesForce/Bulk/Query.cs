@@ -54,7 +54,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 			"soql",
 			Namespace = "http://Icod.Wod"
 		)]
-		[System.ComponentModel.DefaultValue( (System.String)null )]
+		[System.ComponentModel.DefaultValue( null )]
 		public System.String Soql {
 			get;
 			set;
@@ -67,7 +67,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 			return System.String.Format( "/services/data/v{0:F1}/jobs/query", this.ApiVersion );
 		}
 
-		protected sealed override JobResponse CreateJob( LoginResponse loginResponse ) {
+		protected sealed override JobResponse? CreateJob( LoginResponse loginResponse ) {
 			var instanceUrl = new System.Uri( loginResponse.InstanceUrl );
 			var uri = new System.UriBuilder( instanceUrl.Scheme, instanceUrl.Host, instanceUrl.Port, this.GetServicePath() ).Uri;
 			var request = System.Net.WebRequest.CreateHttp( uri );

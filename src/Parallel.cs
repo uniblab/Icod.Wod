@@ -112,7 +112,7 @@ namespace Icod.Wod {
 
 		#region methods
 		public void DoWork( WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
+			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
 			var steps = ( this.Steps ?? new IStep[ 0 ] ).OfType<IStep>();
 			if ( !steps.Any() ) {
 				return;

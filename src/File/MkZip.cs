@@ -18,9 +18,6 @@
     USA
 */
 
-using System;
-using System.Linq;
-
 namespace Icod.Wod.File {
 
 	[System.Serializable]
@@ -48,9 +45,6 @@ namespace Icod.Wod.File {
 		public MkZip() : base() {
 			myMove = false;
 		}
-		public MkZip( WorkOrder workOrder ) : base( workOrder ) {
-			myMove = false;
-		}
 		#endregion .ctor
 
 
@@ -73,8 +67,7 @@ namespace Icod.Wod.File {
 
 		#region methods
 		public sealed override void DoWork( WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
-			var sources = ( this.Source ?? new FileDescriptor[ 0 ] ).Select(
+			var sources = ( this.Source ?? System.Array.Empty<FileDescriptor>() ).Select(
 				x => {
 					x.WorkOrder = workOrder;
 					return x;
@@ -87,7 +80,7 @@ namespace Icod.Wod.File {
 			System.IO.Compression.ZipArchiveEntry entry;
 			var writeIfEmpty = this.WriteIfEmpty;
 			var isEmpty = true;
-			System.Action<FileHandlerBase, System.String> fileAct = null;
+			System.Action<FileHandlerBase, System.String> fileAct;
 			if ( this.Move ) {
 				fileAct = theMoveFile;
 			} else {
@@ -96,7 +89,7 @@ namespace Icod.Wod.File {
 			using ( System.IO.Stream buffer = new System.IO.MemoryStream() ) {
 				using ( var zipArchive = this.GetZipArchive( buffer, System.IO.Compression.ZipArchiveMode.Create ) ) {
 					foreach ( var sourceD in sources ?? new FileDescriptor[ 0 ] ) {
-						sep = sourceD.ExpandedPath;
+						sep = sourceD.ExpandedPath!;
 						source = sourceD.GetFileHandler( workOrder );
 						foreach ( var file in source.ListFiles().Where(
 							x => x.FileType.Equals( FileType.File )
@@ -117,7 +110,7 @@ namespace Icod.Wod.File {
 				}
 				if ( !isEmpty || writeIfEmpty ) {
 					_ = buffer.Seek( 0, System.IO.SeekOrigin.Begin );
-					handler.Overwrite( buffer, handler.PathCombine( this.ExpandedPath, this.ExpandedName ) );
+					handler.Overwrite( buffer, handler.PathCombine( this.ExpandedPath!, this.ExpandedName! ) );
 				}
 			}
 		}

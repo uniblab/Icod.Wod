@@ -18,7 +18,9 @@
     USA
 */
 
+using System.Diagnostics;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Icod.Wod {
 
@@ -28,21 +30,26 @@ namespace Icod.Wod {
 		Namespace = "http://Icod.Wod",
 		IsNullable = false
 	)]
-	public sealed class WorkOrder {
+	public sealed partial class WorkOrder {
 
 		#region fields
-		private const System.String DateTimeFormat = @"(?<DateTimeFormat>%wod:DateTime\{(?<dateTimeFormatString>[^\}]+)\}%)";
-		private const System.String AppSetting = @"(?<AppSetting>%app:(?<AppKeyName>[^%]+)%)";
-		private const System.String CmdArgFormat = @"(?<CmdArgFormat>%cmd:(?<CmdArgNumber>\d+)%)";
+		private const System.String theDateTimeFormat = @"(?<DateTimeFormat>%wod:DateTime\{(?<dateTimeFormatString>[^\}]+)\}%)";
+		private const System.String theAppSetting = @"(?<AppSetting>%app:(?<AppKeyName>[^%]+)%)";
+		private const System.String theCmdArgFormat = @"(?<CmdArgFormat>%cmd:(?<CmdArgNumber>\d+)%)";
 
-		private readonly System.Func<System.String, System.String>[] myFuncs;
-		private System.String[] myCmdArgs;
+		private static readonly System.String[] theEmpty;
+		private readonly System.Func<System.String?, System.String?>[] myFuncs;
+		private System.String[]? myCmdArgs;
 		#endregion fields
 
 
 		#region .ctor
+		static WorkOrder() {
+			theEmpty = System.Array.Empty<System.String>();
+		}
+
 		public WorkOrder() : base() {
-			myFuncs = new System.Func<System.String, System.String>[ 5 ] {
+			myFuncs = new System.Func<System.String?, System.String?>[ 5 ] {
 				this.ExpandWorkOrderVariables,
 				this.ExpandWodVariables,
 				this.ExpandAppVariables,
@@ -59,7 +66,7 @@ namespace Icod.Wod {
 			Namespace = "http://Icod.Wod"
 		)]
 		[System.ComponentModel.DefaultValue( null )]
-		public System.String JobName {
+		public System.String? JobName {
 			get;
 			set;
 		}
@@ -69,12 +76,12 @@ namespace Icod.Wod {
 			Namespace = "http://Icod.Wod"
 		)]
 		[System.ComponentModel.DefaultValue( null )]
-		public System.String EmailTo {
+		public System.String? EmailTo {
 			get;
 			set;
 		}
 		[System.Xml.Serialization.XmlIgnore]
-		private System.String ExpandedEmailTo {
+		private System.String? ExpandedEmailTo {
 			get {
 				return this.ExpandPseudoVariables( this.EmailTo );
 			}
@@ -91,7 +98,7 @@ namespace Icod.Wod {
 			Namespace = "http://Icod.Wod"
 		)]
 		[System.ComponentModel.DefaultValue( null )]
-		public ConnectionStringEntry[] ConnectionStrings {
+		public ConnectionStringEntry[]? ConnectionStrings {
 			get;
 			set;
 		}
@@ -107,7 +114,7 @@ namespace Icod.Wod {
 			Namespace = "http://Icod.Wod"
 		)]
 		[System.ComponentModel.DefaultValue( null )]
-		public SalesForce.Credential[] SFCredentials {
+		public SalesForce.Credential[]? SFCredentials {
 			get;
 			set;
 		}
@@ -123,7 +130,7 @@ namespace Icod.Wod {
 			Namespace = "http://Icod.Wod"
 		)]
 		[System.ComponentModel.DefaultValue( null )]
-		public Variable[] Variables {
+		public Variable[]? Variables {
 			get;
 			set;
 		}
@@ -140,7 +147,7 @@ namespace Icod.Wod {
 		)]
 		[System.Xml.Serialization.XmlIgnore]
 		[System.ComponentModel.DefaultValue( null )]
-		public System.String[] Email {
+		public System.String[]? Email {
 			get;
 			set;
 		}
@@ -151,9 +158,9 @@ namespace Icod.Wod {
 				return System.String.Join(
 					",",
 					(
-						( this.Email ?? new System.String[ 0 ] ).Select(
+						( this.Email ?? theEmpty ).Select(
 							x => this.ExpandPseudoVariables( x )
-						) ?? new System.String[ 0 ]
+						) ?? theEmpty
 					).Union(
 						new System.String[ 1 ] { this.ExpandedEmailTo ?? System.String.Empty }
 					).Where(
@@ -221,7 +228,7 @@ namespace Icod.Wod {
 			Namespace = "http://Icod.Wod"
 		)]
 		[System.ComponentModel.DefaultValue( null )]
-		public System.Object[] Steps {
+		public System.Object[]? Steps {
 			get;
 			set;
 		}
@@ -230,11 +237,11 @@ namespace Icod.Wod {
 
 		#region methods
 		public void Run() {
-			myCmdArgs = System.Environment.GetCommandLineArgs() ?? new System.String[ 0 ];
+			myCmdArgs = System.Environment.GetCommandLineArgs() ?? theEmpty;
 			System.Int32 i = 1;
-			IStep step = null;
+			IStep? step = null;
 			try {
-				var steps = ( this.Steps ?? new IStep[ 0 ] ).OfType<IStep>().ToArray();
+				var steps = ( this.Steps ?? System.Array.Empty<IStep>() ).OfType<IStep>().ToArray();
 				foreach ( var s in steps ) {
 					step = s;
 					s.DoWork( this );
@@ -249,70 +256,76 @@ namespace Icod.Wod {
 			}
 		}
 
-		private System.String ExpandWorkOrderVariables( System.String @string ) {
+		private System.String? ExpandWorkOrderVariables( System.String? @string ) {
 			@string = @string.TrimToNull();
 			if ( System.String.IsNullOrEmpty( @string ) ) {
 				return null;
 			}
-			foreach ( var @var in ( this.Variables ?? new Variable[ 0 ] ) ) {
+			foreach ( var @var in ( this.Variables ?? System.Array.Empty<Variable>() ) ) {
 				@string = @string.Replace( "%var:" + @var.Name + "%", @var.Value ?? System.String.Empty );
 			}
 			return @string;
 		}
-		private System.String ExpandWodVariables( System.String @string ) {
+		[System.Text.RegularExpressions.GeneratedRegex( theDateTimeFormat, RegexOptions.IgnoreCase, "en-US" )]
+		private static partial Regex DateTimeFormat();
+		private System.String? ExpandWodVariables( System.String? @string ) {
 			@string = @string.TrimToNull();
 			if ( System.String.IsNullOrEmpty( @string ) ) {
 				return null;
 			}
-			foreach ( System.Text.RegularExpressions.Match m in System.Text.RegularExpressions.Regex.Matches( @string, WorkOrder.DateTimeFormat ) ) {
+			foreach ( System.Text.RegularExpressions.Match m in DateTimeFormat().Matches( @string ) ) {
 				@string = System.Text.RegularExpressions.Regex.Replace( @string, m.Value, System.DateTime.Now.ToString( m.Groups[ "dateTimeFormatString" ].Value ) );
 			}
 			@string = @string.Replace( "%wod:EmailTo%", this.EmailTo );
 			@string = @string.Replace( "%wod:JobName%", this.JobName );
 			return @string;
 		}
-		private System.String ExpandAppVariables( System.String @string ) {
+		[System.Text.RegularExpressions.GeneratedRegex( theAppSetting, RegexOptions.IgnoreCase, "en-US" )]
+		private static partial Regex AppSettingFormat();
+		private System.String? ExpandAppVariables( System.String? @string ) {
 			@string = @string.TrimToNull();
 			if ( System.String.IsNullOrEmpty( @string ) ) {
 				return null;
 			}
 			var settings = System.Configuration.ConfigurationManager.AppSettings;
-			foreach ( System.Text.RegularExpressions.Match m in System.Text.RegularExpressions.Regex.Matches( @string, WorkOrder.AppSetting ) ) {
+			foreach ( System.Text.RegularExpressions.Match m in AppSettingFormat().Matches( @string ) ) {
 				@string = System.Text.RegularExpressions.Regex.Replace( @string, m.Value, settings[ m.Groups[ "AppKeyName" ].Value ] ?? System.String.Empty );
 			}
 			return @string;
 		}
-		private System.String ExpandEnvironmentVariables( System.String @string ) {
+		private System.String? ExpandEnvironmentVariables( System.String? @string ) {
 			@string = @string.TrimToNull();
 			if ( System.String.IsNullOrEmpty( @string ) ) {
 				return null;
 			}
 			return System.Environment.ExpandEnvironmentVariables( @string );
 		}
-		private System.String ExpandCmdVariables( System.String @string ) {
+		[System.Text.RegularExpressions.GeneratedRegex( theCmdArgFormat, RegexOptions.IgnoreCase, "en-US" )]
+		private static partial Regex CmdArgFormat();
+		private System.String? ExpandCmdVariables( System.String? @string ) {
 			@string = @string.TrimToNull();
 			if ( System.String.IsNullOrEmpty( @string ) ) {
 				return null;
 			}
 
-			foreach ( System.Text.RegularExpressions.Match m in System.Text.RegularExpressions.Regex.Matches( @string, WorkOrder.CmdArgFormat ) ) {
-				@string = System.Text.RegularExpressions.Regex.Replace( @string, m.Value, myCmdArgs[ System.Int32.Parse( m.Groups[ "CmdArgNumber" ].Value ) ] );
+			foreach ( System.Text.RegularExpressions.Match m in CmdArgFormat().Matches( @string ) ) {
+				@string = System.Text.RegularExpressions.Regex.Replace( @string, m.Value, myCmdArgs![ System.Int32.Parse( m.Groups[ "CmdArgNumber" ].Value ) ] );
 			}
 			return @string;
 		}
-		public System.String ExpandPseudoVariables( System.String @string ) {
+		public System.String? ExpandPseudoVariables( System.String? @string ) {
 			@string = @string.TrimToNull();
 			if ( System.String.IsNullOrEmpty( @string ) ) {
 				return null;
 			}
 			System.Int32 i = 0;
-			while ( ( 120 < i ) && !System.String.IsNullOrEmpty( @string ) && @string.Contains( "%" ) ) {
+			while ( ( 120 < i ) && !System.String.IsNullOrEmpty( @string ) && @string.Contains( '%' ) ) {
 				@string = myFuncs[ i++ ]( @string );
 			}
 			return @string;
 		}
 
-		public sealed override System.String ToString() {
+		public sealed override System.String? ToString() {
 			return this.JobName ?? base.ToString();
 		}
 		#endregion methods

@@ -33,10 +33,8 @@ namespace Icod.Wod {
 
 
 		#region .ctor
-		private ChainedDisposer() : base() {
+		public ChainedDisposer( System.IDisposable outer, System.IDisposable inner ) : base() {
 			myIsDisposed = false;
-		}
-		public ChainedDisposer( System.IDisposable outer, System.IDisposable inner ) : this() {
 			myInner = inner;
 			myOuter = outer;
 		}

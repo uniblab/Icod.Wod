@@ -18,8 +18,6 @@
     USA
 */
 
-using System.Linq;
-
 namespace Icod.Wod.File {
 
 	[System.Serializable]
@@ -35,9 +33,6 @@ namespace Icod.Wod.File {
 
 		#region .ctor
 		protected FileOrDirectoryListerBase() : base() {
-			myTruncateEntryName = true;
-		}
-		protected FileOrDirectoryListerBase( WorkOrder workOrder ) : base( workOrder ) {
 			myTruncateEntryName = true;
 		}
 		#endregion .ctor
@@ -63,22 +58,18 @@ namespace Icod.Wod.File {
 		#region methods
 		protected abstract System.Collections.Generic.IEnumerable<FileEntry> GetEntries( FileHandlerBase source );
 		public override void DoWork( WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			var source = this.GetFileHandler( workOrder );
-			if ( null == source ) {
-				throw new System.InvalidOperationException();
-			}
 
 			System.Func<FileEntry, System.String> getFileName;
 			if ( this.TruncateEntryName ) {
-				getFileName = x => System.IO.Path.GetFileName( x.File );
+				getFileName = x => System.IO.Path.GetFileName( x.File )!;
 			} else {
 				getFileName = x => x.File;
 			}
 
 			var list = this.GetEntries( source );
 			if ( this.WriteIfEmpty || list.Any() ) {
-				var dest = this.Destination;
+				var dest = this.Destination!;
 				dest.WorkOrder = workOrder;
 				var dh = dest.GetFileHandler( workOrder );
 				using ( var buffer = new System.IO.MemoryStream() ) {
@@ -89,7 +80,7 @@ namespace Icod.Wod.File {
 						writer.Flush();
 					}
 					_ = buffer.Seek( 0, System.IO.SeekOrigin.Begin );
-					dh.Overwrite( buffer, dh.PathCombine( dest.ExpandedPath, dest.ExpandedName ) );
+					dh.Overwrite( buffer, dh.PathCombine( dest.ExpandedPath!, dest.ExpandedName! ) );
 				}
 			}
 		}

@@ -55,7 +55,7 @@ namespace Icod.Wod.SalesForce {
 			"name",
 			Namespace = "http://Icod.Wod"
 		)]
-		public System.String Name {
+		public System.String? Name {
 			get;
 			set;
 		}
@@ -63,7 +63,7 @@ namespace Icod.Wod.SalesForce {
 			"clientId",
 			Namespace = "http://Icod.Wod"
 		)]
-		public System.String ClientId {
+		public System.String? ClientId {
 			get;
 			set;
 		}
@@ -84,7 +84,7 @@ namespace Icod.Wod.SalesForce {
 			"clientSecret",
 			Namespace = "http://Icod.Wod"
 		)]
-		public System.String ClientSecret {
+		public System.String? ClientSecret {
 			get;
 			set;
 		}
@@ -92,7 +92,7 @@ namespace Icod.Wod.SalesForce {
 			"username",
 			Namespace = "http://Icod.Wod"
 		)]
-		public System.String Username {
+		public System.String? Username {
 			get;
 			set;
 		}
@@ -100,7 +100,7 @@ namespace Icod.Wod.SalesForce {
 			"password",
 			Namespace = "http://Icod.Wod"
 		)]
-		public System.String Password {
+		public System.String? Password {
 			get;
 			set;
 		}
@@ -108,7 +108,7 @@ namespace Icod.Wod.SalesForce {
 			"securityToken",
 			Namespace = "http://Icod.Wod"
 		)]
-		public System.String SecurityToken {
+		public System.String? SecurityToken {
 			get;
 			set;
 		}
@@ -154,15 +154,15 @@ namespace Icod.Wod.SalesForce {
 			get;
 			set;
 		}
-		public System.Uri SiteUrl {
+		public System.Uri? SiteUrl {
 			get {
 				if ( null == mySiteUrl ) {
 					var host = this.Host;
-					System.Uri probe = System.String.IsNullOrEmpty( host )
+					System.Uri? probe = System.String.IsNullOrEmpty( host )
 						? null
 						: new System.UriBuilder( this.Scheme, host, this.Port, this.Path ?? System.String.Empty ).Uri
 					;
-					_ = System.Threading.Interlocked.CompareExchange<System.Uri>( ref mySiteUrl, probe, null );
+					_ = System.Threading.Interlocked.CompareExchange<System.Uri?>( ref mySiteUrl, probe, null );
 				}
 				return mySiteUrl;
 			}
@@ -172,7 +172,7 @@ namespace Icod.Wod.SalesForce {
 			"callbackUrl",
 			Namespace = "http://Icod.Wod"
 		)]
-		[System.ComponentModel.DefaultValue( (System.String)null )]
+		[System.ComponentModel.DefaultValue( null )]
 		public System.String CallbackUrl {
 			get;
 			set;
@@ -181,7 +181,7 @@ namespace Icod.Wod.SalesForce {
 			"refreshToken",
 			Namespace = "http://Icod.Wod"
 		)]
-		[System.ComponentModel.DefaultValue( (System.String)null )]
+		[System.ComponentModel.DefaultValue( null )]
 		public System.String RefreshToken {
 			get;
 			set;
@@ -192,11 +192,11 @@ namespace Icod.Wod.SalesForce {
 		#region static methods
 		public static ICredential GetCredential( System.String name, WorkOrder workOrder ) {
 			if ( null == workOrder ) {
-				throw new System.ArgumentNullException( "workOrder" );
+				throw new System.ArgumentNullException( nameof( workOrder ) );
 			} else if ( System.String.IsNullOrEmpty( name ) ) {
-				throw new System.ArgumentNullException( "name" );
+				throw new System.ArgumentNullException( nameof( name ) );
 			}
-			ICredential here = ( workOrder.SFCredentials ?? new ICredential[ 0 ] ).FirstOrDefault(
+			ICredential here = ( workOrder.SFCredentials ?? System.Array.Empty<ICredential>() ).FirstOrDefault(
 				x => x.Name.Equals( name, System.StringComparison.Ordinal )
 			);
 			if ( null != here ) {

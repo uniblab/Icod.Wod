@@ -271,7 +271,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 			}
 		}
 
-		protected virtual JobResponse CreateJob( LoginResponse loginResponse, System.String operation ) {
+		protected virtual JobResponse? CreateJob( LoginResponse loginResponse, System.String operation ) {
 			var instanceUrl = new System.Uri( loginResponse.InstanceUrl );
 			var uri = new System.UriBuilder( instanceUrl.Scheme, instanceUrl.Host, instanceUrl.Port, this.GetServicePath() ).Uri;
 			var request = System.Net.WebRequest.CreateHttp( uri );

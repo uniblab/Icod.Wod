@@ -18,8 +18,6 @@
     USA
 */
 
-using System.Linq;
-
 namespace Icod.Wod.File {
 
 	[System.Serializable]
@@ -38,9 +36,6 @@ namespace Icod.Wod.File {
 
 		#region .ctor
 		protected CountBinaryFileOperationBase() : base() {
-			myCount = 0;
-		}
-		protected CountBinaryFileOperationBase( WorkOrder workOrder ) : base( workOrder ) {
 			myCount = 0;
 		}
 		#endregion .ctor
@@ -64,6 +59,36 @@ namespace Icod.Wod.File {
 
 
 		#region methods
+		public sealed override void DoWork( WorkOrder workOrder ) {
+			var sourceHandler = this.GetFileHandler( workOrder );
+			var dest = this.Destination!;
+			var destHandler = dest.GetFileHandler( workOrder );
+
+			System.Func<FileHandlerBase, System.String, System.Text.Encoding, IQueue<System.String>> reader;
+			var count = this.Count;
+			if ( 0 == count ) {
+				return;
+			} else if ( 0 < count ) {
+				reader = this.ReadPositiveCount;
+			} else {
+				reader = this.ReadNegativeCount;
+			}
+			var sourceEncoding = this.GetEncoding()!;
+			foreach ( var file in sourceHandler.ListFiles().Select(
+				x => x.File
+			) ) {
+				using ( var buffer = new System.IO.MemoryStream( this.BufferLength ) ) {
+					using ( var writer = new System.IO.StreamWriter( buffer, sourceEncoding, this.BufferLength, true ) ) {
+						var rs = this.RecordSeparator;
+						foreach ( var line in reader( sourceHandler, file, sourceEncoding ) ) {
+							writer.Write( line + rs );
+						}
+					}
+					_ = buffer.Seek( 0, System.IO.SeekOrigin.Begin );
+					destHandler.Overwrite( buffer, dest.GetFilePathName( destHandler, file ) );
+				}
+			}
+		}
 		protected abstract IQueue<System.String> ReadPositiveCount( FileHandlerBase fileHandler, System.String filePathName, System.Text.Encoding encoding );
 		protected abstract IQueue<System.String> ReadNegativeCount( FileHandlerBase fileHandler, System.String filePathName, System.Text.Encoding encoding );
 		#endregion methods

@@ -18,9 +18,6 @@
     USA
 */
 
-using System;
-using System.Linq;
-
 namespace Icod.Wod.File {
 
 	[System.Serializable]
@@ -34,35 +31,28 @@ namespace Icod.Wod.File {
 		#region .ctor
 		public ListZip() : base() {
 		}
-		public ListZip( WorkOrder workOrder ) : base( workOrder ) {
-		}
 		#endregion .ctor
 
 
 		#region methods
 		public sealed override void DoWork( WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			var handler = this.GetFileHandler( workOrder );
-			if ( null == handler ) {
-				throw new System.InvalidOperationException();
-			}
-
-			var destD = this.Destination;
+			var destD = this.Destination!;
 			destD.WorkOrder = workOrder;
 			var dest = destD.GetFileHandler( workOrder );
 			if ( null == dest ) {
 				throw new System.InvalidOperationException();
 			}
 
-			System.Func<System.IO.Compression.ZipArchiveEntry, System.String> getFileName = null;
+			System.Func<System.IO.Compression.ZipArchiveEntry, System.String> getFileName;
 			if ( this.TruncateEntryName ) {
-				getFileName = x => System.IO.Path.GetFileName( x.Name );
+				getFileName = x => System.IO.Path.GetFileName( x.Name )!;
 			} else {
 				getFileName = x => x.FullName;
 			}
 
-			System.Collections.Generic.IEnumerable<System.IO.Compression.ZipArchiveEntry> list = null;
-			using ( var reader = handler.OpenReader( handler.PathCombine( this.ExpandedPath, this.ExpandedName ) ) ) {
+			System.Collections.Generic.IEnumerable<System.IO.Compression.ZipArchiveEntry> list;
+			using ( var reader = handler.OpenReader( handler.PathCombine( this.ExpandedPath!, this.ExpandedName! ) ) ) {
 				using ( var zip = this.GetZipArchive( reader, System.IO.Compression.ZipArchiveMode.Read ) ) {
 					list = this.MatchEntries( zip.Entries );
 				}
@@ -78,7 +68,7 @@ namespace Icod.Wod.File {
 						writer.Flush();
 					}
 					_ = buffer.Seek( 0, System.IO.SeekOrigin.Begin );
-					dest.Overwrite( buffer, dest.PathCombine( destD.ExpandedPath, destD.ExpandedName ) );
+					dest.Overwrite( buffer, dest.PathCombine( destD.ExpandedPath!, destD.ExpandedName! ) );
 				}
 			}
 		}

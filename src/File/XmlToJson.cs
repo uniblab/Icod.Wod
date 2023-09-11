@@ -18,8 +18,6 @@
     USA
 */
 
-using System.Linq;
-
 namespace Icod.Wod.File {
 
 	[System.Serializable]
@@ -32,9 +30,6 @@ namespace Icod.Wod.File {
 
 		#region .ctor
 		public XmlToJson() : base() {
-			this.ChangeFileExtension = true;
-		}
-		public XmlToJson( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
 			this.ChangeFileExtension = true;
 		}
 		#endregion .ctor
@@ -55,12 +50,11 @@ namespace Icod.Wod.File {
 
 		#region methods
 		public sealed override void DoWork( WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
-			this.Destination.WorkOrder = workOrder;
+			this.Destination!.WorkOrder = workOrder;
 			var dest = this.Destination.GetFileHandler( workOrder );
 			var source = this.GetFileHandler( workOrder );
 
-			System.Func<System.String, System.String> correctedFileName = null;
+			System.Func<System.String, System.String> correctedFileName;
 			if ( this.ChangeFileExtension ) {
 				correctedFileName = x => System.IO.Path.GetFileNameWithoutExtension( x ) + ".json";
 			} else {
