@@ -45,9 +45,6 @@ namespace Icod.Wod.File {
 		public MkZip() : base() {
 			myMove = false;
 		}
-		public MkZip( WorkOrder workOrder ) : base( workOrder ) {
-			myMove = false;
-		}
 		#endregion .ctor
 
 

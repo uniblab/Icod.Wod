@@ -32,8 +32,6 @@ namespace Icod.Wod.File {
 		#region .ctor
 		public TouchZip() : base() {
 		}
-		public TouchZip( WorkOrder workOrder ) : base( workOrder ) {
-		}
 		#endregion .ctor
 
 

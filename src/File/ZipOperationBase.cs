@@ -52,9 +52,6 @@ namespace Icod.Wod.File {
 			myTruncateEntryName = true;
 			myGetFileName = theTruncatedGetFileName;
 		}
-		protected ZipOperationBase( WorkOrder workOrder ) : base( workOrder ) {
-			myTruncateEntryName = true;
-		}
 		#endregion .ctor
 
 
@@ -86,10 +83,10 @@ namespace Icod.Wod.File {
 			Type = typeof( FileDescriptor ),
 			ElementName = "source",
 			Namespace = "http://Icod.Wod",
-			IsNullable = false
+			IsNullable = true
 		)]
 		[System.ComponentModel.DefaultValue( null )]
-		public virtual FileDescriptor[] Source {
+		public virtual FileDescriptor[]? Source {
 			get;
 			set;
 		}

@@ -31,8 +31,6 @@ namespace Icod.Wod.File {
 		#region .ctor
 		public ListZip() : base() {
 		}
-		public ListZip( WorkOrder workOrder ) : base( workOrder ) {
-		}
 		#endregion .ctor
 
 

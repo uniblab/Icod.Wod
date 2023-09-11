@@ -33,8 +33,6 @@ namespace Icod.Wod.File {
 		#region .ctor
 		protected BinaryZipOperationBase() : base() {
 		}
-		protected BinaryZipOperationBase( WorkOrder workOrder ) : base( workOrder ) {
-		}
 		#endregion .ctor
 
 
