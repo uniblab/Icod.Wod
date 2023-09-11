@@ -18,9 +18,6 @@
     USA
 */
 
-using System;
-using System.Linq;
-
 namespace Icod.Wod.File {
 
 	[System.Serializable]
@@ -41,7 +38,7 @@ namespace Icod.Wod.File {
 
 		#region methods
 		public sealed override void DoWork( WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
+			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
 			var handler = this.GetFileHandler( workOrder );
 			System.String file;
 			System.IO.Stream buffer;
