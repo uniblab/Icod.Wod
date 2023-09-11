@@ -41,7 +41,6 @@ namespace Icod.Wod.File {
 
 		#region methods
 		public sealed override void DoWork( WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			var handler = this.GetFileHandler( workOrder );
 			if ( null == handler ) {
 				throw new System.InvalidOperationException();
@@ -62,7 +61,7 @@ namespace Icod.Wod.File {
 			}
 
 			System.Collections.Generic.IEnumerable<System.IO.Compression.ZipArchiveEntry> list = null;
-			using ( var reader = handler.OpenReader( handler.PathCombine( this.ExpandedPath, this.ExpandedName ) ) ) {
+			using ( var reader = handler.OpenReader( handler.PathCombine( this.ExpandedPath!, this.ExpandedName! ) ) ) {
 				using ( var zip = this.GetZipArchive( reader, System.IO.Compression.ZipArchiveMode.Read ) ) {
 					list = this.MatchEntries( zip.Entries );
 				}
@@ -78,7 +77,7 @@ namespace Icod.Wod.File {
 						writer.Flush();
 					}
 					_ = buffer.Seek( 0, System.IO.SeekOrigin.Begin );
-					dest.Overwrite( buffer, dest.PathCombine( destD.ExpandedPath, destD.ExpandedName ) );
+					dest.Overwrite( buffer, dest.PathCombine( destD.ExpandedPath!, destD.ExpandedName! ) );
 				}
 			}
 		}

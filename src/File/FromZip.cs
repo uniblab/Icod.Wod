@@ -41,10 +41,9 @@ namespace Icod.Wod.File {
 
 		#region method
 		public sealed override void DoWork( WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			var destD = this.Destination;
 			destD.WorkOrder = workOrder;
-			System.String ePath = destD.ExpandedPath;
+			System.String ePath = destD.ExpandedPath!;
 			var dest = destD.GetFileHandler( workOrder );
 
 			var handler = this.GetFileHandler( workOrder );
@@ -64,7 +63,7 @@ namespace Icod.Wod.File {
 					foreach ( var entry in this.MatchEntries( zipArchive.Entries ) ) {
 						eDir = ( this.TruncateEntryName )
 							? ePath
-							: dest.PathCombine( ePath, System.IO.Path.GetDirectoryName( entry.FullName ) )
+							: dest.PathCombine( ePath, System.IO.Path.GetDirectoryName( entry.FullName )! )
 						;
 						using ( var entryStream = entry.Open() ) {
 							dest.Overwrite( entryStream, dest.PathCombine( eDir, entry.Name ) );

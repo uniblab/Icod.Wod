@@ -40,9 +40,6 @@ namespace Icod.Wod.File {
 
 		#region methods
 		protected sealed override System.Collections.Generic.IEnumerable<FileEntry> GetEntries( FileHandlerBase source ) {
-			if ( null == source ) {
-				throw new System.ArgumentNullException( "source" );
-			}
 			return source.ListFiles();
 		}
 		#endregion methods

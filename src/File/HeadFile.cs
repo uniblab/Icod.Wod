@@ -40,18 +40,11 @@ namespace Icod.Wod.File {
 
 		#region methods
 		public sealed override void DoWork( WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			var sourceHandler = this.GetFileHandler( workOrder );
-			if ( null == sourceHandler ) {
-				throw new System.InvalidOperationException();
-			}
 			var dest = this.Destination;
-			if ( null == dest ) {
-				dest = this;
-			}
 			var destHandler = dest.GetFileHandler( workOrder );
 
-			System.Func<FileHandlerBase, System.String, System.Text.Encoding, IQueue<System.String>> reader = null;
+			System.Func<FileHandlerBase, System.String, System.Text.Encoding, IQueue<System.String>> reader;
 			var count = this.Count;
 			if ( 0 == count ) {
 				throw new System.InvalidOperationException( "Count may not be 0." );
@@ -60,7 +53,7 @@ namespace Icod.Wod.File {
 			} else {
 				reader = this.ReadNegativeCount;
 			}
-			var sourceEncoding = this.GetEncoding();
+			var sourceEncoding = this.GetEncoding()!;
 			foreach ( var file in sourceHandler.ListFiles().Select(
 				x => x.File
 			) ) {
@@ -79,7 +72,7 @@ namespace Icod.Wod.File {
 		protected sealed override IQueue<System.String> ReadPositiveCount( FileHandlerBase fileHandler, System.String filePathName, System.Text.Encoding encoding ) {
 			var output = Queue<System.String>.Empty;
 			var count = this.Count;
-			System.String line = null;
+			System.String? line;
 			System.Int32 lineCount = 0;
 			using ( var stream = fileHandler.OpenReader( filePathName ) ) {
 				using ( var reader = new System.IO.StreamReader( stream, encoding, true, fileHandler.BufferLength ) ) {
@@ -100,7 +93,7 @@ namespace Icod.Wod.File {
 		}
 		protected sealed override IQueue<System.String> ReadNegativeCount( FileHandlerBase fileHandler, System.String filePathName, System.Text.Encoding encoding ) {
 			var output = Stack<System.String>.Empty;
-			System.String line = null;
+			System.String? line;
 			using ( var stream = fileHandler.OpenReader( filePathName ) ) {
 				using ( var reader = new System.IO.StreamReader( stream, encoding, true, fileHandler.BufferLength ) ) {
 					var rs = this.RecordSeparator;

@@ -40,18 +40,11 @@ namespace Icod.Wod.File {
 
 		#region methods
 		public sealed override void DoWork( WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			var sourceHandler = this.GetFileHandler( workOrder );
-			if ( null == sourceHandler ) {
-				throw new System.InvalidOperationException();
-			}
 			var dest = this.Destination;
-			if ( null == dest ) {
-				dest = this;
-			}
 			var destHandler = dest.GetFileHandler( workOrder );
 
-			System.Func<FileHandlerBase, System.String, System.Text.Encoding, IQueue<System.String>> reader = null;
+			System.Func<FileHandlerBase, System.String, System.Text.Encoding, IQueue<System.String>> reader;
 			var count = this.Count;
 			if ( 0 == count ) {
 				throw new System.InvalidOperationException( "Count may not be 0." );
@@ -67,7 +60,7 @@ namespace Icod.Wod.File {
 				using ( var buffer = new System.IO.MemoryStream( this.BufferLength ) ) {
 					using ( var writer = new System.IO.StreamWriter( buffer, sourceEncoding, this.BufferLength, true ) ) {
 						var rs = this.RecordSeparator;
-						foreach ( var line in reader( sourceHandler, file, sourceEncoding ) ) {
+						foreach ( var line in reader( sourceHandler, file, sourceEncoding! ) ) {
 							writer.Write( line + rs );
 						}
 					}
@@ -78,7 +71,7 @@ namespace Icod.Wod.File {
 		}
 		protected sealed override IQueue<System.String> ReadPositiveCount( FileHandlerBase fileHandler, System.String filePathName, System.Text.Encoding encoding ) {
 			var output = Queue<System.String>.Empty;
-			System.String line = null;
+			System.String? line;
 			using ( var stream = fileHandler.OpenReader( filePathName ) ) {
 				using ( var reader = new System.IO.StreamReader( stream, encoding, true, fileHandler.BufferLength ) ) {
 					var rs = this.RecordSeparator;
@@ -100,7 +93,7 @@ namespace Icod.Wod.File {
 		}
 		protected sealed override IQueue<System.String> ReadNegativeCount( FileHandlerBase fileHandler, System.String filePathName, System.Text.Encoding encoding ) {
 			var output = Queue<System.String>.Empty;
-			System.String line = null;
+			System.String? line;
 			using ( var stream = fileHandler.OpenReader( filePathName ) ) {
 				using ( var reader = new System.IO.StreamReader( stream, encoding, true, fileHandler.BufferLength ) ) {
 					var rs = this.RecordSeparator;
