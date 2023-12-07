@@ -46,6 +46,9 @@ namespace Icod.Wod {
 			public sealed override System.Int32 GetHashCode() {
 				return theHashCode;
 			}
+			public sealed override System.Boolean Equals( System.Object obj ) {
+				return ReferenceEquals( this, obj );
+			}
 			public System.Collections.Generic.IEnumerator<T> GetEnumerator() {
 				yield break;
 			}
@@ -105,6 +108,9 @@ namespace Icod.Wod {
 			}
 			public sealed override System.Int32 GetHashCode() {
 				return myHashCode;
+			}
+			public sealed override System.Boolean Equals( System.Object obj ) {
+				return ReferenceEquals( this, obj );
 			}
 			public System.Collections.Generic.IEnumerator<T> GetEnumerator() {
 				yield return myValue;
@@ -207,6 +213,9 @@ namespace Icod.Wod {
 
 		public sealed override System.Int32 GetHashCode() {
 			return myHashCode;
+		}
+		public sealed override System.Boolean Equals( System.Object obj ) {
+			return ReferenceEquals( this, obj );
 		}
 		public System.Collections.Generic.IEnumerator<T> GetEnumerator() {
 			IQueue<T> probe = this;
