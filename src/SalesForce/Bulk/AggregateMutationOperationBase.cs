@@ -382,7 +382,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 				writer.Write( System.String.Join( columnDelimiter.ToString(), list ) );
 				writer.Write( lineEnding );
 				foreach ( var row in dataTable.Rows.OfType<System.Data.DataRow>() ) {
-					writer.Write( this.GetRow( dbColumns, row, columnDelimiter, lineEnding, quoteChar ) + lineEnding );
+					writer.Write( this.GetRow( dbColumns, row, columnDelimiter, quoteChar ) + lineEnding );
 				}
 				return writer.ToString();
 			}

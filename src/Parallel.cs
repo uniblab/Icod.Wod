@@ -104,7 +104,7 @@ namespace Icod.Wod {
 				if ( DefaultMaxDegreeOfParallelism == maxP ) {
 					this.DoUnlimitedWork( workOrder, steps, token );
 				} else {
-					this.DoLimitedWork( workOrder, steps, token, maxP );
+					this.DoLimitedWork( workOrder, steps, token );
 				}
 			}
 		}

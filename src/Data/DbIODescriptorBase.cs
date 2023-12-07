@@ -234,8 +234,8 @@ namespace Icod.Wod.Data {
 			);
 			var there = System.Configuration.ConfigurationManager.ConnectionStrings[ cn ];
 			var output = ( null == here )
-				? there.CreateDataAdapter( command, connection )
-				: here.CreateDataAdapter( command, connection )
+				? there.CreateDataAdapter( command )
+				: here.CreateDataAdapter( command )
 			;
 			output.UpdateBatchSize = this.UpdateBatchSize;
 			output.MissingMappingAction = this.MissingMappingAction;
