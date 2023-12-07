@@ -14,7 +14,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 		private const System.Char DQUOTE = '"';
 
 		private System.String myLocator;
-		private System.Func<System.Text.StringBuilder, System.String> myColumnReader;
+		private readonly System.Func<System.Text.StringBuilder, System.String> myColumnReader;
 		#endregion fields
 
 
