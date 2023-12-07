@@ -1,5 +1,6 @@
 // Copyright 2022, Timothy J. Bruce
 using System.Linq;
+using System.Transactions;
 
 namespace Icod.Wod.SalesForce.Bulk {
 
@@ -95,20 +96,22 @@ namespace Icod.Wod.SalesForce.Bulk {
 			return myString;
 		}
 		public System.Boolean Equals( ColumnDelimiterOption other ) {
-			return ( null == other )
-				? false
-				: System.Object.ReferenceEquals( this, other )
-					? true
-					: this.Value.Equals( other.Value )
-			;
+			if ( other is null ) {
+				return false;
+			} else if ( ReferenceEquals( this, other ) ) {
+				return true;
+			} else {
+				return this.Value.Equals( other.Value ) );
+			}
 		}
 		public sealed override System.Boolean Equals( System.Object obj ) {
-			return ( null == obj )
-				? false
-				: System.Object.ReferenceEquals( this, obj )
-					? true
-					: this.Equals( ( obj as ColumnDelimiterOption ) );
-			;
+			if ( obj is null ) {
+				return false;
+			} else if ( ReferenceEquals( this, obj ) ) {
+				return true;
+			} else {
+				return this.Equals( ( obj as ColumnDelimiterOption ) );
+			}
 		}
 		public sealed override System.Int32 GetHashCode() {
 			return myHashcode;
@@ -140,12 +143,13 @@ namespace Icod.Wod.SalesForce.Bulk {
 		}
 
 		public static System.Boolean operator ==( ColumnDelimiterOption left, ColumnDelimiterOption right ) {
-			return ( ( null == (System.Object)left ) && ( null == (System.Object)right ) )
-				? true
-				: ( null != (System.Object)left )
-					? left.Equals( right )
-					: right.Equals( left )
-			;
+			if ( ( left is null ) && ( right is null ) ) {
+				return true;
+			} else if ( ( left is null ) || ( right is null ) ) {
+				return false;
+			} else {
+				return left.Equals( right );
+			}
 		}
 		public static System.Boolean operator !=( ColumnDelimiterOption left, ColumnDelimiterOption right ) {
 			return !( left == right );
