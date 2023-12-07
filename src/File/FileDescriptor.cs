@@ -173,7 +173,7 @@ namespace Icod.Wod.File {
 
 		#region methods
 		public FileHandlerBase GetFileHandler( Icod.Wod.WorkOrder workOrder ) {
-			FileHandlerBase output = null;
+			FileHandlerBase output;
 
 			this.WorkOrder = workOrder;
 			var ep = this.ExpandedPath;

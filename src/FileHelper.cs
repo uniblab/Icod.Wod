@@ -92,7 +92,6 @@ namespace Icod.Wod {
 				return null;
 			}
 
-			System.Boolean isReading = true;
 			var rs = recordSeparator.ToCharArray();
 			System.Int32 i = 0;
 			var maxI = rs.Length;
@@ -104,7 +103,6 @@ namespace Icod.Wod {
 				c = file.Read();
 				if ( -1 == c ) {
 					maxI = 0;
-					isReading = false;
 					break;
 				}
 				isNull = false;
@@ -115,11 +113,10 @@ namespace Icod.Wod {
 					i = 0;
 				}
 				if ( i == maxI ) {
-					isReading = false;
 					break;
 				}
 				j++;
-			} while ( isReading );
+			} while ( true );
 			line.Remove( line.Length - maxI, maxI );
 			return isNull ? null : line.ToString();
 		}
@@ -186,7 +183,6 @@ namespace Icod.Wod {
 				return null;
 			}
 
-			System.Boolean isReading = true;
 			var rs = recordSeparator.ToCharArray();
 			System.Int32 i = 0;
 			var maxI = rs.Length;
@@ -198,7 +194,6 @@ namespace Icod.Wod {
 				c = file.Read();
 				if ( -1 == c ) {
 					maxI = 0;
-					isReading = false;
 					break;
 				}
 				isNull = false;
@@ -209,11 +204,10 @@ namespace Icod.Wod {
 					i = 0;
 				}
 				if ( i == maxI ) {
-					isReading = false;
 					break;
 				}
 				j++;
-			} while ( isReading );
+			} while ( true );
 			line.Remove( line.Length - maxI, maxI );
 			return isNull ? null : line.ToString();
 		}
@@ -234,13 +228,11 @@ namespace Icod.Wod {
 				System.Int32 i;
 				System.Char c;
 				System.String column;
-				var reading = true;
 				System.Nullable<System.Char> ec = null;
 				var qc = quoteChar;
 				do {
 					i = reader.Peek();
 					if ( -1 == i ) {
-						reading = false;
 						break;
 					}
 					c = System.Convert.ToChar( i );
@@ -252,7 +244,7 @@ namespace Icod.Wod {
 						column = ReadColumn( reader, fieldSeparator, false );
 						yield return column;
 					}
-				} while ( reading );
+				} while ( true );
 			}
 		}
 		public static System.Collections.Generic.IEnumerable<System.String> ReadRecord( this System.IO.StreamReader file, System.String recordSeparator, System.Char quoteChar, System.Char fieldSeparator ) {
@@ -272,13 +264,11 @@ namespace Icod.Wod {
 				System.Int32 i;
 				System.Char c;
 				System.String column;
-				var reading = true;
 				System.Nullable<System.Char> ec = null;
 				var qc = quoteChar;
 				do {
 					i = reader.Peek();
 					if ( -1 == i ) {
-						reading = false;
 						break;
 					}
 					c = System.Convert.ToChar( i );
@@ -290,7 +280,7 @@ namespace Icod.Wod {
 						column = ReadColumn( reader, fieldSeparator, false );
 						yield return column;
 					}
-				} while ( reading );
+				} while ( true );
 			}
 		}
 		public static System.String ReadColumn( this System.IO.StringReader reader, System.Char @break, System.Boolean readNextOnBreak ) {

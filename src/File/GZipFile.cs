@@ -22,7 +22,7 @@ namespace Icod.Wod.File {
 		public sealed override void DoWork( Icod.Wod.WorkOrder workOrder ) {
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			this.Destination.WorkOrder = workOrder;
-			System.Action<Icod.Wod.File.FileHandlerBase, System.String, Icod.Wod.File.FileHandlerBase> action = null;
+			System.Action<Icod.Wod.File.FileHandlerBase, System.String, Icod.Wod.File.FileHandlerBase> action;
 			switch ( this.CompressionMode ) {
 				case System.IO.Compression.CompressionMode.Decompress :
 					action = this.Decompress;

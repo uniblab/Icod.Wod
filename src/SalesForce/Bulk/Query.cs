@@ -125,7 +125,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 				state = jobResponse.state;
 			}
 
-			SelectResult result = null;
+			SelectResult result;
 			System.String locator = null;
 			do {
 				result = this.GetResults( loginResponse, id, locator, ColumnDelimiterOption.FromName( jobResponse.columnDelimiter ).Value, LineEndingOption.FromName( jobResponse.lineEnding ).Value );

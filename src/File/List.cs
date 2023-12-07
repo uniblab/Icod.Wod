@@ -33,7 +33,7 @@ namespace Icod.Wod.File {
 				throw new System.InvalidOperationException();
 			}
 
-			System.Func<FileEntry, System.String> getFileName = null;
+			System.Func<FileEntry, System.String> getFileName;
 			if ( this.TruncateEntryName ) {
 				getFileName = x => System.IO.Path.GetFileName( x.File );
 			} else {
