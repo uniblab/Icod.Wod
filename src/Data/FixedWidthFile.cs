@@ -44,10 +44,10 @@ namespace Icod.Wod.Data {
 			}
 			set {
 				base.ConvertEmptyStringToNull = value;
-				System.Func<System.String, System.Int32, System.Int32, System.String> w = ( a, b, c ) => a.Substring( b, c );
+				System.String w( System.String a, System.Int32 b, System.Int32 c ) => a.Substring( b, c );
 				var q = ( this.TrimValues )
 					? ( a, b, c ) => w( a, b, c ).TrimToNull()
-					: w
+					: (System.Func<System.String, System.Int32, System.Int32, System.String>)w
 				;
 				this.ColumnReader = ( value )
 					? q
@@ -67,10 +67,10 @@ namespace Icod.Wod.Data {
 			}
 			set {
 				base.TrimValues = value;
-				System.Func<System.String, System.Int32, System.Int32, System.String> w = ( a, b, c ) => a.Substring( b, c );
+				System.String w( System.String a, System.Int32 b, System.Int32 c ) => a.Substring( b, c );
 				var q = ( value )
 					? ( a, b, c ) => w( a, b, c ).TrimToNull()
-					: w
+					: (System.Func<System.String, System.Int32, System.Int32, System.String>)w
 				;
 				this.ColumnReader = ( this.ConvertEmptyStringToNull )
 					? q

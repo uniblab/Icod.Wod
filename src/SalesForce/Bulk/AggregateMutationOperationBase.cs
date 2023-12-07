@@ -449,7 +449,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 				yield return file;
 				yield break;
 			}
-			System.Func<System.String, System.Int32> getSize = x => System.Text.Encoding.UTF8.GetByteCount( x );
+			System.Int32 getSize( System.String x ) => System.Text.Encoding.UTF8.GetByteCount( x );
 			var le = LineEndingOption.CRLF.Value;
 			using ( var reader = new System.IO.StringReader( file ) ) {
 				var output = new System.Text.StringBuilder();
