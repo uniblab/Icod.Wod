@@ -20,7 +20,7 @@ namespace Icod.Wod.Data {
 			return output;
 		}
 
-		public static System.Data.Common.DbDataAdapter CreateDataAdapter( System.String providerName, System.Data.Common.DbCommand command, System.Data.Common.DbConnection connection ) {
+		public static System.Data.Common.DbDataAdapter CreateDataAdapter( System.String providerName, System.Data.Common.DbCommand command ) {
 			var output = System.Data.Common.DbProviderFactories.GetFactory(
 				providerName
 			).CreateDataAdapter();

@@ -387,7 +387,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 				return writer.ToString();
 			}
 		}
-		protected System.String GetRow( System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Data.DataRow row, System.Char columnDelimiter, System.String lineEnding, System.Char quoteChar ) {
+		protected System.String GetRow( System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Data.DataRow row, System.Char columnDelimiter, System.Char quoteChar ) {
 			if ( null == row ) {
 				throw new System.ArgumentNullException( "row" );
 			} else if ( ( null == columns ) || !columns.Any() ) {
