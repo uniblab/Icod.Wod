@@ -1,7 +1,15 @@
 # Icod Work on Demand Framework
 
 ## What the Hell is this thing?
-The Icod Work on Demand Framework, or WoD, is a class library and corresponding client program (Icod.Wod.Client, [https://github.com/uniblab/Icod.Wod.Client]) intended to automate a great variety of tasks.  Some tasks might be downloading a delimited file via Sftp, inserting that file into a database, and exporting some data to your SalesForce cloud.  Another option might be pulling data, exposed as Json feed, and importing into your own database, manipulating it, and then exporting a CSV report to a group via email.  Or maybe you just need something to archive a bunch of daily log files into a set of ZIP archives.  There is an extremely good chance the WoD has the functionality you need, even if that need is emptying a directory and then downloading a few hundred PDF's from an Ftp site back into that directory.
+The Icod Work on Demand Framework, or WoD, is a class library and corresponding client program 
+[Icod.Wod.Client](https://github.com/uniblab/Icod.Wod.Client) intended to automate a great variety of tasks.
+Some tasks might be downloading a delimited file via Sftp, inserting that file into a database, 
+and exporting some data to your SalesForce cloud.  
+Another option might be pulling data, exposed as Json feed, and importing into your own database, 
+manipulating it, and then exporting a CSV report to a group via email.  
+Or maybe you just need something to archive a bunch of daily log files into a set of ZIP archives.  
+There is an extremely good chance the WoD has the functionality you need, even if that need is 
+emptying a directory and then downloading a few hundred PDF's from an Ftp site back into that directory.
 
 ## Does it need some sort of cloud?
 No.  It'll run on any computer which supports the .Net Framework 4.8.
