@@ -172,8 +172,7 @@ namespace Icod.Wod.File {
 				}
 			).Where(
 				x => System.String.IsNullOrEmpty( regexPattern )
-					? true
-					: System.Text.RegularExpressions.Regex.IsMatch( x.File, regexPattern )
+					|| System.Text.RegularExpressions.Regex.IsMatch( x.File, regexPattern )
 			);
 		}
 		private System.String StripNameFromList( System.String listLine ) {
