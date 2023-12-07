@@ -101,7 +101,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 			} else if ( ReferenceEquals( this, other ) ) {
 				return true;
 			} else {
-				return this.Value.Equals( other.Value ) );
+				return this.Value.Equals( other.Value );
 			}
 		}
 		public sealed override System.Boolean Equals( System.Object obj ) {
