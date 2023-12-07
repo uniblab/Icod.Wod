@@ -8,29 +8,14 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 		#region fields
 		private const System.Int32 EOF = -1;
-		private static readonly System.Func<System.Text.StringBuilder, System.String> theValueToString;
-		private static readonly System.Func<System.Text.StringBuilder, System.String> theTrimToNullReader;
-
 		private const System.Char DQUOTE = '"';
 
 		private System.String myLocator;
-		private readonly System.Func<System.Text.StringBuilder, System.String> myColumnReader;
 		#endregion fields
 
 
 		#region .ctor
-		static SelectResult() {
-			theValueToString = a => ( null == a )
-				? null
-				: ( System.DBNull.Value.Equals( a ) )
-					? null
-					: a.ToString()
-			;
-			theTrimToNullReader = a => theValueToString( a ).TrimToNull();
-		}
-
 		public SelectResult() : base() {
-			myColumnReader = theTrimToNullReader;
 		}
 		#endregion .ctor
 
@@ -67,13 +52,6 @@ namespace Icod.Wod.SalesForce.Bulk {
 		public System.String LineEnding {
 			get;
 			set;
-		}
-
-		[System.Xml.Serialization.XmlIgnore]
-		private System.Func<System.Text.StringBuilder, System.String> ColumnReader {
-			get {
-				return myColumnReader ?? theTrimToNullReader;
-			}
 		}
 
 		[System.Xml.Serialization.XmlIgnore]
