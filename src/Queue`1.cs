@@ -70,7 +70,7 @@ namespace Icod.Wod {
 			}
 			internal SingleQueue( T value ) : this() {
 				myValue = value;
-				if ( !System.Object.ReferenceEquals( value, null ) ) {
+				if ( value is object ) {
 					unchecked {
 						myHashCode += value.GetHashCode();
 					}

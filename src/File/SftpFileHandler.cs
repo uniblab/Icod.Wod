@@ -116,15 +116,11 @@ namespace Icod.Wod.File {
 				try {
 					stream = client.Open( absolutePath, System.IO.FileMode.Open, System.IO.FileAccess.Read );
 				} catch ( System.Exception ) {
-					if ( null != stream ) {
-						stream.Dispose();
-					}
+					stream?.Dispose();
 					throw;
 				}
 			} catch ( System.Exception ) {
-				if  ( null != client ) {
-					client.Dispose();
-				}
+				client?.Dispose();
 				throw;
 			}
 			return new ClientStream( stream, client );

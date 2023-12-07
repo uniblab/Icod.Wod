@@ -72,18 +72,19 @@ namespace Icod.Wod.Data {
 		}
 
 		public sealed override System.Boolean Equals( System.Object obj ) {
-			if ( System.Object.ReferenceEquals( this, obj ) ) {
-				return true;
-			} else if ( null == (System.Object)obj ) {
+			if ( obj is null ) {
 				return false;
+			} else if ( ReferenceEquals( this, obj ) ) {
+				return true;
+			} else {
+				return this.Equals( obj as ColumnMap );
 			}
-			return this.Equals( obj as ColumnMap );
 		}
 		public System.Boolean Equals( ColumnMap other ) {
-			if ( System.Object.ReferenceEquals( this, other ) ) {
-				return true;
-			} else if ( null == other ) {
+			if ( other is null ) {
 				return false;
+			} else if ( ReferenceEquals( this, other ) ) {
+				return true;
 			} else {
 				return System.String.Equals( this.FromName, other.FromName )
 					&& System.String.Equals( this.ToName, other.ToName )
@@ -92,12 +93,12 @@ namespace Icod.Wod.Data {
 			}
 		}
 		public static System.Boolean operator ==( ColumnMap x, ColumnMap y ) {
-			if ( ( null == (System.Object)x ) && ( null == (System.Object)y ) ) {
+			if ( ( x is null ) && ( y is null ) ) {
 				return true;
-			} else if ( null != (System.Object)x ) {
-				return x.Equals( y );
+			} else if ( ( x is null ) || ( y is null ) ) {
+				return false;
 			} else {
-				return y.Equals( x );
+				return x.Equals( y );
 			}
 		}
 		public static System.Boolean operator !=( ColumnMap x, ColumnMap y ) {

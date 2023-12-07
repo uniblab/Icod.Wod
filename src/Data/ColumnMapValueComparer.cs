@@ -32,17 +32,20 @@ namespace Icod.Wod.Data {
 
 		#region methods
 		public System.Boolean Equals( ColumnMap x, ColumnMap y ) {
-			if ( ( null == (System.Object)x ) && ( null == (System.Object)y ) ) {
+			if ( ( x is null ) && ( y is null ) ) {
 				return true;
-			} else if ( null != (System.Object)x ) {
-				return x.Equals( y );
+			} else if ( ( x is null ) || ( y is null ) ) {
+				return false;
 			} else {
-				return y.Equals( x );
+				return x.Equals( y );
 			}
 		}
 
 		public System.Int32 GetHashCode( ColumnMap obj ) {
-			return ( null == obj ) ? 0 : obj.GetHashCode();
+			return ( obj is null ) 
+				? 0 
+				: obj.GetHashCode()
+			;
 		}
 		#endregion methods
 

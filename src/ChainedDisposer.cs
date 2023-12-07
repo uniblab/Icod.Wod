@@ -37,10 +37,10 @@ namespace Icod.Wod {
 			if ( disposing && !myIsDisposed ) {
 				System.Threading.Thread.BeginCriticalRegion();
 				if ( !System.Threading.Volatile.Read( ref myIsDisposed ) ) {
-					if ( null != myInner ) {
+					if ( myInner is null ) {
 						myInner.Dispose();
 					}
-					if ( null != myOuter ) {
+					if ( myOuter is null ) {
 						myOuter.Dispose();
 					}
 					System.Threading.Volatile.Write( ref myIsDisposed, true );
