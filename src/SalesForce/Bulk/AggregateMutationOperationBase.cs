@@ -120,9 +120,9 @@ namespace Icod.Wod.SalesForce.Bulk {
 				var max = wait.Maximum;
 				var sleepTime = wait.Initial;
 				if (
-					!StateOption.Open.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
-					&& !StateOption.Aborted.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
-					&& !StateOption.Failed.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
+					!StateOption.Open.Value.Equals( jobResponse.State, System.StringComparison.OrdinalIgnoreCase )
+					&& !StateOption.Aborted.Value.Equals( jobResponse.State, System.StringComparison.OrdinalIgnoreCase )
+					&& !StateOption.Failed.Value.Equals( jobResponse.State, System.StringComparison.OrdinalIgnoreCase )
 				) {
 					if ( 0 < sleepTime ) {
 						System.Threading.Thread.Sleep( sleepTime );
@@ -130,9 +130,9 @@ namespace Icod.Wod.SalesForce.Bulk {
 					jobResponse = this.QueryJob( loginResponse, id );
 					sleepTime = wait.Minimum;
 					while (
-						!StateOption.Open.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
-						&& !StateOption.Aborted.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
-						&& !StateOption.Failed.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
+						!StateOption.Open.Value.Equals( jobResponse.State, System.StringComparison.OrdinalIgnoreCase )
+						&& !StateOption.Aborted.Value.Equals( jobResponse.State, System.StringComparison.OrdinalIgnoreCase )
+						&& !StateOption.Failed.Value.Equals( jobResponse.State, System.StringComparison.OrdinalIgnoreCase )
 						&& ( sleepTime < max )
 					) {
 						System.Threading.Thread.Sleep( sleepTime );
@@ -140,9 +140,9 @@ namespace Icod.Wod.SalesForce.Bulk {
 						jobResponse = this.QueryJob( loginResponse, id );
 					}
 					while (
-						!StateOption.Open.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
-						&& !StateOption.Aborted.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
-						&& !StateOption.Failed.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
+						!StateOption.Open.Value.Equals( jobResponse.State, System.StringComparison.OrdinalIgnoreCase )
+						&& !StateOption.Aborted.Value.Equals( jobResponse.State, System.StringComparison.OrdinalIgnoreCase )
+						&& !StateOption.Failed.Value.Equals( jobResponse.State, System.StringComparison.OrdinalIgnoreCase )
 					) {
 						System.Threading.Thread.Sleep( max );
 						jobResponse = this.QueryJob( loginResponse, id );
@@ -156,9 +156,9 @@ namespace Icod.Wod.SalesForce.Bulk {
 				jobResponse = this.QueryJob( loginResponse, id );
 				sleepTime = wait.Initial;
 				if (
-					!StateOption.JobComplete.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
-					&& !StateOption.Aborted.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
-					&& !StateOption.Failed.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
+					!StateOption.JobComplete.Value.Equals( jobResponse.State, System.StringComparison.OrdinalIgnoreCase )
+					&& !StateOption.Aborted.Value.Equals( jobResponse.State, System.StringComparison.OrdinalIgnoreCase )
+					&& !StateOption.Failed.Value.Equals( jobResponse.State, System.StringComparison.OrdinalIgnoreCase )
 				) {
 					if ( 0 < sleepTime ) {
 						System.Threading.Thread.Sleep( sleepTime );
@@ -166,9 +166,9 @@ namespace Icod.Wod.SalesForce.Bulk {
 					jobResponse = this.QueryJob( loginResponse, id );
 					sleepTime = wait.Minimum;
 					while (
-						!StateOption.JobComplete.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
-						&& !StateOption.Aborted.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
-						&& !StateOption.Failed.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
+						!StateOption.JobComplete.Value.Equals( jobResponse.State, System.StringComparison.OrdinalIgnoreCase )
+						&& !StateOption.Aborted.Value.Equals( jobResponse.State, System.StringComparison.OrdinalIgnoreCase )
+						&& !StateOption.Failed.Value.Equals( jobResponse.State, System.StringComparison.OrdinalIgnoreCase )
 						&& ( sleepTime < max )
 					) {
 						System.Threading.Thread.Sleep( sleepTime );
@@ -176,9 +176,9 @@ namespace Icod.Wod.SalesForce.Bulk {
 						jobResponse = this.QueryJob( loginResponse, id );
 					}
 					while (
-						!StateOption.JobComplete.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
-						&& !StateOption.Aborted.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
-						&& !StateOption.Failed.Value.Equals( jobResponse.state, System.StringComparison.OrdinalIgnoreCase )
+						!StateOption.JobComplete.Value.Equals( jobResponse.State, System.StringComparison.OrdinalIgnoreCase )
+						&& !StateOption.Aborted.Value.Equals( jobResponse.State, System.StringComparison.OrdinalIgnoreCase )
+						&& !StateOption.Failed.Value.Equals( jobResponse.State, System.StringComparison.OrdinalIgnoreCase )
 					) {
 						System.Threading.Thread.Sleep( max );
 						jobResponse = this.QueryJob( loginResponse, id );
@@ -222,11 +222,11 @@ namespace Icod.Wod.SalesForce.Bulk {
 					}
 					return new SelectResult {
 						Body = buffer.ToArray().GetWebString( System.Text.Encoding.UTF8, response.Headers[ "Content-Encoding" ].TrimToNull() ?? "identity" ),
-						ColumnDelimiter = ColumnDelimiterOption.FromName( jobResponse.columnDelimiter ).Value,
-						LineEnding = LineEndingOption.FromName( jobResponse.lineEnding ).Value,
+						ColumnDelimiter = ColumnDelimiterOption.FromName( jobResponse.ColumnDelimiter ).Value,
+						LineEnding = LineEndingOption.FromName( jobResponse.LineEnding ).Value,
 						AdditionalColumns = new System.Data.DataColumn[ 7 ] {
 							new System.Data.DataColumn( "%wod:sf_operation%", typeof( System.String ) ) {
-								DefaultValue = jobResponse.operation
+								DefaultValue = jobResponse.Operation
 							},
 							new System.Data.DataColumn( "%wod:sf_object%", typeof( System.String ) ) {
 								DefaultValue = this.Object

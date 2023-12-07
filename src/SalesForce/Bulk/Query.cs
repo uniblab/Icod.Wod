@@ -103,7 +103,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 			}
 			sleepTime = wait.Minimum;
 			var max = wait.Maximum;
-			var state = jobResponse.state;
+			var state = jobResponse.State;
 			while (
 				!StateOption.JobComplete.Value.Equals( state, System.StringComparison.OrdinalIgnoreCase )
 				&& !StateOption.Aborted.Value.Equals( state, System.StringComparison.OrdinalIgnoreCase )
@@ -113,7 +113,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 				System.Threading.Thread.Sleep( sleepTime );
 				sleepTime = System.Math.Min( max, sleepTime + wait.Increment );
 				jobResponse = this.QueryJob( loginResponse, id );
-				state = jobResponse.state;
+				state = jobResponse.State;
 			}
 			while (
 				!StateOption.JobComplete.Value.Equals( state, System.StringComparison.OrdinalIgnoreCase )
@@ -122,13 +122,13 @@ namespace Icod.Wod.SalesForce.Bulk {
 			) {
 				System.Threading.Thread.Sleep( max );
 				jobResponse = this.QueryJob( loginResponse, id );
-				state = jobResponse.state;
+				state = jobResponse.State;
 			}
 
 			SelectResult result;
 			System.String locator = null;
 			do {
-				result = this.GetResults( loginResponse, id, locator, ColumnDelimiterOption.FromName( jobResponse.columnDelimiter ).Value, LineEndingOption.FromName( jobResponse.lineEnding ).Value );
+				result = this.GetResults( loginResponse, id, locator, ColumnDelimiterOption.FromName( jobResponse.ColumnDelimiter ).Value, LineEndingOption.FromName( jobResponse.LineEnding ).Value );
 				this.WriteRecords( workOrder, result );
 				locator = result.Locator;
 			} while ( !System.String.IsNullOrEmpty( locator ) );

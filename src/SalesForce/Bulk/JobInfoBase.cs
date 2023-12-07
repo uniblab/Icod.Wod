@@ -13,31 +13,38 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 
 		#region properties
-		public System.String columnDelimiter {
+		[Newtonsoft.Json.JsonProperty( propertyName: "columnDelimiter" )]
+		public System.String ColumnDelimiter {
 			get;
 			set;
 		}
-		public System.String contentType {
+		[Newtonsoft.Json.JsonProperty( propertyName: "contentType" )]
+		public System.String ContentType {
 			get;
 			set;
 		}
-		public System.String externalIdFieldName {
+		[Newtonsoft.Json.JsonProperty( propertyName: "externalIdFieldName" )]
+		public System.String ExternalIdFieldName {
 			get;
 			set;
 		}
-		public System.String lineEnding {
+		[Newtonsoft.Json.JsonProperty( propertyName: "lineEnding" )]
+		public System.String LineEnding {
 			get;
 			set;
 		}
-		public System.String @object {
+		[Newtonsoft.Json.JsonProperty( propertyName: "object" )]
+		public System.String Object {
 			get;
 			set;
 		}
-		public System.String operation {
+		[Newtonsoft.Json.JsonProperty( propertyName: "operation" )]
+		public System.String Operation {
 			get;
 			set;
 		}
-		public System.String state {
+		[Newtonsoft.Json.JsonProperty( propertyName: "state" )]
+		public System.String State {
 			get;
 			set;
 		}
