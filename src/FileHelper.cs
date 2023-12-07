@@ -56,7 +56,7 @@ namespace Icod.Wod {
 						isPlaintext = false;
 					} else if ( ( leLen <= output.Length ) && ( recordSeparator[ i ].Equals( output[ ( output.Length - leLen ) - i ] ) ) ) {
 						if ( lenStop <= ++i ) {
-							output.Remove( output.Length - leLen, leLen );
+							_ = output.Remove( output.Length - leLen, leLen );
 							break;
 						}
 					} else {
@@ -70,7 +70,7 @@ namespace Icod.Wod {
 						}
 						c = System.Convert.ToChar( p );
 						if ( quoteChar.Equals( c ) ) {
-							file.Read();
+							_ = file.Read();
 							output = output.Append( c );
 						} else {
 							i = 0;
@@ -106,7 +106,7 @@ namespace Icod.Wod {
 					break;
 				}
 				isNull = false;
-				line.Append( System.Convert.ToChar( c ) );
+				_ = line.Append( System.Convert.ToChar( c ) );
 				if ( line[ j ].Equals( rs[ i ] ) ) {
 					i++;
 				} else {
@@ -117,7 +117,7 @@ namespace Icod.Wod {
 				}
 				j++;
 			} while ( true );
-			line.Remove( line.Length - maxI, maxI );
+			_ = line.Remove( line.Length - maxI, maxI );
 			return isNull ? null : line.ToString();
 		}
 		public static System.String ReadLine( this System.IO.StreamReader file, System.String recordSeparator, System.Char quoteChar ) {
@@ -147,7 +147,7 @@ namespace Icod.Wod {
 						isPlaintext = false;
 					} else if ( ( leLen <= output.Length ) && ( recordSeparator[ i ].Equals( output[ ( output.Length - leLen ) - i ] ) ) ) {
 						if ( lenStop <= ++i ) {
-							output.Remove( output.Length - leLen, leLen );
+							_ = output.Remove( output.Length - leLen, leLen );
 							break;
 						}
 					} else {
@@ -161,7 +161,7 @@ namespace Icod.Wod {
 						}
 						c = System.Convert.ToChar( p );
 						if ( quoteChar.Equals( c ) ) {
-							file.Read();
+							_ = file.Read();
 							output = output.Append( c );
 						} else {
 							i = 0;
@@ -197,7 +197,7 @@ namespace Icod.Wod {
 					break;
 				}
 				isNull = false;
-				line.Append( System.Convert.ToChar( c ) );
+				_ = line.Append( System.Convert.ToChar( c ) );
 				if ( line[ j ].Equals( rs[ i ] ) ) {
 					i++;
 				} else {
@@ -208,7 +208,7 @@ namespace Icod.Wod {
 				}
 				j++;
 			} while ( true );
-			line.Remove( line.Length - maxI, maxI );
+			_ = line.Remove( line.Length - maxI, maxI );
 			return isNull ? null : line.ToString();
 		}
 
@@ -237,7 +237,7 @@ namespace Icod.Wod {
 					}
 					c = System.Convert.ToChar( i );
 					if ( qc.Equals( c ) ) {
-						reader.Read();
+						_ = reader.Read();
 						column = ReadColumn( reader, quoteChar, true );
 						yield return column;
 					} else {
@@ -273,7 +273,7 @@ namespace Icod.Wod {
 					}
 					c = System.Convert.ToChar( i );
 					if ( qc.Equals( c ) ) {
-						reader.Read();
+						_ = reader.Read();
 						column = ReadColumn( reader, quoteChar, true );
 						yield return column;
 					} else {
@@ -323,7 +323,7 @@ namespace Icod.Wod {
 					} else if ( @break.Equals( System.Convert.ToChar( p ) ) ) {
 						return System.Convert.ToChar( reader.Read() );
 					} else {
-						reader.Read();
+						_ = reader.Read();
 					}
 				}
 				return null;

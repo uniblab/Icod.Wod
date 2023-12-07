@@ -75,7 +75,7 @@ namespace Icod.Wod.Data {
 					table.Columns[ 0 ].ColumnName = this.Columns.FirstOrDefault().Name;
 				}
 				var record = file.ReadLine( this.RecordSeparator );
-				table.Rows.Add( record );
+				_ = table.Rows.Add( record );
 			} catch ( System.Exception e ) {
 				if ( !e.Data.Contains( "%wod:FilePathName%" ) ) {
 					e.Data.Add( "%wod:FilePathName%", filePathName );

@@ -85,8 +85,8 @@ namespace Icod.Wod.SalesForce {
 			var clientId = credential.ClientId;
 			var parameters = new System.Text.StringBuilder();
 			var encoding = System.Text.Encoding.UTF8;
-			parameters.Append( "client_id=" );
-			parameters.Append( System.Web.HttpUtility.UrlEncode( clientId, encoding ) );
+			_ = parameters.Append( "client_id=" );
+			_ = parameters.Append( System.Web.HttpUtility.UrlEncode( clientId, encoding ) );
 			switch ( credential.LoginMode ) {
 				case LoginMode.Password:
 					var clientSecret = credential.ClientSecret;
@@ -94,20 +94,20 @@ namespace Icod.Wod.SalesForce {
 					if ( System.String.IsNullOrEmpty( password ) ) {
 						throw new System.InvalidOperationException( "The specified credential is attempting Password authentication but does not have a password configured." );
 					}
-					parameters.Append( "&client_secret=" );
-					parameters.Append( System.Web.HttpUtility.UrlEncode( clientSecret, encoding ) );
-					parameters.Append( "&grant_type=password" );
-					parameters.Append( "&password=" );
-					parameters.Append( System.Web.HttpUtility.UrlEncode( password, encoding ) );
-					parameters.Append( "&username=" );
-					parameters.Append( System.Web.HttpUtility.UrlEncode( credential.Username, encoding ) );
+					_ = parameters.Append( "&client_secret=" );
+					_ = parameters.Append( System.Web.HttpUtility.UrlEncode( clientSecret, encoding ) );
+					_ = parameters.Append( "&grant_type=password" );
+					_ = parameters.Append( "&password=" );
+					_ = parameters.Append( System.Web.HttpUtility.UrlEncode( password, encoding ) );
+					_ = parameters.Append( "&username=" );
+					_ = parameters.Append( System.Web.HttpUtility.UrlEncode( credential.Username, encoding ) );
 					break;
 				case LoginMode.RefreshToken:
-					parameters.Append( "&grant_type=refresh_token" );
-					parameters.Append( "&refresh_token=" );
-					parameters.Append( System.Web.HttpUtility.UrlEncode( credential.RefreshToken, encoding ) );
-					parameters.Append( "&redirect_uri=" );
-					parameters.Append( System.Web.HttpUtility.UrlEncode( credential.CallbackUrl, encoding ) );
+					_ = parameters.Append( "&grant_type=refresh_token" );
+					_ = parameters.Append( "&refresh_token=" );
+					_ = parameters.Append( System.Web.HttpUtility.UrlEncode( credential.RefreshToken, encoding ) );
+					_ = parameters.Append( "&redirect_uri=" );
+					_ = parameters.Append( System.Web.HttpUtility.UrlEncode( credential.CallbackUrl, encoding ) );
 					break;
 				default:
 					throw new System.InvalidOperationException( "Unknown LoginMode configured for the specified credential." );

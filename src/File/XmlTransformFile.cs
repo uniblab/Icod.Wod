@@ -69,7 +69,7 @@ namespace Icod.Wod.File {
 				xslTransform.Transform( source, writer );
 				writer.Flush();
 			}
-			output.Seek( 0, System.IO.SeekOrigin.Begin );
+			_ = output.Seek( 0, System.IO.SeekOrigin.Begin );
 			return output;
 		}
 		#endregion  methods

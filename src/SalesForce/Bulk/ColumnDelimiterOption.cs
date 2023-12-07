@@ -91,7 +91,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 		#region methods
 		public sealed override System.String ToString() {
 			if ( null == myString ) {
-				System.Threading.Interlocked.CompareExchange<System.String>( ref myString, new System.String( myValue, 1 ), null );
+				_ = System.Threading.Interlocked.CompareExchange<System.String>( ref myString, new System.String( myValue, 1 ), null );
 			}
 			return myString;
 		}

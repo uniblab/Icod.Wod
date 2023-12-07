@@ -27,7 +27,7 @@ namespace Icod.Wod {
 					using ( var output = new System.IO.MemoryStream() ) {
 						worker.CopyTo( output );
 						output.Flush();
-						output.Seek( 0, System.IO.SeekOrigin.Begin );
+						_ = output.Seek( 0, System.IO.SeekOrigin.Begin );
 						return output.ToArray();
 					}
 				}
@@ -59,7 +59,7 @@ namespace Icod.Wod {
 					using ( var output = new System.IO.MemoryStream() ) {
 						worker.CopyTo( output );
 						output.Flush();
-						output.Seek( 0, System.IO.SeekOrigin.Begin );
+						_ = output.Seek( 0, System.IO.SeekOrigin.Begin );
 						return output.ToArray().GetString( encoding );
 					}
 				}

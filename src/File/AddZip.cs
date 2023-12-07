@@ -40,7 +40,7 @@ namespace Icod.Wod.File {
 				using ( var reader = handler.OpenReader( handler.PathCombine( this.ExpandedPath, this.ExpandedName ) ) ) {
 					reader.CopyTo( buffer );
 				}
-				buffer.Seek( 0, System.IO.SeekOrigin.Begin );
+				_ = buffer.Seek( 0, System.IO.SeekOrigin.Begin );
 				using ( var zipArchive = this.GetZipArchive( buffer, System.IO.Compression.ZipArchiveMode.Update ) ) {
 					foreach ( var sourceD in sources ?? new FileDescriptor[ 0 ] ) {
 						sep = sourceD.ExpandedPath;

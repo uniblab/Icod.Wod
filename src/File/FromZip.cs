@@ -40,7 +40,7 @@ namespace Icod.Wod.File {
 				using ( var a = handler.OpenReader( file ) ) {
 					a.CopyTo( buffer );
 				}
-				buffer.Seek( 0, System.IO.SeekOrigin.Begin );
+				_ = buffer.Seek( 0, System.IO.SeekOrigin.Begin );
 				using ( var zipArchive = this.GetZipArchive( buffer, System.IO.Compression.ZipArchiveMode.Read ) ) {
 					foreach ( var entry in this.MatchEntries( zipArchive.Entries ) ) {
 						eDir = ( this.TruncateEntryName )

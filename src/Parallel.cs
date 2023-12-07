@@ -128,7 +128,7 @@ namespace Icod.Wod {
 						() => {
 							semaphore.Wait();
 							step.DoWork( workOrder );
-							semaphore.Release();
+							_ = semaphore.Release();
 						},
 						token
 					) );

@@ -118,7 +118,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 					lineNumber++;
 					var rowList = this.ReadColumns( record, columDelimiter, DQUOTE );
 					try {
-						table.Rows.Add( rowList.ToArray() );
+						_ = table.Rows.Add( rowList.ToArray() );
 					} catch {
 						throw;
 					}
@@ -177,10 +177,10 @@ namespace Icod.Wod.SalesForce.Bulk {
 					}
 					c = System.Convert.ToChar( p );
 					if ( quoteCharacter.Equals( c ) ) {
-						reader.Read();
+						_ = reader.Read();
 						yield return this.ReadQuotedTextCell( reader, fieldSeparator, quoteCharacter );
 					} else if ( fieldSeparator.Equals( c ) ) {
-						reader.Read();
+						_ = reader.Read();
 						yield return null;
 					} else {
 						yield return this.ReadPlainTextCell( reader, fieldSeparator );
@@ -233,10 +233,10 @@ namespace Icod.Wod.SalesForce.Bulk {
 					}
 					c = System.Convert.ToChar( p );
 					if ( quoteCharacter.Equals( c ) ) {
-						reader.Read();
+						_ = reader.Read();
 						cell = cell.Append( c );
 					} else if ( fieldSeparator.Equals( c ) ) {
-						reader.Read();
+						_ = reader.Read();
 						break;
 					} else {
 						throw new System.InvalidOperationException();

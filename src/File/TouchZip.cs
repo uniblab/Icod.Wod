@@ -35,7 +35,7 @@ namespace Icod.Wod.File {
 						;
 					}
 					buffer.Flush();
-					buffer.Seek( 0, System.IO.SeekOrigin.Begin );
+					_ = buffer.Seek( 0, System.IO.SeekOrigin.Begin );
 					handler.Overwrite( buffer, zipName );
 				} else {
 					handler.Append( buffer, zipName );

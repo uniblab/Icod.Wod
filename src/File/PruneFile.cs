@@ -75,7 +75,7 @@ namespace Icod.Wod.File {
 							}
 						}
 					}
-					buffer.Seek( 0, System.IO.SeekOrigin.Begin );
+					_ = buffer.Seek( 0, System.IO.SeekOrigin.Begin );
 					destHandler.Overwrite( buffer, file );
 				}
 			}

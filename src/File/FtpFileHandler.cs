@@ -59,7 +59,7 @@ namespace Icod.Wod.File {
 						using ( var keySource = kffd.OpenReader( fe.File ) ) {
 							keySource.CopyTo( kfs );
 						}
-						kfs.Seek( 0, System.IO.SeekOrigin.Begin );
+						_ = kfs.Seek( 0, System.IO.SeekOrigin.Begin );
 						return action( kfs.ToArray(), kfpasswd );
 					}
 				).ToArray() );

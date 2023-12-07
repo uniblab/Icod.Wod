@@ -65,7 +65,7 @@ namespace Icod.Wod.File {
 				? fd.ExpandedPath
 				: this.PathCombine( fd.ExpandedPath, fd.ExpandedName )
 			;
-			System.IO.Directory.CreateDirectory( dirPath );
+			_ = System.IO.Directory.CreateDirectory( dirPath );
 		}
 		public sealed override void RmDir( System.Boolean recurse ) {
 			var fd = this.FileDescriptor;

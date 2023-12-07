@@ -170,7 +170,7 @@ namespace Icod.Wod.File {
 		private System.Int32 RunProcess( System.Diagnostics.ProcessStartInfo startInfo ) {
 			using ( var proc = new System.Diagnostics.Process() ) {
 				proc.StartInfo = startInfo;
-				proc.Start();
+				_ = proc.Start();
 
 				var stdErr = this.StdErr;
 				if ( null != stdErr ) {

@@ -187,7 +187,7 @@ namespace Icod.Wod.Data {
 				if ( !file.EndOfStream ) {
 					this.ReadPreamble( file );
 					while ( !file.EndOfStream ) {
-						this.ReadRecord( table, file );
+						_ = this.ReadRecord( table, file );
 					}
 				}
 				this.AddFileColumns( table, filePathName );
