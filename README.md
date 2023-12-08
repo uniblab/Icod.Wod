@@ -30,17 +30,118 @@ WoD Schematics.  It would typically be invoked aline the lines of:
 ### File Operations
 There are a great many file operations supported by the Icod.Wod Framework, but we should first describe the 
 different end-points supported.
-Local Files
-: This is any file accessible by any installed file system driver, such as NTFS or Ext4, or CIFS, or even NFS.
 
-Ftp/Ftps
-: This is any file accessible via the Ftp or Ftps protocols.
+#### End-points
+A file or directory is specified by an end-point.  This end-point could be almost anything.  A web page, 
+a spreadsheet on an Sftp site, or even a Jpeg on the local computer itself.  
+All operations require at least one end-point specification.
 
-Http/Https
-: This is any file accessible via the Http or Https protocols.
+##### Local Files
+This is any file accessible by any installed file system driver, such as NTFS or Ext4, or CIFS, or even NFS.
 
-Sftp
-: This is any file accessible via the Sftp protocol.
+##### Ftp/Ftps
+This is any file accessible via the Ftp or Ftps protocols.
+
+##### Http/Https
+This is any file accessible via the Http or Https protocols.
+
+##### Sftp
+This is any file accessible via the Sftp protocol.
+
+#### Operations
+These are the core function which manipulate one or more files or directories.  Each requires one or more 
+end-points.
+
+##### AddZip
+Appends one or more files to a Zip archive.
+
+##### AppendFile
+Appends text from one or more files to the end of a file.
+
+##### CopyFile
+Copies one or more files.
+
+##### DeflateFile
+Attempts to decompress one or more files with the Deflate algorithm.
+
+##### DeleteFile
+Attempts to delete one or more files.
+
+##### ExecuteFile
+Attempts to launch the file as an executable.
+
+##### ExistsFile
+Perform specified work if and only if the specified file exists.
+
+##### FromZip
+Retrieve/unpack one or more files from one or more Zip archives.
+
+##### GZipFile
+Compresses the specified files using the GZip algorithm.
+
+##### HeadFile
+Retrieve the top-most specified number of lines from one or more files.
+
+##### JsonToXml
+Translates the specified Json files to Xml files.
+
+##### List
+List all files and directories in a specified path.
+
+##### ListDirectory
+List all directories in a specified path.
+
+##### ListFile
+List all files in a specified path.
+
+##### ListZip
+List the contents of the specified Zip archive.
+
+##### MkDir
+Creates a directory in the specified path.
+
+##### MkZip
+Creates a Zip archive.
+
+##### PreambleFile
+Prepends text to the beginning of the specified ciles.
+
+##### PrefixFile
+Prefixes each line of the specified files with the specified text.
+
+##### PruneFile
+Removes all blank lines and trims all trailing and leading whitespace from the lines of the specified files.
+
+##### RebaseFile
+Changes the Code Page of the specified files.
+
+##### RenameFile
+Renames the specified file.
+
+##### RmDir
+Removes the specified directory.
+
+##### RmZip
+Removes the specified file from a Zip archive.
+
+##### SuffixFile
+Appends the specified text to each line in the specified files.
+
+##### TailFile
+Retrieve the bottom-most specified number of lines from one or more files.
+
+##### TouchFile
+Creates the specified file if it does not exist; otherwise it updates the last-write and last-access times.
+
+##### TouchZip
+Creates the specified Zip archive if it does not exist; otherwise it updates the last-write and last-access times.
+
+##### XmlToJson
+Translates the specified Xml files to Json files.
+
+##### XmlTransformFile
+Transforms the specified XML files according to the rules of the specified XSLT file.
+
 
 
 ### Database Operations
