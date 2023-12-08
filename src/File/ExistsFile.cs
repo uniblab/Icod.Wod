@@ -87,10 +87,7 @@ namespace Icod.Wod.File {
 		#region methods
 		public sealed override void DoWork( WorkOrder workOrder ) {
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
-			var handler = this.GetFileHandler( workOrder );
-			if ( handler is null ) {
-				throw new System.InvalidOperationException();
-			}
+			var handler = this.GetFileHandler( workOrder ) ?? throw new System.InvalidOperationException();
 
 			if ( handler.ListFiles().Any(
 				x => x.FileType.Equals( FileType.File )

@@ -87,10 +87,7 @@ namespace Icod.Wod.SalesForce.Rest {
 		#region methods
 		public void DoWork( WorkOrder workOrder ) {
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
-			var dest = this.Destination;
-			if ( dest is null ) {
-				throw new System.InvalidOperationException();
-			}
+			var dest = this.Destination ?? throw new System.InvalidOperationException();
 			dest.WriteRecords( workOrder, this );
 		}
 

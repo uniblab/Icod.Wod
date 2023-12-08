@@ -183,10 +183,7 @@ namespace Icod.Wod.SalesForce {
 			if ( null != here ) {
 				return here;
 			}
-			var section = (Configuration.SalesForceCredentialSection)Configuration.SalesForceCredentialSection.GetSection();
-			if ( section is null ) {
-				throw new System.Configuration.ConfigurationErrorsException( "The icod.wod.sfCredentials is not defined." );
-			}
+			var section = (Configuration.SalesForceCredentialSection)Configuration.SalesForceCredentialSection.GetSection() ?? throw new System.Configuration.ConfigurationErrorsException( "The icod.wod.sfCredentials is not defined." );
 			var collection = section.Credentials;
 			if ( ( collection is null ) || ( collection.Count < 1 ) ) {
 				throw new System.Configuration.ConfigurationErrorsException( "No such configuration element is defined." );

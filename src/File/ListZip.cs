@@ -23,17 +23,11 @@ namespace Icod.Wod.File {
 		#region methods
 		public sealed override void DoWork( WorkOrder workOrder ) {
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
-			var handler = this.GetFileHandler( workOrder );
-			if ( handler is null ) {
-				throw new System.InvalidOperationException();
-			}
+			var handler = this.GetFileHandler( workOrder ) ?? throw new System.InvalidOperationException();
 
 			var destD = this.Destination;
 			destD.WorkOrder = workOrder;
-			var dest = destD.GetFileHandler( workOrder );
-			if ( dest is null ) {
-				throw new System.InvalidOperationException();
-			}
+			var dest = destD.GetFileHandler( workOrder ) ?? throw new System.InvalidOperationException();
 
 			System.Func<System.IO.Compression.ZipArchiveEntry, System.String> getFileName = null;
 			if ( this.TruncateEntryName ) {

@@ -37,14 +37,8 @@ namespace Icod.Wod.File {
 		#region methods
 		public sealed override void DoWork( WorkOrder workOrder ) {
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
-			var sourceHandler = this.GetFileHandler( workOrder );
-			if ( sourceHandler is null ) {
-				throw new System.InvalidOperationException();
-			}
-			var dest = this.Destination;
-			if ( dest is null ) {
-				dest = this;
-			}
+			var sourceHandler = this.GetFileHandler( workOrder ) ?? throw new System.InvalidOperationException();
+			var dest = this.Destination ?? this;
 			var destHandler = dest.GetFileHandler( workOrder );
 
 			var sourceEncoding = CodePageHelper.GetCodePage( this.CodePage );

@@ -34,18 +34,12 @@ namespace Icod.Wod.File {
 		#region methods
 		public sealed override void DoWork( WorkOrder workOrder ) {
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
-			var sourceHandler = this.GetFileHandler( workOrder );
-			if ( sourceHandler is null ) {
-				throw new System.InvalidOperationException();
-			}
+			var sourceHandler = this.GetFileHandler( workOrder ) ?? throw new System.InvalidOperationException();
 			var suffix = this.Suffix;
 			if ( System.String.IsNullOrEmpty( suffix ) ) {
-				throw new System.InvalidOperationException();
+				throw new System.InvalidOperationException( "The Suffix parameter may not be null or empty." );
 			}
-			var dest = this.Destination;
-			if ( dest is null ) {
-				dest = this;
-			}
+			var dest = this.Destination ?? this;
 			var destHandler = dest.GetFileHandler( workOrder );
 
 			var rs = this.RecordSeparator;

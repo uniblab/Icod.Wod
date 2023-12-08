@@ -28,10 +28,7 @@ namespace Icod.Wod.File {
 		}
 		public sealed override void DoWork( WorkOrder workOrder ) {
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
-			var source = this.GetFileHandler( workOrder );
-			if ( source is null ) {
-				throw new System.InvalidOperationException();
-			}
+			var source = this.GetFileHandler( workOrder ) ?? throw new System.InvalidOperationException();
 
 			System.Func<FileEntry, System.String> getFileName;
 			if ( this.TruncateEntryName ) {
