@@ -1,5 +1,6 @@
 // Copyright 2022, Timothy J. Bruce
 using System.Linq;
+using System.Net;
 
 namespace Icod.Wod.SalesForce.Bulk {
 

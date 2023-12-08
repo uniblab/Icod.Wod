@@ -163,13 +163,13 @@ namespace Icod.Wod.SalesForce.Bulk {
 					}
 				}
 
-				if ( null != this.Error ) {
+				if ( this.Error is object ) {
 					var error = this.GetResults( workOrder, loginResponse, jobResponse, FailedResults );
 					if ( !System.String.IsNullOrEmpty( error.Body ) ) {
 						this.Error.WriteRecords( workOrder, error );
 					}
 				}
-				if ( null != this.Success ) {
+				if ( this.Success is object ) {
 					var success = this.GetResults( workOrder, loginResponse, jobResponse, SuccessfulResults );
 					if ( !System.String.IsNullOrEmpty( success.Body ) ) {
 						this.Success.WriteRecords( workOrder, success );
