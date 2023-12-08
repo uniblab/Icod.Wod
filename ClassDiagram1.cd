@@ -721,7 +721,7 @@
       <HashCode>BAAAAACARQQIQAAoAAABAAAAAAAAAAAAAEAAIABAAFA=</HashCode>
       <FileName>src\SalesForce\Bulk\SelectResult.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Orientation="Left" Position="0.1" Collapsed="true" />
+    <Lollipop Position="0.1" Collapsed="true" />
   </Class>
   <Class Name="Icod.Wod.SalesForce.Bulk.StateOption" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="92.75" Y="4.5" Width="1.5" />
@@ -729,7 +729,7 @@
       <HashCode>AAABAQAAAAAAYAAEgAAIAAYAAhAQAIAAAFAgABAAAmE=</HashCode>
       <FileName>src\SalesForce\Bulk\StateOption.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Orientation="Left" Position="0.1" Collapsed="true" />
+    <Lollipop Position="0.1" Collapsed="true" />
   </Class>
   <Class Name="Icod.Wod.SalesForce.Bulk.Update" Collapsed="true">
     <Position X="3.75" Y="16.5" Width="1.5" />
