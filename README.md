@@ -27,6 +27,25 @@ WoD Schematics.  It would typically be invoked aline the lines of:
 \\application-server\Icod.Wod\Icod.Wod.Client.exe \\application-server\jobs\daily\SFstaff-to-Workday.xml
 ```
 
+### Database Operations
+These operations involve working with a database of some sort.  The WoD Framework will connect to any 
+database product for which you have a driver and can specify via a connection-string.
+See [ConnectionStrings.com](https://www.connectionstrings.com/).
+
+#### DbCommand
+Executes a stored procedure or even raw text in the specified database.
+
+#### FileExport
+Exports data to a specified file.
+
+#### FileImport
+Imports data from a specified file.
+
+
+### Email Operations
+Sends email to one or more specified addresses.  May contain zero or more file attachments.
+
+
 ### File Operations
 There are a great many file operations supported by the Icod.Wod Framework, but we should first describe the 
 different end-points supported.
@@ -143,10 +162,7 @@ Translates the specified Xml files to Json files.
 Transforms the specified XML files according to the rules of the specified XSLT file.
 
 
-
-### Database Operations
-### Salesforce Operations
-### Email Operations
+## Salesforce Operations
 
 ## Does it need some sort of cloud?
 No.  It'll run on any computer which supports the .Net Framework 4.8.1.
