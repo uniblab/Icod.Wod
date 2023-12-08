@@ -61,8 +61,8 @@ Example:
 ``` xml
 <email to="boss@example.com" sendIfEmpty="false" subjectCodePage="us-ascii" subject="Customer mailing list">
 	<attachments>
-        <attach path="\\file-store\weekly-reports\" name="customer-mailing-list.csv" />
-    </attachments>
+		<attach path="\\file-store\weekly-reports\" name="customer-mailing-list.csv" />
+	</attachments>
 </email>
 ```
 
