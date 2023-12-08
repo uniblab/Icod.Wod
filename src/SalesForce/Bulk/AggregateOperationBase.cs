@@ -206,6 +206,22 @@ namespace Icod.Wod.SalesForce.Bulk {
 		}
 		#endregion methods
 
+
+		#region static methods
+		protected static System.Boolean NotOpenAbortedFailed( System.String state ) {
+			return !StateOption.Open.Equals( state )
+				&& !StateOption.Aborted.Equals( state )
+				&& !StateOption.Failed.Equals( state )
+			;
+		}
+		protected static System.Boolean NotCompleteAbortedFailed( System.String state ) {
+			return !StateOption.JobComplete.Equals( state )
+				&& !StateOption.Aborted.Equals( state )
+				&& !StateOption.Failed.Equals( state )
+			;
+		}
+		#endregion static methods
+
 	}
 
 }

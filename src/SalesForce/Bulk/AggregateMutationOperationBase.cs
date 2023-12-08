@@ -1,5 +1,6 @@
 // Copyright 2022, Timothy J. Bruce
 using System.Linq;
+using System.Net;
 
 namespace Icod.Wod.SalesForce.Bulk {
 
@@ -116,31 +117,21 @@ namespace Icod.Wod.SalesForce.Bulk {
 				var wait = ( this.Wait ?? new Wait() );
 				var max = wait.Maximum;
 				var sleepTime = wait.Initial;
-				if (
-					!StateOption.Open.Equals( jobResponse.State )
-					&& !StateOption.Aborted.Equals( jobResponse.State )
-					&& !StateOption.Failed.Equals( jobResponse.State )
-				) {
+				if ( NotOpenAbortedFailed( jobResponse.State ) ) {
 					if ( 0 < sleepTime ) {
 						System.Threading.Thread.Sleep( sleepTime );
 					}
 					jobResponse = this.QueryJob( loginResponse, id );
 					sleepTime = wait.Minimum;
 					while (
-						!StateOption.Open.Equals( jobResponse.State )
-						&& !StateOption.Aborted.Equals( jobResponse.State )
-						&& !StateOption.Failed.Equals( jobResponse.State )
+						NotOpenAbortedFailed( jobResponse.State )
 						&& ( sleepTime < max )
 					) {
 						System.Threading.Thread.Sleep( sleepTime );
 						sleepTime = System.Math.Min( max, sleepTime + wait.Increment );
 						jobResponse = this.QueryJob( loginResponse, id );
 					}
-					while (
-						!StateOption.Open.Equals( jobResponse.State )
-						&& !StateOption.Aborted.Equals( jobResponse.State )
-						&& !StateOption.Failed.Equals( jobResponse.State )
-					) {
+					while ( NotOpenAbortedFailed( jobResponse.State ) ) {
 						System.Threading.Thread.Sleep( max );
 						jobResponse = this.QueryJob( loginResponse, id );
 					}
@@ -152,31 +143,21 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 				jobResponse = this.QueryJob( loginResponse, id );
 				sleepTime = wait.Initial;
-				if (
-					!StateOption.JobComplete.Equals( jobResponse.State )
-					&& !StateOption.Aborted.Equals( jobResponse.State )
-					&& !StateOption.Failed.Equals( jobResponse.State )
-				) {
+				if ( NotCompleteAbortedFailed( jobResponse.State ) ) {
 					if ( 0 < sleepTime ) {
 						System.Threading.Thread.Sleep( sleepTime );
 					}
 					jobResponse = this.QueryJob( loginResponse, id );
 					sleepTime = wait.Minimum;
 					while (
-						!StateOption.JobComplete.Equals( jobResponse.State )
-						&& !StateOption.Aborted.Equals( jobResponse.State )
-						&& !StateOption.Failed.Equals( jobResponse.State )
+						NotCompleteAbortedFailed( jobResponse.State )
 						&& ( sleepTime < max )
 					) {
 						System.Threading.Thread.Sleep( sleepTime );
 						sleepTime = System.Math.Min( max, sleepTime + wait.Increment );
 						jobResponse = this.QueryJob( loginResponse, id );
 					}
-					while (
-						!StateOption.JobComplete.Equals( jobResponse.State )
-						&& !StateOption.Aborted.Equals( jobResponse.State )
-						&& !StateOption.Failed.Equals( jobResponse.State )
-					) {
+					while ( NotCompleteAbortedFailed( jobResponse.State ) ) {
 						System.Threading.Thread.Sleep( max );
 						jobResponse = this.QueryJob( loginResponse, id );
 					}
