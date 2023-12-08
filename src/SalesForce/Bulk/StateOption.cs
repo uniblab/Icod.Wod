@@ -1,7 +1,4 @@
 // Copyright 2022, Timothy J. Bruce
-using System.Data.SqlTypes;
-using System.Linq;
-using System.Security.Policy;
 
 namespace Icod.Wod.SalesForce.Bulk {
 
@@ -9,6 +6,8 @@ namespace Icod.Wod.SalesForce.Bulk {
 	public sealed class StateOption : System.IEquatable<StateOption>, System.IEquatable<System.String> {
 
 		#region fields
+		private static readonly System.Int32 theHashCode;
+
 		private const System.String theAbortedString = "Aborted";
 		private static readonly StateOption theAborted;
 		private const System.String theFailedString = "Failed";
@@ -30,6 +29,8 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 		#region .ctor
 		static StateOption() {
+			theHashCode = typeof( StateOption ).GetHashCode();
+
 			theAborted = new StateOption( theAbortedString );
 			theFailed = new StateOption( theFailedString );
 			theInProgress = new StateOption( theInProgressString );
@@ -46,8 +47,13 @@ namespace Icod.Wod.SalesForce.Bulk {
 			} else if ( System.String.IsNullOrEmpty( name ) ) {
 				throw new System.ArgumentNullException( "name" );
 			}
+			myHashcode = theHashCode;
 			myValue = value;
-			myHashcode = value.GetHashCode();
+			if ( !System.String.IsNullOrEmpty( value ) ) {
+				unchecked {
+					myHashcode += value.GetHashCode();
+				}
+			}
 			myName = name;
 		}
 		#endregion .ctor
