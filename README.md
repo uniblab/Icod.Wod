@@ -32,6 +32,18 @@ These operations involve working with a database of some sort.  The WoD Framewor
 database product for which you have a driver and can specify via a connection-string.
 See [ConnectionStrings.com](https://www.connectionstrings.com/).
 
+Example:
+``` xml
+<dbFileExport connectionStringName="CustomerData" namespace="dbo"
+    commandText="getCustomerMailingList" commandType="StoredProcedure"
+>
+	<destination xsi:type="delimitedFile" codePage="utf-8" convertEmptyStringToNull="false" hasHeader="true"
+        fieldSeperator="44" quoteChar="34" recordSeparator="&#13;&#10;" append="false"
+        path="\\file-store\weekly-reports\" name="customer-mailing-list.csv" writeIfEmpty="true"
+    />
+</dbFileExport>
+```
+
 #### DbCommand
 Executes a stored procedure or even raw text in the specified database.
 
@@ -45,10 +57,25 @@ Imports data from a specified file.
 ### Email Operations
 Sends email to one or more specified addresses.  May contain zero or more file attachments.
 
+Example:
+``` xml
+<email to="boss@example.com" sendIfEmpty="false" subjectCodePage="us-ascii" subject="Customer mailing list"
+>
+	<attachments>
+        <attach path="\\file-store\weekly-reports\" name="customer-mailing-list.csv" />
+    </attachments>
+</email>
+```
+
 
 ### File Operations
 There are a great many file operations supported by the Icod.Wod Framework, but we should first describe the 
 different end-points supported.
+
+Example:
+``` xml
+<fileOperation xsi:type="deleteFile" path="\\file-store\weekly-reports\" name="customer-mailing-list.csv" />
+```
 
 #### End-points
 A file or directory is specified by an end-point.  This end-point could be almost anything.  A web page, 
@@ -163,18 +190,46 @@ Transforms the specified XML files according to the rules of the specified XSLT 
 
 
 ## Salesforce Operations
+These operations are for exchanging data with the SalesForce cloud.
+
+### BulkOperations
+These operations use the highly efficient Bulk API.
+
+#### Delete
+Deletes the specified records.
+
+#### Insert
+Inserts the specified records.
+
+#### Query
+Downloads records from the SalesForce cloud as per the specified soql to a file.
+
+#### Update
+Updates the specified records.
+
+#### Upsert
+Perhaps an upsert opertion in the SalesForce cloud as per the specified records.
+
+### RestSelect
+Downloads records from the SalesForce cloud as per the specified soql to a file, using the inefficient Rest Api.
+
 
 ## Does it need some sort of cloud?
 No.  It'll run on any computer which supports the .Net Framework 4.8.1.
 
-## How do I use it?
-Some collection of tasks, a Work Order, is represented by an Xml file, called a Schematic.  A separate client is used to interpret the Schematic and execute the corresponding functions of the WoD Framework.  Typical use would be along the lines of:
- <nowiki>
- C:\users\tbruce\bin\Icod.Wod\Icod.Wod.Client.exe .\someSchematic.xml
-</nowiki>
-
 ## Is it hard to write a WoD Schematic?
-It's rather easy, IMHO.  Since we like intellisense and autocomplete there is a pair of Xsd schema files which Visual Studio, Glade, and Notepad++ will use.  Thanks to intellisense  and autocomplete you can focus on ''what'' you want to do rather than ''how'' to do it.  The fundamental tasks are dbCommand, dbFileExport, dbFileImport, fileOperation, sfRestSelect, sfBulkOperation, and email.  If what you want done can't be done with those then give me a ring and we'll see how your task fits into things.  Or better yet, extend the framework and submit your contribution!
+It's rather easy.  
+A schematic is a collection of one or more steps.  
+Each step is an operation to execute, such as delete or email a file.  
+Some steps can be done in paralell, and even conditionally on the existence of some file.
+Since we like intellisense and autocomplete there is a pair of Xsd schema files which Visual Studio, Glade, and Notepad++ will use.  
+Thanks to intellisense and autocomplete you can focus on ''what'' you want to do rather than ''how'' to do it.  
+If what you want done can't be done with those then give me a ring and we'll see how your task fits into things.
+
+Example:
+``` xml
+
+```
 
 ## Do you have an example I could take a look at?
 Sure! Here is the schematic I used to rebase all the source code files to code page 1252, and then prepend each with a copyright notice.
