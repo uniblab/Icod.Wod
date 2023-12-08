@@ -217,13 +217,14 @@ Downloads records from the SalesForce cloud as per the specified soql to a file,
 No.  It'll run on any computer which supports the .Net Framework 4.8.1.
 
 ## Is it hard to write a WoD Schematic?
-It's rather easy.  
-A schematic is a collection of one or more steps.  
-Each step is an operation to execute, such as delete or email a file.  
-Some steps can be done in paralell, and even conditionally on the existence of some file.
-Since we like intellisense and autocomplete there is a pair of Xsd schema files which Visual Studio, Glade, and Notepad++ will use.  
-Thanks to intellisense and autocomplete you can focus on ''what'' you want to do rather than ''how'' to do it.  
-If what you want done can't be done with those then give me a ring and we'll see how your task fits into things.
+It's rather easy.  A schematic is a collection of one or more steps.  Each step 
+is an operation to execute, such as delete or email a file.  Some steps can be 
+done in paralell, and even conditionally on the existence of some file.  Since 
+we like intellisense and autocomplete there is a pair of Xsd schema files which 
+Visual Studio, Glade, and Notepad++ will use.  Thanks to intellisense and 
+autocomplete you can focus on ''what'' you want to do rather than ''how'' to do 
+it.  If what you want done can't be done with those then give me a ring and 
+we'll see how your task fits into things.
 
 ## Do you have an example I could take a look at?
 Sure! You can find a few examples here, [at my pastebin](https://pastebin.com/u/uniblab/1/94QwU3QE).
