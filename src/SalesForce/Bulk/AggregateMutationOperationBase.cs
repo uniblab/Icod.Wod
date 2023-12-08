@@ -117,9 +117,9 @@ namespace Icod.Wod.SalesForce.Bulk {
 				var max = wait.Maximum;
 				var sleepTime = wait.Initial;
 				if (
-					!StateOption.Open.Value.Equals( jobResponse.State, System.StringComparison.OrdinalIgnoreCase )
-					&& !StateOption.Aborted.Value.Equals( jobResponse.State, System.StringComparison.OrdinalIgnoreCase )
-					&& !StateOption.Failed.Value.Equals( jobResponse.State, System.StringComparison.OrdinalIgnoreCase )
+					!StateOption.Open.Equals( jobResponse.State )
+					&& !StateOption.Aborted.Equals( jobResponse.State )
+					&& !StateOption.Failed.Equals( jobResponse.State )
 				) {
 					if ( 0 < sleepTime ) {
 						System.Threading.Thread.Sleep( sleepTime );
@@ -127,9 +127,9 @@ namespace Icod.Wod.SalesForce.Bulk {
 					jobResponse = this.QueryJob( loginResponse, id );
 					sleepTime = wait.Minimum;
 					while (
-						!StateOption.Open.Value.Equals( jobResponse.State, System.StringComparison.OrdinalIgnoreCase )
-						&& !StateOption.Aborted.Value.Equals( jobResponse.State, System.StringComparison.OrdinalIgnoreCase )
-						&& !StateOption.Failed.Value.Equals( jobResponse.State, System.StringComparison.OrdinalIgnoreCase )
+						!StateOption.Open.Equals( jobResponse.State )
+						&& !StateOption.Aborted.Equals( jobResponse.State )
+						&& !StateOption.Failed.Equals( jobResponse.State )
 						&& ( sleepTime < max )
 					) {
 						System.Threading.Thread.Sleep( sleepTime );
@@ -137,9 +137,9 @@ namespace Icod.Wod.SalesForce.Bulk {
 						jobResponse = this.QueryJob( loginResponse, id );
 					}
 					while (
-						!StateOption.Open.Value.Equals( jobResponse.State, System.StringComparison.OrdinalIgnoreCase )
-						&& !StateOption.Aborted.Value.Equals( jobResponse.State, System.StringComparison.OrdinalIgnoreCase )
-						&& !StateOption.Failed.Value.Equals( jobResponse.State, System.StringComparison.OrdinalIgnoreCase )
+						!StateOption.Open.Equals( jobResponse.State )
+						&& !StateOption.Aborted.Equals( jobResponse.State )
+						&& !StateOption.Failed.Equals( jobResponse.State )
 					) {
 						System.Threading.Thread.Sleep( max );
 						jobResponse = this.QueryJob( loginResponse, id );
@@ -153,9 +153,9 @@ namespace Icod.Wod.SalesForce.Bulk {
 				jobResponse = this.QueryJob( loginResponse, id );
 				sleepTime = wait.Initial;
 				if (
-					!StateOption.JobComplete.Value.Equals( jobResponse.State, System.StringComparison.OrdinalIgnoreCase )
-					&& !StateOption.Aborted.Value.Equals( jobResponse.State, System.StringComparison.OrdinalIgnoreCase )
-					&& !StateOption.Failed.Value.Equals( jobResponse.State, System.StringComparison.OrdinalIgnoreCase )
+					!StateOption.JobComplete.Equals( jobResponse.State )
+					&& !StateOption.Aborted.Equals( jobResponse.State )
+					&& !StateOption.Failed.Equals( jobResponse.State )
 				) {
 					if ( 0 < sleepTime ) {
 						System.Threading.Thread.Sleep( sleepTime );
@@ -163,9 +163,9 @@ namespace Icod.Wod.SalesForce.Bulk {
 					jobResponse = this.QueryJob( loginResponse, id );
 					sleepTime = wait.Minimum;
 					while (
-						!StateOption.JobComplete.Value.Equals( jobResponse.State, System.StringComparison.OrdinalIgnoreCase )
-						&& !StateOption.Aborted.Value.Equals( jobResponse.State, System.StringComparison.OrdinalIgnoreCase )
-						&& !StateOption.Failed.Value.Equals( jobResponse.State, System.StringComparison.OrdinalIgnoreCase )
+						!StateOption.JobComplete.Equals( jobResponse.State )
+						&& !StateOption.Aborted.Equals( jobResponse.State )
+						&& !StateOption.Failed.Equals( jobResponse.State )
 						&& ( sleepTime < max )
 					) {
 						System.Threading.Thread.Sleep( sleepTime );
@@ -173,9 +173,9 @@ namespace Icod.Wod.SalesForce.Bulk {
 						jobResponse = this.QueryJob( loginResponse, id );
 					}
 					while (
-						!StateOption.JobComplete.Value.Equals( jobResponse.State, System.StringComparison.OrdinalIgnoreCase )
-						&& !StateOption.Aborted.Value.Equals( jobResponse.State, System.StringComparison.OrdinalIgnoreCase )
-						&& !StateOption.Failed.Value.Equals( jobResponse.State, System.StringComparison.OrdinalIgnoreCase )
+						!StateOption.JobComplete.Equals( jobResponse.State )
+						&& !StateOption.Aborted.Equals( jobResponse.State )
+						&& !StateOption.Failed.Equals( jobResponse.State )
 					) {
 						System.Threading.Thread.Sleep( max );
 						jobResponse = this.QueryJob( loginResponse, id );

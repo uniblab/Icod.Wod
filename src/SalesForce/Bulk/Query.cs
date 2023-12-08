@@ -102,9 +102,9 @@ namespace Icod.Wod.SalesForce.Bulk {
 			var max = wait.Maximum;
 			var state = jobResponse.State;
 			while (
-				!StateOption.JobComplete.Value.Equals( state, System.StringComparison.OrdinalIgnoreCase )
-				&& !StateOption.Aborted.Value.Equals( state, System.StringComparison.OrdinalIgnoreCase )
-				&& !StateOption.Failed.Value.Equals( state, System.StringComparison.OrdinalIgnoreCase )
+				!StateOption.JobComplete.Equals( state )
+				&& !StateOption.Aborted.Equals( state )
+				&& !StateOption.Failed.Equals( state )
 				&& ( sleepTime < max )
 			) {
 				System.Threading.Thread.Sleep( sleepTime );
@@ -113,9 +113,9 @@ namespace Icod.Wod.SalesForce.Bulk {
 				state = jobResponse.State;
 			}
 			while (
-				!StateOption.JobComplete.Value.Equals( state, System.StringComparison.OrdinalIgnoreCase )
-				&& !StateOption.Aborted.Value.Equals( state, System.StringComparison.OrdinalIgnoreCase )
-				&& !StateOption.Failed.Value.Equals( state, System.StringComparison.OrdinalIgnoreCase )
+				!StateOption.JobComplete.Equals( state )
+				&& !StateOption.Aborted.Equals( state )
+				&& !StateOption.Failed.Equals( state )
 			) {
 				System.Threading.Thread.Sleep( max );
 				jobResponse = this.QueryJob( loginResponse, id );

@@ -24,7 +24,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 		#region methods
 		protected sealed override JobResponse CreateJob( LoginResponse loginResponse ) {
-			return this.CreateJob( loginResponse, "update" );
+			return base.CreateJob( loginResponse, "update" );
 		}
 		#endregion methods
 
