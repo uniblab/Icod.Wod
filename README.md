@@ -37,7 +37,7 @@ Example:
 <dbFileExport connectionStringName="CustomerData" namespace="dbo"
     commandText="getCustomerMailingList" commandType="StoredProcedure"
 >
-	<destination xsi:type="delimitedFile" codePage="utf-8" convertEmptyStringToNull="false" hasHeader="true"
+    <destination xsi:type="delimitedFile" codePage="utf-8" convertEmptyStringToNull="false" hasHeader="true"
         fieldSeperator="44" quoteChar="34" recordSeparator="&#13;&#10;" append="false"
         path="\\file-store\weekly-reports\" name="customer-mailing-list.csv" writeIfEmpty="true"
     />
@@ -59,8 +59,7 @@ Sends email to one or more specified addresses.  May contain zero or more file a
 
 Example:
 ``` xml
-<email to="boss@example.com" sendIfEmpty="false" subjectCodePage="us-ascii" subject="Customer mailing list"
->
+<email to="boss@example.com" sendIfEmpty="false" subjectCodePage="us-ascii" subject="Customer mailing list">
 	<attachments>
         <attach path="\\file-store\weekly-reports\" name="customer-mailing-list.csv" />
     </attachments>
@@ -226,14 +225,8 @@ Since we like intellisense and autocomplete there is a pair of Xsd schema files 
 Thanks to intellisense and autocomplete you can focus on ''what'' you want to do rather than ''how'' to do it.  
 If what you want done can't be done with those then give me a ring and we'll see how your task fits into things.
 
-Example:
-``` xml
-
-```
-
 ## Do you have an example I could take a look at?
-Sure! Here is the schematic I used to rebase all the source code files to code page 1252, and then prepend each with a copyright notice.
-[https://pastebin.com/ruG9g3Jb]
+Sure! You can find a few examples here, [at my pastebin](https://pastebin.com/u/uniblab/1/94QwU3QE).
 
 ## Wow! This does more than Dell's Boomi.
-Yes, I know.  It's easier to use too.
+Yes, I know.  It's easier to use too.  And did I mention it doesn't need a cloud and doesn't cost a fortune?
