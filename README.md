@@ -207,7 +207,7 @@ Downloads records from the SalesForce cloud as per the specified soql to a file.
 Updates the specified records.
 
 #### Upsert
-Perhaps an upsert opertion in the SalesForce cloud as per the specified records.
+Performs an upsert opertion in the SalesForce cloud as per the specified records.
 
 ### RestSelect
 Downloads records from the SalesForce cloud as per the specified soql to a file, using the inefficient Rest Api.
