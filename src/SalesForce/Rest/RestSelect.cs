@@ -169,10 +169,10 @@ namespace Icod.Wod.SalesForce.Rest {
 			};
 			client.Headers[ "Authorization" ] = "Bearer " + token.AccessToken;
 			client.Headers[ "User-Agent" ] = userAgent.TrimToNull() ?? System.Reflection.Assembly.GetExecutingAssembly().FullName;
-			var ssl = System.Net.SecurityProtocolType.Tls12;
+			var ssl = System.Net.SecurityProtocolType.Tls13;
 #if DEBUG
 			client.Headers[ "Accept-Encoding" ] = "identity, gzip, deflate";
-			ssl = ssl | System.Net.SecurityProtocolType.Tls11 | System.Net.SecurityProtocolType.Tls | System.Net.SecurityProtocolType.Ssl3;
+			ssl = ssl | System.Net.SecurityProtocolType.Tls12 | System.Net.SecurityProtocolType.Tls11 | System.Net.SecurityProtocolType.Tls | System.Net.SecurityProtocolType.Ssl3;
 #else
 			client.Headers[ "Accept-Encoding" ] = "gzip, deflate, identity";
 #endif
