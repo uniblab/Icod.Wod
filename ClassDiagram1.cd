@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="Icod.Wod.ChainedDisposer" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="85.75" Y="0.5" Width="1.5" />
+    <Position X="24.25" Y="10" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAABCAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAgAA=</HashCode>
       <FileName>src\ChainedDisposer.cs</FileName>
@@ -9,21 +9,21 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Icod.Wod.CodePageHelper" Collapsed="true">
-    <Position X="89.25" Y="0.5" Width="1.5" />
+    <Position X="27.75" Y="10" Width="1.5" />
     <TypeIdentifier>
       <HashCode>IAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>src\CodePageHelper.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Icod.Wod.ConnectionStringEntry" Collapsed="true">
-    <Position X="85.75" Y="1.5" Width="1.5" />
+    <Position X="24.25" Y="11" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAEAAAQAAAAAAAAAACAAAAAQAAA=</HashCode>
       <FileName>src\ConnectionStringEntry.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Icod.Wod.Email" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="92.75" Y="1.5" Width="1.5" />
+    <Position X="31.25" Y="11" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AEAAAASCAAQSAAEQGIAhBACiCQAIEAAABACAAEAhAgg=</HashCode>
       <FileName>src\Email.cs</FileName>
@@ -31,21 +31,21 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Icod.Wod.FileHelper" Collapsed="true">
-    <Position X="85.75" Y="2.5" Width="1.5" />
+    <Position X="24.25" Y="12" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AABAAAQABAAAAACKAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>src\FileHelper.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Icod.Wod.Pair&lt;S, T&gt;" Collapsed="true">
-    <Position X="85.75" Y="3.5" Width="1.5" />
+    <Position X="24.25" Y="13" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAUAAAAAAAAIAAAAAAAAAAAAACAAAAAA=</HashCode>
       <FileName>src\Pair`2.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Icod.Wod.Parallel" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="87.5" Y="3.5" Width="1.5" />
+    <Position X="26" Y="13" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAABACAAAAQAAAAECgAAAAAAAAAABAAAAAAAAAAAAAA=</HashCode>
       <FileName>src\Parallel.cs</FileName>
@@ -53,7 +53,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Icod.Wod.Queue&lt;T&gt;" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="89.25" Y="3.5" Width="1.5" />
+    <Position X="27.75" Y="13" Width="1.5" />
     <TypeIdentifier>
       <HashCode>ACBAAAAAAAAEABAIgAICAAQAAAAABIAAAQACAAEAACA=</HashCode>
       <FileName>src\Queue`1.cs</FileName>
@@ -61,7 +61,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Icod.Wod.Semaphore" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="87.5" Y="4.5" Width="1.5" />
+    <Position X="26" Y="14" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAQAAAAACAAAAAIIEAAIAAAAAQAAAAABAAAEBAAAAA=</HashCode>
       <FileName>src\Semaphore.cs</FileName>
@@ -69,7 +69,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Icod.Wod.Serial" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="89.25" Y="4.5" Width="1.5" />
+    <Position X="27.75" Y="14" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAABAAAAAAQAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>src\Serial.cs</FileName>
@@ -77,7 +77,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Icod.Wod.Stack&lt;T&gt;" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="91" Y="4.5" Width="1.5" />
+    <Position X="29.5" Y="14" Width="1.5" />
     <TypeIdentifier>
       <HashCode>ACBAAAAAAAAEEBAAgEICAAQAABCAAIAAAAACAAEACCA=</HashCode>
       <FileName>src\Stack`1.cs</FileName>
@@ -85,35 +85,35 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Icod.Wod.StringHelper" Collapsed="true">
-    <Position X="94.5" Y="4.5" Width="1.5" />
+    <Position X="33" Y="14" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAYAAAAABAAICAAAAKABAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
       <FileName>src\StringHelper.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Icod.Wod.Variable" Collapsed="true">
-    <Position X="85.75" Y="5.5" Width="1.5" />
+    <Position X="24.25" Y="15" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAgAAAAAAA=</HashCode>
       <FileName>src\Variable.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Icod.Wod.WorkOrder" Collapsed="true">
-    <Position X="89.25" Y="5.5" Width="1.5" />
+    <Position X="27.75" Y="15" Width="1.5" />
     <TypeIdentifier>
       <HashCode>YAABAQAABCAAgQBEAAAABAACAIAAgAQBAAQAABCgAQI=</HashCode>
       <FileName>src\WorkOrder.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Icod.Wod.Configuration.SalesForceCredentialCollection" Collapsed="true">
-    <Position X="91" Y="3.5" Width="1.5" />
+    <Position X="29.5" Y="13" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AEICAAAAAAAAIAAACAAAhAAAAAABAAAACAAAAABAAAA=</HashCode>
       <FileName>src\Cofiguration\SalesForceCredentialCollection.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Icod.Wod.Configuration.SalesForceCredentialElement" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="92.75" Y="3.5" Width="1.5" />
+    <Position X="31.25" Y="13" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAQBAAAAIAgQAAAASECAgBCEACAAAAAAAEAAA=</HashCode>
       <FileName>src\Cofiguration\SalesForceCredentialElement.cs</FileName>
@@ -121,7 +121,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Icod.Wod.Configuration.SalesForceCredentialSection" Collapsed="true">
-    <Position X="94.5" Y="3.5" Width="1.5" />
+    <Position X="33" Y="13" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAACAAAAAAAAAAAAABAAEAAAAAAAAAAAAAAA=</HashCode>
       <FileName>src\Cofiguration\SalesForceCredentialSection.cs</FileName>
@@ -135,7 +135,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Icod.Wod.Data.ColumnMap" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="92.75" Y="0.5" Width="1.5" />
+    <Position X="31.25" Y="10" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAIAAAAAAAAAAEAkAAQAAAAAgAAAIAAAAAAAAAAEiA=</HashCode>
       <FileName>src\Data\ColumnMap.cs</FileName>
@@ -143,7 +143,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Icod.Wod.Data.ColumnMapValueComparer" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="94.5" Y="0.5" Width="1.5" />
+    <Position X="33" Y="10" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAkAAAAAAAAAAAAIAAAAAAAAAAAQA=</HashCode>
       <FileName>src\Data\ColumnMapValueComparer.cs</FileName>
@@ -174,7 +174,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Icod.Wod.Data.DbHelper" Collapsed="true">
-    <Position X="89.25" Y="1.5" Width="1.5" />
+    <Position X="27.75" Y="11" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAIAAAAAAEAAAQEAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>src\Data\DbHelper.cs</FileName>
@@ -196,7 +196,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Icod.Wod.Data.DbParameter" Collapsed="true">
-    <Position X="91" Y="1.5" Width="1.5" />
+    <Position X="29.5" Y="11" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAgAAAAAAAgIAAACIAAAQAABBAADBAAAAAAAAAEAA=</HashCode>
       <FileName>src\Data\DbParameter.cs</FileName>
@@ -314,7 +314,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="Icod.Wod.File.ClientStream" Collapsed="true">
-    <Position X="87.5" Y="0.5" Width="1.5" />
+    <Position X="26" Y="10" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAQAAiAAQAAgGAAAAABgAAAAAAAAAAAAAAEIECA=</HashCode>
       <FileName>src\File\ClientStream.cs</FileName>
@@ -379,7 +379,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="Icod.Wod.File.FileEntry" Collapsed="true">
-    <Position X="94.5" Y="1.5" Width="1.5" />
+    <Position X="33" Y="11" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAgAAAAAIAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA=</HashCode>
       <FileName>src\File\FileEntry.cs</FileName>
@@ -644,7 +644,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="Icod.Wod.SalesForce.Bulk.ColumnDelimiterOption" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="91" Y="0.5" Width="1.5" />
+    <Position X="29.5" Y="10" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAEgAAAEgpAAAAQABhACAIgAIAAgAAAAAnA=</HashCode>
       <FileName>src\SalesForce\Bulk\ColumnDelimiterOption.cs</FileName>
@@ -673,7 +673,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Icod.Wod.SalesForce.Bulk.JobProcess" Collapsed="true">
-    <Position X="87.5" Y="2.5" Width="1.5" />
+    <Position X="26" Y="12" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAIAEAAIAAAAAEAAAEAAAAAAIAAAAAAAAAA=</HashCode>
       <FileName>src\SalesForce\Bulk\JobProcess.cs</FileName>
@@ -694,14 +694,14 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Icod.Wod.SalesForce.Bulk.JobState" Collapsed="true">
-    <Position X="89.25" Y="2.5" Width="1.5" />
+    <Position X="27.75" Y="12" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAIAAAAAAAAAAAAAAQAAAAAFAAABAAAgA=</HashCode>
       <FileName>src\SalesForce\Bulk\JobState.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Icod.Wod.SalesForce.Bulk.LineEndingOption" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="91" Y="2.5" Width="1.5" />
+    <Position X="29.5" Y="12" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAEAAEgAACAQQAAhAAIIAAAAAgAAAAAmA=</HashCode>
       <FileName>src\SalesForce\Bulk\LineEndingOption.cs</FileName>
@@ -716,7 +716,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Icod.Wod.SalesForce.Bulk.SelectResult" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="85.75" Y="4.5" Width="1.5" />
+    <Position X="24.25" Y="14" Width="1.5" />
     <TypeIdentifier>
       <HashCode>BAAAAACARQQIQAAoAAABAAAAAAAAAAAAAEAAIABAAFA=</HashCode>
       <FileName>src\SalesForce\Bulk\SelectResult.cs</FileName>
@@ -724,7 +724,7 @@
     <Lollipop Position="0.1" Collapsed="true" />
   </Class>
   <Class Name="Icod.Wod.SalesForce.Bulk.StateOption" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="92.75" Y="4.5" Width="1.5" />
+    <Position X="31.25" Y="14" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAABAQAAAAAAYAAEgAAIAAYAAhAQAIAAAFAgABAAAmE=</HashCode>
       <FileName>src\SalesForce\Bulk\StateOption.cs</FileName>
@@ -746,14 +746,14 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Icod.Wod.SalesForce.Bulk.Wait" Collapsed="true">
-    <Position X="87.5" Y="5.5" Width="1.5" />
+    <Position X="26" Y="15" Width="1.5" />
     <TypeIdentifier>
       <HashCode>gAAAAACAAAAAAAACIAQAMAQAAgAAAAAAAAAgAIAkAAA=</HashCode>
       <FileName>src\SalesForce\Bulk\Wait.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Icod.Wod.SalesForce.Credential" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="87.5" Y="1.5" Width="1.5" />
+    <Position X="26" Y="11" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAQBAAEAoAgQAAAASECAgBDEACACAACAAEAAA=</HashCode>
       <FileName>src\SalesForce\Credential.cs</FileName>
@@ -768,14 +768,14 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Icod.Wod.SalesForce.Login" Collapsed="true">
-    <Position X="92.75" Y="2.5" Width="1.5" />
+    <Position X="31.25" Y="12" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAEAAACAAAAAAAAAAAAIAAAAAAAAAgEAA=</HashCode>
       <FileName>src\SalesForce\Login.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Icod.Wod.SalesForce.LoginResponse" Collapsed="true">
-    <Position X="94.5" Y="2.5" Width="1.5" />
+    <Position X="33" Y="12" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAECAAAAAAAAAAAAAAAAAAAAEAAAAAAAAIAAAAAAAAE=</HashCode>
       <FileName>src\SalesForce\LoginResponse.cs</FileName>
@@ -818,70 +818,70 @@
     </TypeIdentifier>
   </Interface>
   <Interface Name="Icod.Wod.IStep" Collapsed="true">
-    <Position X="92.75" Y="6.75" Width="1.5" />
+    <Position X="31.25" Y="16.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAQAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>src\Interfaces\IStep.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="Icod.Wod.Data.IRecordSeparator" Collapsed="true">
-    <Position X="91" Y="6.75" Width="1.5" />
+    <Position X="29.5" Y="16.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>src\Data\Interfaces\IRecordSeparator.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="Icod.Wod.Data.ITableDestination" Collapsed="true">
-    <Position X="94.5" Y="6.75" Width="1.5" />
+    <Position X="33" Y="16.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>src\Data\Interfaces\ITableDestination.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="Icod.Wod.Data.ITableSource" Collapsed="true">
-    <Position X="85.75" Y="7.5" Width="1.5" />
+    <Position X="24.25" Y="17" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>src\Data\Interfaces\ITableSource.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="Icod.Wod.File.IFile" Collapsed="true">
-    <Position X="89.25" Y="6.75" Width="1.5" />
+    <Position X="27.75" Y="16.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAEAIAAQAAAAQAAAAAAAACAQAEAAAAEAA=</HashCode>
       <FileName>src\File\Interfaces\IFile.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="Icod.Wod.SalesForce.Bulk.IAggregateOperation" Collapsed="true">
-    <Position X="85.75" Y="6.75" Width="1.5" />
+    <Position X="24.25" Y="16.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
       <FileName>src\SalesForce\Interfaces\IAggregateOperation.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="Icod.Wod.SalesForce.ICredential" Collapsed="true">
-    <Position X="87.5" Y="6.75" Width="1.5" />
+    <Position X="26" Y="16.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAQBAAAAIAgQAAAASECAgBCEACAAAAAAAAAAA=</HashCode>
       <FileName>src\SalesForce\Interfaces\ICredential.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Enum Name="Icod.Wod.File.FileType" Collapsed="true">
-    <Position X="85.75" Y="8.5" Width="1.5" />
+    <Position X="24.25" Y="18" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAABAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAABA=</HashCode>
       <FileName>src\File\FileType.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Enum Name="Icod.Wod.SalesForce.Bulk.JobType" Collapsed="true">
-    <Position X="87.5" Y="8.5" Width="1.5" />
+    <Position X="26" Y="18" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAQBAAAAAAAAAAAAAAAAAAAAAAACAIAAAAAAAAA=</HashCode>
       <FileName>src\SalesForce\Bulk\JobType.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Enum Name="Icod.Wod.SalesForce.LoginMode" Collapsed="true">
-    <Position X="89.25" Y="8.5" Width="1.5" />
+    <Position X="27.75" Y="18" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAQAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAA=</HashCode>
       <FileName>src\SalesForce\LoginMode.cs</FileName>
