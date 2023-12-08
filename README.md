@@ -107,7 +107,7 @@ Appends text from one or more files to the end of a file.
 Copies one or more files.
 
 ##### DeflateFile
-Attempts to decompress one or more files with the Deflate algorithm.
+Compresses or decompresses one or more files with the Deflate algorithm.
 
 ##### DeleteFile
 Attempts to delete one or more files.
@@ -122,7 +122,7 @@ Perform specified work if and only if the specified file exists.
 Retrieve/unpack one or more files from one or more Zip archives.
 
 ##### GZipFile
-Compresses the specified files using the GZip algorithm.
+Compresses or decompresses one or more files with the GZip algorithm.
 
 ##### HeadFile
 Retrieve the top-most specified number of lines from one or more files.
