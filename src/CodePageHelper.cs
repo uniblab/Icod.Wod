@@ -11,7 +11,7 @@ namespace Icod.Wod {
 			if ( System.Int32.TryParse( codePage, out var cpNumber ) ) {
 				output = System.Text.Encoding.GetEncoding( cpNumber );
 			}
-			if ( null == output ) {
+			if ( output is null ) {
 				output = System.Text.Encoding.GetEncoding( codePage );
 			}
 

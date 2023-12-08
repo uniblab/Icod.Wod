@@ -101,7 +101,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 		#region methods
 		public override void PerformWork( Pair<LoginResponse, IStep> jobProcess ) {
 			var step = jobProcess.Second;
-			if ( null == step ) {
+			if ( step is null ) {
 				throw new System.ArgumentException();
 			}
 			var workOrder = step.WorkOrder;
@@ -351,11 +351,11 @@ namespace Icod.Wod.SalesForce.Bulk {
 			);
 		}
 		protected System.String BuildFile( System.Data.DataTable dataTable, System.Char columnDelimiter, System.String lineEnding, System.Char quoteChar ) {
-			if ( null == dataTable ) {
+			if ( dataTable is null ) {
 				throw new System.ArgumentNullException( "dataTable" );
 			}
 			var dbColumns = dataTable.Columns.OfType<System.Data.DataColumn>();
-			if ( ( null == dbColumns ) || !dbColumns.Any() ) {
+			if ( ( dbColumns is null ) || !dbColumns.Any() ) {
 				throw new System.ArgumentNullException( "dbColumns" );
 			}
 			var mapping = ( this.ColumnMapping ?? new Data.ColumnMap[ 0 ] );
@@ -388,9 +388,9 @@ namespace Icod.Wod.SalesForce.Bulk {
 			}
 		}
 		protected System.String GetRow( System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Data.DataRow row, System.Char columnDelimiter, System.Char quoteChar ) {
-			if ( null == row ) {
+			if ( row is null ) {
 				throw new System.ArgumentNullException( "row" );
-			} else if ( ( null == columns ) || !columns.Any() ) {
+			} else if ( ( columns is null ) || !columns.Any() ) {
 				throw new System.ArgumentNullException( "columns" );
 			}
 

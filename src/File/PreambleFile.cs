@@ -35,7 +35,7 @@ namespace Icod.Wod.File {
 		public sealed override void DoWork( WorkOrder workOrder ) {
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			var sourceHandler = this.GetFileHandler( workOrder );
-			if ( null == sourceHandler ) {
+			if ( sourceHandler is null ) {
 				throw new System.InvalidOperationException();
 			}
 			var preamble = this.Preamble;
@@ -43,7 +43,7 @@ namespace Icod.Wod.File {
 				throw new System.InvalidOperationException();
 			}
 			var dest = this.Destination;
-			if ( null == dest ) {
+			if ( dest is null ) {
 				dest = this;
 			}
 			var destHandler = dest.GetFileHandler( workOrder );
@@ -70,9 +70,9 @@ namespace Icod.Wod.File {
 		private void PrefixOnce( System.IO.StreamWriter destination, System.IO.StreamReader source, System.String preamble ) {
 			if ( System.String.IsNullOrEmpty( preamble ) ) {
 				throw new System.ArgumentException( "preamble" );
-			} else if ( null == source ) {
+			} else if ( source is null ) {
 				throw new System.ArgumentNullException( "source" );
-			} else if ( null == destination ) {
+			} else if ( destination is null ) {
 				throw new System.ArgumentNullException( "destination" );
 			}
 			destination.Write( preamble );

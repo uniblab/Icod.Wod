@@ -50,9 +50,9 @@ namespace Icod.Wod.File {
 		}
 		private void Decompress( Icod.Wod.File.FileHandlerBase source, System.String sourceFilePathName, Icod.Wod.File.FileHandlerBase dest ) {
 #if DEBUG
-			if ( null == dest ) {
+			if ( dest is null ) {
 				throw new System.ArgumentNullException( "dest" );
-			} else if ( null == source ) {
+			} else if ( source is null ) {
 				throw new System.ArgumentNullException( "source" );
 			}
 #endif
@@ -74,9 +74,9 @@ namespace Icod.Wod.File {
 		}
 		private void Compress( Icod.Wod.File.FileHandlerBase source, System.String sourceFilePathName, Icod.Wod.File.FileHandlerBase dest ) {
 #if DEBUG
-			if ( null == dest ) {
+			if ( dest is null ) {
 				throw new System.ArgumentNullException( "dest" );
-			} else if ( null == source ) {
+			} else if ( source is null ) {
 				throw new System.ArgumentNullException( "source" );
 			}
 #endif

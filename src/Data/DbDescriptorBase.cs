@@ -113,7 +113,7 @@ namespace Icod.Wod.Data {
 
 		#region methods
 		public virtual System.Data.Common.DbConnection CreateConnection( Icod.Wod.WorkOrder workOrder ) {
-			if ( null == workOrder ) {
+			if ( workOrder is null ) {
 				throw new System.ArgumentNullException( "workOrder" );
 			}
 			var cn = this.ConnectionStringName;
@@ -121,7 +121,7 @@ namespace Icod.Wod.Data {
 				x => x.Name.Equals( cn, System.StringComparison.OrdinalIgnoreCase )
 			);
 			var there = System.Configuration.ConfigurationManager.ConnectionStrings[ cn ];
-			var cnxn = ( null == here )
+			var cnxn = ( here is null )
 				? there.CreateConnection()
 				: here.CreateConnection()
 			;
@@ -129,7 +129,7 @@ namespace Icod.Wod.Data {
 			return cnxn;
 		}
 		public virtual System.Data.Common.DbCommand CreateCommand( System.Data.Common.DbConnection connection ) {
-			if ( null == connection ) {
+			if ( connection is null ) {
 				throw new System.ArgumentNullException( "connection" );
 			}
 			var timeout = this.CommandTimeout;
@@ -137,9 +137,9 @@ namespace Icod.Wod.Data {
 		}
 
 		protected virtual System.Data.Common.DbCommandBuilder CreateCommandBuilder( Icod.Wod.WorkOrder workOrder, System.Data.Common.DbDataAdapter adapter ) {
-			if ( null == adapter ) {
+			if ( adapter is null ) {
 				throw new System.ArgumentNullException( "adapter" );
-			} else if ( null == workOrder ) {
+			} else if ( workOrder is null ) {
 				throw new System.ArgumentNullException( "workOrder" );
 			}
 
@@ -148,7 +148,7 @@ namespace Icod.Wod.Data {
 				x => x.Name.Equals( cn, System.StringComparison.OrdinalIgnoreCase )
 			);
 			var there = System.Configuration.ConfigurationManager.ConnectionStrings[ cn ];
-			return ( null == here )
+			return ( here is null )
 				? there.CreateCommandBuilder( adapter )
 				: here.CreateCommandBuilder( adapter )
 			;

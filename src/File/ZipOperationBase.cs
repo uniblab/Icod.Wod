@@ -92,11 +92,11 @@ namespace Icod.Wod.File {
 			);
 		}
 		protected virtual System.Collections.Generic.IEnumerable<System.IO.Compression.ZipArchiveEntry> MatchEntries( System.Collections.Generic.IEnumerable<System.IO.Compression.ZipArchiveEntry> collection, FileDescriptor source ) {
-			if ( null == collection ) {
+			if ( collection is null ) {
 				throw new System.ArgumentNullException( "collection" );
 			}
 
-			if ( null == source ) {
+			if ( source is null ) {
 				throw new System.InvalidOperationException();
 			}
 			var regexPattern = source.ExpandedRegexPattern;
@@ -124,7 +124,7 @@ namespace Icod.Wod.File {
 		}
 
 		protected virtual System.IO.Compression.ZipArchive GetZipArchive( System.IO.Stream stream, System.IO.Compression.ZipArchiveMode zipArchiveMode ) {
-			if ( null == stream ) {
+			if ( stream is null ) {
 				throw new System.ArgumentNullException( "stream" );
 			}
 			return new System.IO.Compression.ZipArchive( stream, zipArchiveMode, true, this.GetEncoding() );

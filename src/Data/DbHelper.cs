@@ -55,7 +55,7 @@ namespace Icod.Wod.Data {
 			} );
 		}
 		public static System.Data.Common.DbConnection CreateConnection( this Icod.Wod.ConnectionStringEntry connectionString ) {
-			if ( null == connectionString ) {
+			if ( connectionString is null ) {
 				throw new System.ArgumentNullException( "connectionString" );
 			}
 			try {
@@ -73,7 +73,7 @@ namespace Icod.Wod.Data {
 			}
 		}
 		public static System.Data.Common.DbConnection CreateConnection( this System.Configuration.ConnectionStringSettings connectionString ) {
-			if ( null == connectionString ) {
+			if ( connectionString is null ) {
 				throw new System.ArgumentNullException( "connectionString" );
 			}
 			try {
@@ -92,7 +92,7 @@ namespace Icod.Wod.Data {
 		}
 
 		public static System.Data.Common.DbCommand CreateCommand( this System.Data.Common.DbConnection connection ) {
-			if ( null == connection ) {
+			if ( connection is null ) {
 				throw new System.ArgumentNullException( "connection" );
 			}
 			var command = connection.CreateCommand();
@@ -102,7 +102,7 @@ namespace Icod.Wod.Data {
 		public static System.Data.Common.DbCommand CreateCommand(
 			this System.Data.Common.DbConnection connection, System.Data.Common.DbTransaction transaction
 		) {
-			if ( null == connection ) {
+			if ( connection is null ) {
 				throw new System.ArgumentNullException( "connection" );
 			}
 			var command = connection.CreateCommand();
@@ -114,7 +114,7 @@ namespace Icod.Wod.Data {
 			this System.Data.Common.DbConnection connection, System.Data.Common.DbTransaction transaction,
 			System.String commandText, System.Data.CommandType commandType
 		) {
-			if ( null == connection ) {
+			if ( connection is null ) {
 				throw new System.ArgumentNullException( "connection" );
 			}
 			var command = connection.CreateCommand();
@@ -128,7 +128,7 @@ namespace Icod.Wod.Data {
 			this System.Data.Common.DbConnection connection, System.Data.Common.DbTransaction transaction,
 			System.String commandText, System.Data.CommandType commandType, System.Nullable<System.Int32> commandTimeout
 		) {
-			if ( null == connection ) {
+			if ( connection is null ) {
 				throw new System.ArgumentNullException( "connection" );
 			}
 			var command = connection.CreateCommand();

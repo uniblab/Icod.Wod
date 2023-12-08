@@ -21,7 +21,7 @@ namespace Icod.Wod.File {
 
 		#region methods
 		protected sealed override System.Collections.Generic.IEnumerable<FileEntry> GetEntries( FileHandlerBase source ) {
-			if ( null == source ) {
+			if ( source is null ) {
 				throw new System.ArgumentNullException( "source" );
 			}
 			return source.List();
@@ -29,7 +29,7 @@ namespace Icod.Wod.File {
 		public sealed override void DoWork( WorkOrder workOrder ) {
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			var source = this.GetFileHandler( workOrder );
-			if ( null == source ) {
+			if ( source is null ) {
 				throw new System.InvalidOperationException();
 			}
 

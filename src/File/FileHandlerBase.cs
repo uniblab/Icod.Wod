@@ -71,9 +71,9 @@ namespace Icod.Wod.File {
 		public abstract void Append( System.IO.Stream source, System.String filePathName );
 
 		protected System.Int64 Write( System.IO.Stream source, System.IO.Stream dest ) {
-			if ( null == source ) {
+			if ( source is null ) {
 				throw new System.ArgumentNullException( "source" );
-			} else if ( null == dest ) {
+			} else if ( dest is null ) {
 				throw new System.ArgumentNullException( "dest" );
 			}
 			System.Int64 total = 0;

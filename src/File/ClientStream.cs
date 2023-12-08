@@ -17,9 +17,9 @@ namespace Icod.Wod.File {
 		private ClientStream() : base() {
 		}
 		public ClientStream( System.IO.Stream stream, System.IDisposable client, System.Boolean disposeClient ) : this() {
-			if ( null == client ) {
+			if ( client is null ) {
 				throw new System.ArgumentNullException( "client" );
-			} else if ( null == stream ) {
+			} else if ( stream is null ) {
 				throw new System.ArgumentNullException( "stream" );
 			}
 			myClient = client;
@@ -38,7 +38,7 @@ namespace Icod.Wod.File {
 		#region properties
 		public sealed override System.Boolean CanRead {
 			get {
-				if ( null == myStream ) {
+				if ( myStream is null ) {
 					throw new System.ObjectDisposedException( null );
 				}
 				return myStream.CanRead;
@@ -46,7 +46,7 @@ namespace Icod.Wod.File {
 		}
 		public sealed override System.Boolean CanSeek {
 			get {
-				if ( null == myStream ) {
+				if ( myStream is null ) {
 					throw new System.ObjectDisposedException( null );
 				}
 				return myStream.CanSeek;
@@ -54,7 +54,7 @@ namespace Icod.Wod.File {
 		}
 		public sealed override System.Boolean CanWrite {
 			get {
-				if ( null == myStream ) {
+				if ( myStream is null ) {
 					throw new System.ObjectDisposedException( null );
 				}
 				return myStream.CanWrite;
@@ -63,7 +63,7 @@ namespace Icod.Wod.File {
 
 		public sealed override System.Int64 Length {
 			get {
-				if ( null == myStream ) {
+				if ( myStream is null ) {
 					throw new System.ObjectDisposedException( null );
 				}
 				return myStream.Length;
@@ -71,13 +71,13 @@ namespace Icod.Wod.File {
 		}
 		public sealed override System.Int64 Position {
 			get {
-				if ( null == myStream ) {
+				if ( myStream is null ) {
 					throw new System.ObjectDisposedException( null );
 				}
 				return myStream.Position;
 			}
 			set {
-				if ( null == myStream ) {
+				if ( myStream is null ) {
 					throw new System.ObjectDisposedException( null );
 				}
 				myStream.Position = value;
@@ -98,31 +98,31 @@ namespace Icod.Wod.File {
 		}
 
 		public sealed override void Flush() {
-			if ( null == myStream ) {
+			if ( myStream is null ) {
 				throw new System.ObjectDisposedException( null );
 			}
 			myStream.Flush();
 		}
 		public sealed override System.Int64 Seek( System.Int64 offset, System.IO.SeekOrigin origin ) {
-			if ( null == myStream ) {
+			if ( myStream is null ) {
 				throw new System.ObjectDisposedException( null );
 			}
 			return myStream.Seek( offset, origin );
 		}
 		public sealed override void SetLength( System.Int64 value ) {
-			if ( null == myStream ) {
+			if ( myStream is null ) {
 				throw new System.ObjectDisposedException( null );
 			}
 			myStream.SetLength( value );
 		}
 		public sealed override System.Int32 Read( [System.Runtime.InteropServices.In, System.Runtime.InteropServices.Out] System.Byte[] buffer, System.Int32 offset, System.Int32 count ) {
-			if ( null == myStream ) {
+			if ( myStream is null ) {
 				throw new System.ObjectDisposedException( null );
 			}
 			return myStream.Read( buffer, offset, count );
 		}
 		public sealed override void Write( System.Byte[] buffer, System.Int32 offset, System.Int32 count ) {
-			if ( null == myStream ) {
+			if ( myStream is null ) {
 				throw new System.ObjectDisposedException( null );
 			}
 			myStream.Write( buffer, offset, count );

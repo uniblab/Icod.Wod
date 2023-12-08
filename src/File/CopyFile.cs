@@ -61,7 +61,7 @@ namespace Icod.Wod.File {
 			this.Destination.WorkOrder = workOrder;
 			var dest = this.Destination.GetFileHandler( workOrder );
 			var source = this.GetFileHandler( workOrder );
-			if ( ( null == dest ) || ( null == source ) ) {
+			if ( ( dest is null ) || ( source is null ) ) {
 				throw new System.InvalidOperationException();
 			} else if ( ( source is LocalFileHandler ) && ( dest is LocalFileHandler ) ) {
 				this.DoWork( source as LocalFileHandler, dest as LocalFileHandler );
@@ -89,9 +89,9 @@ namespace Icod.Wod.File {
 
 		private void DoWork( LocalFileHandler source, LocalFileHandler dest ) {
 #if DEBUG
-			if ( null == dest ) {
+			if ( dest is null ) {
 				throw new System.ArgumentNullException( "dest" );
-			} else if ( null == source ) {
+			} else if ( source is null ) {
 				throw new System.ArgumentNullException( "source" );
 			}
 #endif

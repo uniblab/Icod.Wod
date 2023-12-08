@@ -59,9 +59,9 @@ namespace Icod.Wod.SalesForce {
 			}
 		}
 		private void WriteRecordsOverride( Icod.Wod.WorkOrder workOrder, Icod.Wod.Data.ITableSource source ) {
-			if ( null == source ) {
+			if ( source is null ) {
 				throw new System.ArgumentNullException( "source" );
-			} else if ( null == workOrder ) {
+			} else if ( workOrder is null ) {
 				throw new System.ArgumentNullException( "workOrder" );
 			}
 

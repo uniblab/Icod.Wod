@@ -32,7 +32,7 @@ namespace Icod.Wod {
 		public static System.String ReadLine( this System.IO.TextReader file, System.String recordSeparator, System.Char quoteChar ) {
 			if ( System.String.IsNullOrEmpty( recordSeparator ) ) {
 				throw new System.ArgumentNullException( "recordSeparator" );
-			} else if ( null == file ) {
+			} else if ( file is null ) {
 				throw new System.ArgumentNullException( "file" );
 			} else if ( ( 1 == recordSeparator.Length ) && recordSeparator.Equals( quoteChar.ToString() ) ) {
 				throw new System.InvalidOperationException( "Quote character and record separator cannot be the same." );
@@ -86,7 +86,7 @@ namespace Icod.Wod {
 		public static System.String ReadLine( this System.IO.TextReader file, System.String recordSeparator ) {
 			if ( System.String.IsNullOrEmpty( recordSeparator ) ) {
 				throw new System.ArgumentNullException( "recordSeparator" );
-			} else if ( null == file ) {
+			} else if ( file is null ) {
 				throw new System.ArgumentNullException( "file" );
 			} else if ( EOF == file.Peek() ) {
 				return null;
@@ -123,7 +123,7 @@ namespace Icod.Wod {
 		public static System.String ReadLine( this System.IO.StreamReader file, System.String recordSeparator, System.Char quoteChar ) {
 			if ( System.String.IsNullOrEmpty( recordSeparator ) ) {
 				throw new System.ArgumentNullException( "recordSeparator" );
-			} else if ( null == file ) {
+			} else if ( file is null ) {
 				throw new System.ArgumentNullException( "file" );
 			} else if ( ( 1 == recordSeparator.Length ) && recordSeparator.Equals( quoteChar.ToString() ) ) {
 				throw new System.InvalidOperationException( "Quote character and record separator cannot be the same." );
@@ -177,7 +177,7 @@ namespace Icod.Wod {
 		public static System.String ReadLine( this System.IO.StreamReader file, System.String recordSeparator ) {
 			if ( System.String.IsNullOrEmpty( recordSeparator ) ) {
 				throw new System.ArgumentNullException( "recordSeparator" );
-			} else if ( null == file ) {
+			} else if ( file is null ) {
 				throw new System.ArgumentNullException( "file" );
 			} else if ( EOF == file.Peek() ) {
 				return null;
@@ -214,14 +214,14 @@ namespace Icod.Wod {
 
 
 		public static System.Collections.Generic.IEnumerable<System.String> ReadRecord( this System.IO.TextReader file, System.String recordSeparator, System.Char quoteChar, System.Char fieldSeparator ) {
-			if ( null == file ) {
+			if ( file is null ) {
 				throw new System.ArgumentNullException( "file" );
 			} else if ( System.String.IsNullOrEmpty( recordSeparator ) ) {
 				throw new System.InvalidOperationException();
 			}
 
 			var line = file.ReadLine( recordSeparator, quoteChar );
-			if ( null == line ) {
+			if ( line is null ) {
 				yield break;
 			}
 			using ( var reader = new System.IO.StringReader( line ) ) {
@@ -248,7 +248,7 @@ namespace Icod.Wod {
 			}
 		}
 		public static System.Collections.Generic.IEnumerable<System.String> ReadRecord( this System.IO.StreamReader file, System.String recordSeparator, System.Char quoteChar, System.Char fieldSeparator ) {
-			if ( null == file ) {
+			if ( file is null ) {
 				throw new System.ArgumentNullException( "file" );
 			} else if ( file.EndOfStream ) {
 				yield break;
@@ -257,7 +257,7 @@ namespace Icod.Wod {
 			}
 
 			var line = file.ReadLine( recordSeparator, quoteChar );
-			if ( null == line ) {
+			if ( line is null ) {
 				yield break;
 			}
 			using ( var reader = new System.IO.StringReader( line ) ) {
@@ -285,7 +285,7 @@ namespace Icod.Wod {
 		}
 		public static System.String ReadColumn( this System.IO.StringReader reader, System.Char @break, System.Boolean readNextOnBreak ) {
 #if DEBUG
-			if ( null == reader ) {
+			if ( reader is null ) {
 				throw new System.ArgumentNullException( "reader" );
 			}
 #endif
@@ -305,7 +305,7 @@ namespace Icod.Wod {
 		}
 		public static System.Nullable<System.Char> ReadChar( this System.IO.StringReader reader, System.Char @break, System.Boolean readNextOnBreak ) {
 #if DEBUG
-			if ( null == reader ) {
+			if ( reader is null ) {
 				throw new System.ArgumentNullException( "reader" );
 			}
 #endif

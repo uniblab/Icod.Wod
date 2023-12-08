@@ -35,7 +35,7 @@ namespace Icod.Wod.File {
 		public sealed override void DoWork( WorkOrder workOrder ) {
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			var sourceHandler = this.GetFileHandler( workOrder );
-			if ( null == sourceHandler ) {
+			if ( sourceHandler is null ) {
 				throw new System.InvalidOperationException();
 			}
 			var suffix = this.Suffix;
@@ -43,7 +43,7 @@ namespace Icod.Wod.File {
 				throw new System.InvalidOperationException();
 			}
 			var dest = this.Destination;
-			if ( null == dest ) {
+			if ( dest is null ) {
 				dest = this;
 			}
 			var destHandler = dest.GetFileHandler( workOrder );
@@ -76,9 +76,9 @@ namespace Icod.Wod.File {
 		private void SuffixOnce( System.IO.StreamWriter destination, System.IO.StreamReader source, System.String suffix ) {
 			if ( System.String.IsNullOrEmpty( suffix ) ) {
 				throw new System.ArgumentException( "suffix" );
-			} else if ( null == source ) {
+			} else if ( source is null ) {
 				throw new System.ArgumentNullException( "source" );
-			} else if ( null == destination ) {
+			} else if ( destination is null ) {
 				throw new System.ArgumentNullException( "destination" );
 			}
 			source.BaseStream.CopyTo( destination.BaseStream );
@@ -88,9 +88,9 @@ namespace Icod.Wod.File {
 		private void SuffixEach( System.IO.StreamWriter destination, System.IO.StreamReader source, System.String suffix ) {
 			if ( System.String.IsNullOrEmpty( suffix ) ) {
 				throw new System.ArgumentException( "suffix" );
-			} else if ( null == source ) {
+			} else if ( source is null ) {
 				throw new System.ArgumentNullException( "source" );
-			} else if ( null == destination ) {
+			} else if ( destination is null ) {
 				throw new System.ArgumentNullException( "destination" );
 			}
 			System.String line;

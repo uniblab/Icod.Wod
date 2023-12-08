@@ -137,7 +137,7 @@ namespace Icod.Wod.SalesForce {
 		}
 		public System.Uri SiteUrl {
 			get {
-				if ( null == mySiteUrl ) {
+				if ( mySiteUrl is null) {
 					var host = this.Host;
 					System.Uri probe = System.String.IsNullOrEmpty( host )
 						? null
@@ -172,7 +172,7 @@ namespace Icod.Wod.SalesForce {
 
 		#region static methods
 		public static ICredential GetCredential( System.String name, WorkOrder workOrder ) {
-			if ( null == workOrder ) {
+			if ( workOrder is null ) {
 				throw new System.ArgumentNullException( "workOrder" );
 			} else if ( System.String.IsNullOrEmpty( name ) ) {
 				throw new System.ArgumentNullException( "name" );
@@ -184,11 +184,11 @@ namespace Icod.Wod.SalesForce {
 				return here;
 			}
 			var section = (Configuration.SalesForceCredentialSection)Configuration.SalesForceCredentialSection.GetSection();
-			if ( null == section ) {
+			if ( section is null ) {
 				throw new System.Configuration.ConfigurationErrorsException( "The icod.wod.sfCredentials is not defined." );
 			}
 			var collection = section.Credentials;
-			if ( ( null == collection ) || ( collection.Count < 1 ) ) {
+			if ( ( collection is null ) || ( collection.Count < 1 ) ) {
 				throw new System.Configuration.ConfigurationErrorsException( "No such configuration element is defined." );
 			}
 			return collection[ name ];

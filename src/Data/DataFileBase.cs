@@ -70,25 +70,25 @@ namespace Icod.Wod.Data {
 
 		#region methods
 		public virtual void WriteRecords( Icod.Wod.WorkOrder workOrder, ITableSource source ) {
-			if ( null == source ) {
+			if ( source is null ) {
 				if ( this.WriteIfEmpty ) {
 					throw new System.ArgumentNullException( "source" );
 				} else {
 					return;
 				}
-			} else if ( null == workOrder ) {
+			} else if ( workOrder is null ) {
 				throw new System.ArgumentNullException( "workOrder" );
 			}
 			this.WriteRecords( workOrder, source.ReadTables( workOrder ).OfType<System.Data.DataTable>() );
 		}
 		protected virtual void WriteRecords( Icod.Wod.WorkOrder workOrder, System.Collections.Generic.IEnumerable<System.Data.DataTable> source ) {
-			if ( ( null == source ) || !source.Any() ) {
+			if ( ( source is null ) || !source.Any() ) {
 				if ( this.WriteIfEmpty ) {
 					throw new System.ArgumentNullException( "source" );
 				} else {
 					return;
 				}
-			} else if ( null == workOrder ) {
+			} else if ( workOrder is null ) {
 				throw new System.ArgumentNullException( "workOrder" );
 			}
 
@@ -97,13 +97,13 @@ namespace Icod.Wod.Data {
 			}
 		}
 		protected virtual void WriteRecords( Icod.Wod.WorkOrder workOrder, System.Data.DataTable source ) {
-			if ( null == source ) {
+			if ( source is null ) {
 				if ( this.WriteIfEmpty ) {
 					throw new System.ArgumentNullException( "source" );
 				} else {
 					return;
 				}
-			} else if ( null == workOrder ) {
+			} else if ( workOrder is null ) {
 				throw new System.ArgumentNullException( "workOrder" );
 			}
 
@@ -112,7 +112,7 @@ namespace Icod.Wod.Data {
 		protected abstract void WriteRecords( Icod.Wod.WorkOrder workOrder, System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Collections.Generic.IEnumerable<System.Data.DataRow> rows );
 
 		protected System.Collections.Generic.IDictionary<System.Data.DataColumn, ColumnBase> BuildFormatMap( System.Collections.Generic.IEnumerable<System.Data.DataColumn> dbColumns ) {
-			if ( ( null == dbColumns ) || !dbColumns.Any() ) {
+			if ( ( dbColumns is null ) || !dbColumns.Any() ) {
 				throw new System.ArgumentNullException( "dbColumns" );
 			}
 			var output = new System.Collections.Generic.Dictionary<System.Data.DataColumn, ColumnBase>();
@@ -131,7 +131,7 @@ namespace Icod.Wod.Data {
 			return output;
 		}
 		protected void WriteFile( System.IO.Stream stream ) {
-			if ( null == stream ) {
+			if ( stream is null ) {
 				throw new System.ArgumentNullException( "stream" );
 			}
 			var handler = this.GetFileHandler( this.WorkOrder );
@@ -148,7 +148,7 @@ namespace Icod.Wod.Data {
 			return this.GetFileHandler( this.WorkOrder ).ListFiles();
 		}
 		protected System.IO.StreamReader OpenReader( Icod.Wod.File.FileEntry file ) {
-			if ( null == file ) {
+			if ( file is null ) {
 				throw new System.ArgumentNullException( "file" );
 			} else if ( Icod.Wod.File.FileType.Directory == file.FileType ) {
 				throw new System.InvalidOperationException();
@@ -170,7 +170,7 @@ namespace Icod.Wod.Data {
 		protected void AddFileColumns( System.Data.DataTable table, System.String filePathName ) {
 			if ( System.String.IsNullOrEmpty( filePathName ) ) {
 				throw new System.ArgumentNullException( "filePathName" );
-			} else if ( null == table ) {
+			} else if ( table is null ) {
 				throw new System.ArgumentNullException( "table" );
 			}
 

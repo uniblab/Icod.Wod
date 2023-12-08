@@ -23,11 +23,11 @@ namespace Icod.Wod.File {
 		public sealed override void DoWork( WorkOrder workOrder ) {
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			var sourceHandler = this.GetFileHandler( workOrder );
-			if ( null == sourceHandler ) {
+			if ( sourceHandler is null ) {
 				throw new System.InvalidOperationException();
 			}
 			var dest = this.Destination;
-			if ( null == dest ) {
+			if ( dest is null ) {
 				dest = this;
 			}
 			var destHandler = dest.GetFileHandler( workOrder );

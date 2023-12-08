@@ -243,7 +243,7 @@ namespace Icod.Wod.File {
 		}
 		private System.Collections.Generic.IEnumerable<Renci.SshNet.Sftp.ISftpFile> GetRemoteList( Renci.SshNet.SftpClient client, System.String filePathName, System.String regexPattern ) {
 #if DEBUG
-			if ( null == client ) {
+			if ( client is null ) {
 				throw new System.ArgumentNullException( "client" );
 			}
 #endif

@@ -126,11 +126,11 @@ namespace Icod.Wod.Data {
 
 		#region methods
 		protected virtual System.String GetRow( System.Collections.Generic.IDictionary<System.Data.DataColumn, ColumnBase> formatMap, System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Data.DataRow row ) {
-			if ( null == row ) {
+			if ( row is null ) {
 				throw new System.ArgumentNullException( "row" );
-			} else if ( ( null == columns ) || !columns.Any() ) {
+			} else if ( ( columns is null ) || !columns.Any() ) {
 				throw new System.ArgumentNullException( "columns" );
-			} else if ( ( null == formatMap ) || !formatMap.Any() ) {
+			} else if ( ( formatMap is null ) || !formatMap.Any() ) {
 				throw new System.ArgumentNullException( "formatMap" );
 			}
 
@@ -139,11 +139,11 @@ namespace Icod.Wod.Data {
 			) );
 		}
 		protected System.Collections.Generic.IEnumerable<System.String> GetColumns( System.Collections.Generic.IDictionary<System.Data.DataColumn, ColumnBase> formatMap, System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Data.DataRow row ) {
-			if ( null == row ) {
+			if ( row is null ) {
 				throw new System.ArgumentNullException( "row" );
-			} else if ( ( null == columns ) || !columns.Any() ) {
+			} else if ( ( columns is null ) || !columns.Any() ) {
 				throw new System.ArgumentNullException( "columns" );
-			} else if ( ( null == formatMap ) || !formatMap.Any() ) {
+			} else if ( ( formatMap is null ) || !formatMap.Any() ) {
 				throw new System.ArgumentNullException( "formatMap" );
 			}
 
@@ -152,13 +152,13 @@ namespace Icod.Wod.Data {
 			);
 		}
 		protected System.String GetColumn( ColumnBase format, System.Data.DataColumn column, System.Data.DataRow row ) {
-			if ( null == row ) {
+			if ( row is null ) {
 				throw new System.ArgumentNullException( "row" );
-			} else if ( null == column ) {
+			} else if ( column is null ) {
 				throw new System.ArgumentNullException( "column" );
 			}
 
-			if ( null == format ) {
+			if ( format is null ) {
 				format = new TextFileColumn( column.ColumnName );
 			}
 			var output = format.GetColumnText( this.WorkOrder, row[ column ] ) ?? this.NullReplacementText ?? System.String.Empty;
@@ -175,7 +175,7 @@ namespace Icod.Wod.Data {
 		}
 
 		protected sealed override System.Data.DataTable ReadFile( System.String filePathName, System.IO.StreamReader file ) {
-			if ( null == file ) {
+			if ( file is null ) {
 				throw new System.ArgumentNullException( "file" );
 			} else if ( System.String.IsNullOrEmpty( filePathName ) ) {
 				throw new System.ArgumentNullException( "filePathName" );
@@ -208,9 +208,9 @@ namespace Icod.Wod.Data {
 		}
 		private void BuildTable( System.IO.StreamReader file, System.Data.DataTable table ) {
 #if DEBUG
-			if ( null == table ) {
+			if ( table is null ) {
 				throw new System.ArgumentNullException( "table" );
-			} else if ( null == file ) {
+			} else if ( file is null ) {
 				throw new System.ArgumentNullException( "file" );
 			}
 #endif
@@ -222,7 +222,7 @@ namespace Icod.Wod.Data {
 
 		protected sealed override void WriteRecords( Icod.Wod.WorkOrder workOrder, System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Collections.Generic.IEnumerable<System.Data.DataRow> rows ) {
 #if DEBUG
-			if ( null == workOrder ) {
+			if ( workOrder is null ) {
 				throw new System.ArgumentNullException( "workOrder" );
 			}
 #endif
@@ -256,13 +256,13 @@ namespace Icod.Wod.Data {
 		}
 		protected abstract void WriteHeader( System.IO.StreamWriter writer, System.Collections.Generic.IEnumerable<System.Data.DataColumn> dbColumns, System.Collections.Generic.IEnumerable<ColumnBase> fileColumns );
 		protected void WriteRow( System.IO.StreamWriter writer, System.Collections.Generic.IDictionary<System.Data.DataColumn, ColumnBase> formatMap, System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Data.DataRow row ) {
-			if ( null == row ) {
+			if ( row is null ) {
 				throw new System.ArgumentNullException( "row" );
-			} else if ( ( null == columns ) || !columns.Any() ) {
+			} else if ( ( columns is null ) || !columns.Any() ) {
 				throw new System.ArgumentNullException( "columns" );
-			} else if ( ( null == formatMap ) || !formatMap.Any() ) {
+			} else if ( ( formatMap is null ) || !formatMap.Any() ) {
 				throw new System.ArgumentNullException( "formatMap" );
-			} else if ( null == writer ) {
+			} else if ( writer is null ) {
 				throw new System.ArgumentNullException( "writer" );
 			}
 			writer.Write( this.GetRow( formatMap, columns, row ) );
@@ -271,12 +271,12 @@ namespace Icod.Wod.Data {
 
 		private void ReadPreamble( System.IO.StreamReader file ) {
 #if DEBUG
-			if ( null == file ) {
+			if ( file is null ) {
 				throw new System.ArgumentNullException( "file" );
 			}
 #endif
 			var bs = file.BaseStream;
-			if ( ( null == bs ) || !bs.CanRead ) {
+			if ( ( bs is null ) || !bs.CanRead ) {
 				throw new System.InvalidOperationException();
 			}
 			var skip = this.Skip;

@@ -30,11 +30,11 @@ namespace Icod.Wod.File {
 
 		#region methods
 		public void Write( WorkOrder workOrder, System.IO.Stream stream ) {
-			if ( null == stream ) {
+			if ( stream is null ) {
 				throw new System.ArgumentNullException( "stream" );
 			} else if ( !stream.CanRead ) {
 				throw new System.InvalidOperationException();
-			} else if ( null == workOrder ) {
+			} else if ( workOrder is null ) {
 				throw new System.ArgumentNullException( "workOrder" );
 			}
 

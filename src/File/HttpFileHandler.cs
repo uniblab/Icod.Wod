@@ -19,7 +19,7 @@ namespace Icod.Wod.File {
 		#region methods
 		private void SetClient( System.Net.HttpWebRequest client, System.String method ) {
 #if DEBUG
-			if ( null == client ) {
+			if ( client is null ) {
 				throw new System.ArgumentNullException( "client" );
 			}
 #endif

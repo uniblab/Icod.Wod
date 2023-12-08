@@ -88,7 +88,7 @@ namespace Icod.Wod.File {
 		public sealed override void DoWork( WorkOrder workOrder ) {
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			var handler = this.GetFileHandler( workOrder );
-			if ( null == handler ) {
+			if ( handler is null ) {
 				throw new System.InvalidOperationException();
 			}
 

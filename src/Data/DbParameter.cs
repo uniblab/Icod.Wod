@@ -133,7 +133,7 @@ namespace Icod.Wod.Data {
 			return workOrder.ExpandPseudoVariables( this.DefaultValue );
 		}
 		public System.Data.Common.DbParameter ToDbParameter( WorkOrder workOrder, System.Data.Common.DbCommand command ) {
-			if ( null == command ) {
+			if ( command is null ) {
 				throw new System.ArgumentNullException( "command" );
 			}
 

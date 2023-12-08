@@ -18,7 +18,7 @@ namespace Icod.Wod.SalesForce {
 		public LoginResponse() : base() {
 		}
 		public LoginResponse( dynamic response ) : this() {
-			if ( null == response ) {
+			if ( response is null ) {
 				throw new System.ArgumentNullException( "response" );
 			};
 			this.AccessToken = (System.String)response.access_token;

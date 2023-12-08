@@ -134,7 +134,7 @@ namespace Icod.Wod.Configuration {
 		[System.Xml.Serialization.XmlIgnore]
 		public System.Uri SiteUrl {
 			get {
-				if ( null == mySiteUrl ) {
+				if ( mySiteUrl is null ) {
 					var host = this.Host;
 					System.Uri probe = System.String.IsNullOrEmpty( host )
 						? null

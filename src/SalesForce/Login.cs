@@ -43,7 +43,7 @@ namespace Icod.Wod.SalesForce {
 			return this.GetLoginResponse( credential, System.Text.Encoding.UTF8 );
 		}
 		public LoginResponse GetLoginResponse( SalesForce.ICredential credential, System.Text.Encoding encoding ) {
-			if ( null == credential ) {
+			if ( credential is null ) {
 				throw new System.ArgumentNullException( "credential" );
 			} else if (
 				( LoginMode.RefreshToken == credential.LoginMode )
@@ -63,7 +63,7 @@ namespace Icod.Wod.SalesForce {
 			return this.BuildLogin( credential, encoding );
 		}
 		private LoginResponse BuildLogin( SalesForce.ICredential credential, System.Text.Encoding encoding ) {
-			if ( null == credential ) {
+			if ( credential is null ) {
 				throw new System.ArgumentNullException( "credential" );
 			}
 
@@ -78,7 +78,7 @@ namespace Icod.Wod.SalesForce {
 			return this.BuildLogin( credential.SiteUrl, headers, body );
 		}
 		private System.String BuildBody( SalesForce.ICredential credential ) {
-			if ( null == credential ) {
+			if ( credential is null ) {
 				throw new System.ArgumentNullException( "credential" );
 			}
 

@@ -212,7 +212,7 @@ namespace Icod.Wod.File {
 			return output;
 		}
 		public virtual System.String GetFilePathName( FileHandlerBase handler, System.String alternateName ) {
-			if ( null == handler ) {
+			if ( handler is null ) {
 				throw new System.ArgumentNullException( "handler" );
 			}
 			return handler.PathCombine( this.ExpandedPath, this.GetFileName( alternateName ) );

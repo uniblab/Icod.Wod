@@ -133,9 +133,9 @@ namespace Icod.Wod.Data {
 		}
 
 		protected virtual System.Collections.Generic.IEnumerable<System.Data.Common.DataColumnMapping> CreateDataColumnMapping( System.Data.DataTable source, System.Data.DataTable dest ) {
-			if ( null == dest ) {
+			if ( dest is null ) {
 				throw new System.ArgumentNullException( "dest" );
-			} else if ( null == source ) {
+			} else if ( source is null ) {
 				throw new System.ArgumentNullException( "source" );
 			}
 
@@ -189,18 +189,18 @@ namespace Icod.Wod.Data {
 		}
 
 		protected virtual System.Data.Common.DbDataAdapter CreateDataAdapter( System.Data.Common.DbConnection connection, Icod.Wod.WorkOrder workOrder ) {
-			if ( null == workOrder ) {
+			if ( workOrder is null ) {
 				throw new System.ArgumentNullException( "workOrder" );
-			} else if ( null == connection ) {
+			} else if ( connection is null ) {
 				throw new System.ArgumentNullException( "connection" );
 			}
 
 			return this.CreateDataAdapter( connection, workOrder, this.GenerateSchemaQuery() );
 		}
 		protected virtual System.Data.Common.DbDataAdapter CreateDataAdapter( System.Data.Common.DbConnection connection, Icod.Wod.WorkOrder workOrder, System.String schemaQuery ) {
-			if ( null == workOrder ) {
+			if ( workOrder is null ) {
 				throw new System.ArgumentNullException( "workOrder" );
-			} else if ( null == connection ) {
+			} else if ( connection is null ) {
 				throw new System.ArgumentNullException( "connection" );
 			}
 
@@ -210,7 +210,7 @@ namespace Icod.Wod.Data {
 				x => x.Name.Equals( cn, System.StringComparison.OrdinalIgnoreCase )
 			);
 			var there = System.Configuration.ConfigurationManager.ConnectionStrings[ cn ];
-			var output = ( null == here )
+			var output = ( here is null )
 				? there.CreateDataAdapter( schemaQuery, connection )
 				: here.CreateDataAdapter( schemaQuery, connection )
 			;
@@ -220,11 +220,11 @@ namespace Icod.Wod.Data {
 			return output;
 		}
 		protected virtual System.Data.Common.DbDataAdapter CreateDataAdapter( System.Data.Common.DbConnection connection, Icod.Wod.WorkOrder workOrder, System.Data.Common.DbCommand command ) {
-			if ( null == command ) {
+			if ( command is null ) {
 				throw new System.ArgumentNullException( "command" );
-			} else if ( null == workOrder ) {
+			} else if ( workOrder is null ) {
 				throw new System.ArgumentNullException( "workOrder" );
-			} else if ( null == connection ) {
+			} else if ( connection is null ) {
 				throw new System.ArgumentNullException( "connection" );
 			}
 
@@ -233,7 +233,7 @@ namespace Icod.Wod.Data {
 				x => x.Name.Equals( cn, System.StringComparison.OrdinalIgnoreCase )
 			);
 			var there = System.Configuration.ConfigurationManager.ConnectionStrings[ cn ];
-			var output = ( null == here )
+			var output = ( here is null )
 				? there.CreateDataAdapter( command )
 				: here.CreateDataAdapter( command )
 			;
@@ -244,7 +244,7 @@ namespace Icod.Wod.Data {
 		}
 
 		public virtual System.Collections.Generic.IEnumerable<System.Data.DataTable> ReadTables( Icod.Wod.WorkOrder workOrder ) {
-			if ( null == workOrder ) {
+			if ( workOrder is null ) {
 				throw new System.ArgumentNullException( "workOrder" );
 			}
 
@@ -260,9 +260,9 @@ namespace Icod.Wod.Data {
 			}
 		}
 		public virtual void WriteRecords( Icod.Wod.WorkOrder workOrder, ITableSource source ) {
-			if ( null == source ) {
+			if ( source is null ) {
 				throw new System.ArgumentNullException( "source" );
-			} else if ( null == workOrder ) {
+			} else if ( workOrder is null ) {
 				throw new System.ArgumentNullException( "workOrder" );
 			}
 
@@ -303,18 +303,18 @@ namespace Icod.Wod.Data {
 		}
 
 		protected virtual void FillSchema( System.Data.Common.DbDataAdapter adapter, System.Data.DataSet set ) {
-			if ( null == set ) {
+			if ( set is null ) {
 				throw new System.ArgumentNullException( "set" );
-			} else if ( null == adapter ) {
+			} else if ( adapter is null ) {
 				throw new System.ArgumentNullException( "adapter" );
 			}
 
 			_ = adapter.FillSchema( set, System.Data.SchemaType.Source, this.NamespaceTableName );
 		}
 		protected virtual void FillSchema( System.Data.Common.DbDataAdapter adapter, System.Data.DataTable table ) {
-			if ( null == table ) {
+			if ( table is null ) {
 				throw new System.ArgumentNullException( "table" );
-			} else if ( null == adapter ) {
+			} else if ( adapter is null ) {
 				throw new System.ArgumentNullException( "adapter" );
 			}
 
@@ -336,16 +336,16 @@ namespace Icod.Wod.Data {
 			}
 		}
 		private void ExecuteCommand( System.Data.Common.DbCommand command, System.Data.DataTable source ) {
-			if ( null == source ) {
+			if ( source is null ) {
 				throw new System.ArgumentNullException( "source" );
-			} else if ( null == command ) {
+			} else if ( command is null ) {
 				throw new System.ArgumentNullException( "command" );
 			}
 			this.ExecuteCommand( command, source, this.BuildSourceToParameter( source ) );
 		}
 
 		protected System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<System.Data.DataColumn, DbParameter>> BuildSourceToParameter( System.Data.DataTable source ) {
-			if ( null == source ) {
+			if ( source is null ) {
 				throw new System.ArgumentNullException( "source" );
 			}
 			var parameters = this.Parameters ?? new DbParameter[ 0 ];
@@ -410,11 +410,11 @@ namespace Icod.Wod.Data {
 			);
 		}
 		protected void ExecuteCommand( System.Data.Common.DbCommand command, System.Data.DataTable source, System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<System.Data.DataColumn, DbParameter>> columnParameterMap ) {
-			if ( null == columnParameterMap ) {
+			if ( columnParameterMap is null ) {
 				throw new System.ArgumentNullException( "columnParameterMap" );
-			} else if ( null == source ) {
+			} else if ( source is null ) {
 				throw new System.ArgumentNullException( "source" );
-			} else if ( null == command ) {
+			} else if ( command is null ) {
 				throw new System.ArgumentNullException( "command" );
 			}
 

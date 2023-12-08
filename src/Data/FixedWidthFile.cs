@@ -93,7 +93,7 @@ namespace Icod.Wod.Data {
 
 		#region methods
 		protected sealed override System.Collections.Generic.IEnumerable<System.Data.DataColumn> BuildColumns( System.IO.StreamReader file ) {
-			if ( null == file ) {
+			if ( file is null ) {
 				throw new System.ArgumentNullException( "file" );
 			} else if ( !( this.Columns ?? new ColumnBase[ 0 ] ).Any() ) {
 				throw new System.InvalidOperationException();
@@ -109,15 +109,15 @@ namespace Icod.Wod.Data {
 			);
 		}
 		protected sealed override System.Data.DataRow ReadRecord( System.Data.DataTable table, System.IO.StreamReader file ) {
-			if ( null == file ) {
+			if ( file is null ) {
 				throw new System.ArgumentNullException( "file" );
-			} else if ( null == table ) {
+			} else if ( table is null ) {
 				throw new System.ArgumentNullException( "table" );
 			}
 			return table.Rows.Add( this.ReadRecord( file ).ToArray() );
 		}
 		protected sealed override System.Collections.Generic.IEnumerable<System.String> ReadRecord( System.IO.StreamReader file ) {
-			if ( null == file ) {
+			if ( file is null ) {
 				throw new System.ArgumentNullException( "file" );
 			} else if ( file.EndOfStream ) {
 				yield break;
@@ -146,11 +146,11 @@ namespace Icod.Wod.Data {
 		}
 
 		protected sealed override void WriteHeader( System.IO.StreamWriter writer, System.Collections.Generic.IEnumerable<System.Data.DataColumn> dbColumns, System.Collections.Generic.IEnumerable<ColumnBase> fileColumns ) {
-			if ( ( null == fileColumns ) || !fileColumns.Any() ) {
+			if ( ( fileColumns is null ) || !fileColumns.Any() ) {
 				throw new System.ArgumentNullException( "fileColumns" );
-			} else if ( ( null == dbColumns ) || !dbColumns.Any() ) {
+			} else if ( ( dbColumns is null ) || !dbColumns.Any() ) {
 				throw new System.ArgumentNullException( "dbColumns" );
-			} else if ( null == writer ) {
+			} else if ( writer is null ) {
 				throw new System.ArgumentNullException( "writer" );
 			}
 

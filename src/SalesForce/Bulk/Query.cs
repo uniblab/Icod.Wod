@@ -87,7 +87,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 		public sealed override void PerformWork( Pair<LoginResponse, IStep> jobProcess ) {
 			var step = jobProcess.Second;
-			if ( null == step ) {
+			if ( step is null ) {
 				throw new System.ArgumentException();
 			}
 			var workOrder = step.WorkOrder;

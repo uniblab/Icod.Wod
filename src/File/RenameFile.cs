@@ -34,11 +34,11 @@ namespace Icod.Wod.File {
 
 		private void DoWork( WorkOrder workOrder, FileHandlerBase source, FileHandlerBase dest ) {
 #if DEBUG
-			if ( null == dest ) {
+			if ( dest is null ) {
 				throw new System.ArgumentNullException( "dest" );
-			} else if ( null == source ) {
+			} else if ( source is null ) {
 				throw new System.ArgumentNullException( "source" );
-			} else if ( null == workOrder ) {
+			} else if ( workOrder is null ) {
 				throw new System.ArgumentNullException( "workOrder" );
 			}
 #endif
@@ -59,15 +59,15 @@ namespace Icod.Wod.File {
 
 		private void DoWork( LocalFileHandler source, LocalFileHandler dest ) {
 #if DEBUG
-			if ( null == dest ) {
+			if ( dest is null ) {
 				throw new System.ArgumentNullException( "dest" );
-			} else if ( null == source ) {
+			} else if ( source is null ) {
 				throw new System.ArgumentNullException( "source" );
 			}
 #endif
 
 			var file = source.ListFiles().FirstOrDefault();
-			if ( null == file ) {
+			if ( file is null ) {
 				return;
 			}
 			var filePathName = file.File;
