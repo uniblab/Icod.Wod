@@ -88,7 +88,7 @@ namespace Icod.Wod.SalesForce.Rest {
 		public void DoWork( WorkOrder workOrder ) {
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			var dest = this.Destination;
-			if ( null == dest ) {
+			if ( dest is null ) {
 				throw new System.InvalidOperationException();
 			}
 			dest.WriteRecords( workOrder, this );
@@ -161,7 +161,7 @@ namespace Icod.Wod.SalesForce.Rest {
 		}
 
 		private System.Net.WebClient BuildClient( LoginResponse token, System.String userAgent ) {
-			if ( null == token ) {
+			if ( token is null ) {
 				throw new System.ArgumentNullException( "token" );
 			}
 			var client = new System.Net.WebClient {
