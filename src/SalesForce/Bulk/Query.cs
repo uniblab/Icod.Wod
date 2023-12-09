@@ -14,18 +14,6 @@ namespace Icod.Wod.SalesForce.Bulk {
 			this.ApiVersion = DefaultApiVersion;
 			this.BatchSize = DefaultBatchSize;
 		}
-		public Query( WorkOrder workOrder ) : base( workOrder ) {
-			this.ApiVersion = DefaultApiVersion;
-			this.BatchSize = DefaultBatchSize;
-		}
-		public Query( System.Data.MissingSchemaAction missingSchemaAction, System.Data.MissingMappingAction missingMappingAction ) : base( missingSchemaAction, missingMappingAction ) {
-			this.ApiVersion = DefaultApiVersion;
-			this.BatchSize = DefaultBatchSize;
-		}
-		public Query( WorkOrder workOrder, System.Data.MissingSchemaAction missingSchemaAction, System.Data.MissingMappingAction missingMappingAction ) : base( workOrder, missingSchemaAction, missingMappingAction ) {
-			this.ApiVersion = DefaultApiVersion;
-			this.BatchSize = DefaultBatchSize;
-		}
 		#endregion .ctor
 
 
