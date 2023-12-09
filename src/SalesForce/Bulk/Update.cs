@@ -13,12 +13,6 @@ namespace Icod.Wod.SalesForce.Bulk {
 		#region .ctor
 		public Update() : base() {
 		}
-		public Update( WorkOrder workOrder ) : base( workOrder ) {
-		}
-		public Update( System.Data.MissingSchemaAction missingSchemaAction, System.Data.MissingMappingAction missingMappingAction ) : base( missingSchemaAction, missingMappingAction ) {
-		}
-		public Update( WorkOrder workOrder, System.Data.MissingSchemaAction missingSchemaAction, System.Data.MissingMappingAction missingMappingAction ) : base( workOrder, missingSchemaAction, missingMappingAction ) {
-		}
 		#endregion .ctor
 
 
