@@ -14,12 +14,6 @@ namespace Icod.Wod.SalesForce.Bulk {
 		#region .ctor
 		public Insert() : base() {
 		}
-		public Insert( WorkOrder workOrder ) : base( workOrder ) {
-		}
-		public Insert( System.Data.MissingSchemaAction missingSchemaAction, System.Data.MissingMappingAction missingMappingAction ) : base( missingSchemaAction, missingMappingAction ) {
-		}
-		public Insert( WorkOrder workOrder, System.Data.MissingSchemaAction missingSchemaAction, System.Data.MissingMappingAction missingMappingAction ) : base( workOrder, missingSchemaAction, missingMappingAction ) {
-		}
 		#endregion .ctor
 
 
