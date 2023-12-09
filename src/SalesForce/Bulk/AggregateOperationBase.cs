@@ -1,6 +1,4 @@
-// Copyright 2022, Timothy J. Bruce
-using System.Linq;
-using System.Net;
+// Copyright 2023, Timothy J. Bruce
 
 namespace Icod.Wod.SalesForce.Bulk {
 
