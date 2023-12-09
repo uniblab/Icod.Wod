@@ -8,17 +8,11 @@ namespace Icod.Wod.SalesForce.Bulk {
 		#region fields
 		private static readonly System.Int32 theHashCode;
 
-		private const System.String theAbortedString = "Aborted";
 		private static readonly StateOption theAborted;
-		private const System.String theFailedString = "Failed";
 		private static readonly StateOption theFailed;
-		private const System.String theInProgressString = "InProgress";
 		private static readonly StateOption theInProgress;
-		private const System.String theJobCompleteString = "JobComplete";
 		private static readonly StateOption theJobComplete;
-		private const System.String theOpenString = "Open";
 		private static readonly StateOption theOpen;
-		private const System.String theUploadCompleteString = "UploadComplete";
 		private static readonly StateOption theUploadComplete;
 
 		private readonly System.String myValue;
@@ -31,12 +25,12 @@ namespace Icod.Wod.SalesForce.Bulk {
 		static StateOption() {
 			theHashCode = typeof( StateOption ).GetHashCode();
 
-			theAborted = new StateOption( theAbortedString );
-			theFailed = new StateOption( theFailedString );
-			theInProgress = new StateOption( theInProgressString );
-			theJobComplete = new StateOption( theJobCompleteString );
-			theOpen = new StateOption( theOpenString );
-			theUploadComplete = new StateOption( theUploadCompleteString );
+			theAborted = new StateOption( JobState.Aborted );
+			theFailed = new StateOption( JobState.Failed );
+			theInProgress = new StateOption( JobState.InProgress );
+			theJobComplete = new StateOption( JobState.JobComplete );
+			theOpen = new StateOption( JobState.Open );
+			theUploadComplete = new StateOption( JobState.UploadComplete );
 		}
 
 		private StateOption( System.String value ) : this( value, value ) {
