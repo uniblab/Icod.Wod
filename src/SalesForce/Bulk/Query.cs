@@ -43,7 +43,11 @@ namespace Icod.Wod.SalesForce.Bulk {
 					query = this.Soql,
 					contentType = "CSV",
 					columnDelimiter = "COMMA",
+#if DEBUG
 					lineEnding = "CRLF"
+#else
+					lineEnding = "LF"
+#endif
 				};
 				var js = Newtonsoft.Json.JsonConvert.SerializeObject( jr );
 				var buffer = System.Text.Encoding.UTF8.GetBytes( js );

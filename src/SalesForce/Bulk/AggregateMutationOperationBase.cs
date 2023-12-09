@@ -112,7 +112,11 @@ namespace Icod.Wod.SalesForce.Bulk {
 			var workOrder = step.WorkOrder;
 			var loginResponse = jobProcess.First;
 
+#if DEBUG
 			System.String lineEnding = LineEndingOption.CRLF.Value;
+#else
+			System.String lineEnding = LineEndingOption.LF.Value;
+#endif
 			foreach ( var file in this.BuildFiles(
 				this.ReadTables( workOrder ),
 				ColumnDelimiterOption.Comma.Value, lineEnding, '"',
@@ -148,9 +152,9 @@ namespace Icod.Wod.SalesForce.Bulk {
 					}
 				}
 				if ( this.Unprocessed is object ) {
-					var success = this.GetResults( workOrder, loginResponse, jobResponse, UnprocessedResults );
-					if ( !System.String.IsNullOrEmpty( success.Body ) ) {
-						this.Success.WriteRecords( workOrder, success );
+					var unprocessed = this.GetResults( workOrder, loginResponse, jobResponse, UnprocessedResults );
+					if ( !System.String.IsNullOrEmpty( unprocessed.Body ) ) {
+						this.Success.WriteRecords( workOrder, unprocessed );
 					}
 				}
 
@@ -205,7 +209,11 @@ namespace Icod.Wod.SalesForce.Bulk {
 					operation = operation,
 					columnDelimiter = "COMMA",
 					contentType = "CSV",
+#if DEBUG
 					lineEnding = "CRLF",
+#else
+					lineEnding = "LF",
+#endif
 					@object = this.Object,
 				};
 				var js = Newtonsoft.Json.JsonConvert.SerializeObject( jr );
