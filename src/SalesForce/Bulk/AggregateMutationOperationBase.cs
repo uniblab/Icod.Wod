@@ -113,54 +113,20 @@ namespace Icod.Wod.SalesForce.Bulk {
 				var jobResponse = this.CreateJob( loginResponse );
 				var id = jobResponse.Id;
 
-				var wait = ( this.Wait ?? new Wait() );
-				var max = wait.Maximum;
-				var sleepTime = wait.Initial;
-				if ( NotOpenAbortedFailed( jobResponse.State ) ) {
-					if ( 0 < sleepTime ) {
-						System.Threading.Thread.Sleep( sleepTime );
-					}
-					jobResponse = this.QueryJob( loginResponse, id );
-					sleepTime = wait.Minimum;
-					while (
-						NotOpenAbortedFailed( jobResponse.State )
-						&& ( sleepTime < max )
-					) {
-						System.Threading.Thread.Sleep( sleepTime );
-						sleepTime = System.Math.Min( max, sleepTime + wait.Increment );
-						jobResponse = this.QueryJob( loginResponse, id );
-					}
-					while ( NotOpenAbortedFailed( jobResponse.State ) ) {
-						System.Threading.Thread.Sleep( max );
-						jobResponse = this.QueryJob( loginResponse, id );
-					}
+				jobResponse = this.WaitUntilStateOption( 
+					jobResponse, loginResponse, id, 
+					new StateOption[ 3 ] { StateOption.Aborted, StateOption.Failed, StateOption.Open }
+				);
+				if ( StateOption.Open.Equals( jobResponse.State ) ) {
+					this.UploadData( loginResponse, jobResponse, file );
 				}
-
-				this.UploadData( loginResponse, jobResponse, file );
 
 				this.CloseJob( loginResponse, id );
 
-				jobResponse = this.QueryJob( loginResponse, id );
-				sleepTime = wait.Initial;
-				if ( NotCompleteAbortedFailed( jobResponse.State ) ) {
-					if ( 0 < sleepTime ) {
-						System.Threading.Thread.Sleep( sleepTime );
-					}
-					jobResponse = this.QueryJob( loginResponse, id );
-					sleepTime = wait.Minimum;
-					while (
-						NotCompleteAbortedFailed( jobResponse.State )
-						&& ( sleepTime < max )
-					) {
-						System.Threading.Thread.Sleep( sleepTime );
-						sleepTime = System.Math.Min( max, sleepTime + wait.Increment );
-						jobResponse = this.QueryJob( loginResponse, id );
-					}
-					while ( NotCompleteAbortedFailed( jobResponse.State ) ) {
-						System.Threading.Thread.Sleep( max );
-						jobResponse = this.QueryJob( loginResponse, id );
-					}
-				}
+				jobResponse = this.WaitUntilStateOption(
+					this.QueryJob( loginResponse, id ), loginResponse, id,
+					new StateOption[ 3 ] { StateOption.Aborted, StateOption.Failed, StateOption.JobComplete }
+				);
 
 				if ( this.Error is object ) {
 					var error = this.GetResults( workOrder, loginResponse, jobResponse, FailedResults );

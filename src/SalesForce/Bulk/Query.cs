@@ -92,28 +92,10 @@ namespace Icod.Wod.SalesForce.Bulk {
 			var jobResponse = this.CreateJob( loginResponse );
 			var id = jobResponse.Id;
 
-			var wait = ( this.Wait ?? new Wait() );
-			var sleepTime = wait.Initial;
-			if ( 0 < sleepTime ) {
-				System.Threading.Thread.Sleep( sleepTime );
-			}
-			sleepTime = wait.Minimum;
-			var max = wait.Maximum;
-			var state = jobResponse.State;
-			while (
-				NotCompleteAbortedFailed( jobResponse.State )
-				&& ( sleepTime < max )
-			) {
-				System.Threading.Thread.Sleep( sleepTime );
-				sleepTime = System.Math.Min( max, sleepTime + wait.Increment );
-				jobResponse = this.QueryJob( loginResponse, id );
-				state = jobResponse.State;
-			}
-			while ( NotCompleteAbortedFailed( jobResponse.State ) ) {
-				System.Threading.Thread.Sleep( max );
-				jobResponse = this.QueryJob( loginResponse, id );
-				state = jobResponse.State;
-			}
+			jobResponse = this.WaitUntilStateOption(
+				this.QueryJob( loginResponse, id ), loginResponse, id,
+				new StateOption[ 3 ] { StateOption.Aborted, StateOption.Failed, StateOption.JobComplete }
+			);
 
 			SelectResult result;
 			System.String locator = null;

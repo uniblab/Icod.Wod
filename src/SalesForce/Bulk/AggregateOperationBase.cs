@@ -1,5 +1,7 @@
 // Copyright 2023, Timothy J. Bruce
 
+using System.Linq;
+
 namespace Icod.Wod.SalesForce.Bulk {
 
 	[System.Serializable]
@@ -180,7 +182,6 @@ namespace Icod.Wod.SalesForce.Bulk {
 				return this.GetJobResponse( response );
 			}
 		}
-
 		protected JobResponse SendRequest( LoginResponse loginResponse, System.String id, System.String method, JobRequest data ) {
 			var instanceUrl = new System.Uri( loginResponse.InstanceUrl );
 			var uri = new System.UriBuilder( instanceUrl.Scheme, instanceUrl.Host, instanceUrl.Port, this.GetServicePath() ).Uri;
@@ -203,23 +204,40 @@ namespace Icod.Wod.SalesForce.Bulk {
 				return this.GetJobResponse( response );
 			}
 		}
+
+		protected virtual JobResponse WaitUntilStateOption(
+			JobResponse start, LoginResponse loginResponse, System.String id,
+			System.Collections.Generic.IEnumerable<StateOption> collection
+		) {
+			var states = collection.Select( x => x.ToString() );
+			if ( states.Contains( start.State ) ) {
+				return start;
+			}
+
+			var wait = ( this.Wait ?? new Wait() );
+			var sleepTime = wait.Initial;
+			var max = wait.Maximum;
+			var inc = wait.Increment;
+			if ( 0 < sleepTime ) {
+				System.Threading.Thread.Sleep( sleepTime );
+			}
+			var jobResponse = this.QueryJob( loginResponse, id );
+			sleepTime = wait.Minimum;
+			while (
+				!states.Contains( jobResponse.State )
+				&& ( sleepTime < max )
+			) {
+				System.Threading.Thread.Sleep( sleepTime );
+				sleepTime = System.Math.Min( max, sleepTime + inc );
+				jobResponse = this.QueryJob( loginResponse, id );
+			}
+			while ( !states.Contains( jobResponse.State ) ) {
+				System.Threading.Thread.Sleep( max );
+				jobResponse = this.QueryJob( loginResponse, id );
+			}
+			return jobResponse;
+		}
 		#endregion methods
-
-
-		#region static methods
-		protected static System.Boolean NotOpenAbortedFailed( System.String state ) {
-			return !StateOption.Open.Equals( state )
-				&& !StateOption.Aborted.Equals( state )
-				&& !StateOption.Failed.Equals( state )
-			;
-		}
-		protected static System.Boolean NotCompleteAbortedFailed( System.String state ) {
-			return !StateOption.JobComplete.Equals( state )
-				&& !StateOption.Aborted.Equals( state )
-				&& !StateOption.Failed.Equals( state )
-			;
-		}
-		#endregion static methods
 
 	}
 
