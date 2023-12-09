@@ -112,9 +112,12 @@
         <xs:sequence>
           <xs:element minOccurs="0" maxOccurs="1" name="success" type="tns:DbDestination" />
           <xs:element minOccurs="0" maxOccurs="1" name="error" type="tns:DbDestination" />
+          <xs:element minOccurs="0" maxOccurs="1" name="unprocessed" type="tns:DbDestination" />
         </xs:sequence>
         <xs:attribute name="object" type="xs:string" />
-      </xs:extension>
+		<xs:attribute default="Add" name="missingSchemaAction" type="tns:MissingSchemaAction" />
+	    <xs:attribute default="Passthrough" name="missingMappingAction" type="tns:MissingMappingAction" />
+	  </xs:extension>
     </xs:complexContent>
   </xs:complexType>
   <xs:complexType name="AggregateOperationBase" abstract="true">
@@ -125,8 +128,8 @@
         </xs:sequence>
         <xs:attribute name="apiVersion" type="xs:decimal" use="optional" default="47.0" />
         <xs:attribute default="10000" name="batchSize" type="xs:int" />
-        <xs:attribute default="Add" name="missingSchemaAction" type="tns:MissingSchemaAction" />
-        <xs:attribute default="Passthrough" name="missingMappingAction" type="tns:MissingMappingAction" />
+        <xs:attribute default="Ignore" name="missingSchemaAction" type="tns:MissingSchemaAction" />
+        <xs:attribute default="Ignore" name="missingMappingAction" type="tns:MissingMappingAction" />
         <xs:attribute name="tag" type="xs:string" />
       </xs:extension>
     </xs:complexContent>
@@ -758,7 +761,9 @@
   </xs:complexType>
   <xs:complexType name="sfBulkDelete">
     <xs:complexContent mixed="false">
-      <xs:extension base="tns:AggregateMutationOperationBase" />
+      <xs:extension base="tns:AggregateMutationOperationBase">
+        <xs:attribute default="false" name="hard" type="xs:boolean" />
+      </xs:extension>
     </xs:complexContent>
   </xs:complexType>
 </xs:schema>
