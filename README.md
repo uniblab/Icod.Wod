@@ -1,4 +1,6 @@
 # Icod Work on Demand Framework
+Icod.Wod framework, or WoD, is an automation class library.
+Copyright (C) 2023  Timothy J. Bruce
 
 ## What the Hell is this thing?
 The Icod Work on Demand Framework, or WoD, is a class library intended to automate a great variety of tasks.
@@ -231,3 +233,22 @@ Sure! You can find a few examples here, [at my pastebin](https://pastebin.com/u/
 
 ## Wow! This does more than Dell's Boomi.
 Yes, I know.  It's easier to use too.  And did I mention it doesn't need a cloud and doesn't cost a fortune?
+
+## Copyright and Licensing
+Icod.Wod framework, or WoD, is an automation class library.
+Copyright (C) 2023  Timothy J. Bruce
+
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public
+License as published by the Free Software Foundation; either
+version 2.1 of the License, or (at your option) any later version.
+
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public
+License along with this library; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
+USA
