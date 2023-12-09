@@ -1,4 +1,5 @@
 // Copyright 2023, Timothy J. Bruce
+
 namespace Icod.Wod {
 
 	[System.Serializable]
