@@ -14,8 +14,6 @@ namespace Icod.Wod.Data {
 		#region .ctor
 		public XmlFile() : base() {
 		}
-		public XmlFile( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
-		}
 		#endregion .ctor
 
 
@@ -30,7 +28,7 @@ namespace Icod.Wod.Data {
 				var table = new System.Data.DataTable( "table1" );
 				if ( rows.Any() ) {
 					var r = rows.First();
-					if ( null != r.Table ) {
+					if ( r.Table is object ) {
 						table.TableName = r.Table.TableName.TrimToNull() ?? "table1";
 					}
 				}

@@ -20,8 +20,6 @@ namespace Icod.Wod.File {
 
 		public SftpFileHandler() : base() {
 		}
-		public SftpFileHandler( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
-		}
 		public SftpFileHandler( Icod.Wod.WorkOrder workOrder, FileDescriptor descriptor ) : base( workOrder, descriptor ) {
 		}
 		#endregion .ctor
@@ -38,7 +36,7 @@ namespace Icod.Wod.File {
 			System.Int32 port = uri.Port;
 			System.Collections.Generic.List<Renci.SshNet.AuthenticationMethod> ama = new System.Collections.Generic.List<Renci.SshNet.AuthenticationMethod>( 2 );
 			var kf = fd.SshKeyFile;
-			if ( null != kf ) {
+			if ( kf is object ) {
 				var wo = fd.WorkOrder;
 				kf.WorkOrder = wo;
 				var kffd = kf.GetFileHandler( wo );

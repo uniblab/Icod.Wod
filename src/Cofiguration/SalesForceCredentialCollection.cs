@@ -1,5 +1,4 @@
 // Copyright 2023, Timothy J. Bruce
-using System.Linq;
 
 namespace Icod.Wod.Configuration {
 
@@ -30,7 +29,7 @@ namespace Icod.Wod.Configuration {
 				return (SalesForceCredentialElement)this.BaseGet( index );
 			}
 			set {
-				if ( null != this.BaseGet( index ) ) {
+				if ( this.BaseGet( index ) is object ) {
 					this.BaseRemoveAt( index );
 				}
 				this.BaseAdd( index, value );

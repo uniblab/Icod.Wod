@@ -1,5 +1,4 @@
 // Copyright 2023, Timothy J. Bruce
-using System.Linq;
 
 namespace Icod.Wod.File {
 
@@ -146,13 +145,13 @@ namespace Icod.Wod.File {
 			};
 
 			var stdErr = this.StdErr;
-			if ( null != stdErr ) {
+			if ( stdErr is object ) {
 				stdErr.WorkOrder = workOrder;
 				si.RedirectStandardError = true;
 				si.StandardErrorEncoding = this.StdErr.GetEncoding();
 			}
 			var stdOut = this.StdOut;
-			if ( null != stdOut ) {
+			if ( stdOut is object ) {
 				stdOut.WorkOrder = workOrder;
 				si.RedirectStandardOutput = true;
 				si.StandardOutputEncoding = this.StdOut.GetEncoding();
@@ -173,11 +172,11 @@ namespace Icod.Wod.File {
 				_ = proc.Start();
 
 				var stdErr = this.StdErr;
-				if ( null != stdErr ) {
+				if ( stdErr is object ) {
 					var pErr = proc.StandardError;
-					if ( null != pErr ) {
+					if ( pErr is object ) {
 						var sErr = pErr.BaseStream;
-						if ( ( null != sErr ) && sErr.CanRead ) {
+						if ( ( sErr is object ) && sErr.CanRead ) {
 							var errH = stdErr.GetFileHandler( this.WorkOrder );
 							errH.Overwrite( pErr.BaseStream, errH.PathCombine( stdErr.ExpandedPath, stdErr.ExpandedName ) );
 						}
@@ -185,11 +184,11 @@ namespace Icod.Wod.File {
 				}
 
 				var stdOut = this.StdOut;
-				if ( null != stdOut ) {
+				if ( stdOut is object ) {
 					var pOut = proc.StandardOutput;
-					if ( null != pOut ) {
+					if ( pOut is object ) {
 						var sOut = pOut.BaseStream;
-						if ( ( null != sOut ) && sOut.CanRead ) {
+						if ( ( sOut is object) && sOut.CanRead ) {
 							var outH = stdOut.GetFileHandler( this.WorkOrder );
 							outH.Overwrite( pOut.BaseStream, outH.PathCombine( stdOut.ExpandedPath, stdOut.ExpandedName ) );
 						}

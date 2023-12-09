@@ -1,5 +1,4 @@
 // Copyright 2023, Timothy J. Bruce
-using System.Linq;
 
 namespace Icod.Wod.Data {
 
@@ -138,7 +137,7 @@ namespace Icod.Wod.Data {
 			}
 
 			var output = command.CreateParameter();
-			if ( null != output ) {
+			if ( output is object ) {
 				output.DbType = this.DbType;
 				output.Direction = this.Direction;
 				output.ParameterName = this.ParameterName;
@@ -146,7 +145,7 @@ namespace Icod.Wod.Data {
 				output.SourceColumn = this.SourceColumn;
 				output.SourceColumnNullMapping = this.SourceColumnNullMapping;
 				var iDbDataParameter = ( output as System.Data.IDbDataParameter );
-				if ( null != iDbDataParameter ) {
+				if ( iDbDataParameter is object ) {
 					iDbDataParameter.Precision = this.Precision;
 					iDbDataParameter.Scale = this.Scale;
 				}

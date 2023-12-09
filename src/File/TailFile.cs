@@ -14,8 +14,6 @@ namespace Icod.Wod.File {
 		#region .ctor
 		public TailFile() : base() {
 		}
-		public TailFile( WorkOrder workOrder ) : base( workOrder ) {
-		}
 		#endregion .ctor
 
 
@@ -58,7 +56,7 @@ namespace Icod.Wod.File {
 				using ( var reader = new System.IO.StreamReader( stream, encoding, true, fileHandler.BufferLength ) ) {
 					var rs = this.RecordSeparator;
 					line = reader.ReadLine( rs );
-					while ( null != line ) {
+					while ( line is object ) {
 						output = output.Enqueue( line );
 						line = reader.ReadLine( rs );
 					}
@@ -87,7 +85,7 @@ namespace Icod.Wod.File {
 						}
 					}
 					line = reader.ReadLine();
-					while ( null != line ) {
+					while ( line is object ) {
 						output = output.Enqueue( line );
 						line = reader.ReadLine( rs );
 					}

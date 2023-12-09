@@ -45,7 +45,7 @@ namespace Icod.Wod.File {
 			var fd = this.FileDescriptor;
 			client.UsePassive = fd.UsePassive;
 			var kf = fd.SshKeyFile;
-			if ( null != kf ) {
+			if ( kf is object ) {
 				kf.WorkOrder = fd.WorkOrder;
 				var kffd = kf.GetFileHandler( this.WorkOrder );
 				var kfpasswd = kf.KeyFilePassword.TrimToNull();

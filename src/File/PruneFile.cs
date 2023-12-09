@@ -59,7 +59,7 @@ namespace Icod.Wod.File {
 							using ( var writer = new System.IO.StreamWriter( buffer, destEncoding, this.BufferLength, true ) ) {
 								var rs = this.RecordSeparator;
 								System.String line = reader.ReadLine( rs );
-								while ( null != line ) {
+								while ( line is object ) {
 									line = trim( line );
 									if ( !System.String.IsNullOrEmpty( line ) ) {
 										writer.Write( line + rs );

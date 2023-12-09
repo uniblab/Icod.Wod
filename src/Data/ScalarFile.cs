@@ -1,8 +1,4 @@
 // Copyright 2023, Timothy J. Bruce
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.IO;
 using System.Linq;
 
 namespace Icod.Wod.Data {
@@ -17,8 +13,6 @@ namespace Icod.Wod.Data {
 
 		#region .ctor
 		public ScalarFile() : base() {
-		}
-		public ScalarFile( WorkOrder workOrder ) : base( workOrder ) {
 		}
 		#endregion .ctor
 
@@ -46,7 +40,7 @@ namespace Icod.Wod.Data {
 					System.Object record;
 					foreach ( var row in rows ) {
 						record = row[ 0 ];
-						if ( ( null != record ) && !System.DBNull.Value.Equals( record ) ) {
+						if ( ( record is object ) && !System.DBNull.Value.Equals( record ) ) {
 							writer.Write( record );
 						}
 					}

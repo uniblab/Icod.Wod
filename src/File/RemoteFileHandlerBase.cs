@@ -1,5 +1,4 @@
 // Copyright 2023, Timothy J. Bruce
-using System.Linq;
 
 namespace Icod.Wod.File {
 
@@ -33,7 +32,7 @@ namespace Icod.Wod.File {
 				using ( var stream = response.GetResponseStream() ) {
 					using ( var reader = new System.IO.StreamReader( stream ) ) {
 						System.String line = reader.ReadLine();
-						while ( null != line ) {
+						while ( line is object ) {
 							output.Add( line );
 							line = reader.ReadLine();
 						}

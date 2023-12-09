@@ -235,7 +235,7 @@ namespace Icod.Wod {
 					foreach ( var stream in msg.Attachments.OfType<System.Net.Mail.Attachment>().Select(
 						x => x.ContentStream
 					).Where(
-						x => null != x
+						x => x is object
 					) ) {
 						stream.Dispose();
 					}
