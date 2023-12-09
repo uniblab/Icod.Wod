@@ -104,6 +104,9 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 
 		#region methods
+		protected sealed override System.String GetServicePath() {
+			return System.String.Format( "/services/data/v{0:F1}/jobs/ingest", this.ApiVersion );
+		}
 		public override void PerformWork( Pair<LoginResponse, IStep> jobProcess ) {
 			var step = jobProcess.Second ?? throw new System.ArgumentException();
 			var workOrder = step.WorkOrder;
@@ -157,7 +160,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 		private SelectResult GetResults( WorkOrder workOrder, LoginResponse loginResponse, JobResponse jobResponse, System.String results ) {
 			var id = jobResponse.Id;
-			var request = this.BuildSalesForceRequest( loginResponse, id, "text/csv", "GET", results, null );
+			var request = this.BuildSalesForceRequest( loginResponse, id, "text/csv", "GET", results );
 			using ( var response = request.GetResponse() ) {
 				using ( var buffer = new System.IO.MemoryStream() ) {
 					using ( var source = response.GetResponseStream() ) {
@@ -196,7 +199,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 		}
 
 		protected virtual JobResponse CreateJob( LoginResponse loginResponse, System.String operation ) {
-			var request = this.BuildSalesForceRequest( loginResponse, null, "application/json; charset=utf-8", "POST", null, null );
+			var request = this.BuildSalesForceRequest( loginResponse, "application/json; charset=utf-8", "POST" );
 			using ( var w = request.GetRequestStream() ) {
 				var jr = new {
 					operation = operation,
@@ -217,11 +220,8 @@ namespace Icod.Wod.SalesForce.Bulk {
 				return this.GetJobResponse( response );
 			}
 		}
-		protected sealed override System.String GetServicePath() {
-			return System.String.Format( "/services/data/v{0:F1}/jobs/ingest", this.ApiVersion );
-		}
 		protected void SendUploadComplete( LoginResponse loginResponse, System.String id ) {
-			var request = this.BuildSalesForceRequest( loginResponse, id, "application/json; charset=utf-8", "PATCH", null, null );
+			var request = this.BuildSalesForceRequest( loginResponse, id, "application/json; charset=utf-8", "PATCH" );
 			using ( var w = request.GetRequestStream() ) {
 				var jr = new {
 					state = "UploadComplete"
@@ -240,7 +240,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 		}
 
 		protected virtual void UploadData( LoginResponse loginResponse, JobResponse jobResponse, System.String data ) {
-			var request = this.BuildSalesForceRequest( loginResponse, null, "text/csv", "PUT", null, jobResponse.ContentUrl );
+			var request = this.BuildSalesForceRequest( loginResponse, null, "text/csv", "PUT", null, jobResponse.ContentUrl, null );
 			using ( var w = request.GetRequestStream() ) {
 				var buffer = System.Text.Encoding.UTF8.GetBytes( data );
 				w.Write( buffer, 0, buffer.Length );

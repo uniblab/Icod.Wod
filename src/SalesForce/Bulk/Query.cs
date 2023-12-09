@@ -109,21 +109,11 @@ namespace Icod.Wod.SalesForce.Bulk {
 		}
 
 		private SelectResult GetResults( LoginResponse loginResponse, System.String id, System.String locator, System.Char columnDelimiter, System.String lineEnding ) {
-			var instanceUrl = new System.Uri( loginResponse.InstanceUrl );
-			var urib = new System.UriBuilder( instanceUrl.Scheme, instanceUrl.Host, instanceUrl.Port, this.GetServicePath() + "/" + id + "/results" ) {
-				Query = System.String.IsNullOrEmpty( locator )
+			var query = System.String.IsNullOrEmpty( locator )
 					? System.String.Format( "maxRecords={1}", locator, this.BatchSize )
 					: System.String.Format( "locator={0}&maxRecords={1}", locator, this.BatchSize )
-			};
-			var uri = urib.Uri;
-			var request = System.Net.WebRequest.CreateHttp( uri );
-			request.Headers.Add( "Authorization", "Bearer " + loginResponse.AccessToken );
-#if DEBUG
-			request.Headers.Add( "Accept-Encoding", "identity, gzip, deflate" );
-#else
-			request.Headers.Add( "Accept-Encoding", "gzip, deflate, identity" );
-#endif
-			request.Method = System.Net.Http.HttpMethod.Get.Method;
+			;
+			var request = this.BuildSalesForceRequest( loginResponse, id, "text/csv", "GET", "results", null, query );
 			using ( var response = request.GetResponse() ) {
 				using ( var buffer = new System.IO.MemoryStream() ) {
 					using ( var source = response.GetResponseStream() ) {

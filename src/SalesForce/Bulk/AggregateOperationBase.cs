@@ -1,5 +1,6 @@
 // Copyright 2023, Timothy J. Bruce
 
+using System;
 using System.Linq;
 
 namespace Icod.Wod.SalesForce.Bulk {
@@ -126,7 +127,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 			}
 		}
 		protected virtual void DeleteJob( LoginResponse loginResponse, System.String id ) {
-			var request = this.BuildSalesForceRequest( loginResponse, id, "application/json; charset=utf-8", "DELETE", null, null );
+			var request = this.BuildSalesForceRequest( loginResponse, id, "application/json; charset=utf-8", "DELETE" );
 			using ( var response = (System.Net.HttpWebResponse)request.GetResponse() ) {
 				var failure = System.Net.HttpStatusCode.NoContent != response.StatusCode;
 				if ( failure ) {
@@ -135,7 +136,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 			}
 		}
 		protected virtual JobResponse AbortJob( LoginResponse loginResponse, System.String id ) {
-			var request = this.BuildSalesForceRequest( loginResponse, id, "application/json; charset=utf-8", "PATCH", null, null );
+			var request = this.BuildSalesForceRequest( loginResponse, id, "application/json; charset=utf-8", "PATCH" );
 			using ( var w = request.GetRequestStream() ) {
 				var jr = new {
 					state = "Aborted"
@@ -155,7 +156,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 		}
 
 		protected virtual JobResponse QueryJob( LoginResponse loginResponse, System.String id ) {
-			var request = this.BuildSalesForceRequest( loginResponse, id, "application/json; charset=utf-8", "GET", null, null );
+			var request = this.BuildSalesForceRequest( loginResponse, id, "application/json; charset=utf-8", "GET" );
 			using ( var response = (System.Net.HttpWebResponse)request.GetResponse() ) {
 				var failure = System.Net.HttpStatusCode.OK != response.StatusCode;
 				if ( failure ) {
@@ -166,23 +167,51 @@ namespace Icod.Wod.SalesForce.Bulk {
 		}
 
 		protected System.Net.HttpWebRequest BuildSalesForceRequest(
+			LoginResponse loginResponse, System.String contentType, System.String method
+		) {
+			return this.BuildSalesForceRequest(
+				loginResponse, null, contentType, method, null, null, null 
+			);
+		}
+		protected System.Net.HttpWebRequest BuildSalesForceRequest(
+			LoginResponse loginResponse, System.String id,
+			System.String contentType, System.String method
+		) {
+			return this.BuildSalesForceRequest(
+				loginResponse, id, contentType, method, null, null, null
+			);
+		}
+		protected System.Net.HttpWebRequest BuildSalesForceRequest(
 			LoginResponse loginResponse, System.String id,
 			System.String contentType, System.String method,
-			System.String subPath, System.String contentUrl
+			System.String subPath
+		) {
+			return this.BuildSalesForceRequest(
+				loginResponse, id, contentType, method, subPath, null, null
+			);
+		}
+		protected System.Net.HttpWebRequest BuildSalesForceRequest(
+			LoginResponse loginResponse, System.String id,
+			System.String contentType, System.String method,
+			System.String subPath, System.String contentUrl,
+			System.String query
 		) {
 			var instanceUrl = new System.Uri( loginResponse.InstanceUrl );
-			var path = System.String.IsNullOrEmpty( contentUrl )
+			var pathValue = System.String.IsNullOrEmpty( contentUrl )
 				? this.GetServicePath()
 				: contentUrl
 			;
 			if ( !System.String.IsNullOrEmpty( id ) ) {
-				path += "/" + id;
+				pathValue += "/" + id;
 				if ( !System.String.IsNullOrEmpty( subPath ) ) {
-					path += "/" + subPath;
+					pathValue += "/" + subPath;
 				}
 			}
-			var uri = new System.UriBuilder( instanceUrl.Scheme, instanceUrl.Host, instanceUrl.Port, path ).Uri;
-			var request = System.Net.WebRequest.CreateHttp( uri );
+			var urib = new System.UriBuilder( instanceUrl.Scheme, instanceUrl.Host, instanceUrl.Port, pathValue ) {
+				Query = query
+			};
+
+			var request = System.Net.WebRequest.CreateHttp( urib.Uri );
 			request.ContentType = contentType;
 			request.Method = method.ToUpper();
 			request.Headers.Add( "Authorization", "Bearer " + loginResponse.AccessToken );
