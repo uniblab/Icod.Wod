@@ -7,10 +7,10 @@ namespace Icod.Wod {
 	public sealed class Stack<T> : IStack<T> {
 
 		#region nested classes
-		internal sealed class EmptyStack<T> : IStack<T> {
+		internal sealed class EmptyStack : IStack<T> {
 			private static readonly System.Int32 theHashCode;
 			static EmptyStack() {
-				theHashCode = typeof( EmptyStack<T> ).AssemblyQualifiedName.GetHashCode();
+				theHashCode = typeof( EmptyStack ).AssemblyQualifiedName.GetHashCode();
 				unchecked {
 					theHashCode += typeof( T ).AssemblyQualifiedName.GetHashCode();
 				}
@@ -34,7 +34,7 @@ namespace Icod.Wod {
 				throw new System.InvalidOperationException();
 			}
 			public IStack<T> Push( T value ) {
-				return new SingleStack<T>( value );
+				return new SingleStack( value );
 			}
 			public IStack<T> Reverse() {
 				return this;
@@ -56,12 +56,12 @@ namespace Icod.Wod {
 				yield break;
 			}
 		}
-		internal sealed class SingleStack<T> : IStack<T> {
+		internal sealed class SingleStack : IStack<T> {
 			private static readonly System.Int32 theHashCode;
 			private readonly T myValue;
 			private readonly System.Int32 myHashCode;
 			static SingleStack() {
-				theHashCode = typeof( SingleStack<T> ).AssemblyQualifiedName.GetHashCode();
+				theHashCode = typeof( SingleStack ).AssemblyQualifiedName.GetHashCode();
 				unchecked {
 					theHashCode += typeof( T ).AssemblyQualifiedName.GetHashCode();
 				}
@@ -133,7 +133,7 @@ namespace Icod.Wod {
 
 		#region .ctor
 		static Stack() {
-			theEmpty = new EmptyStack<T>();
+			theEmpty = new EmptyStack();
 			theHashCode = typeof( Stack<T> ).AssemblyQualifiedName.GetHashCode();
 			unchecked {
 				theHashCode += typeof( T ).AssemblyQualifiedName.GetHashCode();

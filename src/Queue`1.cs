@@ -5,10 +5,10 @@ namespace Icod.Wod {
 	public sealed class Queue<T> : IQueue<T> {
 
 		#region nested classes
-		internal sealed class EmptyQueue<T> : IQueue<T> {
+		internal sealed class EmptyQueue : IQueue<T> {
 			private static readonly System.Int32 theHashCode;
 			static EmptyQueue() {
-				theHashCode = typeof( EmptyQueue<T> ).AssemblyQualifiedName.GetHashCode();
+				theHashCode = typeof( EmptyQueue ).AssemblyQualifiedName.GetHashCode();
 				unchecked {
 					theHashCode += typeof( T ).AssemblyQualifiedName.GetHashCode();
 				}
@@ -35,7 +35,7 @@ namespace Icod.Wod {
 				throw new System.InvalidOperationException();
 			}
 			public IQueue<T> Enqueue( T value ) {
-				return new SingleQueue<T>( value );
+				return new SingleQueue ( value );
 			}
 			public IQueue<T> Reverse() {
 				throw new System.InvalidOperationException();
@@ -57,13 +57,13 @@ namespace Icod.Wod {
 			}
 		}
 
-		internal sealed class SingleQueue<T> : IQueue<T> {
+		internal sealed class SingleQueue : IQueue<T> {
 			private static readonly System.Int32 theHashCode;
 			private readonly T myValue;
 			private readonly System.Int32 myHashCode;
 
 			static SingleQueue() {
-				theHashCode = typeof( SingleQueue<T> ).AssemblyQualifiedName.GetHashCode();
+				theHashCode = typeof( SingleQueue ).AssemblyQualifiedName.GetHashCode();
 				unchecked {
 					theHashCode += typeof( T ).AssemblyQualifiedName.GetHashCode();
 				}
@@ -135,7 +135,7 @@ namespace Icod.Wod {
 
 		#region .ctor
 		static Queue() {
-			theEmpty = new EmptyQueue<T>();
+			theEmpty = new EmptyQueue();
 			theHashCode = typeof( Queue<T> ).AssemblyQualifiedName.GetHashCode();
 			unchecked {
 				theHashCode += typeof( T ).AssemblyQualifiedName.GetHashCode();
