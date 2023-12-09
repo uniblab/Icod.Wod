@@ -83,7 +83,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 				return this.ReadFile( reader, columDelimiter, lineEnding );
 			}
 		}
-		protected System.Data.DataTable ReadFile( System.IO.StringReader file, System.Char columDelimiter, System.String lineEnding ) {
+		private System.Data.DataTable ReadFile( System.IO.StringReader file, System.Char columDelimiter, System.String lineEnding ) {
 			if ( file is null ) {
 				throw new System.ArgumentNullException( "file" );
 			}
@@ -121,7 +121,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 				table.Columns.Add( new System.Data.DataColumn( column, typeof( System.String ) ) );
 			}
 		}
-		protected System.Collections.Generic.IEnumerable<System.String> ReadRecord( System.IO.StringReader file, System.String lineEnding ) {
+		private System.Collections.Generic.IEnumerable<System.String> ReadRecord( System.IO.StringReader file, System.String lineEnding ) {
 #if DEBUG
 			if ( file is null ) {
 				throw new System.ArgumentNullException( "file" );
@@ -138,7 +138,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 			yield break;
 		}
-		protected System.Collections.Generic.IEnumerable<System.String> ReadColumns( System.String line, System.Char fieldSeparator, System.Char quoteCharacter ) {
+		private System.Collections.Generic.IEnumerable<System.String> ReadColumns( System.String line, System.Char fieldSeparator, System.Char quoteCharacter ) {
 			if ( System.String.IsNullOrEmpty( line ) ) {
 				throw new System.ArgumentNullException( line );
 			}

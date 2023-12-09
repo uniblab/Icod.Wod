@@ -52,7 +52,7 @@ namespace Icod.Wod {
 			this.Dispose( true );
 			System.GC.SuppressFinalize( this );
 		}
-		protected void Dispose( System.Boolean disposing ) {
+		private void Dispose( System.Boolean disposing ) {
 			if ( disposing ) {
 				mySemaphore?.Dispose();
 				mySemaphoreSlim?.Dispose();
