@@ -10,21 +10,43 @@ namespace Icod.Wod.SalesForce.Bulk {
 	)]
 	public sealed class Delete : AggregateMutationOperationBase {
 
+		#region fields
+		private const System.String theHardDelete = "hardDelete";
+		private const System.String theDelete = "delete";
+
+		private System.Boolean myIsHard;
+		#endregion fields
+
+
 		#region .ctor
 		public Delete() : base() {
-		}
-		public Delete( WorkOrder workOrder ) : base( workOrder ) {
-		}
-		public Delete( System.Data.MissingSchemaAction missingSchemaAction, System.Data.MissingMappingAction missingMappingAction ) : base( missingSchemaAction, missingMappingAction ) {
-		}
-		public Delete( WorkOrder workOrder, System.Data.MissingSchemaAction missingSchemaAction, System.Data.MissingMappingAction missingMappingAction ) : base( workOrder, missingSchemaAction, missingMappingAction ) {
 		}
 		#endregion .ctor
 
 
+		#region properties
+		[System.Xml.Serialization.XmlAttribute(
+			"hard",
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.ComponentModel.DefaultValue( false )]
+		public System.Boolean IsHard {
+			get {
+				return myIsHard;
+			}
+			set {
+				myIsHard = value;
+			}
+		}
+		#endregion properties
+
+
 		#region methods
 		protected sealed override JobResponse CreateJob( LoginResponse loginResponse ) {
-			return base.CreateJob( loginResponse, "delete" );
+			return this.IsHard
+				? base.CreateJob( loginResponse, theHardDelete )
+				: base.CreateJob( loginResponse, theDelete )
+			;
 		}
 		#endregion methods
 
