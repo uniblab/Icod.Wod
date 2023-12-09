@@ -1,10 +1,9 @@
 // Copyright 2023, Timothy J. Bruce
-using System.Linq;
 
 namespace Icod.Wod.SalesForce.Bulk {
 
 	[System.Serializable]
-	public sealed class LineEndingOption : System.IEquatable<LineEndingOption> {
+	public sealed class LineEndingOption : System.IEquatable<LineEndingOption>, System.IEquatable<System.String> {
 
 		#region fields
 		private static readonly LineEndingOption theLF;
@@ -82,6 +81,15 @@ namespace Icod.Wod.SalesForce.Bulk {
 				return this.Equals( ( obj as LineEndingOption ) );
 			}
 		}
+		public System.Boolean Equals( System.String other ) {
+			if ( System.String.IsNullOrEmpty( other ) ) {
+				return false;
+			} else if ( ReferenceEquals( this, other ) ) {
+				return true;
+			} else {
+				return this.Value.Equals( other, System.StringComparison.OrdinalIgnoreCase );
+			}
+		}
 		public sealed override System.Int32 GetHashCode() {
 			return myHashcode;
 		}
@@ -113,6 +121,19 @@ namespace Icod.Wod.SalesForce.Bulk {
 			}
 		}
 		public static System.Boolean operator !=( LineEndingOption left, LineEndingOption right ) {
+			return !( left == right );
+		}
+
+		public static System.Boolean operator ==( LineEndingOption left, System.String right ) {
+			if ( ( left is null ) && ( System.String.IsNullOrEmpty( right ) ) ) {
+				return true;
+			} else if ( ( left is null ) || ( System.String.IsNullOrEmpty( right ) ) ) {
+				return false;
+			} else {
+				return left.Equals( right );
+			}
+		}
+		public static System.Boolean operator !=( LineEndingOption left, System.String right ) {
 			return !( left == right );
 		}
 		#endregion static methods
