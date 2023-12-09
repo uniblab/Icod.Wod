@@ -154,7 +154,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 				if ( this.Unprocessed is object ) {
 					var unprocessed = this.GetResults( workOrder, loginResponse, jobResponse, UnprocessedResults );
 					if ( !System.String.IsNullOrEmpty( unprocessed.Body ) ) {
-						this.Success.WriteRecords( workOrder, unprocessed );
+						this.Unprocessed.WriteRecords( workOrder, unprocessed );
 					}
 				}
 
