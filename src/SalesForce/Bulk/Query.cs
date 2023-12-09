@@ -48,17 +48,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 		}
 
 		protected sealed override JobResponse CreateJob( LoginResponse loginResponse ) {
-			var instanceUrl = new System.Uri( loginResponse.InstanceUrl );
-			var uri = new System.UriBuilder( instanceUrl.Scheme, instanceUrl.Host, instanceUrl.Port, this.GetServicePath() ).Uri;
-			var request = System.Net.WebRequest.CreateHttp( uri );
-			request.Headers.Add( "Authorization", "Bearer " + loginResponse.AccessToken );
-#if DEBUG
-			request.Headers.Add( "Accept-Encoding", "identity, gzip, deflate" );
-#else
-			request.Headers.Add( "Accept-Encoding", "gzip, deflate, identity" );
-#endif
-			request.ContentType = "application/json; charset=utf-8";
-			request.Method = System.Net.Http.HttpMethod.Post.Method;
+			var request = this.BuildSalesForceRequest( loginResponse, "application/json; charset=utf-8", "POST" );
 			using ( var w = request.GetRequestStream() ) {
 				var jr = new {
 					operation = "query",
@@ -100,7 +90,11 @@ namespace Icod.Wod.SalesForce.Bulk {
 			SelectResult result;
 			System.String locator = null;
 			do {
-				result = this.GetResults( loginResponse, id, locator, ColumnDelimiterOption.FromName( jobResponse.ColumnDelimiter ).Value, LineEndingOption.FromName( jobResponse.LineEnding ).Value );
+				result = this.GetResults( 
+					loginResponse, id, locator, 
+					ColumnDelimiterOption.FromName( jobResponse.ColumnDelimiter ).Value, 
+					LineEndingOption.FromName( jobResponse.LineEnding ).Value 
+				);
 				this.WriteRecords( workOrder, result );
 				locator = result.Locator;
 			} while ( !System.String.IsNullOrEmpty( locator ) );
