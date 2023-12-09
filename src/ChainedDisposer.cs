@@ -1,5 +1,4 @@
 // Copyright 2023, Timothy J. Bruce
-using System.Linq;
 
 namespace Icod.Wod {
 
@@ -37,12 +36,8 @@ namespace Icod.Wod {
 			if ( disposing && !myIsDisposed ) {
 				System.Threading.Thread.BeginCriticalRegion();
 				if ( !System.Threading.Volatile.Read( ref myIsDisposed ) ) {
-					if ( myInner is null ) {
-						myInner.Dispose();
-					}
-					if ( myOuter is null ) {
-						myOuter.Dispose();
-					}
+					myInner?.Dispose();
+					myOuter?.Dispose();
 					System.Threading.Volatile.Write( ref myIsDisposed, true );
 				}
 				System.Threading.Thread.EndCriticalRegion();
