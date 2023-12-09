@@ -273,7 +273,6 @@ namespace Icod.Wod.Data {
 				System.Char c;
 				System.String column;
 				var reading = true;
-				System.Nullable<System.Char> ec = null;
 				var qc = this.QuoteChar;
 				do {
 					i = reader.Peek();

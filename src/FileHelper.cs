@@ -47,7 +47,6 @@ namespace Icod.Wod {
 			System.Char c;
 			System.Boolean isPlaintext = true;
 			System.Int32 p = file.Read();
-			System.Char q;
 			while ( EOL != p ) {
 				c = System.Convert.ToChar( p );
 				output = output.Append( c );
@@ -138,7 +137,6 @@ namespace Icod.Wod {
 			System.Char c;
 			System.Boolean isPlaintext = true;
 			System.Int32 p = file.Read();
-			System.Char q;
 			while ( EOL != p ) {
 				c = System.Convert.ToChar( p );
 				output = output.Append( c );
@@ -228,7 +226,6 @@ namespace Icod.Wod {
 				System.Int32 i;
 				System.Char c;
 				System.String column;
-				System.Nullable<System.Char> ec = null;
 				var qc = quoteChar;
 				do {
 					i = reader.Peek();
@@ -264,7 +261,6 @@ namespace Icod.Wod {
 				System.Int32 i;
 				System.Char c;
 				System.String column;
-				System.Nullable<System.Char> ec = null;
 				var qc = quoteChar;
 				do {
 					i = reader.Peek();
