@@ -19,8 +19,6 @@ namespace Icod.Wod.SalesForce.Bulk {
 		public BulkAggregateOperation() : base() {
 			myInstanceName = null;
 		}
-		public BulkAggregateOperation( WorkOrder workOrder ) : base( workOrder ) {
-			myInstanceName = null;		}
 		#endregion .ctor
 
 
@@ -91,7 +89,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 			}
 			var cred = Credential.GetCredential( this.InstanceName, workOrder );
 			var name = cred.ClientId + ( cred.Username ?? cred.RefreshToken ?? System.String.Empty );
-			var loginResponse = new Login( workOrder ).GetLoginResponse( this.InstanceName );
+			var loginResponse = new Login() { WorkOrder = workOrder }.GetLoginResponse( this.InstanceName );
 			var jobProcess = new Pair<LoginResponse, IStep>( loginResponse, this );
 
 			using ( var tokenSource = new System.Threading.CancellationTokenSource() ) {

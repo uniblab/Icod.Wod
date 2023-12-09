@@ -10,11 +10,6 @@ namespace Icod.Wod.SalesForce {
 			this.MissingMappingAction = System.Data.MissingMappingAction.Ignore;
 			this.MissingSchemaAction = System.Data.MissingSchemaAction.Ignore;
 		}
-		public DbDestination( WorkOrder workOrder ) : this() {
-			this.WorkOrder = workOrder;
-			this.MissingMappingAction = System.Data.MissingMappingAction.Ignore;
-			this.MissingSchemaAction = System.Data.MissingSchemaAction.Ignore;
-		}
 		#endregion .ctor
 
 

@@ -27,10 +27,6 @@ namespace Icod.Wod.SalesForce.Rest {
 			myApiVersion = DefaultApiVersion;
 			myInstanceName = null;
 		}
-		public RestSelect( WorkOrder workOrder ) : base( workOrder ) {
-			myApiVersion = DefaultApiVersion;
-			myInstanceName = null;
-		}
 		#endregion .ctor
 
 
@@ -94,7 +90,7 @@ namespace Icod.Wod.SalesForce.Rest {
 		public System.Collections.Generic.IEnumerable<System.Data.DataTable> ReadTables( Icod.Wod.WorkOrder workOrder ) {
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
 			var credential = Credential.GetCredential( this.InstanceName, workOrder );
-			var loginToken = new Login( workOrder ).GetLoginResponse( credential, System.Text.Encoding.UTF8 );
+			var loginToken = new Login() { WorkOrder = workOrder }.GetLoginResponse( credential, System.Text.Encoding.UTF8 );
 			return this.ReadTables( loginToken );
 		}
 		public System.Collections.Generic.IEnumerable<System.Data.DataTable> ReadTables( LoginResponse loginToken ) {

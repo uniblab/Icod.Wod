@@ -20,9 +20,6 @@ namespace Icod.Wod.SalesForce {
 		protected SFOperationBase() : base() {
 			myWorkOrder = null;
 		}
-		protected SFOperationBase( WorkOrder workOrder ) : this() {
-			myWorkOrder = workOrder;
-		}
 		#endregion .ctor
 
 

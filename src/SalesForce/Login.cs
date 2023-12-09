@@ -15,9 +15,6 @@ namespace Icod.Wod.SalesForce {
 		#region .ctor
 		public Login() : base() {
 		}
-		public Login( WorkOrder workOrder ) : this() {
-			myWorkOrder = workOrder;
-		}
 		#endregion .ctor
 
 
