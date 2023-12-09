@@ -126,11 +126,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 			}
 		}
 		protected virtual void DeleteJob( LoginResponse loginResponse, System.String id ) {
-			var instanceUrl = new System.Uri( loginResponse.InstanceUrl );
-			var uri = new System.UriBuilder( instanceUrl.Scheme, instanceUrl.Host, instanceUrl.Port, this.GetServicePath() + "/" + id ).Uri;
-			var request = System.Net.WebRequest.CreateHttp( uri );
-			request.Headers.Add( "Authorization", "Bearer " + loginResponse.AccessToken );
-			request.Method = System.Net.Http.HttpMethod.Delete.Method;
+			var request = this.BuildSalesForceRequest( loginResponse, id, "application/json; charset=utf-8", "DELETE", null, null );
 			using ( var response = (System.Net.HttpWebResponse)request.GetResponse() ) {
 				var failure = System.Net.HttpStatusCode.NoContent != response.StatusCode;
 				if ( failure ) {
@@ -139,17 +135,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 			}
 		}
 		protected virtual JobResponse AbortJob( LoginResponse loginResponse, System.String id ) {
-			var instanceUrl = new System.Uri( loginResponse.InstanceUrl );
-			var uri = new System.UriBuilder( instanceUrl.Scheme, instanceUrl.Host, instanceUrl.Port, this.GetServicePath() + "/" + id ).Uri;
-			var request = System.Net.WebRequest.CreateHttp( uri );
-			request.Headers.Add( "Authorization", "Bearer " + loginResponse.AccessToken );
-#if DEBUG
-			request.Headers.Add( "Accept-Encoding", "identity, gzip, deflate" );
-#else
-			request.Headers.Add( "Accept-Encoding", "gzip, deflate, identity" );
-#endif
-			request.ContentType = "application/json; charset=utf-8";
-			request.Method = "PATCH";
+			var request = this.BuildSalesForceRequest( loginResponse, id, "application/json; charset=utf-8", "PATCH", null, null );
 			using ( var w = request.GetRequestStream() ) {
 				var jr = new {
 					state = "Aborted"
@@ -169,11 +155,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 		}
 
 		protected virtual JobResponse QueryJob( LoginResponse loginResponse, System.String id ) {
-			var instanceUrl = new System.Uri( loginResponse.InstanceUrl );
-			var uri = new System.UriBuilder( instanceUrl.Scheme, instanceUrl.Host, instanceUrl.Port, this.GetServicePath() + "/" + id ).Uri;
-			var request = System.Net.WebRequest.CreateHttp( uri );
-			request.Headers.Add( "Authorization", "Bearer " + loginResponse.AccessToken );
-			request.Method = System.Net.Http.HttpMethod.Get.Method;
+			var request = this.BuildSalesForceRequest( loginResponse, id, "application/json; charset=utf-8", "GET", null, null );
 			using ( var response = (System.Net.HttpWebResponse)request.GetResponse() ) {
 				var failure = System.Net.HttpStatusCode.OK != response.StatusCode;
 				if ( failure ) {
@@ -182,29 +164,35 @@ namespace Icod.Wod.SalesForce.Bulk {
 				return this.GetJobResponse( response );
 			}
 		}
-		protected JobResponse SendRequest( LoginResponse loginResponse, System.String id, System.String method, JobRequest data ) {
+
+		protected System.Net.HttpWebRequest BuildSalesForceRequest(
+			LoginResponse loginResponse, System.String id,
+			System.String contentType, System.String method,
+			System.String subPath, System.String contentUrl
+		) {
 			var instanceUrl = new System.Uri( loginResponse.InstanceUrl );
-			var uri = new System.UriBuilder( instanceUrl.Scheme, instanceUrl.Host, instanceUrl.Port, this.GetServicePath() ).Uri;
+			var path = System.String.IsNullOrEmpty( contentUrl )
+				? this.GetServicePath()
+				: contentUrl
+			;
+			if ( !System.String.IsNullOrEmpty( id ) ) {
+				path += "/" + id;
+				if ( !System.String.IsNullOrEmpty( subPath ) ) {
+					path += "/" + subPath;
+				}
+			}
+			var uri = new System.UriBuilder( instanceUrl.Scheme, instanceUrl.Host, instanceUrl.Port, path ).Uri;
 			var request = System.Net.WebRequest.CreateHttp( uri );
+			request.ContentType = contentType;
+			request.Method = method.ToUpper();
 			request.Headers.Add( "Authorization", "Bearer " + loginResponse.AccessToken );
 #if DEBUG
 			request.Headers.Add( "Accept-Encoding", "identity, gzip, deflate" );
 #else
 			request.Headers.Add( "Accept-Encoding", "gzip, deflate, identity" );
 #endif
-			request.ContentType = "application/json; charset=utf-8";
-			request.Method = method;
-			using ( var w = request.GetRequestStream() ) {
-				var js = Newtonsoft.Json.JsonConvert.SerializeObject( data );
-				var buffer = System.Text.Encoding.UTF8.GetBytes( js );
-				w.Write( buffer, 0, buffer.Length );
-			}
-			using ( var response = (System.Net.HttpWebResponse)request.GetResponse() ) {
-				var sc = response.StatusCode;
-				return this.GetJobResponse( response );
-			}
+			return request;
 		}
-
 		protected virtual JobResponse WaitUntilStateOption(
 			JobResponse start, LoginResponse loginResponse, System.String id,
 			System.Collections.Generic.IEnumerable<StateOption> collection

@@ -15,6 +15,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 		private const System.String FailedResults = "failedResults";
 		private const System.String SuccessfulResults = "successfulResults";
+		private const System.String UnprocessedResults = "unprocessedrecords";
 		#endregion  fields
 
 
@@ -95,6 +96,10 @@ namespace Icod.Wod.SalesForce.Bulk {
 			get;
 			set;
 		}
+		public DbDestination Unprocessed {
+			get;
+			set;
+		}
 		#endregion properties
 
 
@@ -139,6 +144,12 @@ namespace Icod.Wod.SalesForce.Bulk {
 						this.Success.WriteRecords( workOrder, success );
 					}
 				}
+				if ( this.Unprocessed is object ) {
+					var success = this.GetResults( workOrder, loginResponse, jobResponse, UnprocessedResults );
+					if ( !System.String.IsNullOrEmpty( success.Body ) ) {
+						this.Success.WriteRecords( workOrder, success );
+					}
+				}
 
 				this.DeleteJob( loginResponse, id );
 			}
@@ -146,17 +157,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 		private SelectResult GetResults( WorkOrder workOrder, LoginResponse loginResponse, JobResponse jobResponse, System.String results ) {
 			var id = jobResponse.Id;
-			var instanceUrl = new System.Uri( loginResponse.InstanceUrl );
-			var urib = new System.UriBuilder( instanceUrl.Scheme, instanceUrl.Host, instanceUrl.Port, this.GetServicePath() + "/" + id + "/" + results );
-			var uri = urib.Uri;
-			var request = System.Net.WebRequest.CreateHttp( uri );
-			request.Headers.Add( "Authorization", "Bearer " + loginResponse.AccessToken );
-#if DEBUG
-			request.Headers.Add( "Accept-Encoding", "identity, gzip, deflate" );
-#else
-			request.Headers.Add( "Accept-Encoding", "gzip, deflate, identity" );
-#endif
-			request.Method = System.Net.Http.HttpMethod.Get.Method;
+			var request = this.BuildSalesForceRequest( loginResponse, id, "text/csv", "GET", results, null );
 			using ( var response = request.GetResponse() ) {
 				using ( var buffer = new System.IO.MemoryStream() ) {
 					using ( var source = response.GetResponseStream() ) {
@@ -195,17 +196,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 		}
 
 		protected virtual JobResponse CreateJob( LoginResponse loginResponse, System.String operation ) {
-			var instanceUrl = new System.Uri( loginResponse.InstanceUrl );
-			var uri = new System.UriBuilder( instanceUrl.Scheme, instanceUrl.Host, instanceUrl.Port, this.GetServicePath() ).Uri;
-			var request = System.Net.WebRequest.CreateHttp( uri );
-			request.Headers.Add( "Authorization", "Bearer " + loginResponse.AccessToken );
-#if DEBUG
-			request.Headers.Add( "Accept-Encoding", "identity, gzip, deflate" );
-#else
-			request.Headers.Add( "Accept-Encoding", "gzip, deflate, identity" );
-#endif
-			request.ContentType = "application/json; charset=utf-8";
-			request.Method = System.Net.Http.HttpMethod.Post.Method;
+			var request = this.BuildSalesForceRequest( loginResponse, null, "application/json; charset=utf-8", "POST", null, null );
 			using ( var w = request.GetRequestStream() ) {
 				var jr = new {
 					operation = operation,
@@ -230,17 +221,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 			return System.String.Format( "/services/data/v{0:F1}/jobs/ingest", this.ApiVersion );
 		}
 		protected void SendUploadComplete( LoginResponse loginResponse, System.String id ) {
-			var instanceUrl = new System.Uri( loginResponse.InstanceUrl );
-			var uri = new System.UriBuilder( instanceUrl.Scheme, instanceUrl.Host, instanceUrl.Port, this.GetServicePath() + "/" + id ).Uri;
-			var request = System.Net.WebRequest.CreateHttp( uri );
-			request.Headers.Add( "Authorization", "Bearer " + loginResponse.AccessToken );
-#if DEBUG
-			request.Headers.Add( "Accept-Encoding", "identity, gzip, deflate" );
-#else
-			request.Headers.Add( "Accept-Encoding", "gzip, deflate, identity" );
-#endif
-			request.ContentType = "application/json; charset=utf-8";
-			request.Method = "PATCH";
+			var request = this.BuildSalesForceRequest( loginResponse, id, "application/json; charset=utf-8", "PATCH", null, null );
 			using ( var w = request.GetRequestStream() ) {
 				var jr = new {
 					state = "UploadComplete"
@@ -259,17 +240,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 		}
 
 		protected virtual void UploadData( LoginResponse loginResponse, JobResponse jobResponse, System.String data ) {
-			var instanceUrl = new System.Uri( loginResponse.InstanceUrl );
-			var uri = new System.UriBuilder( instanceUrl.Scheme, instanceUrl.Host, instanceUrl.Port, jobResponse.ContentUrl ).Uri;
-			var request = System.Net.WebRequest.CreateHttp( uri );
-			request.Headers.Add( "Authorization", "Bearer " + loginResponse.AccessToken );
-#if DEBUG
-			request.Headers.Add( "Accept-Encoding", "identity, gzip, deflate" );
-#else
-			request.Headers.Add( "Accept-Encoding", "gzip, deflate, identity" );
-#endif
-			request.ContentType = "text/csv";
-			request.Method = System.Net.Http.HttpMethod.Put.Method;
+			var request = this.BuildSalesForceRequest( loginResponse, null, "text/csv", "PUT", null, jobResponse.ContentUrl );
 			using ( var w = request.GetRequestStream() ) {
 				var buffer = System.Text.Encoding.UTF8.GetBytes( data );
 				w.Write( buffer, 0, buffer.Length );
