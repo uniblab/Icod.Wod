@@ -14,8 +14,6 @@ namespace Icod.Wod.File {
 		#region .ctor
 		public XmlTransformFile() : base() {
 		}
-		public XmlTransformFile( WorkOrder workOrder ) : base( workOrder ) {
-		}
 		#endregion .ctor
 
 

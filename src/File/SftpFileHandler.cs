@@ -22,6 +22,7 @@ namespace Icod.Wod.File {
 		}
 		public SftpFileHandler( Icod.Wod.WorkOrder workOrder, FileDescriptor descriptor ) : base( workOrder, descriptor ) {
 		}
+
 		#endregion .ctor
 
 

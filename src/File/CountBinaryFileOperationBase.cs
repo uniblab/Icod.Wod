@@ -1,5 +1,4 @@
 // Copyright 2023, Timothy J. Bruce
-using System.Linq;
 
 namespace Icod.Wod.File {
 
@@ -19,9 +18,6 @@ namespace Icod.Wod.File {
 
 		#region .ctor
 		protected CountBinaryFileOperationBase() : base() {
-			myCount = 0;
-		}
-		protected CountBinaryFileOperationBase( WorkOrder workOrder ) : base( workOrder ) {
 			myCount = 0;
 		}
 		#endregion .ctor

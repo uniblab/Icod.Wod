@@ -24,8 +24,6 @@ namespace Icod.Wod.File {
 		#region .ctor
 		protected BinaryFileOperationBase() : base() {
 		}
-		protected BinaryFileOperationBase( WorkOrder workOrder ) : base( workOrder ) {
-		}
 		#endregion .ctor
 
 

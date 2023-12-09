@@ -1,5 +1,4 @@
 // Copyright 2023, Timothy J. Bruce
-using System.Linq;
 
 namespace Icod.Wod.File {
 
@@ -12,8 +11,6 @@ namespace Icod.Wod.File {
 
 		#region .ctor
 		public DeflateFile() : base() {
-		}
-		public DeflateFile( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
 		}
 		#endregion .ctor
 

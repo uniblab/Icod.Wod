@@ -20,11 +20,9 @@ namespace Icod.Wod.File {
 			myFileDescriptor = null;
 			myBufferLength = DefaultBufferLength;
 		}
-		protected FileHandlerBase( Icod.Wod.WorkOrder workOrder ) : this() {
-			myWorkOrder = workOrder;
-		}
-		protected FileHandlerBase( Icod.Wod.WorkOrder workOrder, FileDescriptor descriptor ) : this( workOrder ) {
+		protected FileHandlerBase( Icod.Wod.WorkOrder workOrder, FileDescriptor descriptor ) : this() {
 			myFileDescriptor = descriptor;
+			myWorkOrder = workOrder;
 		}
 		#endregion .ctor
 

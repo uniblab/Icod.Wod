@@ -1,6 +1,4 @@
 // Copyright 2023, Timothy J. Bruce
-using System;
-using System.Linq;
 
 namespace Icod.Wod.File {
 
@@ -9,8 +7,6 @@ namespace Icod.Wod.File {
 
 		#region .ctor
 		public FileRedirection() : base() {
-		}
-		public FileRedirection( WorkOrder workOrder ) : base( workOrder ) {
 		}
 		#endregion .ctor
 

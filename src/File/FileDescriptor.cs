@@ -25,9 +25,6 @@ namespace Icod.Wod.File {
 		public FileDescriptor() : base() {
 			myUsePassive = true;
 		}
-		public FileDescriptor( Icod.Wod.WorkOrder workOrder ) : this() {
-			myWorkOrder = workOrder;
-		}
 		#endregion .ctor
 
 

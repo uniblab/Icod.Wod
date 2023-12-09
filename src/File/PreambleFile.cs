@@ -14,8 +14,6 @@ namespace Icod.Wod.File {
 		#region .ctor
 		public PreambleFile() : base() {
 		}
-		public PreambleFile( WorkOrder workOrder ) : base( workOrder ) {
-		}
 		#endregion  .ctor
 
 

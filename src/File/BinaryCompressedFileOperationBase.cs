@@ -1,5 +1,4 @@
 // Copyright 2023, Timothy J. Bruce
-using System.Linq;
 
 namespace Icod.Wod.File {
 
@@ -20,10 +19,6 @@ namespace Icod.Wod.File {
 
 		#region .ctor
 		protected BinaryCompressedFileOperationBase() : base() {
-			myCompressionMode = System.IO.Compression.CompressionMode.Decompress;
-			myDelete = false;
-		}
-		protected BinaryCompressedFileOperationBase( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
 			myCompressionMode = System.IO.Compression.CompressionMode.Decompress;
 			myDelete = false;
 		}

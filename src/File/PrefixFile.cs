@@ -14,8 +14,6 @@ namespace Icod.Wod.File {
 		#region .ctor
 		public PrefixFile() : base() {
 		}
-		public PrefixFile( WorkOrder workOrder ) : base( workOrder ) {
-		}
 		#endregion  .ctor
 
 

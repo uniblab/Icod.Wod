@@ -23,9 +23,8 @@ namespace Icod.Wod.Data {
 			myColumns = null;
 			myAppend = false;
 		}
-		protected DataFileBase( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
-			myColumns = null;
-			myAppend = false;
+		protected DataFileBase( Icod.Wod.WorkOrder workOrder ) : this() {
+			base.WorkOrder = workOrder;
 		}
 		#endregion .ctor
 

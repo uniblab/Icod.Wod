@@ -26,12 +26,6 @@ namespace Icod.Wod.File {
 			myStdErr = null;
 			myStdOut = null;
 		}
-		public ExecuteFile( WorkOrder workOrder ) : base( workOrder ) {
-			mySuccessExitCode = 0;
-			myArgs = null;
-			myStdErr = null;
-			myStdOut = null;
-		}
 		#endregion .ctor
 
 

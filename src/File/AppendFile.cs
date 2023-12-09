@@ -20,9 +20,6 @@ namespace Icod.Wod.File {
 		public AppendFile() : base() {
 			myMove = false;
 		}
-		public AppendFile( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
-			myMove = false;
-		}
 		#endregion .ctor
 
 

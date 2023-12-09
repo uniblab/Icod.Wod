@@ -1,5 +1,4 @@
 // Copyright 2023, Timothy J. Bruce
-using System.Linq;
 
 namespace Icod.Wod.File {
 
@@ -22,12 +21,6 @@ namespace Icod.Wod.File {
 
 		#region .ctor
 		protected FileBase() : base() {
-			myCodePage = DefaultCodePage;
-			myBufferLength = DefaultBufferLength;
-			myWriteIfEmpty = false;
-			myRecordSeparator = DefaultRecordSeparator;
-		}
-		protected FileBase( WorkOrder workOrder ) : base( workOrder ) {
 			myCodePage = DefaultCodePage;
 			myBufferLength = DefaultBufferLength;
 			myWriteIfEmpty = false;

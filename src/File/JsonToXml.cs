@@ -15,9 +15,6 @@ namespace Icod.Wod.File {
 		public JsonToXml() : base() {
 			this.ChangeFileExtension = true;
 		}
-		public JsonToXml( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
-			this.ChangeFileExtension = true;
-		}
 		#endregion .ctor
 
 

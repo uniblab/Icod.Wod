@@ -1,5 +1,4 @@
 // Copyright 2023, Timothy J. Bruce
-using System.Linq;
 
 namespace Icod.Wod.File {
 
@@ -8,8 +7,6 @@ namespace Icod.Wod.File {
 
 		#region .ctor
 		public HttpFileHandler() : base() {
-		}
-		public HttpFileHandler( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
 		}
 		public HttpFileHandler( Icod.Wod.WorkOrder workOrder, FileDescriptor descriptor ) : base( workOrder, descriptor ) {
 		}

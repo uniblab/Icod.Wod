@@ -20,9 +20,6 @@ namespace Icod.Wod.File {
 		public RebaseFile() : base() {
 			myOutputCodePage = DefaultCodePage;
 		}
-		public RebaseFile( WorkOrder workOrder ) : base( workOrder ) {
-			myOutputCodePage = DefaultCodePage;
-		}
 		#endregion .ctor
 
 

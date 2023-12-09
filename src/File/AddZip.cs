@@ -1,5 +1,4 @@
 // Copyright 2023, Timothy J. Bruce
-using System;
 using System.Linq;
 
 namespace Icod.Wod.File {
@@ -14,8 +13,6 @@ namespace Icod.Wod.File {
 
 		#region .ctor
 		public AddZip() : base() {
-		}
-		public AddZip( WorkOrder workOrder ) : base( workOrder ) {
 		}
 		#endregion .ctor
 
@@ -52,7 +49,7 @@ namespace Icod.Wod.File {
 								fileName = this.ProcessFileName( file, sep );
 								if ( !System.String.IsNullOrEmpty( fileName ) ) {
 									entry = zipArchive.Entries.FirstOrDefault(
-										x => x.FullName.Equals( fileName, StringComparison.OrdinalIgnoreCase )
+										x => x.FullName.Equals( fileName, System.StringComparison.OrdinalIgnoreCase )
 									) ?? zipArchive.CreateEntry( fileName, System.IO.Compression.CompressionLevel.Optimal );
 									using ( var writer = entry.Open() ) {
 										reader.CopyTo( writer );

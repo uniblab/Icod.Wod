@@ -8,9 +8,7 @@ namespace Icod.Wod.File {
 		#region .ctor
 		protected RemoteFileHandlerBase() : base() {
 		}
-		protected RemoteFileHandlerBase( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
-		}
-		protected RemoteFileHandlerBase( Icod.Wod.WorkOrder workOrder, FileDescriptor descriptor ) : base( workOrder, descriptor ) { 
+		protected RemoteFileHandlerBase( Icod.Wod.WorkOrder workOrder, FileDescriptor descriptor ) : base( workOrder, descriptor ) {
 		}
 		#endregion .ctor
 

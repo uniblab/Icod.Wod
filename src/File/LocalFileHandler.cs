@@ -9,15 +9,13 @@ namespace Icod.Wod.File {
 		#region .ctor
 		public LocalFileHandler() : base() {
 		}
-		public LocalFileHandler( Icod.Wod.WorkOrder workOrder ) : base( workOrder) {
-		}
-		public LocalFileHandler( Icod.Wod.WorkOrder workOrder, FileDescriptor descriptor ) : base( workOrder, descriptor ) { 
+		public LocalFileHandler(Icod.Wod.WorkOrder workOrder, FileDescriptor descriptor) : base( workOrder, descriptor ) {
 		}
 		#endregion .ctor
 
 
 		#region properties
-		[System.Xml.Serialization.XmlIgnore]
+		[ System.Xml.Serialization.XmlIgnore]
 		public sealed override System.Char PathSeparator {
 			get {
 				return System.IO.Path.DirectorySeparatorChar;

@@ -36,9 +36,6 @@ namespace Icod.Wod.File {
 			myTruncateEntryName = true;
 			myGetFileName = theTruncatedGetFileName;
 		}
-		protected ZipOperationBase( WorkOrder workOrder ) : base( workOrder ) {
-			myTruncateEntryName = true;
-		}
 		#endregion .ctor
 
 

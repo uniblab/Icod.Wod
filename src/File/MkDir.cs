@@ -13,8 +13,6 @@ namespace Icod.Wod.File {
 		#region .ctor
 		public MkDir() : base() {
 		}
-		public MkDir( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
-		}
 		#endregion .ctor
 
 

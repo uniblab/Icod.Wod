@@ -20,8 +20,6 @@ namespace Icod.Wod.File {
 
 		public FtpFileHandler() : base() {
 		}
-		public FtpFileHandler( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
-		}
 		public FtpFileHandler( Icod.Wod.WorkOrder workOrder, FileDescriptor descriptor ) : base( workOrder, descriptor ) {
 		}
 		#endregion .ctor

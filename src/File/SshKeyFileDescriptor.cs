@@ -16,8 +16,6 @@ namespace Icod.Wod.File {
 		#region .ctor
 		public SshKeyFileDescriptor() : base() {
 		}
-		public SshKeyFileDescriptor( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
-		}
 		#endregion .ctor
 
 
