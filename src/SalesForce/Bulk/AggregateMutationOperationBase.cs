@@ -81,6 +81,10 @@ namespace Icod.Wod.SalesForce.Bulk {
 			get;
 			set;
 		}
+		[System.Xml.Serialization.XmlElement(
+			"unprocessed",
+			Namespace = "http://Icod.Wod"
+		)]
 		public DbDestination Unprocessed {
 			get;
 			set;
