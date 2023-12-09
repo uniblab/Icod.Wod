@@ -49,6 +49,7 @@ namespace Icod.Wod {
 		}
 		#endregion properties
 
+
 		#region methods
 		public sealed override System.Int32 GetHashCode() {
 			return myHashCode;
@@ -72,6 +73,23 @@ namespace Icod.Wod {
 			}
 		}
 		#endregion methods
+
+
+		#region static methods
+		public static System.Boolean operator ==( Pair<S, T> left, Pair<S, T> right ) {
+			if ( ( left is null ) && ( right is null ) ) {
+				return true;
+			} else if ( ( left is null ) && ( right is null ) ) {
+				return false;
+			} else {
+				return left.Equals( right );
+			}
+		}
+		public static System.Boolean operator !=( Pair<S, T> left, Pair<S, T> right ) {
+			return !( left == right );
+		}
+		#endregion static methods
+
 	}
 
 }
