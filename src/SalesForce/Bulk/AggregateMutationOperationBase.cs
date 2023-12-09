@@ -119,9 +119,8 @@ namespace Icod.Wod.SalesForce.Bulk {
 				);
 				if ( StateOption.Open.Equals( jobResponse.State ) ) {
 					this.UploadData( loginResponse, jobResponse, file );
+					this.SendUploadComplete( loginResponse, id );
 				}
-
-				this.CloseJob( loginResponse, id );
 
 				jobResponse = this.WaitUntilStateOption(
 					this.QueryJob( loginResponse, id ), loginResponse, id,
@@ -230,7 +229,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 		protected sealed override System.String GetServicePath() {
 			return System.String.Format( "/services/data/v{0:F1}/jobs/ingest", this.ApiVersion );
 		}
-		protected void CloseJob( LoginResponse loginResponse, System.String id ) {
+		protected void SendUploadComplete( LoginResponse loginResponse, System.String id ) {
 			var instanceUrl = new System.Uri( loginResponse.InstanceUrl );
 			var uri = new System.UriBuilder( instanceUrl.Scheme, instanceUrl.Host, instanceUrl.Port, this.GetServicePath() + "/" + id ).Uri;
 			var request = System.Net.WebRequest.CreateHttp( uri );
