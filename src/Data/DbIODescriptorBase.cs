@@ -21,21 +21,6 @@ namespace Icod.Wod.Data {
 			myMissingSchemaAction = System.Data.MissingSchemaAction.Ignore;
 			myMissingMappingAction = System.Data.MissingMappingAction.Ignore;
 		}
-		protected DbIODescriptorBase( System.Data.MissingSchemaAction missingSchemaAction, System.Data.MissingMappingAction missingMappingAction ) : base() {
-			myUpdateBatchSize = 1;
-			myMissingSchemaAction = missingSchemaAction;
-			myMissingMappingAction = missingMappingAction;
-		}
-		public DbIODescriptorBase( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
-			myUpdateBatchSize = 1;
-			myMissingSchemaAction = System.Data.MissingSchemaAction.Ignore;
-			myMissingMappingAction = System.Data.MissingMappingAction.Ignore;
-		}
-		protected DbIODescriptorBase( Icod.Wod.WorkOrder workOrder, System.Data.MissingSchemaAction missingSchemaAction, System.Data.MissingMappingAction missingMappingAction ) : base( workOrder ) {
-			myUpdateBatchSize = 1;
-			myMissingSchemaAction = missingSchemaAction;
-			myMissingMappingAction = missingMappingAction;
-		}
 		#endregion .ctor
 
 

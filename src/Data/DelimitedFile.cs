@@ -51,14 +51,6 @@ namespace Icod.Wod.Data {
 			myColumnReader = theDefaultColumnReader;
 			myForceQuote = true;
 		}
-		public DelimitedFile( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
-			myFieldSeparator = ',';
-			myFieldSeparatorString = myFieldSeparator.ToString();
-			myQuoteChar = '\"';
-			myQuoteCharString = myQuoteChar.ToString();
-			myColumnReader = theDefaultColumnReader;
-			myForceQuote = true;
-		}
 		#endregion .ctor
 
 

@@ -14,9 +14,6 @@ namespace Icod.Wod.Data {
 		public TextFileColumn() : base() {
 			myFormatString = "{0}";
 		}
-		public TextFileColumn( System.String name ) : this() {
-			this.Name = name;
-		}
 		#endregion .ctor
 
 

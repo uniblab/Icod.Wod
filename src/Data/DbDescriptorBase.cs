@@ -20,9 +20,6 @@ namespace Icod.Wod.Data {
 			myCommandType = System.Data.CommandType.Text;
 			myCommandTimeout = -2;
 		}
-		public DbDescriptorBase( Icod.Wod.WorkOrder workOrder ) : this() {
-			myWorkOrder = workOrder;
-		}
 		#endregion .ctor
 
 

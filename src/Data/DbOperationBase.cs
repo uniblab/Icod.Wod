@@ -15,8 +15,6 @@ namespace Icod.Wod.Data {
 		#region .ctor
 		protected DbOperationBase() : base() {
 		}
-		protected DbOperationBase( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
-		}
 		#endregion .ctor
 
 	}

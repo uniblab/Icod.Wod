@@ -11,16 +11,6 @@ namespace Icod.Wod.Data {
 	public sealed class DbParameter {
 
 		#region .ctor
-		[System.Xml.Serialization.XmlAttribute(
-			"name",
-			Namespace = "http://Icod.Wod"
-		)]
-		[System.ComponentModel.DefaultValue( (System.String)null )]
-		public System.String Name {
-			get;
-			set;
-		}
-
 		public DbParameter() : base() {
 			this.DbType = System.Data.DbType.AnsiString;
 			this.Direction = System.Data.ParameterDirection.Input;
@@ -35,6 +25,16 @@ namespace Icod.Wod.Data {
 
 
 		#region properties
+		[System.Xml.Serialization.XmlAttribute(
+			"name",
+			Namespace = "http://Icod.Wod"
+		)]
+		[System.ComponentModel.DefaultValue( (System.String)null )]
+		public System.String Name {
+			get;
+			set;
+		}
+
 		[System.Xml.Serialization.XmlAttribute(
 			"dbType",
 			Namespace = "http://Icod.Wod"

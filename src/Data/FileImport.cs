@@ -14,10 +14,6 @@ namespace Icod.Wod.Data {
 			this.MissingMappingAction = System.Data.MissingMappingAction.Ignore;
 			this.MissingSchemaAction = System.Data.MissingSchemaAction.Ignore;
 		}
-		public FileImport( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
-			this.MissingMappingAction = System.Data.MissingMappingAction.Ignore;
-			this.MissingSchemaAction = System.Data.MissingSchemaAction.Ignore;
-		}
 		#endregion .ctor
 
 

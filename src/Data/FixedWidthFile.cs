@@ -26,9 +26,6 @@ namespace Icod.Wod.Data {
 		public FixedWidthFile() : base() {
 			myColumnReader = theDefaultColumnReader;
 		}
-		public FixedWidthFile( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
-			myColumnReader = theDefaultColumnReader;
-		}
 		#endregion .ctor
 
 

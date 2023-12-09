@@ -24,21 +24,6 @@ namespace Icod.Wod.SalesForce.Bulk {
 			this.MissingSchemaAction = System.Data.MissingSchemaAction.Ignore;
 			this.BatchSize = DefaultBatchSize;
 		}
-		protected AggregateOperationBase( WorkOrder workOrder ) : base( workOrder ) {
-			this.MissingMappingAction = System.Data.MissingMappingAction.Ignore;
-			this.MissingSchemaAction = System.Data.MissingSchemaAction.Ignore;
-			this.BatchSize = DefaultBatchSize;
-		}
-		protected AggregateOperationBase( System.Data.MissingSchemaAction missingSchemaAction, System.Data.MissingMappingAction missingMappingAction ) : base( missingSchemaAction, missingMappingAction ) {
-			this.MissingMappingAction = System.Data.MissingMappingAction.Ignore;
-			this.MissingSchemaAction = System.Data.MissingSchemaAction.Ignore;
-			this.BatchSize = DefaultBatchSize;
-		}
-		protected AggregateOperationBase( WorkOrder workOrder, System.Data.MissingSchemaAction missingSchemaAction, System.Data.MissingMappingAction missingMappingAction ) : base( workOrder, missingSchemaAction, missingMappingAction ) {
-			this.MissingMappingAction = System.Data.MissingMappingAction.Ignore;
-			this.MissingSchemaAction = System.Data.MissingSchemaAction.Ignore;
-			this.BatchSize = DefaultBatchSize;
-		}
 		#endregion .ctor
 
 

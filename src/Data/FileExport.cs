@@ -14,10 +14,6 @@ namespace Icod.Wod.Data {
 			this.MissingMappingAction = System.Data.MissingMappingAction.Passthrough;
 			this.MissingSchemaAction = System.Data.MissingSchemaAction.Add;
 		}
-		public FileExport( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
-			this.MissingMappingAction = System.Data.MissingMappingAction.Passthrough;
-			this.MissingSchemaAction = System.Data.MissingSchemaAction.Add;
-		}
 		#endregion .ctor
 
 

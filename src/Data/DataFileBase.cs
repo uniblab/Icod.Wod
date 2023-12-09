@@ -23,9 +23,6 @@ namespace Icod.Wod.Data {
 			myColumns = null;
 			myAppend = false;
 		}
-		protected DataFileBase( Icod.Wod.WorkOrder workOrder ) : this() {
-			base.WorkOrder = workOrder;
-		}
 		#endregion .ctor
 
 
@@ -120,12 +117,12 @@ namespace Icod.Wod.Data {
 			foreach ( var dbCol in dbColumns ) {
 				output.Add( dbCol, cols.FirstOrDefault(
 					x => x.Name.Equals( dbCol.ColumnName, System.StringComparison.OrdinalIgnoreCase )
-				) ?? new TextFileColumn( dbCol.ColumnName ) );
+				) ?? new TextFileColumn() { Name = dbCol.ColumnName } );
 			}
 			foreach ( var missing in dbColumns.Where(
 				x => !output.ContainsKey( x )
 			).ToArray() ) {
-				output.Add( missing, new TextFileColumn( missing.ColumnName ) );
+				output.Add( missing, new TextFileColumn() { Name = missing.ColumnName } );
 			}
 			return output;
 		}

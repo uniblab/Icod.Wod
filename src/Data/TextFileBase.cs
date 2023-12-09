@@ -32,13 +32,6 @@ namespace Icod.Wod.Data {
 			myTrimValues = true;
 			myEolWriter = x => x.Write( DefaultRecordSeparator );
 		}
-		protected TextFileBase( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
-			myHasHeader = true;
-			mySkip = 0;
-			myConvertEmptyStringToNull = true;
-			myTrimValues = true;
-			myEolWriter = x => x.Write( DefaultRecordSeparator );
-		}
 		#endregion .ctor
 
 
@@ -158,7 +151,7 @@ namespace Icod.Wod.Data {
 			}
 
 			if ( format is null ) {
-				format = new TextFileColumn( column.ColumnName );
+				format = new TextFileColumn(){ Name = column.ColumnName };
 			}
 			var output = format.GetColumnText( this.WorkOrder, row[ column ] ) ?? this.NullReplacementText ?? System.String.Empty;
 			if ( 0 < format.Length ) {

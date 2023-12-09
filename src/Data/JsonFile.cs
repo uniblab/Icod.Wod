@@ -14,8 +14,6 @@ namespace Icod.Wod.Data {
 		#region .ctor
 		public JsonFile() : base() {
 		}
-		public JsonFile( Icod.Wod.WorkOrder workOrder ) : base( workOrder ) {
-		}
 		#endregion .ctor
 
 
