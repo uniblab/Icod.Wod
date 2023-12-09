@@ -1,6 +1,4 @@
 // Copyright 2023, Timothy J. Bruce
-using System.Data.Common;
-using System.Linq;
 
 namespace Icod.Wod.SalesForce.Bulk {
 
