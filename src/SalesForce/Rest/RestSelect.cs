@@ -162,7 +162,12 @@ namespace Icod.Wod.SalesForce.Rest {
 			};
 			client.Headers[ "Authorization" ] = "Bearer " + token.AccessToken;
 			client.Headers[ "User-Agent" ] = userAgent.TrimToNull() ?? System.Reflection.Assembly.GetExecutingAssembly().FullName;
-			var ssl = System.Net.SecurityProtocolType.Tls13;
+			System.Net.SecurityProtocolType ssl;
+#if NET48_OR_GREATER || NETCOREAPP3_0_OR_GREATER || NET5_0_OR_GREATER
+			ssl = System.Net.SecurityProtocolType.Tls13;
+#else
+			ssl = System.Net.SecurityProtocolType.Tls12;
+#endif
 #if DEBUG
 			client.Headers[ "Accept-Encoding" ] = "identity, gzip, deflate";
 			ssl = ssl | System.Net.SecurityProtocolType.Tls12 | System.Net.SecurityProtocolType.Tls11 | System.Net.SecurityProtocolType.Tls | System.Net.SecurityProtocolType.Ssl3;
