@@ -94,10 +94,9 @@ namespace Icod.Wod.File {
 
 			var dest = this.Destination.GetFileHandler( workOrder );
 			var source = this.GetFileHandler( workOrder );
-			System.String file;
 			var files = source.ListFiles();
 			System.Threading.Tasks.Parallel.ForEach( files, fe => {
-				file = fe.File;
+				var file = fe.File;
 				action( source, file, dest );
 			} );
 			if ( this.Delete ) {
