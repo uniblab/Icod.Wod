@@ -1,5 +1,7 @@
 // Copyright (C) 2025  Timothy J. Bruce
 
+using System.IO;
+
 namespace Icod.Wod.File {
 
 	[System.Serializable]
@@ -47,13 +49,10 @@ namespace Icod.Wod.File {
 		}
 		private void Decompress( Icod.Wod.File.FileHandlerBase source, System.String sourceFilePathName, Icod.Wod.File.FileHandlerBase dest ) {
 #if DEBUG
-			if ( dest is null ) {
-				throw new System.ArgumentNullException( nameof( dest ) );
-			} else if ( source is null ) {
-				throw new System.ArgumentNullException( nameof( source ) );
-			}
+			dest = dest ?? throw new System.ArgumentNullException( nameof( dest ) );
+			source = source ?? throw new System.ArgumentNullException( nameof( source ) );
 #endif
-			if (System.String.IsNullOrEmpty(sourceFilePathName ) ) {
+			if ( System.String.IsNullOrEmpty(sourceFilePathName ) ) {
 				throw new System.ArgumentNullException( nameof( sourceFilePathName ) );
 			}
 			var dfd = dest.FileDescriptor;
@@ -71,11 +70,8 @@ namespace Icod.Wod.File {
 		}
 		private void Compress( Icod.Wod.File.FileHandlerBase source, System.String sourceFilePathName, Icod.Wod.File.FileHandlerBase dest ) {
 #if DEBUG
-			if ( dest is null ) {
-				throw new System.ArgumentNullException( nameof( dest ) );
-			} else if ( source is null ) {
-				throw new System.ArgumentNullException( nameof( source ) );
-			}
+			dest = dest ?? throw new System.ArgumentNullException( nameof( dest ) );
+			source = source ?? throw new System.ArgumentNullException( nameof( source ) );
 #endif
 			if ( System.String.IsNullOrEmpty( sourceFilePathName ) ) {
 				throw new System.ArgumentNullException( nameof( sourceFilePathName ) );

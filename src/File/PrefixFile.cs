@@ -66,24 +66,21 @@ namespace Icod.Wod.File {
 			}
 		}
 		private void PrefixOnce( System.IO.StreamWriter destination, System.IO.StreamReader source, System.String prefix ) {
+			source = source ?? throw new System.ArgumentNullException( nameof( source ) );
+			destination = destination ?? throw new System.ArgumentNullException( nameof( destination ) );
 			if ( System.String.IsNullOrEmpty( prefix ) ) {
 				throw new System.ArgumentNullException( nameof( prefix ) );
-			} else if ( source is null ) {
-				throw new System.ArgumentNullException( nameof( source ) );
-			} else if ( destination is null ) {
-				throw new System.ArgumentNullException( nameof( destination ) );
 			}
+
 			destination.Write( prefix );
 			destination.Flush();
 			source.BaseStream.CopyTo( destination.BaseStream );
 		}
 		private void PrefixEach( System.IO.StreamWriter destination, System.IO.StreamReader source, System.String prefix ) {
+			source = source ?? throw new System.ArgumentNullException( nameof( source ) );
+			destination = destination ?? throw new System.ArgumentNullException( nameof( destination ) );
 			if ( System.String.IsNullOrEmpty( prefix ) ) {
 				throw new System.ArgumentNullException( nameof( prefix ) );
-			} else if ( source is null ) {
-				throw new System.ArgumentNullException( nameof( source ) );
-			} else if ( destination is null ) {
-				throw new System.ArgumentNullException( nameof( destination ) );
 			}
 
 			var rs = this.RecordSeparator;

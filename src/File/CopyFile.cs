@@ -86,11 +86,8 @@ namespace Icod.Wod.File {
 
 		private void DoWork( LocalFileHandler source, LocalFileHandler dest ) {
 #if DEBUG
-			if ( dest is null ) {
-				throw new System.ArgumentNullException( nameof( dest ) );
-			} else if ( source is null ) {
-				throw new System.ArgumentNullException( nameof( source ) );
-			}
+			dest = dest ?? throw new System.ArgumentNullException( nameof( dest ) );
+			source = source ?? throw new System.ArgumentNullException( nameof( source ) );
 #endif
 			var dfd = dest.FileDescriptor;
 			System.String file;

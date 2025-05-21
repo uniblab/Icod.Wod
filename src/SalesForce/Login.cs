@@ -112,11 +112,7 @@ namespace Icod.Wod.SalesForce {
 			return parameters.ToString();
 		}
 		private LoginResponse BuildLogin( System.Uri siteUrl, System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<System.String, System.String>> headers, System.String body ) {
-			var ssl = System.Net.SecurityProtocolType.Tls12;
-#if DEBUG
-			ssl = ssl | System.Net.SecurityProtocolType.Tls11 | System.Net.SecurityProtocolType.Tls | System.Net.SecurityProtocolType.Ssl3;
-#endif
-			System.Net.ServicePointManager.SecurityProtocol = ssl;
+			System.Net.ServicePointManager.SecurityProtocol = TlsHelper.GetSecurityProtocol();
 
 			using ( var client = new System.Net.WebClient {
 				Encoding = System.Text.Encoding.UTF8

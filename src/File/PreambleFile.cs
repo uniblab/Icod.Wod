@@ -60,14 +60,12 @@ namespace Icod.Wod.File {
 			}
 		}
 		private void PrefixOnce( System.IO.StreamWriter destination, System.IO.StreamReader source, System.String preamble ) {
+			source = source ?? throw new System.ArgumentNullException( nameof( source ) );
+			destination = destination ?? throw new System.ArgumentNullException( nameof( destination ) );
 			if ( System.String.IsNullOrEmpty( preamble ) ) {
 				throw new System.ArgumentNullException( nameof( preamble ) );
-			} else if ( source is null ) {
-				throw new System.ArgumentNullException( nameof( source ) ){
-				};
-			} else if ( destination is null ) {
-				throw new System.ArgumentNullException( nameof( destination ) );
-			}
+			} else
+
 			destination.Write( preamble );
 			var rs = this.RecordSeparator;
 			if ( !System.String.IsNullOrEmpty( rs ) ) {

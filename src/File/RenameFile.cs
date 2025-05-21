@@ -32,13 +32,9 @@ namespace Icod.Wod.File {
 
 		private void DoWork( WorkOrder workOrder, FileHandlerBase source, FileHandlerBase dest ) {
 #if DEBUG
-			if ( dest is null ) {
-				throw new System.ArgumentNullException( nameof( dest ) );
-			} else if ( source is null ) {
-				throw new System.ArgumentNullException( nameof( source ) );
-			} else if ( workOrder is null ) {
-				throw new System.ArgumentNullException( nameof( workOrder ) );
-			}
+			source = source ?? throw new System.ArgumentNullException( nameof( source ) );
+			dest = dest ?? throw new System.ArgumentNullException( nameof( dest ) );
+			workOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
 #endif
 			if ( ( source is LocalFileHandler ) && ( dest is LocalFileHandler ) ) {
 				this.DoWork( source as LocalFileHandler, dest as LocalFileHandler );
@@ -57,11 +53,8 @@ namespace Icod.Wod.File {
 
 		private void DoWork( LocalFileHandler source, LocalFileHandler dest ) {
 #if DEBUG
-			if ( dest is null ) {
-				throw new System.ArgumentNullException( nameof( dest ) );
-			} else if ( source is null ) {
-				throw new System.ArgumentNullException( nameof( source ) );
-			}
+			source = source ?? throw new System.ArgumentNullException( nameof( source ) );
+			dest = dest?? throw new System.ArgumentNullException( nameof( dest ) );
 #endif
 
 			var file = source.ListFiles().FirstOrDefault();

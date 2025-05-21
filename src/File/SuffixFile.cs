@@ -68,23 +68,21 @@ namespace Icod.Wod.File {
 		private void SuffixOnce( System.IO.StreamWriter destination, System.IO.StreamReader source, System.String suffix ) {
 			if ( System.String.IsNullOrEmpty( suffix ) ) {
 				throw new System.ArgumentNullException( nameof( suffix ) );
-			} else if ( source is null ) {
-				throw new System.ArgumentNullException( nameof( source ) );
-			} else if ( destination is null ) {
-				throw new System.ArgumentNullException( nameof( destination ) );
 			}
+			source = source ?? throw new System.ArgumentNullException( nameof( source ) );
+			destination = destination ?? throw new System.ArgumentNullException( nameof( destination ) );
+
 			source.BaseStream.CopyTo( destination.BaseStream );
 			destination.Flush();
 			destination.Write( suffix );
 		}
 		private void SuffixEach( System.IO.StreamWriter destination, System.IO.StreamReader source, System.String suffix ) {
+			source = source ?? throw new System.ArgumentNullException( nameof( source ) );
+			destination = destination ?? throw new System.ArgumentNullException( nameof( destination ) );
 			if ( System.String.IsNullOrEmpty( suffix ) ) {
 				throw new System.ArgumentNullException( nameof( suffix ) );
-			} else if ( source is null ) {
-				throw new System.ArgumentNullException( nameof( source ) );
-			} else if ( destination is null ) {
-				throw new System.ArgumentNullException( nameof( destination ) );
 			}
+
 			System.String line;
 			while ( !source.EndOfStream ) {
 				line = source.ReadLine( this.RecordSeparator );
