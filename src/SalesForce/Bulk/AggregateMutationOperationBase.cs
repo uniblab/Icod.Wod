@@ -97,7 +97,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 			return System.String.Format( "/services/data/v{0:F1}/jobs/ingest", this.ApiVersion );
 		}
 		public override void PerformWork( Pair<LoginResponse, IStep> jobProcess ) {
-			var step = jobProcess.Second ?? throw new System.ArgumentException();
+			var step = jobProcess.Second ?? throw new System.ArgumentException( nameof( jobProcess ) );
 			var workOrder = step.WorkOrder;
 			var loginResponse = jobProcess.First;
 

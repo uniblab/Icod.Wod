@@ -97,7 +97,7 @@ namespace Icod.Wod.Data {
 			} else if ( this.Columns.Any(
 				x => ( x.Length < -1 )
 			) ) {
-				throw new System.ArgumentException( "All column lengths must be positive." );
+				throw new System.InvalidOperationException( "All column lengths must be positive." );
 			}
 			return this.Columns.Select(
 				x => new System.Data.DataColumn( x.Name, typeof( System.String ) ) {
