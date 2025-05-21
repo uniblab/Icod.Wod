@@ -44,11 +44,17 @@
 		<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 		<NuGetPackageImportStamp>
 		</NuGetPackageImportStamp>
+		<Configurations>Debug;Staging;Release</Configurations>
+		<SignAssembly>false</SignAssembly>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<OutputPath>bin\$(Configuration)\</OutputPath>
+		<DocumentationFile>$(OutDir)\$(Configuration)\$(TargetFrameworkVersion)\$(AssemblyName).XML</DocumentationFile>
+		<ImplicitUsings>disable</ImplicitUsings>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
 		<PlatformTarget>AnyCPU</PlatformTarget>
 	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration.Contains( &quot;Debug&quot; ))' ">
+	<PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
 		<ErrorReport>prompt</ErrorReport>
 		<WarningLevel>2</WarningLevel>
 		<DebugSymbols>true</DebugSymbols>
@@ -57,7 +63,7 @@
 		<DefineConstants>DEBUG;TRACE</DefineConstants>
 		<SignAssembly>false</SignAssembly>
 	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration.Contains( &quot;Staging&quot; ))' ">
+	<PropertyGroup Condition=" '$(Configuration)' == 'Staging' ">
 		<ErrorReport>prompt</ErrorReport>
 		<WarningLevel>3</WarningLevel>
 		<DebugSymbols>true</DebugSymbols>
@@ -66,7 +72,7 @@
 		<DefineConstants>TRACE</DefineConstants>
 		<SignAssembly>false</SignAssembly>
 	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration.Contains( &quot;Release&quot; ))' ">
+	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
 		<AssemblyKeyContainerName>Icod</AssemblyKeyContainerName>
 		<AssemblyOriginatorKeyFile>..\STRONG_NAME_KEY\Icod.snk</AssemblyOriginatorKeyFile>
 		<SignAssembly>true</SignAssembly>
@@ -88,28 +94,30 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
 		<Content Include="Schema Updates.txt" />
-		<None Include="C:\Users\unibl\Development\Icod\Icod.Wod\.editorconfig" />
+		<None Include=".editorconfig" />
 		<None Include="ClassDiagram1.cd" />
 	</ItemGroup>
 	<ItemGroup>
 		<Reference Include="Microsoft.CSharp" />
+		<Reference Include="System.Configuration" Condition=" '$(TargetFramework)' != 'net462' "/>
+		<Reference Include="System.Web" />
+		<!--
 		<Reference Include="System" />
 		<Reference Include="System.ComponentModel.Composition" />
-		<Reference Include="System.Configuration" />
 		<Reference Include="System.Data" />
 		<Reference Include="System.Data.OracleClient" />
 		<Reference Include="System.DirectoryServices" />
 		<Reference Include="System.Drawing" />
 		<Reference Include="System.IO.Compression.FileSystem" />
-		<Reference Include="System.Net" />
 		<Reference Include="System.Runtime.InteropServices" />
+		<Reference Include="System.Net" />
 		<Reference Include="System.Security" />
 		<Reference Include="System.ServiceProcess" />
 		<Reference Include="System.Threading.Thread" />
 		<Reference Include="System.Transactions" />
-		<Reference Include="System.Web" />
 		<Reference Include="System.Xml" />
 		<Reference Include="WindowsBase" />
+		-->
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
@@ -131,6 +139,6 @@
 		<PackageReference Include="System.Threading.Thread" Version="4.3.0" />
 	</ItemGroup>
 	<ItemGroup>
-		<EditorConfigFiles Remove="C:\Users\unibl\Development\Icod\Icod.Wod\.editorconfig" />
+		<EditorConfigFiles Remove=".editorconfig" />
 	</ItemGroup>
 </Project>
