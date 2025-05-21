@@ -261,9 +261,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 			);
 		}
 		protected System.String BuildFile( System.Data.DataTable dataTable, System.Char columnDelimiter, System.String lineEnding, System.Char quoteChar ) {
-			if ( dataTable is null ) {
-				throw new System.ArgumentNullException( nameof( dataTable ) );
-			}
+			dataTable = dataTable ?? throw new System.ArgumentNullException( nameof( dataTable ) );
 			var dbColumns = dataTable.Columns.OfType<System.Data.DataColumn>();
 			if ( ( dbColumns is null ) || !dbColumns.Any() ) {
 				throw new System.ArgumentNullException( nameof( dbColumns ) );
@@ -298,9 +296,8 @@ namespace Icod.Wod.SalesForce.Bulk {
 			}
 		}
 		protected System.String GetRow( System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Data.DataRow row, System.Char columnDelimiter, System.Char quoteChar ) {
-			if ( row is null ) {
-				throw new System.ArgumentNullException( nameof( row ) );
-			} else if ( ( columns is null ) || !columns.Any() ) {
+			row = row ?? throw new System.ArgumentNullException( nameof( row ) );
+			if ( ( columns is null ) || !columns.Any() ) {
 				throw new System.ArgumentNullException( nameof( columns ) );
 			}
 

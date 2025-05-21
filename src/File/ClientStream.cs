@@ -16,11 +16,8 @@ namespace Icod.Wod.File {
 		private ClientStream() : base() {
 		}
 		public ClientStream( System.IO.Stream stream, System.IDisposable client, System.Boolean disposeClient ) : this() {
-			if ( client is null ) {
-				throw new System.ArgumentNullException( nameof( client ) );
-			} else if ( stream is null ) {
-				throw new System.ArgumentNullException( nameof( stream ) );
-			}
+			client  = client ?? throw new System.ArgumentNullException( nameof( client ) );
+			stream = stream ?? throw new System.ArgumentNullException( nameof( stream ) );
 			myClient = client;
 			myStream = stream;
 			myDisposeClient = disposeClient;

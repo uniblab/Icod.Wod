@@ -90,9 +90,8 @@ namespace Icod.Wod.Data {
 
 		#region methods
 		protected sealed override System.Collections.Generic.IEnumerable<System.Data.DataColumn> BuildColumns( System.IO.StreamReader file ) {
-			if ( file is null ) {
-				throw new System.ArgumentNullException( nameof( file ) );
-			} else if ( !( this.Columns ?? new ColumnBase[ 0 ] ).Any() ) {
+			file = file ?? throw new System.ArgumentNullException( nameof( file ) );
+			if ( !( this.Columns ?? new ColumnBase[ 0 ] ).Any() ) {
 				throw new System.InvalidOperationException();
 			} else if ( this.Columns.Any(
 				x => ( x.Length < -1 )
@@ -106,17 +105,13 @@ namespace Icod.Wod.Data {
 			);
 		}
 		protected sealed override System.Data.DataRow ReadRecord( System.Data.DataTable table, System.IO.StreamReader file ) {
-			if ( file is null ) {
-				throw new System.ArgumentNullException( nameof( file ) );
-			} else if ( table is null ) {
-				throw new System.ArgumentNullException( nameof( table ) );
-			}
+			file = file ?? throw new System.ArgumentNullException( nameof( file ) );
+			table = table ?? throw new System.ArgumentNullException( nameof( table ) );
 			return table.Rows.Add( this.ReadRecord( file ).ToArray() );
 		}
 		protected sealed override System.Collections.Generic.IEnumerable<System.String> ReadRecord( System.IO.StreamReader file ) {
-			if ( file is null ) {
-				throw new System.ArgumentNullException( nameof( file ) );
-			} else if ( file.EndOfStream ) {
+			file = file ?? throw new System.ArgumentNullException( nameof( file ) );
+			if ( file.EndOfStream ) {
 				yield break;
 			}
 
@@ -143,12 +138,11 @@ namespace Icod.Wod.Data {
 		}
 
 		protected sealed override void WriteHeader( System.IO.StreamWriter writer, System.Collections.Generic.IEnumerable<System.Data.DataColumn> dbColumns, System.Collections.Generic.IEnumerable<ColumnBase> fileColumns ) {
+			writer = writer ?? throw new System.ArgumentNullException( nameof( writer ) );
 			if ( ( fileColumns is null ) || !fileColumns.Any() ) {
 				throw new System.ArgumentNullException( nameof( fileColumns ) );
 			} else if ( ( dbColumns is null ) || !dbColumns.Any() ) {
 				throw new System.ArgumentNullException( nameof( dbColumns ) );
-			} else if ( writer is null ) {
-				throw new System.ArgumentNullException( nameof( writer ) );
 			}
 
 			var line = dbColumns.Select(

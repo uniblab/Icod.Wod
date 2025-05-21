@@ -20,9 +20,7 @@ namespace Icod.Wod.Data {
 		#region methods
 		protected sealed override void WriteRecords( Icod.Wod.WorkOrder workOrder, System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Collections.Generic.IEnumerable<System.Data.DataRow> rows ) {
 #if DEBUG
-			if ( workOrder is null ) {
-				throw new System.ArgumentNullException( nameof( workOrder ) );
-			}
+			workOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
 #endif
 			var cols = ( columns ?? new System.Data.DataColumn[ 0 ] );
 			if ( this.WriteIfEmpty ) {
@@ -63,9 +61,8 @@ namespace Icod.Wod.Data {
 		}
 
 		protected sealed override System.Data.DataTable ReadFile( System.String filePathName, System.IO.StreamReader file ) {
-			if ( file is null ) {
-				throw new System.ArgumentNullException( nameof( file ) );
-			} else if ( System.String.IsNullOrEmpty( filePathName ) ) {
+			file = file ?? throw new System.ArgumentNullException( nameof( file ) );
+			if ( System.String.IsNullOrEmpty( filePathName ) ) {
 				throw new System.ArgumentNullException( nameof( filePathName ) );
 			}
 

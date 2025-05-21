@@ -87,9 +87,8 @@ namespace Icod.Wod.Data {
 				} else {
 					return;
 				}
-			} else if ( workOrder is null ) {
-				throw new System.ArgumentNullException( nameof( workOrder ) );
 			}
+			workOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
 
 			this.WriteRecords( workOrder, source.Columns.OfType<System.Data.DataColumn>(), source.Rows.OfType<System.Data.DataRow>() );
 		}
@@ -115,9 +114,7 @@ namespace Icod.Wod.Data {
 			return output;
 		}
 		protected void WriteFile( System.IO.Stream stream ) {
-			if ( stream is null ) {
-				throw new System.ArgumentNullException( nameof( stream ) );
-			}
+			stream = stream ?? throw new System.ArgumentNullException( nameof( stream ) );
 			var handler = this.GetFileHandler( this.WorkOrder );
 			var dfpn = handler.PathCombine( this.ExpandedPath, this.ExpandedName );
 			_ = stream.Seek( 0, System.IO.SeekOrigin.Begin );
@@ -132,9 +129,8 @@ namespace Icod.Wod.Data {
 			return this.GetFileHandler( this.WorkOrder ).ListFiles();
 		}
 		protected System.IO.StreamReader OpenReader( Icod.Wod.File.FileEntry file ) {
-			if ( file is null ) {
-				throw new System.ArgumentNullException( nameof( file ) );
-			} else if ( Icod.Wod.File.FileType.Directory == file.FileType ) {
+			file = file ?? throw new System.ArgumentNullException( nameof( file ) );
+			if ( Icod.Wod.File.FileType.Directory == file.FileType ) {
 				throw new System.InvalidOperationException();
 			}
 			return new System.IO.StreamReader( this.GetFileHandler( this.WorkOrder ).OpenReader( file.File ), this.GetEncoding(), true, this.BufferLength );
@@ -154,9 +150,8 @@ namespace Icod.Wod.Data {
 		protected void AddFileColumns( System.Data.DataTable table, System.String filePathName ) {
 			if ( System.String.IsNullOrEmpty( filePathName ) ) {
 				throw new System.ArgumentNullException( nameof( filePathName ) );
-			} else if ( table is null ) {
-				throw new System.ArgumentNullException( nameof( table ) );
 			}
+			table = table ?? throw new System.ArgumentNullException( nameof( table ) );
 
 			var filePathNameColumn = new System.Data.DataColumn( "%wod:FilePathName%", typeof( System.String ) ) {
 				AllowDBNull = false,
