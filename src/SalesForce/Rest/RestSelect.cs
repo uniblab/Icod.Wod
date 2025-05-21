@@ -94,7 +94,7 @@ namespace Icod.Wod.SalesForce.Rest {
 			return this.ReadTables( loginToken );
 		}
 		public System.Collections.Generic.IEnumerable<System.Data.DataTable> ReadTables( LoginResponse loginToken ) {
-			using ( var client = this.BuildClient( loginToken, this.WorkOrder.JobName ) ) {
+			using ( var client = BuildClient( loginToken, this.WorkOrder.JobName ) ) {
 				client.Headers[ "Content-type" ] = "application/x-www-form-urlencoded; charset=utf-8";
 				var instanceUrl = new System.Uri( loginToken.InstanceUrl );
 				var nextRecordsUrl = this.GetServicePath();
@@ -152,8 +152,11 @@ namespace Icod.Wod.SalesForce.Rest {
 		private System.String GetServicePath() {
 			return System.String.Format( "/services/data/v{0:F1}/query/", this.ApiVersion );
 		}
+		#endregion methods
 
-		private System.Net.WebClient BuildClient( LoginResponse token, System.String userAgent ) {
+
+		#region static methods
+		private static System.Net.WebClient BuildClient( LoginResponse token, System.String userAgent ) {
 			token = token ?? throw new System.ArgumentNullException( nameof( token ) );
 			var client = new System.Net.WebClient {
 				Encoding = System.Text.Encoding.UTF8
@@ -163,7 +166,7 @@ namespace Icod.Wod.SalesForce.Rest {
 			System.Net.ServicePointManager.SecurityProtocol = TlsHelper.GetSecurityProtocol();
 			return client;
 		}
-		#endregion methods
+		#endregion
 
 	}
 

@@ -176,7 +176,7 @@ namespace Icod.Wod.SalesForce {
 			if ( System.String.IsNullOrEmpty( name ) ) {
 				throw new System.ArgumentNullException( nameof( name ) );
 			}
-			ICredential here = ( workOrder.SFCredentials ?? new ICredential[ 0 ] ).FirstOrDefault(
+			ICredential here = ( workOrder.SFCredentials ?? System.Array.Empty<ICredential>() ).FirstOrDefault(
 				x => x.Name.Equals( name, System.StringComparison.Ordinal )
 			);
 			if ( here is object ) {

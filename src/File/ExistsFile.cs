@@ -89,7 +89,7 @@ namespace Icod.Wod.File {
 			if ( handler.ListFiles().Any(
 				x => x.FileType.Equals( FileType.File )
 			) ) {
-				var steps = ( this.Steps ?? new System.Object[ 0 ] ).OfType<IStep>().ToArray();
+				var steps = ( this.Steps ?? System.Array.Empty<System.Object>() ).OfType<IStep>().ToArray();
 				foreach ( var s in steps ) {
 					s.DoWork( workOrder );
 				}

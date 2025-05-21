@@ -1,4 +1,5 @@
 // Copyright (C) 2025  Timothy J. Bruce
+using Icod.Wod.Data;
 using System.Linq;
 
 namespace Icod.Wod {
@@ -223,7 +224,7 @@ namespace Icod.Wod {
 				msg.BodyEncoding = CodePageHelper.GetCodePage( this.BodyCodePage );
 				msg.Body = workOrder.ExpandPseudoVariables( this.Body );
 				File.FileHandlerBase handler;
-				foreach ( var a in ( this.Attachments ?? new Icod.Wod.File.FileDescriptor[ 0 ] ) ) {
+				foreach ( var a in ( this.Attachments ?? System.Array.Empty<Icod.Wod.File.FileDescriptor>() ) ) {
 					handler = a.GetFileHandler( workOrder );
 					System.String filePathName;
 					foreach ( var fe in handler.ListFiles() ) {

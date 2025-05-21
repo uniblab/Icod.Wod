@@ -185,9 +185,9 @@ namespace Icod.Wod.File {
 			var regexPattern = fd.ExpandedRegexPattern;
 			using ( var client = this.GetSftpClient( uri ) ) {
 				client.Connect();
-				return this.GetRemoteList( client, uri.AbsolutePath, regexPattern ).Select(
+				return GetRemoteList( client, uri.AbsolutePath, regexPattern ).Select(
 					x => new FileEntry {
-						File = this.BuildFullName( uri, x.FullName ),
+						File = BuildFullName( uri, x.FullName ),
 						Handler = this,
 						FileType = x.IsDirectory
 							? FileType.Directory
@@ -208,11 +208,11 @@ namespace Icod.Wod.File {
 			var regexPattern = fd.ExpandedRegexPattern;
 			using ( var client = this.GetSftpClient( uri ) ) {
 				client.Connect();
-				return this.GetRemoteList( client, uri.AbsolutePath, regexPattern ).Where(
+				return GetRemoteList( client, uri.AbsolutePath, regexPattern ).Where(
 					x => x.IsRegularFile
 				).Select(
 					x => new FileEntry {
-						File = this.BuildFullName( uri, x.FullName ),
+						File = BuildFullName( uri, x.FullName ),
 						Handler = this,
 						FileType = FileType.File
 					}
@@ -229,18 +229,25 @@ namespace Icod.Wod.File {
 			var regexPattern = fd.ExpandedRegexPattern;
 			using ( var client = this.GetSftpClient( uri ) ) {
 				client.Connect();
-				return this.GetRemoteList( client, uri.AbsolutePath, regexPattern ).Where(
+				return GetRemoteList( client, uri.AbsolutePath, regexPattern ).Where(
 					x => x.IsDirectory
 				).Select(
 					x => new FileEntry {
-						File = this.BuildFullName( uri, x.FullName ),
+						File = BuildFullName( uri, x.FullName ),
 						Handler = this,
 						FileType = FileType.Directory
 					}
 				);
 			}
 		}
-		private System.Collections.Generic.IEnumerable<Renci.SshNet.Sftp.ISftpFile> GetRemoteList( Renci.SshNet.SftpClient client, System.String filePathName, System.String regexPattern ) {
+		#endregion methods
+
+
+		#region static methods
+		private static System.String BuildFullName( System.Uri uri, System.String pathName ) {
+			return new System.UriBuilder( "sftp", uri.Host, uri.Port, pathName ).Uri.ToString();
+		}
+		private static System.Collections.Generic.IEnumerable<Renci.SshNet.Sftp.ISftpFile> GetRemoteList( Renci.SshNet.SftpClient client, System.String filePathName, System.String regexPattern ) {
 #if DEBUG
 			if ( client is null ) {
 				throw new System.ArgumentNullException( nameof( client ) );
@@ -257,10 +264,7 @@ namespace Icod.Wod.File {
 				)
 			;
 		}
-		private System.String BuildFullName( System.Uri uri, System.String pathName ) {
-			return new System.UriBuilder( "sftp", uri.Host, uri.Port, pathName ).Uri.ToString();
-		}
-		#endregion methods
+		#endregion
 
 	}
 

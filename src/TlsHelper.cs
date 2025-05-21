@@ -7,10 +7,14 @@
 			var ssl = System.Net.SecurityProtocolType.Tls12;
 #endif
 #if DEBUG
+#if NETCOREAPP3_0_OR_GREATER || NET5_0_OR_GREATER
 #pragma warning disable 0618
-			ssl = ssl | System.Net.SecurityProtocolType.Ssl3;
+#endif
+			ssl |= System.Net.SecurityProtocolType.Ssl3;
+#if NETCOREAPP3_0_OR_GREATER || NET5_0_OR_GREATER
 #pragma warning restore 0618
-			ssl = ssl | System.Net.SecurityProtocolType.Tls12 | System.Net.SecurityProtocolType.Tls11 | System.Net.SecurityProtocolType.Tls;
+#endif
+			ssl |= System.Net.SecurityProtocolType.Tls12 | System.Net.SecurityProtocolType.Tls11 | System.Net.SecurityProtocolType.Tls;
 #endif
 			return ssl;
 		}

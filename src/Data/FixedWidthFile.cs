@@ -41,7 +41,9 @@ namespace Icod.Wod.Data {
 			}
 			set {
 				base.ConvertEmptyStringToNull = value;
-				System.String w( System.String a, System.Int32 b, System.Int32 c ) => a.Substring( b, c );
+				System.String w( System.String a, System.Int32 b, System.Int32 c ) {
+					return a.Substring( b, c );
+				}
 				var q = ( this.TrimValues )
 					? ( a, b, c ) => w( a, b, c ).TrimToNull()
 					: (System.Func<System.String, System.Int32, System.Int32, System.String>)w
@@ -64,7 +66,10 @@ namespace Icod.Wod.Data {
 			}
 			set {
 				base.TrimValues = value;
-				System.String w( System.String a, System.Int32 b, System.Int32 c ) => a.Substring( b, c );
+				System.String w( System.String a, System.Int32 b, System.Int32 c ) {
+					return a.Substring( b, c );
+				}
+
 				var q = ( value )
 					? ( a, b, c ) => w( a, b, c ).TrimToNull()
 					: (System.Func<System.String, System.Int32, System.Int32, System.String>)w
@@ -91,7 +96,7 @@ namespace Icod.Wod.Data {
 		#region methods
 		protected sealed override System.Collections.Generic.IEnumerable<System.Data.DataColumn> BuildColumns( System.IO.StreamReader file ) {
 			file = file ?? throw new System.ArgumentNullException( nameof( file ) );
-			if ( !( this.Columns ?? new ColumnBase[ 0 ] ).Any() ) {
+			if ( !( this.Columns ?? System.Array.Empty<ColumnBase>() ).Any() ) {
 				throw new System.InvalidOperationException();
 			} else if ( this.Columns.Any(
 				x => ( x.Length < -1 )

@@ -22,13 +22,13 @@ namespace Icod.Wod.Data {
 #if DEBUG
 			workOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
 #endif
-			var cols = ( columns ?? new System.Data.DataColumn[ 0 ] );
+			var cols = ( columns ?? System.Array.Empty<System.Data.DataColumn>() );
 			if ( this.WriteIfEmpty ) {
 				if ( !cols.Any() ) {
 					throw new System.ArgumentNullException( nameof( columns ) );
 				}
 			} else if (
-				( !( rows ?? new System.Data.DataRow[ 0 ] ).Any() )
+				( !( rows ?? System.Array.Empty<System.Data.DataRow>() ).Any() )
 				|| ( !cols.Any() )
 			) {
 				return;
@@ -70,7 +70,7 @@ namespace Icod.Wod.Data {
 			try {
 				var set = Newtonsoft.Json.JsonConvert.DeserializeObject<System.Data.DataSet>( file.ReadToEnd() );
 				table = set.Tables[ 0 ];
-				this.AddFileColumns( table, filePathName );
+				AddFileColumns( table, filePathName );
 			} catch ( System.Exception e ) {
 				if ( !e.Data.Contains( "%wod:FilePathName%" ) ) {
 					e.Data.Add( "%wod:FilePathName%", filePathName );

@@ -46,22 +46,26 @@ namespace Icod.Wod.File {
 				}
 			}
 			foreach ( var file in source.ListFiles() ) {
-				this.DoWork( file, xform, dest );
+				DoWork( file, xform, dest );
 			}
 		}
-		private void DoWork( FileEntry source, System.Xml.Xsl.XslCompiledTransform xslTransform, FileHandlerBase destination ) {
+		#endregion  methods
+
+
+		#region static methods
+		private static void DoWork( FileEntry source, System.Xml.Xsl.XslCompiledTransform xslTransform, FileHandlerBase destination ) {
 			using ( var fileReader = source.Handler.OpenReader( source.File ) ) {
 				using ( var xmlReader = System.Xml.XmlReader.Create( fileReader ) ) {
-					this.DoWork( xmlReader, xslTransform, destination, source.File );
+					DoWork( xmlReader, xslTransform, destination, source.File );
 				}
 			}
 		}
-		private void DoWork( System.Xml.XmlReader source, System.Xml.Xsl.XslCompiledTransform xslTransform, FileHandlerBase destination, System.String filePathName ) {
-			using ( var buffer = this.DoWork( source, xslTransform ) ) {
+		private static void DoWork( System.Xml.XmlReader source, System.Xml.Xsl.XslCompiledTransform xslTransform, FileHandlerBase destination, System.String filePathName ) {
+			using ( var buffer = DoWork( source, xslTransform ) ) {
 				destination.Overwrite( buffer, destination.FileDescriptor.GetFilePathName( destination, filePathName ) );
 			}
 		}
-		private System.IO.Stream DoWork( System.Xml.XmlReader source, System.Xml.Xsl.XslCompiledTransform xslTransform ) {
+		private static System.IO.Stream DoWork( System.Xml.XmlReader source, System.Xml.Xsl.XslCompiledTransform xslTransform ) {
 			var output = new System.IO.MemoryStream();
 			using ( var writer = System.Xml.XmlWriter.Create( output ) ) {
 				xslTransform.Transform( source, writer );
@@ -70,8 +74,7 @@ namespace Icod.Wod.File {
 			_ = output.Seek( 0, System.IO.SeekOrigin.Begin );
 			return output;
 		}
-		#endregion  methods
-
+		#endregion
 	}
 
 }

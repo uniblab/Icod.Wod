@@ -209,7 +209,7 @@ namespace Icod.Wod.Data {
 		protected sealed override System.Collections.Generic.IEnumerable<System.Data.DataColumn> BuildColumns( System.IO.StreamReader file ) {
 			file = file ?? throw new System.ArgumentNullException( nameof( file ) );
 			if ( !this.HasHeader ) {
-				if ( !( this.Columns ?? new ColumnBase[ 0 ] ).Any() ) {
+				if ( !( this.Columns ?? System.Array.Empty<ColumnBase>() ).Any() ) {
 					throw new System.InvalidOperationException();
 				}
 				return this.Columns.Select(
@@ -283,7 +283,7 @@ namespace Icod.Wod.Data {
 			System.Nullable<System.Char> ch;
 			var reading = true;
 			do {
-				ch = this.ReadChar( reader, @break, readNextOnBreak );
+				ch = ReadChar( reader, @break, readNextOnBreak );
 				if ( ch.HasValue ) {
 					sb = sb.Append( ch.Value );
 				} else {
@@ -292,31 +292,6 @@ namespace Icod.Wod.Data {
 				}
 			} while ( reading );
 			return this.ColumnReader( sb );
-		}
-		private System.Nullable<System.Char> ReadChar( System.IO.StringReader reader, System.Char @break, System.Boolean readNextOnBreak ) {
-#if DEBUG
-			reader = reader ?? throw new System.ArgumentNullException( nameof( reader ) );
-#endif
-
-			var p = reader.Peek();
-			if ( -1 == p ) {
-				return null;
-			}
-			var c = System.Convert.ToChar( reader.Read() );
-			if ( @break.Equals( c ) ) {
-				if ( readNextOnBreak ) {
-					p = reader.Peek();
-					if ( -1 == p ) {
-						return null;
-					} else if ( @break.Equals( System.Convert.ToChar( p ) ) ) {
-						return System.Convert.ToChar( reader.Read() );
-					} else {
-						reader.Read();
-					}
-				}
-				return null;
-			}
-			return c;
 		}
 
 		protected sealed override void WriteHeader( System.IO.StreamWriter writer, System.Collections.Generic.IEnumerable<System.Data.DataColumn> dbColumns, System.Collections.Generic.IEnumerable<ColumnBase> fileColumns ) {
@@ -364,6 +339,35 @@ namespace Icod.Wod.Data {
 			return System.String.Join( fss, list );
 		}
 		#endregion methods
+
+
+		#region static methods
+		private static System.Nullable<System.Char> ReadChar( System.IO.StringReader reader, System.Char @break, System.Boolean readNextOnBreak ) {
+#if DEBUG
+			reader = reader ?? throw new System.ArgumentNullException( nameof( reader ) );
+#endif
+
+			var p = reader.Peek();
+			if ( -1 == p ) {
+				return null;
+			}
+			var c = System.Convert.ToChar( reader.Read() );
+			if ( @break.Equals( c ) ) {
+				if ( readNextOnBreak ) {
+					p = reader.Peek();
+					if ( -1 == p ) {
+						return null;
+					} else if ( @break.Equals( System.Convert.ToChar( p ) ) ) {
+						return System.Convert.ToChar( reader.Read() );
+					} else {
+						reader.Read();
+					}
+				}
+				return null;
+			}
+			return c;
+		}
+		#endregion
 
 	}
 

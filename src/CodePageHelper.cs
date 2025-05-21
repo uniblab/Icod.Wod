@@ -10,9 +10,7 @@ namespace Icod.Wod {
 			if ( System.Int32.TryParse( codePage, out var cpNumber ) ) {
 				output = System.Text.Encoding.GetEncoding( cpNumber );
 			}
-			if ( output is null ) {
-				output = System.Text.Encoding.GetEncoding( codePage );
-			}
+			output = output ?? System.Text.Encoding.GetEncoding( codePage );
 
 			return output;
 		}

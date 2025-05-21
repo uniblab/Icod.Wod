@@ -99,7 +99,7 @@ namespace Icod.Wod.Data {
 				throw new System.ArgumentNullException( nameof( dbColumns ) );
 			}
 			var output = new System.Collections.Generic.Dictionary<System.Data.DataColumn, ColumnBase>();
-			var cols = this.Columns ?? new ColumnBase[ 0 ];
+			var cols = this.Columns ?? System.Array.Empty<ColumnBase>();
 
 			foreach ( var dbCol in dbColumns ) {
 				output.Add( dbCol, cols.FirstOrDefault(
@@ -146,8 +146,11 @@ namespace Icod.Wod.Data {
 				}
 			}
 		}
+		#endregion
 
-		protected void AddFileColumns( System.Data.DataTable table, System.String filePathName ) {
+		#region static methods
+
+		protected static void AddFileColumns( System.Data.DataTable table, System.String filePathName ) {
 			if ( System.String.IsNullOrEmpty( filePathName ) ) {
 				throw new System.ArgumentNullException( nameof( filePathName ) );
 			}
@@ -186,7 +189,7 @@ namespace Icod.Wod.Data {
 
 			table.TableName = fileName;
 		}
-		#endregion methods
+		#endregion static methods
 
 	}
 

@@ -24,20 +24,23 @@ namespace Icod.Wod.File {
 			var dest = this.Destination.GetFileHandler( workOrder );
 			var source = this.GetFileHandler( workOrder );
 			if ( ( source is LocalFileHandler ) && ( dest is LocalFileHandler ) ) {
-				this.DoWork( source as LocalFileHandler, dest as LocalFileHandler );
+				DoWork( source as LocalFileHandler, dest as LocalFileHandler );
 			} else {
-				this.DoWork( workOrder, source, dest );
+				DoWork( workOrder, source, dest );
 			}
 		}
+		#endregion methods
 
-		private void DoWork( WorkOrder workOrder, FileHandlerBase source, FileHandlerBase dest ) {
+
+		#region static methods
+		private static void DoWork( WorkOrder workOrder, FileHandlerBase source, FileHandlerBase dest ) {
 #if DEBUG
 			source = source ?? throw new System.ArgumentNullException( nameof( source ) );
 			dest = dest ?? throw new System.ArgumentNullException( nameof( dest ) );
 			workOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
 #endif
 			if ( ( source is LocalFileHandler ) && ( dest is LocalFileHandler ) ) {
-				this.DoWork( source as LocalFileHandler, dest as LocalFileHandler );
+				DoWork( source as LocalFileHandler, dest as LocalFileHandler );
 			}
 
 			var filePathName = source.ListFiles().First().File;
@@ -51,7 +54,7 @@ namespace Icod.Wod.File {
 			source.DeleteFile( filePathName );
 		}
 
-		private void DoWork( LocalFileHandler source, LocalFileHandler dest ) {
+		private static void DoWork( LocalFileHandler source, LocalFileHandler dest ) {
 #if DEBUG
 			source = source ?? throw new System.ArgumentNullException( nameof( source ) );
 			dest = dest?? throw new System.ArgumentNullException( nameof( dest ) );
@@ -64,7 +67,7 @@ namespace Icod.Wod.File {
 			var filePathName = file.File;
 			System.IO.File.Move( filePathName, source.PathCombine( source.FileDescriptor.ExpandedPath, dest.FileDescriptor.ExpandedName ) );
 		}
-		#endregion methods
+		#endregion static methods
 
 	}
 

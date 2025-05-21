@@ -59,7 +59,7 @@ namespace Icod.Wod.Data {
 				var set = new System.Data.DataSet();
 				set.ReadXml( file );
 				table = set.Tables[ 0 ];
-				this.AddFileColumns( table, filePathName );
+				AddFileColumns( table, filePathName );
 			} catch ( System.Exception e ) {
 				if ( !e.Data.Contains( "%wod:FilePathName%" ) ) {
 					e.Data.Add( "%wod:FilePathName%", filePathName );

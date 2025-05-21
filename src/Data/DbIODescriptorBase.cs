@@ -124,7 +124,7 @@ namespace Icod.Wod.Data {
 			var destNames = dest.Columns.OfType<System.Data.DataColumn>().Select(
 				x => x.ColumnName
 			).Where(
-				x => !( this.ColumnMapping ?? new ColumnMap[ 0 ] ).Where(
+				x => !( this.ColumnMapping ?? System.Array.Empty<ColumnMap>() ).Where(
 					y => y.Skip
 				).Select(
 					y => y.ToName
@@ -133,14 +133,14 @@ namespace Icod.Wod.Data {
 			var sourceNames = source.Columns.OfType<System.Data.DataColumn>().Select(
 				x => x.ColumnName
 			).Where(
-				x => !( this.ColumnMapping ?? new ColumnMap[ 0 ] ).Where(
+				x => !( this.ColumnMapping ?? System.Array.Empty<ColumnMap>() ).Where(
 					y => y.Skip
 				).Select(
 					y => y.FromName
 				).Contains( x, System.StringComparer.OrdinalIgnoreCase )
 			);
 
-			var originalMap = ( this.ColumnMapping ?? new ColumnMap[ 0 ] ).Where(
+			var originalMap = ( this.ColumnMapping ?? System.Array.Empty<ColumnMap>() ).Where(
 				x => !x.Skip
 			).Where(
 				x => destNames.Contains( x.ToName, System.StringComparer.OrdinalIgnoreCase )
@@ -182,7 +182,7 @@ namespace Icod.Wod.Data {
 
 			schemaQuery = this.GenerateSchemaQuery();
 			var cn = this.ConnectionStringName;
-			var here = ( workOrder.ConnectionStrings ?? new Icod.Wod.ConnectionStringEntry[ 0 ] ).FirstOrDefault(
+			var here = ( workOrder.ConnectionStrings ?? System.Array.Empty<Icod.Wod.ConnectionStringEntry>() ).FirstOrDefault(
 				x => x.Name.Equals( cn, System.StringComparison.OrdinalIgnoreCase )
 			);
 			var there = System.Configuration.ConfigurationManager.ConnectionStrings[ cn ];
@@ -201,7 +201,7 @@ namespace Icod.Wod.Data {
 			command = command ?? throw new System.ArgumentNullException( nameof( command ) );
 
 			var cn = this.ConnectionStringName;
-			var here = ( workOrder.ConnectionStrings ?? new Icod.Wod.ConnectionStringEntry[ 0 ] ).FirstOrDefault(
+			var here = ( workOrder.ConnectionStrings ?? System.Array.Empty<Icod.Wod.ConnectionStringEntry>() ).FirstOrDefault(
 				x => x.Name.Equals( cn, System.StringComparison.OrdinalIgnoreCase )
 			);
 			var there = System.Configuration.ConfigurationManager.ConnectionStrings[ cn ];
@@ -287,7 +287,7 @@ namespace Icod.Wod.Data {
 				connection.Open();
 				foreach ( var table in source.ReadTables( workOrder ) ) {
 					using ( var command = this.CreateCommand( connection ) ) {
-						foreach ( var parameter in ( this.Parameters ?? new DbParameter[ 0 ] ) ) {
+						foreach ( var parameter in ( this.Parameters ?? System.Array.Empty<DbParameter>() ) ) {
 							_ = command.Parameters.Add( parameter.ToDbParameter( workOrder, command ) );
 						}
 						this.ExecuteCommand( command, table );

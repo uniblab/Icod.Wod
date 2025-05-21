@@ -67,10 +67,34 @@ namespace Icod.Wod.SalesForce {
 #else
 			headers.Add( "Accept-Encoding", "gzip, deflate, identity" );
 #endif
-			var body = this.BuildBody( credential );
+			var body = BuildBody( credential );
 			return this.BuildLogin( credential.SiteUrl, headers, body );
 		}
-		private System.String BuildBody( SalesForce.ICredential credential ) {
+		private LoginResponse BuildLogin( System.Uri siteUrl, System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<System.String, System.String>> headers, System.String body ) {
+			System.Net.ServicePointManager.SecurityProtocol = TlsHelper.GetSecurityProtocol();
+
+			using ( var client = new System.Net.WebClient {
+				Encoding = System.Text.Encoding.UTF8
+			} ) {
+				foreach ( var header in headers ) {
+					client.Headers[ header.Key ] = header.Value;
+				}
+				var rawResponse = client.UploadData( siteUrl, "POST", System.Text.Encoding.UTF8.GetBytes( body ) );
+				var json = rawResponse.GetWebString(
+					client.Encoding,
+					client.ResponseHeaders.Keys.OfType<System.String>().Contains( "Content-Encoding" )
+						? client.ResponseHeaders[ "Content-Encoding" ].TrimToNull() ?? "identity"
+						: "identity"
+				);
+				dynamic respObj = Newtonsoft.Json.JsonConvert.DeserializeObject( json );
+				return new LoginResponse( respObj );
+			}
+		}
+		#endregion methods
+
+
+		#region static methods
+		private static System.String BuildBody( SalesForce.ICredential credential ) {
 			credential = credential ?? throw new System.ArgumentNullException( nameof( credential ) );
 
 			var clientId = credential.ClientId;
@@ -105,27 +129,7 @@ namespace Icod.Wod.SalesForce {
 			}
 			return parameters.ToString();
 		}
-		private LoginResponse BuildLogin( System.Uri siteUrl, System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<System.String, System.String>> headers, System.String body ) {
-			System.Net.ServicePointManager.SecurityProtocol = TlsHelper.GetSecurityProtocol();
-
-			using ( var client = new System.Net.WebClient {
-				Encoding = System.Text.Encoding.UTF8
-			} ) {
-				foreach ( var header in headers ) {
-					client.Headers[ header.Key ] = header.Value;
-				}
-				var rawResponse = client.UploadData( siteUrl, "POST", System.Text.Encoding.UTF8.GetBytes( body ) );
-				var json = rawResponse.GetWebString(
-					client.Encoding,
-					client.ResponseHeaders.Keys.OfType<System.String>().Contains( "Content-Encoding" )
-						? client.ResponseHeaders[ "Content-Encoding" ].TrimToNull() ?? "identity"
-						: "identity"
-				);
-				dynamic respObj = Newtonsoft.Json.JsonConvert.DeserializeObject( json );
-				return new LoginResponse( respObj );
-			}
-		}
-		#endregion methods
+		#endregion
 
 	}
 

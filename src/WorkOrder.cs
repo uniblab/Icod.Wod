@@ -132,9 +132,9 @@ namespace Icod.Wod {
 				return System.String.Join(
 					",",
 					(
-						( this.Email ?? new System.String[ 0 ] ).Select(
+						( this.Email ?? System.Array.Empty<System.String>() ).Select(
 							x => this.ExpandPseudoVariables( x )
-						) ?? new System.String[ 0 ]
+						) ?? System.Array.Empty<System.String>()
 					).Union(
 						new System.String[ 1 ] { this.ExpandedEmailTo ?? System.String.Empty }
 					).Where(
@@ -211,7 +211,7 @@ namespace Icod.Wod {
 
 		#region methods
 		public void Run() {
-			myCmdArgs = System.Environment.GetCommandLineArgs() ?? new System.String[ 0 ];
+			myCmdArgs = System.Environment.GetCommandLineArgs() ?? System.Array.Empty<System.String>();
 			System.Int32 i = 1;
 			IStep step = null;
 			try {

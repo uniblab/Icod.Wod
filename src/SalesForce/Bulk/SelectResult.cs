@@ -70,7 +70,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 		public System.Data.DataTable ReadFile() {
 			using ( var reader = new System.IO.StringReader( this.Body ) ) {
 				var output = this.ReadFile( reader, this.ColumnDelimiter, this.LineEnding );
-				if ( ( this.AdditionalColumns ?? new System.Data.DataColumn[ 0 ] ).Any() ) {
+				if ( ( this.AdditionalColumns ?? System.Array.Empty<System.Data.DataColumn>() ).Any() ) {
 					foreach ( var column in this.AdditionalColumns ) {
 						output.Columns.Add( column );
 					}
@@ -90,9 +90,9 @@ namespace Icod.Wod.SalesForce.Bulk {
 			var table = new System.Data.DataTable();
 			try {
 				this.BuildTable( file, table, columDelimiter, lineEnding );
-				foreach ( var record in this.ReadRecord( file, lineEnding ) ) {
+				foreach ( var record in ReadRecord( file, lineEnding ) ) {
 					lineNumber++;
-					var rowList = this.ReadColumns( record, columDelimiter, DQUOTE );
+					var rowList = ReadColumns( record, columDelimiter, DQUOTE );
 					try {
 						_ = table.Rows.Add( rowList.ToArray() );
 					} catch {
@@ -112,26 +112,15 @@ namespace Icod.Wod.SalesForce.Bulk {
 #endif
 
 			var headerLine = file.ReadLine( lineEnding, DQUOTE );
-			foreach ( var column in this.ReadColumns( headerLine, columDelimiter, DQUOTE ) ) {
+			foreach ( var column in ReadColumns( headerLine, columDelimiter, DQUOTE ) ) {
 				table.Columns.Add( new System.Data.DataColumn( column, typeof( System.String ) ) );
 			}
 		}
-		private System.Collections.Generic.IEnumerable<System.String> ReadRecord( System.IO.StringReader file, System.String lineEnding ) {
-#if DEBUG
-			file = file ?? throw new System.ArgumentNullException( nameof( file ) );
-#endif
+		#endregion methods
 
-			System.String line;
-			while ( EOF != file.Peek() ) {
-				line = file.ReadLine( lineEnding, DQUOTE ).TrimToNull();
-				if ( !System.String.IsNullOrEmpty( line ) ) {
-					yield return line;
-				}
-			}
 
-			yield break;
-		}
-		private System.Collections.Generic.IEnumerable<System.String> ReadColumns( System.String line, System.Char fieldSeparator, System.Char quoteCharacter ) {
+		#region static methods
+		private static System.Collections.Generic.IEnumerable<System.String> ReadColumns( System.String line, System.Char fieldSeparator, System.Char quoteCharacter ) {
 			if ( System.String.IsNullOrEmpty( line ) ) {
 				throw new System.ArgumentNullException( line );
 			}
@@ -149,19 +138,18 @@ namespace Icod.Wod.SalesForce.Bulk {
 					c = System.Convert.ToChar( p );
 					if ( quoteCharacter.Equals( c ) ) {
 						_ = reader.Read();
-						yield return this.ReadQuotedTextCell( reader, fieldSeparator, quoteCharacter );
+						yield return ReadQuotedTextCell( reader, fieldSeparator, quoteCharacter );
 					} else if ( fieldSeparator.Equals( c ) ) {
 						_ = reader.Read();
 						yield return null;
 					} else {
-						yield return this.ReadPlainTextCell( reader, fieldSeparator );
+						yield return ReadPlainTextCell( reader, fieldSeparator );
 					}
 				} while ( true );
 			}
 
 		}
-
-		private System.String ReadPlainTextCell( System.IO.StringReader reader, System.Char fieldSeparator ) {
+		private static System.String ReadPlainTextCell( System.IO.StringReader reader, System.Char fieldSeparator ) {
 			reader = reader ?? throw new System.ArgumentNullException( nameof( reader ) );
 
 			var cell = new System.Text.StringBuilder();
@@ -181,7 +169,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 			return cell.ToString().TrimToNull();
 		}
-		private System.String ReadQuotedTextCell( System.IO.StringReader reader, System.Char fieldSeparator, System.Char quoteCharacter ) {
+		private static System.String ReadQuotedTextCell( System.IO.StringReader reader, System.Char fieldSeparator, System.Char quoteCharacter ) {
 			reader = reader ?? throw new System.ArgumentNullException( nameof( reader ) );
 
 			var cell = new System.Text.StringBuilder();
@@ -215,7 +203,22 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 			return cell.ToString().TrimToNull();
 		}
-		#endregion methods
+		private static System.Collections.Generic.IEnumerable<System.String> ReadRecord( System.IO.StringReader file, System.String lineEnding ) {
+#if DEBUG
+			file = file ?? throw new System.ArgumentNullException( nameof( file ) );
+#endif
+
+			System.String line;
+			while ( EOF != file.Peek() ) {
+				line = file.ReadLine( lineEnding, DQUOTE ).TrimToNull();
+				if ( !System.String.IsNullOrEmpty( line ) ) {
+					yield return line;
+				}
+			}
+
+			yield break;
+		}
+		#endregion
 
 	}
 

@@ -112,7 +112,7 @@ namespace Icod.Wod.Data {
 		public virtual System.Data.Common.DbConnection CreateConnection( Icod.Wod.WorkOrder workOrder ) {
 			workOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
 			var cn = this.ConnectionStringName;
-			var here = ( workOrder.ConnectionStrings ?? new Icod.Wod.ConnectionStringEntry[ 0 ] ).FirstOrDefault(
+			var here = ( workOrder.ConnectionStrings ?? System.Array.Empty<Icod.Wod.ConnectionStringEntry>() ).FirstOrDefault(
 				x => x.Name.Equals( cn, System.StringComparison.OrdinalIgnoreCase )
 			);
 			var there = System.Configuration.ConfigurationManager.ConnectionStrings[ cn ];
@@ -134,7 +134,7 @@ namespace Icod.Wod.Data {
 			workOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
 
 			var cn = this.ConnectionStringName;
-			var here = ( workOrder.ConnectionStrings ?? new Icod.Wod.ConnectionStringEntry[ 0 ] ).FirstOrDefault(
+			var here = ( workOrder.ConnectionStrings ?? System.Array.Empty<Icod.Wod.ConnectionStringEntry>() ).FirstOrDefault(
 				x => x.Name.Equals( cn, System.StringComparison.OrdinalIgnoreCase )
 			);
 			var there = System.Configuration.ConfigurationManager.ConnectionStrings[ cn ];

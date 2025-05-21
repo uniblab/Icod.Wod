@@ -79,7 +79,7 @@ namespace Icod.Wod.File {
 
 		#region methods
 		protected virtual System.Collections.Generic.IEnumerable<System.IO.Compression.ZipArchiveEntry> MatchEntries( System.Collections.Generic.IEnumerable<System.IO.Compression.ZipArchiveEntry> collection ) {
-			return ( this.Source ?? new FileDescriptor[ 0 ] ).Select(
+			return ( this.Source ?? System.Array.Empty<FileDescriptor>() ).Select(
 				x => {
 					x.WorkOrder = this.WorkOrder;
 					return x;

@@ -60,7 +60,7 @@ namespace Icod.Wod.Data {
 			}
 			set {
 				if ( value < 0 ) {
-					throw new System.ArgumentOutOfRangeException( "value", "Parameter cannot be negative." );
+					throw new System.ArgumentOutOfRangeException( nameof( value ), "Parameter cannot be negative." );
 				}
 				mySkip = value;
 			}
@@ -145,9 +145,7 @@ namespace Icod.Wod.Data {
 			row = row ?? throw new System.ArgumentNullException( nameof( row ) );
 			column = column ?? throw new System.ArgumentNullException( nameof( column ) );
 
-			if ( format is null ) {
-				format = new TextFileColumn(){ Name = column.ColumnName };
-			}
+			format = format ?? new TextFileColumn() { Name = column.ColumnName };
 			var output = format.GetColumnText( this.WorkOrder, row[ column ] ) ?? this.NullReplacementText ?? System.String.Empty;
 			if ( 0 < format.Length ) {
 				var l = format.Length;
@@ -176,7 +174,7 @@ namespace Icod.Wod.Data {
 						_ = this.ReadRecord( table, file );
 					}
 				}
-				this.AddFileColumns( table, filePathName );
+				AddFileColumns( table, filePathName );
 			} catch ( System.Exception e ) {
 				if ( !e.Data.Contains( "%wod:FilePathName%" ) ) {
 					e.Data.Add( "%wod:FilePathName%", filePathName );
@@ -207,13 +205,13 @@ namespace Icod.Wod.Data {
 #if DEBUG
 			workOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
 #endif
-			var cols = ( columns ?? new System.Data.DataColumn[ 0 ] );
+			var cols = ( columns ?? System.Array.Empty<System.Data.DataColumn>() );
 			if ( this.WriteIfEmpty ) {
 				if ( !cols.Any() ) {
 					throw new System.ArgumentNullException( nameof( columns ) );
 				}
 			} else if (
-				( !( rows ?? new System.Data.DataRow[ 0 ] ).Any() )
+				( !( rows ?? System.Array.Empty<System.Data.DataRow>() ).Any() )
 				|| ( !cols.Any() )
 			) {
 				return;
