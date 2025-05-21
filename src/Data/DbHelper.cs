@@ -87,7 +87,7 @@ namespace Icod.Wod.Data {
 		}
 
 		public static System.Data.Common.DbCommand CreateCommand( this System.Data.Common.DbConnection connection ) {
-			connectionString = connectionString ?? throw new System.ArgumentNullException( nameof( connectionString ) );
+			connection = connection ?? throw new System.ArgumentNullException( nameof( connection ) );
 			var command = connection.CreateCommand();
 			command.CommandTimeout = connection.ConnectionTimeout;
 			return command;

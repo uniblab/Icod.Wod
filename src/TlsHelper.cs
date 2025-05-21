@@ -14,6 +14,7 @@
 			ssl = ssl | System.Net.SecurityProtocolType.Tls12;
 #endif
 #endif
+			return ssl;
 		}
 
 	}
