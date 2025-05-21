@@ -38,7 +38,7 @@ namespace Icod.Wod.Data {
 			var keys = columns.Select(
 				x => x.ColumnName
 			);
-			System.Collections.Generic.IDictionary<System.String, System.Object> record = null;
+			System.Collections.Generic.Dictionary<System.String, System.Object> record = null;
 			foreach ( var row in rows ) {
 				record = new System.Collections.Generic.Dictionary<System.String, System.Object>( System.StringComparer.OrdinalIgnoreCase );
 				foreach ( var key in keys ) {
@@ -47,7 +47,7 @@ namespace Icod.Wod.Data {
 				collection.Add( record );
 			}
 
-			if ( collection.Any() || this.WriteIfEmpty ) {
+			if ( ( 0 < collection.Count ) || this.WriteIfEmpty ) {
 				using ( var buffer = new System.IO.MemoryStream() ) {
 					using ( var writer = new System.IO.StreamWriter( buffer, this.GetEncoding(), this.BufferLength, true ) ) {
 						new Newtonsoft.Json.JsonSerializer().Serialize( writer, collection, typeof( System.Collections.Generic.IEnumerable<System.Collections.Generic.IDictionary<System.String, System.Object>> ) );

@@ -209,7 +209,7 @@ namespace Icod.Wod.Data {
 		protected sealed override System.Collections.Generic.IEnumerable<System.Data.DataColumn> BuildColumns( System.IO.StreamReader file ) {
 			file = file ?? throw new System.ArgumentNullException( nameof( file ) );
 			if ( !this.HasHeader ) {
-				if ( !( this.Columns ?? System.Array.Empty<ColumnBase>() ).Any() ) {
+				if ( 0 == ( this.Columns ?? System.Array.Empty<ColumnBase>() ).Length ) {
 					throw new System.InvalidOperationException();
 				}
 				return this.Columns.Select(

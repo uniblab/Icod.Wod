@@ -110,7 +110,7 @@ namespace Icod.Wod {
 		}
 		private void DoLimitedWork( WorkOrder workOrder, System.Collections.Generic.IEnumerable<IStep> steps, System.Threading.CancellationToken token ) {
 			using ( var semaphore = new Semaphore( this.MaxDegreeOfParallelism, this.MaxDegreeOfParallelism ) ) {
-				System.Collections.Generic.ICollection<System.Threading.Tasks.Task> tasks = new System.Collections.Generic.List<System.Threading.Tasks.Task>();
+				System.Collections.Generic.List<System.Threading.Tasks.Task> tasks = new System.Collections.Generic.List<System.Threading.Tasks.Task>();
 				var factory = new System.Threading.Tasks.TaskFactory( token );
 				foreach ( var step in steps ) {
 					tasks.Add( factory.StartNew(
@@ -130,7 +130,7 @@ namespace Icod.Wod {
 
 		#region static methods
 		private static void DoUnlimitedWork( WorkOrder workOrder, System.Collections.Generic.IEnumerable<IStep> steps, System.Threading.CancellationToken token ) {
-			System.Collections.Generic.ICollection<System.Threading.Tasks.Task> tasks = new System.Collections.Generic.List<System.Threading.Tasks.Task>();
+			System.Collections.Generic.List<System.Threading.Tasks.Task> tasks = new System.Collections.Generic.List<System.Threading.Tasks.Task>();
 			var factory = new System.Threading.Tasks.TaskFactory( token );
 			foreach ( var step in steps ) {
 				tasks.Add( factory.StartNew(

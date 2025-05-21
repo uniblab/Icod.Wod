@@ -27,7 +27,7 @@ namespace Icod.Wod.File {
 
 			var handler = this.GetFileHandler( workOrder );
 			System.String file;
-			System.IO.Stream buffer;
+			System.IO.MemoryStream buffer;
 			System.String eDir;
 			foreach ( var zipFile in handler.ListFiles().Where(
 				x => x.FileType.Equals( FileType.File )

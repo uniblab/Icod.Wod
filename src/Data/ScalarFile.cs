@@ -62,7 +62,7 @@ namespace Icod.Wod.Data {
 					AllowDBNull = true,
 					DataType = typeof( System.String )
 				} );
-				if ( this.Columns.Any() ) {
+				if ( 0 < this.Columns.Length ) {
 					table.Columns[ 0 ].ColumnName = this.Columns.FirstOrDefault().Name;
 				}
 				var record = file.ReadLine( this.RecordSeparator );

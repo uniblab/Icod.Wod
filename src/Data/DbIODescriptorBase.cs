@@ -299,22 +299,22 @@ namespace Icod.Wod.Data {
 		private void ExecuteCommand( System.Data.Common.DbCommand command, System.Data.DataTable source ) {
 			source = source ?? throw new System.ArgumentNullException( nameof( source ) );
 			command = command ?? throw new System.ArgumentNullException( nameof( command ) );
-			this.ExecuteCommand( command, source, this.BuildSourceToParameter( source ) );
+			ExecuteCommand( command, source, this.BuildSourceToParameter( source ) );
 		}
 
 		protected System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<System.Data.DataColumn, DbParameter>> BuildSourceToParameter( System.Data.DataTable source ) {
 			source = source ?? throw new System.ArgumentNullException( nameof( source ) );
-			var parameters = this.Parameters ?? new DbParameter[ 0 ];
-			if ( !parameters.Any() ) {
+			var parameters = this.Parameters ?? System.Array.Empty<DbParameter>();
+			if ( 0 == parameters.Length ) {
 				return null;
 			}
-			var sourceColumns = source.Columns.OfType<System.Data.DataColumn>();
-			if ( !sourceColumns.Any() ) {
+			var sourceColumns = source.Columns.OfType<System.Data.DataColumn>().ToArray();
+			if ( 0 == sourceColumns.Length ) {
 				throw new System.InvalidOperationException();
 			}
-			var columnMaps = this.ColumnMapping ?? new ColumnMap[ 0 ];
+			var columnMaps = this.ColumnMapping ?? System.Array.Empty<ColumnMap>();
 
-			var sourceToColMap = new System.Collections.Generic.Dictionary<System.Data.DataColumn, ColumnMap>( System.Math.Max( sourceColumns.Count(), columnMaps.Count() ) );
+			var sourceToColMap = new System.Collections.Generic.Dictionary<System.Data.DataColumn, ColumnMap>( System.Math.Max( sourceColumns.Length, columnMaps.Length ) );
 			foreach ( var pair in sourceColumns.Join(
 				columnMaps.Where(
 					x => !x.Skip
@@ -365,7 +365,11 @@ namespace Icod.Wod.Data {
 				)
 			);
 		}
-		protected void ExecuteCommand( System.Data.Common.DbCommand command, System.Data.DataTable source, System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<System.Data.DataColumn, DbParameter>> columnParameterMap ) {
+		#endregion methods
+
+
+		#region static methods
+		protected static void ExecuteCommand( System.Data.Common.DbCommand command, System.Data.DataTable source, System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<System.Data.DataColumn, DbParameter>> columnParameterMap ) {
 			columnParameterMap = columnParameterMap ?? throw new System.ArgumentNullException( nameof( columnParameterMap ) );
 			source = source ?? throw new System.ArgumentNullException( nameof( source ) );
 			command = command ?? throw new System.ArgumentNullException( nameof( command ) );
@@ -377,7 +381,7 @@ namespace Icod.Wod.Data {
 				_ = command.ExecuteNonQuery();
 			}
 		}
-		#endregion methods
+		#endregion
 
 	}
 

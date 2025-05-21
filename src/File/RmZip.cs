@@ -22,7 +22,7 @@ namespace Icod.Wod.File {
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
 			var handler = this.GetFileHandler( workOrder );
 			System.String file;
-			System.IO.Stream buffer;
+			System.IO.MemoryStream buffer;
 			System.Collections.Generic.IEnumerable<System.IO.Compression.ZipArchiveEntry> entries;
 			var deleteIfEmpty = !this.WriteIfEmpty;
 			var isEmpty = true;
@@ -41,7 +41,7 @@ namespace Icod.Wod.File {
 					foreach ( var e in entries ) {
 						e.Delete();
 					}
-					isEmpty = !zipArchive.Entries.Any();
+					isEmpty = ( 0 == zipArchive.Entries.Count );
 				}
 				if ( isEmpty && deleteIfEmpty ) {
 					handler.DeleteFile( file );

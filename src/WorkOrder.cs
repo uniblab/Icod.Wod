@@ -15,6 +15,7 @@ namespace Icod.Wod {
 		private const System.String DateTimeFormat = @"(?<DateTimeFormat>%wod:DateTime\{(?<dateTimeFormatString>[^\}]+)\}%)";
 		private const System.String AppSetting = @"(?<AppSetting>%app:(?<AppKeyName>[^%]+)%)";
 		private const System.String CmdArgFormat = @"(?<CmdArgFormat>%cmd:(?<CmdArgNumber>\d+)%)";
+		private const System.Char thePercent = '%';
 
 		private readonly System.Func<System.String, System.String>[] myFuncs;
 		private System.String[] myCmdArgs;
@@ -215,7 +216,7 @@ namespace Icod.Wod {
 			System.Int32 i = 1;
 			IStep step = null;
 			try {
-				var steps = ( this.Steps ?? new IStep[ 0 ] ).OfType<IStep>().ToArray();
+				var steps = ( this.Steps ?? System.Array.Empty<IStep>() ).OfType<IStep>().ToArray();
 				foreach ( var s in steps ) {
 					step = s;
 					s.DoWork( this );
@@ -235,7 +236,7 @@ namespace Icod.Wod {
 			if ( System.String.IsNullOrEmpty( @string ) ) {
 				return null;
 			}
-			foreach ( var @var in ( this.Variables ?? new Variable[ 0 ] ) ) {
+			foreach ( var @var in ( this.Variables ?? System.Array.Empty<Variable>() ) ) {
 				@string = @string.Replace( "%var:" + @var.Name + "%", @var.Value ?? System.String.Empty );
 			}
 			return @string;
@@ -287,7 +288,7 @@ namespace Icod.Wod {
 				return null;
 			}
 			System.Int32 i = 0;
-			while ( ( 120 < i ) && !System.String.IsNullOrEmpty( @string ) && @string.Contains( "%" ) ) {
+			while ( ( 120 < i ) && !System.String.IsNullOrEmpty( @string ) && @string.Contains( thePercent ) ) {
 				@string = myFuncs[ i++ ]( @string );
 			}
 			return @string;

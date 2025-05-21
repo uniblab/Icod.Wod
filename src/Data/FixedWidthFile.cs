@@ -41,12 +41,9 @@ namespace Icod.Wod.Data {
 			}
 			set {
 				base.ConvertEmptyStringToNull = value;
-				System.String w( System.String a, System.Int32 b, System.Int32 c ) {
-					return a.Substring( b, c );
-				}
 				var q = ( this.TrimValues )
-					? ( a, b, c ) => w( a, b, c ).TrimToNull()
-					: (System.Func<System.String, System.Int32, System.Int32, System.String>)w
+					? ( a, b, c ) => SubStr( a, b, c ).TrimToNull()
+					: (System.Func<System.String, System.Int32, System.Int32, System.String>)SubStr
 				;
 				this.ColumnReader = ( value )
 					? q
@@ -54,6 +51,7 @@ namespace Icod.Wod.Data {
 				;
 			}
 		}
+
 
 		[System.Xml.Serialization.XmlAttribute(
 			"trimValues",
@@ -66,13 +64,10 @@ namespace Icod.Wod.Data {
 			}
 			set {
 				base.TrimValues = value;
-				System.String w( System.String a, System.Int32 b, System.Int32 c ) {
-					return a.Substring( b, c );
-				}
 
 				var q = ( value )
-					? ( a, b, c ) => w( a, b, c ).TrimToNull()
-					: (System.Func<System.String, System.Int32, System.Int32, System.String>)w
+					? ( a, b, c ) => SubStr( a, b, c ).TrimToNull()
+					: (System.Func<System.String, System.Int32, System.Int32, System.String>)SubStr
 				;
 				this.ColumnReader = ( this.ConvertEmptyStringToNull )
 					? q
@@ -96,7 +91,7 @@ namespace Icod.Wod.Data {
 		#region methods
 		protected sealed override System.Collections.Generic.IEnumerable<System.Data.DataColumn> BuildColumns( System.IO.StreamReader file ) {
 			file = file ?? throw new System.ArgumentNullException( nameof( file ) );
-			if ( !( this.Columns ?? System.Array.Empty<ColumnBase>() ).Any() ) {
+			if ( 0 == ( this.Columns ?? System.Array.Empty<ColumnBase>() ).Length ) {
 				throw new System.InvalidOperationException();
 			} else if ( this.Columns.Any(
 				x => ( x.Length < -1 )
@@ -168,6 +163,12 @@ namespace Icod.Wod.Data {
 		}
 		#endregion  methods
 
+
+		#region static methods
+		private static System.String SubStr( System.String a, System.Int32 b, System.Int32 c ) {
+			return a.Substring( b, c );
+		}
+		#endregion static methods
 	}
 
 }

@@ -1,4 +1,5 @@
 // Copyright (C) 2025  Timothy J. Bruce
+using Icod.Wod.Data;
 using System.Linq;
 
 namespace Icod.Wod.SalesForce.Bulk {
@@ -97,7 +98,10 @@ namespace Icod.Wod.SalesForce.Bulk {
 			return System.String.Format( "/services/data/v{0:F1}/jobs/ingest", this.ApiVersion );
 		}
 		public override void PerformWork( Pair<LoginResponse, IStep> jobProcess ) {
-			var step = jobProcess.Second ?? throw new System.ArgumentException( nameof( jobProcess ) );
+			var step = jobProcess.Second ?? throw new System.ArgumentException(
+				System.String.Format( "{0} parameter must specify a valid, non-null step.", nameof( jobProcess ) ),
+				nameof( jobProcess )
+			);
 			var workOrder = step.WorkOrder;
 			var loginResponse = jobProcess.First;
 
@@ -264,9 +268,12 @@ namespace Icod.Wod.SalesForce.Bulk {
 			dataTable = dataTable ?? throw new System.ArgumentNullException( nameof( dataTable ) );
 			var dbColumns = dataTable.Columns.OfType<System.Data.DataColumn>();
 			if ( ( dbColumns is null ) || !dbColumns.Any() ) {
-				throw new System.ArgumentNullException( nameof( dbColumns ) );
+				throw new System.ArgumentException(
+					System.String.Format( "{0} parameter must contain at least one column.", nameof( dataTable ) ), 
+					nameof( dataTable )
+				);
 			}
-			var mapping = ( this.ColumnMapping ?? new Data.ColumnMap[ 0 ] );
+			var mapping = ( this.ColumnMapping ?? System.Array.Empty<Data.ColumnMap>() );
 			foreach ( var skip in mapping.Where(
 				x => x.Skip
 			).Join(
@@ -290,12 +297,19 @@ namespace Icod.Wod.SalesForce.Bulk {
 				writer.Write( System.String.Join( columnDelimiter.ToString(), list ) );
 				writer.Write( lineEnding );
 				foreach ( var row in dataTable.Rows.OfType<System.Data.DataRow>() ) {
-					writer.Write( this.GetRow( dbColumns, row, columnDelimiter, quoteChar ) + lineEnding );
+					writer.Write( GetRow( dbColumns, row, columnDelimiter, quoteChar ) + lineEnding );
 				}
 				return writer.ToString();
 			}
 		}
-		protected System.String GetRow( System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Data.DataRow row, System.Char columnDelimiter, System.Char quoteChar ) {
+		#endregion methods
+
+
+		#region static methods
+		private static System.Int32 GetSize( System.String x ) {
+			return System.Text.Encoding.UTF8.GetByteCount( x );
+		}
+		protected static System.String GetRow( System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Data.DataRow row, System.Char columnDelimiter, System.Char quoteChar ) {
 			row = row ?? throw new System.ArgumentNullException( nameof( row ) );
 			if ( ( columns is null ) || !columns.Any() ) {
 				throw new System.ArgumentNullException( nameof( columns ) );
@@ -313,7 +327,10 @@ namespace Icod.Wod.SalesForce.Bulk {
 		}
 		protected static System.Collections.Generic.IEnumerable<System.String> BreakFile( System.String file, System.Int32 recordCount ) {
 			if ( recordCount <= 0 ) {
-				throw new System.ArgumentOutOfRangeException( "recordCount", "recordCount parameter must be positive." );
+				throw new System.ArgumentOutOfRangeException(
+					nameof( recordCount ),
+					System.String.Format( "{0} parameter must be positive.", nameof( recordCount ) )
+				);
 			} else if ( System.String.IsNullOrEmpty( file ) ) {
 				throw new System.ArgumentNullException( nameof( file ) );
 			}
@@ -343,7 +360,10 @@ namespace Icod.Wod.SalesForce.Bulk {
 			if ( System.String.IsNullOrEmpty( file ) ) {
 				throw new System.ArgumentNullException( nameof( file ) );
 			} else if ( maxSize <= MinimumMaxFileSize ) {
-				throw new System.ArgumentOutOfRangeException( "maxSize", System.String.Format( "maxSize parameter must be equal to or greater than the MinimumMaxFileSize, {0}.", MinimumMaxFileSize ) );
+				throw new System.ArgumentOutOfRangeException(
+					nameof( maxSize ),
+					System.String.Format( "{0} parameter must be equal to or greater than the MinimumMaxFileSize, {1}.", nameof( maxSize ), MinimumMaxFileSize )
+				);
 			}
 
 			var maxCharSize = file.Length << 2;
@@ -356,7 +376,6 @@ namespace Icod.Wod.SalesForce.Bulk {
 				yield return file;
 				yield break;
 			}
-			System.Int32 getSize( System.String x ) => System.Text.Encoding.UTF8.GetByteCount( x );
 			var le = LineEndingOption.CRLF.Value;
 			using ( var reader = new System.IO.StringReader( file ) ) {
 				var output = new System.Text.StringBuilder();
@@ -367,7 +386,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 				System.String line;
 				while ( EOF != reader.Peek() ) {
 					line = reader.ReadLine( le, '"' ) + le;
-					probeSize = getSize( line );
+					probeSize = GetSize( line );
 					if ( ( runningSize + probeSize ) < maxSize ) {
 						output = output.Append( line );
 						runningSize += probeSize;
@@ -382,7 +401,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 				yield return output.ToString();
 			}
 		}
-		#endregion methods
+		#endregion static methods
 
 	}
 

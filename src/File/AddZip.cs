@@ -33,7 +33,7 @@ namespace Icod.Wod.File {
 			System.String fileName;
 			System.IO.Compression.ZipArchiveEntry entry;
 			var writeIfEmpty = this.WriteIfEmpty;
-			using ( System.IO.Stream buffer = new System.IO.MemoryStream() ) {
+			using ( System.IO.MemoryStream buffer = new System.IO.MemoryStream() ) {
 				using ( var reader = handler.OpenReader( handler.PathCombine( this.ExpandedPath, this.ExpandedName ) ) ) {
 					reader.CopyTo( buffer );
 				}

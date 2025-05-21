@@ -9,7 +9,30 @@ namespace Icod.Wod.File {
 	)]
 	public sealed class DeflateFile : BinaryCompressedFileOperationBase {
 
+		#region fields
+		private static readonly System.Collections.Generic.Dictionary<
+			System.IO.Compression.CompressionMode,
+			System.Action<Icod.Wod.File.FileHandlerBase, System.String, Icod.Wod.File.FileHandlerBase>
+		> theAction;
+		#endregion fields
+
+
 		#region .ctor
+		static DeflateFile() {
+			theAction = new System.Collections.Generic.Dictionary<
+				System.IO.Compression.CompressionMode,
+				System.Action<Icod.Wod.File.FileHandlerBase, System.String, Icod.Wod.File.FileHandlerBase>
+			>( 2 );
+			theAction.Add(
+				System.IO.Compression.CompressionMode.Compress, 
+				Compress
+			);
+			theAction.Add(
+				System.IO.Compression.CompressionMode.Decompress,
+				Decompress
+			);
+		}
+
 		public DeflateFile() : base() {
 		}
 		#endregion .ctor
@@ -20,15 +43,14 @@ namespace Icod.Wod.File {
 			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
 			this.Destination.WorkOrder = workOrder;
 			System.Action<Icod.Wod.File.FileHandlerBase, System.String, Icod.Wod.File.FileHandlerBase> action;
-			switch ( this.CompressionMode ) {
-				case System.IO.Compression.CompressionMode.Decompress:
-					action = this.Decompress;
-					break;
-				case System.IO.Compression.CompressionMode.Compress:
-					action = this.Compress;
-					break;
-				default:
-					throw new System.InvalidOperationException();
+			var cm = this.CompressionMode;
+			try {
+				action = theAction[ cm ];
+			} catch ( System.Exception e ) {
+				throw new System.InvalidOperationException( 
+					System.String.Format( "The specified compressionMode, {0}, is not supported.", cm ), 
+					e 
+				);
 			}
 
 			var dest = this.Destination.GetFileHandler( workOrder );
@@ -45,7 +67,13 @@ namespace Icod.Wod.File {
 				}
 			}
 		}
-		private void Decompress( Icod.Wod.File.FileHandlerBase source, System.String sourceFilePathName, Icod.Wod.File.FileHandlerBase dest ) {
+		#endregion methods
+
+
+		#region static methods
+		private static void Decompress( 
+			Icod.Wod.File.FileHandlerBase source, System.String sourceFilePathName, Icod.Wod.File.FileHandlerBase dest 
+		) {
 #if DEBUG
 			dest = dest ?? throw new System.ArgumentNullException( nameof( dest ) );
 			source = source ?? throw new System.ArgumentNullException( nameof( source ) );
@@ -60,13 +88,15 @@ namespace Icod.Wod.File {
 						worker.CopyTo( buffer );
 						buffer.Flush();
 						buffer.Seek( 0, System.IO.SeekOrigin.Begin );
-						var fn = this.GetDestinatonFileName( sourceFilePathName );
+						var fn = GetDestinatonFileName( sourceFilePathName, System.IO.Compression.CompressionMode.Decompress );
 						dest.Overwrite( buffer, dest.PathCombine( dfd.ExpandedPath, fn ) );
 					}
 				}
 			}
 		}
-		private void Compress( Icod.Wod.File.FileHandlerBase source, System.String sourceFilePathName, Icod.Wod.File.FileHandlerBase dest ) {
+		private static void Compress( 
+			Icod.Wod.File.FileHandlerBase source, System.String sourceFilePathName, Icod.Wod.File.FileHandlerBase dest 
+		) {
 #if DEBUG
 			dest = dest ?? throw new System.ArgumentNullException( nameof( dest ) );
 			source = source ?? throw new System.ArgumentNullException( nameof( source ) );
@@ -81,20 +111,20 @@ namespace Icod.Wod.File {
 						reader.CopyTo( worker );
 						worker.Flush();
 						buffer.Seek( 0, System.IO.SeekOrigin.Begin );
-						var fn = this.GetDestinatonFileName( sourceFilePathName );
+						var fn = GetDestinatonFileName( sourceFilePathName, System.IO.Compression.CompressionMode.Compress );
 						dest.Overwrite( buffer, dest.PathCombine( dfd.ExpandedPath, fn ) );
 					}
 				}
 			}
 		}
-		private System.String GetDestinatonFileName( System.String source ) {
+		private static System.String GetDestinatonFileName( System.String source, System.IO.Compression.CompressionMode compressionMode ) {
 #if DEBUG
 			if ( System.String.IsNullOrEmpty( source ) ) {
 				throw new System.ArgumentNullException( nameof( source ) );
 			}
 #endif
 			System.String fn;
-			switch ( this.CompressionMode ) {
+			switch ( compressionMode ) {
 				case System.IO.Compression.CompressionMode.Decompress:
 					fn = System.IO.Path.GetFileNameWithoutExtension( source );
 					break;
@@ -106,7 +136,7 @@ namespace Icod.Wod.File {
 			}
 			return fn;
 		}
-		#endregion methods
+		#endregion static methods
 
 	}
 

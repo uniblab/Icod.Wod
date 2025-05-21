@@ -36,9 +36,13 @@ namespace Icod.Wod.SalesForce {
 		public LoginResponse GetLoginResponse( System.String clientId ) {
 			clientId = clientId ?? throw new System.ArgumentNullException( nameof( clientId ) );
 			var credential = Credential.GetCredential( clientId, this.WorkOrder );
-			return this.GetLoginResponse( credential, System.Text.Encoding.UTF8 );
+			return GetLoginResponse( credential, System.Text.Encoding.UTF8 );
 		}
-		public LoginResponse GetLoginResponse( SalesForce.ICredential credential, System.Text.Encoding encoding ) {
+		#endregion methods
+
+
+		#region static methods
+		public static LoginResponse GetLoginResponse( SalesForce.ICredential credential, System.Text.Encoding encoding ) {
 			credential = credential ?? throw new System.ArgumentNullException( nameof( credential ) );
 			if (
 				( LoginMode.RefreshToken == credential.LoginMode )
@@ -55,9 +59,9 @@ namespace Icod.Wod.SalesForce {
 				throw new System.InvalidOperationException( "The specified credential is attempting Password authentication but does not have a username or password configured." );
 			}
 
-			return this.BuildLogin( credential, encoding );
+			return BuildLogin( credential, encoding );
 		}
-		private LoginResponse BuildLogin( SalesForce.ICredential credential, System.Text.Encoding encoding ) {
+		private static LoginResponse BuildLogin( SalesForce.ICredential credential, System.Text.Encoding encoding ) {
 			credential = credential ?? throw new System.ArgumentNullException( nameof( credential ) );
 
 			var headers = new System.Collections.Generic.Dictionary<System.String, System.String>();
@@ -68,9 +72,9 @@ namespace Icod.Wod.SalesForce {
 			headers.Add( "Accept-Encoding", "gzip, deflate, identity" );
 #endif
 			var body = BuildBody( credential );
-			return this.BuildLogin( credential.SiteUrl, headers, body );
+			return BuildLogin( credential.SiteUrl, headers, body );
 		}
-		private LoginResponse BuildLogin( System.Uri siteUrl, System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<System.String, System.String>> headers, System.String body ) {
+		private static LoginResponse BuildLogin( System.Uri siteUrl, System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<System.String, System.String>> headers, System.String body ) {
 			System.Net.ServicePointManager.SecurityProtocol = TlsHelper.GetSecurityProtocol();
 
 			using ( var client = new System.Net.WebClient {
@@ -90,10 +94,6 @@ namespace Icod.Wod.SalesForce {
 				return new LoginResponse( respObj );
 			}
 		}
-		#endregion methods
-
-
-		#region static methods
 		private static System.String BuildBody( SalesForce.ICredential credential ) {
 			credential = credential ?? throw new System.ArgumentNullException( nameof( credential ) );
 

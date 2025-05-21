@@ -65,7 +65,7 @@ namespace Icod.Wod.File {
 				destination.Overwrite( buffer, destination.FileDescriptor.GetFilePathName( destination, filePathName ) );
 			}
 		}
-		private static System.IO.Stream DoWork( System.Xml.XmlReader source, System.Xml.Xsl.XslCompiledTransform xslTransform ) {
+		private static System.IO.MemoryStream DoWork( System.Xml.XmlReader source, System.Xml.Xsl.XslCompiledTransform xslTransform ) {
 			var output = new System.IO.MemoryStream();
 			using ( var writer = System.Xml.XmlWriter.Create( output ) ) {
 				xslTransform.Transform( source, writer );

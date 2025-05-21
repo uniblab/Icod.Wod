@@ -70,7 +70,7 @@ namespace Icod.Wod.File {
 			} else {
 				fileAct = theCopyFile;
 			}
-			using ( System.IO.Stream buffer = new System.IO.MemoryStream() ) {
+			using ( System.IO.MemoryStream buffer = new System.IO.MemoryStream() ) {
 				using ( var zipArchive = this.GetZipArchive( buffer, System.IO.Compression.ZipArchiveMode.Create ) ) {
 					foreach ( var sourceD in sources ?? System.Array.Empty<FileDescriptor>() ) {
 						sep = sourceD.ExpandedPath;

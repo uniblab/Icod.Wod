@@ -69,7 +69,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 		public System.Data.DataTable ReadFile() {
 			using ( var reader = new System.IO.StringReader( this.Body ) ) {
-				var output = this.ReadFile( reader, this.ColumnDelimiter, this.LineEnding );
+				var output = ReadFile( reader, this.ColumnDelimiter, this.LineEnding );
 				if ( ( this.AdditionalColumns ?? System.Array.Empty<System.Data.DataColumn>() ).Any() ) {
 					foreach ( var column in this.AdditionalColumns ) {
 						output.Columns.Add( column );
@@ -80,16 +80,20 @@ namespace Icod.Wod.SalesForce.Bulk {
 		}
 		public System.Data.DataTable ReadFile( System.Char columDelimiter, System.String lineEnding ) {
 			using ( var reader = new System.IO.StringReader( this.Body ) ) {
-				return this.ReadFile( reader, columDelimiter, lineEnding );
+				return ReadFile( reader, columDelimiter, lineEnding );
 			}
 		}
-		private System.Data.DataTable ReadFile( System.IO.StringReader file, System.Char columDelimiter, System.String lineEnding ) {
+		#endregion methods
+
+
+		#region static methods
+		private static System.Data.DataTable ReadFile( System.IO.StringReader file, System.Char columDelimiter, System.String lineEnding ) {
 			file = file ?? throw new System.ArgumentNullException( nameof( file ) );
 
 			var lineNumber = 0;
 			var table = new System.Data.DataTable();
 			try {
-				this.BuildTable( file, table, columDelimiter, lineEnding );
+				BuildTable( file, table, columDelimiter, lineEnding );
 				foreach ( var record in ReadRecord( file, lineEnding ) ) {
 					lineNumber++;
 					var rowList = ReadColumns( record, columDelimiter, DQUOTE );
@@ -105,7 +109,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 			}
 			return table;
 		}
-		private void BuildTable( System.IO.StringReader file, System.Data.DataTable table, System.Char columDelimiter, System.String lineEnding ) {
+		private static void BuildTable( System.IO.StringReader file, System.Data.DataTable table, System.Char columDelimiter, System.String lineEnding ) {
 #if DEBUG
 			table = table ?? throw new System.ArgumentNullException( nameof( table ) );
 			file = file ?? throw new System.ArgumentNullException( nameof( file ) );
@@ -116,10 +120,6 @@ namespace Icod.Wod.SalesForce.Bulk {
 				table.Columns.Add( new System.Data.DataColumn( column, typeof( System.String ) ) );
 			}
 		}
-		#endregion methods
-
-
-		#region static methods
 		private static System.Collections.Generic.IEnumerable<System.String> ReadColumns( System.String line, System.Char fieldSeparator, System.Char quoteCharacter ) {
 			if ( System.String.IsNullOrEmpty( line ) ) {
 				throw new System.ArgumentNullException( line );

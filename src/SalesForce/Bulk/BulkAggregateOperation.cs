@@ -94,7 +94,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 			using ( var tokenSource = new System.Threading.CancellationTokenSource() ) {
 				var token = tokenSource.Token;
-				System.Collections.Generic.ICollection<System.Threading.Tasks.Task> tasks = new System.Collections.Generic.List<System.Threading.Tasks.Task>();
+				System.Collections.Generic.List<System.Threading.Tasks.Task> tasks = new System.Collections.Generic.List<System.Threading.Tasks.Task>();
 				var factory = new System.Threading.Tasks.TaskFactory(
 					token,
 					System.Threading.Tasks.TaskCreationOptions.LongRunning,
