@@ -17,7 +17,7 @@ namespace Icod.Wod.File {
 		private void SetClient( System.Net.HttpWebRequest client, System.String method ) {
 #if DEBUG
 			if ( client is null ) {
-				throw new System.ArgumentNullException( "client" );
+				throw new System.ArgumentNullException( nameof( client ) );
 			}
 #endif
 			var fd = this.FileDescriptor;

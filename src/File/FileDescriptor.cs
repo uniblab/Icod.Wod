@@ -216,7 +216,7 @@ namespace Icod.Wod.File {
 		}
 		public virtual System.String GetFilePathName( FileHandlerBase handler, System.String alternateName ) {
 			if ( handler is null ) {
-				throw new System.ArgumentNullException( "handler" );
+				throw new System.ArgumentNullException( nameof( handler ) );
 			}
 			return handler.PathCombine( this.ExpandedPath, this.GetFileName( alternateName ) );
 		}

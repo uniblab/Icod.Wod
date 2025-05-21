@@ -17,7 +17,7 @@ namespace Icod.Wod.File {
 
 		#region methods
 		public sealed override void DoWork( Icod.Wod.WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
+			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
 			this.Destination.WorkOrder = workOrder;
 			System.Action<Icod.Wod.File.FileHandlerBase, System.String, Icod.Wod.File.FileHandlerBase> action;
 			switch ( this.CompressionMode ) {
@@ -48,13 +48,13 @@ namespace Icod.Wod.File {
 		private void Decompress( Icod.Wod.File.FileHandlerBase source, System.String sourceFilePathName, Icod.Wod.File.FileHandlerBase dest ) {
 #if DEBUG
 			if ( dest is null ) {
-				throw new System.ArgumentNullException( "dest" );
+				throw new System.ArgumentNullException( nameof( dest ) );
 			} else if ( source is null ) {
-				throw new System.ArgumentNullException( "source" );
+				throw new System.ArgumentNullException( nameof( source ) );
 			}
 #endif
 			if (System.String.IsNullOrEmpty(sourceFilePathName ) ) {
-				throw new System.ArgumentNullException( "sourceFilePathName" );
+				throw new System.ArgumentNullException( nameof( sourceFilePathName ) );
 			}
 			var dfd = dest.FileDescriptor;
 			using ( var reader = source.OpenReader( sourceFilePathName ) ) {
@@ -72,13 +72,13 @@ namespace Icod.Wod.File {
 		private void Compress( Icod.Wod.File.FileHandlerBase source, System.String sourceFilePathName, Icod.Wod.File.FileHandlerBase dest ) {
 #if DEBUG
 			if ( dest is null ) {
-				throw new System.ArgumentNullException( "dest" );
+				throw new System.ArgumentNullException( nameof( dest ) );
 			} else if ( source is null ) {
-				throw new System.ArgumentNullException( "source" );
+				throw new System.ArgumentNullException( nameof( source ) );
 			}
 #endif
 			if ( System.String.IsNullOrEmpty( sourceFilePathName ) ) {
-				throw new System.ArgumentNullException( "sourceFilePathName" );
+				throw new System.ArgumentNullException( nameof( sourceFilePathName ) );
 			}
 			var dfd = dest.FileDescriptor;
 			using ( var buffer = new System.IO.MemoryStream() ) {
@@ -96,7 +96,7 @@ namespace Icod.Wod.File {
 		private System.String GetDestinatonFileName( System.String source ) {
 #if DEBUG
 			if ( System.String.IsNullOrEmpty( source ) ) {
-				throw new System.ArgumentNullException( "source" );
+				throw new System.ArgumentNullException( nameof( source ) );
 			}
 #endif
 			System.String fn;

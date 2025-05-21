@@ -82,7 +82,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 		#region methods
 		public void DoWork( WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
+			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
 			var operations = ( this.Operations ?? new System.Object[ 0 ] ).OfType<IAggregateOperation>();
 			if ( !operations.Any() ) {
 				return;

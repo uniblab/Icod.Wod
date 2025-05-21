@@ -34,14 +34,14 @@ namespace Icod.Wod.SalesForce {
 		#region methods
 		public LoginResponse GetLoginResponse( System.String clientId ) {
 			if ( System.String.IsNullOrEmpty( clientId ) ) {
-				throw new System.ArgumentNullException( "clientId" );
+				throw new System.ArgumentNullException( nameof( clientId ) );
 			}
 			var credential = Credential.GetCredential( clientId, this.WorkOrder );
 			return this.GetLoginResponse( credential, System.Text.Encoding.UTF8 );
 		}
 		public LoginResponse GetLoginResponse( SalesForce.ICredential credential, System.Text.Encoding encoding ) {
 			if ( credential is null ) {
-				throw new System.ArgumentNullException( "credential" );
+				throw new System.ArgumentNullException( nameof( credential ) );
 			} else if (
 				( LoginMode.RefreshToken == credential.LoginMode )
 				&& ( System.String.IsNullOrEmpty( credential.RefreshToken ) || System.String.IsNullOrEmpty( credential.CallbackUrl ) )
@@ -61,7 +61,7 @@ namespace Icod.Wod.SalesForce {
 		}
 		private LoginResponse BuildLogin( SalesForce.ICredential credential, System.Text.Encoding encoding ) {
 			if ( credential is null ) {
-				throw new System.ArgumentNullException( "credential" );
+				throw new System.ArgumentNullException( nameof( credential ) );
 			}
 
 			var headers = new System.Collections.Generic.Dictionary<System.String, System.String>();
@@ -76,7 +76,7 @@ namespace Icod.Wod.SalesForce {
 		}
 		private System.String BuildBody( SalesForce.ICredential credential ) {
 			if ( credential is null ) {
-				throw new System.ArgumentNullException( "credential" );
+				throw new System.ArgumentNullException( nameof( credential ) );
 			}
 
 			var clientId = credential.ClientId;

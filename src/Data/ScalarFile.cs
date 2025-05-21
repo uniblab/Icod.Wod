@@ -21,13 +21,13 @@ namespace Icod.Wod.Data {
 		protected sealed override void WriteRecords( Icod.Wod.WorkOrder workOrder, System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Collections.Generic.IEnumerable<System.Data.DataRow> rows ) {
 #if DEBUG
 			if ( workOrder is null ) {
-				throw new System.ArgumentNullException( "workOrder" );
+				throw new System.ArgumentNullException( nameof( workOrder ) );
 			}
 #endif
 			var cols = ( columns ?? new System.Data.DataColumn[ 0 ] );
 			if ( this.WriteIfEmpty ) {
 				if ( !cols.Any() ) {
-					throw new System.ArgumentNullException( "columns" );
+					throw new System.ArgumentNullException( nameof( columns ) );
 				}
 			} else if (
 				( !( rows ?? new System.Data.DataRow[ 0 ] ).Any() )
@@ -53,9 +53,9 @@ namespace Icod.Wod.Data {
 
 		protected sealed override System.Data.DataTable ReadFile( System.String filePathName, System.IO.StreamReader file ) {
 			if ( file is null ) {
-				throw new System.ArgumentNullException( "file" );
+				throw new System.ArgumentNullException( nameof( file ) );
 			} else if ( System.String.IsNullOrEmpty( filePathName ) ) {
-				throw new System.ArgumentNullException( "filePathName" );
+				throw new System.ArgumentNullException( nameof( filePathName ) );
 			}
 
 			var table = new System.Data.DataTable();

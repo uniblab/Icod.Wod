@@ -133,7 +133,7 @@ namespace Icod.Wod.Data {
 		}
 		public System.Data.Common.DbParameter ToDbParameter( WorkOrder workOrder, System.Data.Common.DbCommand command ) {
 			if ( command is null ) {
-				throw new System.ArgumentNullException( "command" );
+				throw new System.ArgumentNullException( nameof( command ) );
 			}
 
 			var output = command.CreateParameter();

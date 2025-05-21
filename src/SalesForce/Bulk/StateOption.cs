@@ -37,9 +37,9 @@ namespace Icod.Wod.SalesForce.Bulk {
 		}
 		private StateOption( System.String value, System.String name ) : base() {
 			if ( System.String.IsNullOrEmpty( value ) ) {
-				throw new System.ArgumentNullException( "value" );
+				throw new System.ArgumentNullException( nameof( value ) );
 			} else if ( System.String.IsNullOrEmpty( name ) ) {
-				throw new System.ArgumentNullException( "name" );
+				throw new System.ArgumentNullException( nameof( name ) );
 			}
 			myHashcode = theHashCode;
 			myValue = value;
@@ -133,7 +133,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 		public static StateOption FromName( System.String name ) {
 			name = name.TrimToNull();
 			if ( System.String.IsNullOrEmpty( name ) ) {
-				throw new System.ArgumentNullException( "name" );
+				throw new System.ArgumentNullException( nameof( name ) );
 			}
 			if ( name.Equals( Aborted.Name, System.StringComparison.OrdinalIgnoreCase ) ) {
 				return Aborted;

@@ -19,7 +19,7 @@ namespace Icod.Wod.File {
 		#region methods
 		protected sealed override System.Collections.Generic.IEnumerable<FileEntry> GetEntries( FileHandlerBase source ) {
 			if ( source is null ) {
-				throw new System.ArgumentNullException( "source" );
+				throw new System.ArgumentNullException( nameof( source ) );
 			}
 			return source.ListFiles();
 		}

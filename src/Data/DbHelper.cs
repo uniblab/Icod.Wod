@@ -55,7 +55,7 @@ namespace Icod.Wod.Data {
 		}
 		public static System.Data.Common.DbConnection CreateConnection( this Icod.Wod.ConnectionStringEntry connectionString ) {
 			if ( connectionString is null ) {
-				throw new System.ArgumentNullException( "connectionString" );
+				throw new System.ArgumentNullException( nameof( connectionString ) );
 			}
 			try {
 				var output = System.Data.Common.DbProviderFactories.GetFactory(
@@ -73,7 +73,7 @@ namespace Icod.Wod.Data {
 		}
 		public static System.Data.Common.DbConnection CreateConnection( this System.Configuration.ConnectionStringSettings connectionString ) {
 			if ( connectionString is null ) {
-				throw new System.ArgumentNullException( "connectionString" );
+				throw new System.ArgumentNullException( nameof( connectionString ) );
 			}
 			try {
 				var output = System.Data.Common.DbProviderFactories.GetFactory(
@@ -92,7 +92,7 @@ namespace Icod.Wod.Data {
 
 		public static System.Data.Common.DbCommand CreateCommand( this System.Data.Common.DbConnection connection ) {
 			if ( connection is null ) {
-				throw new System.ArgumentNullException( "connection" );
+				throw new System.ArgumentNullException( nameof( connection ) );
 			}
 			var command = connection.CreateCommand();
 			command.CommandTimeout = connection.ConnectionTimeout;
@@ -102,7 +102,7 @@ namespace Icod.Wod.Data {
 			this System.Data.Common.DbConnection connection, System.Data.Common.DbTransaction transaction
 		) {
 			if ( connection is null ) {
-				throw new System.ArgumentNullException( "connection" );
+				throw new System.ArgumentNullException( nameof( connection ) );
 			}
 			var command = connection.CreateCommand();
 			command.Transaction = transaction;
@@ -114,7 +114,7 @@ namespace Icod.Wod.Data {
 			System.String commandText, System.Data.CommandType commandType
 		) {
 			if ( connection is null ) {
-				throw new System.ArgumentNullException( "connection" );
+				throw new System.ArgumentNullException( nameof( connection ) );
 			}
 			var command = connection.CreateCommand();
 			command.Transaction = transaction;
@@ -128,7 +128,7 @@ namespace Icod.Wod.Data {
 			System.String commandText, System.Data.CommandType commandType, System.Nullable<System.Int32> commandTimeout
 		) {
 			if ( connection is null ) {
-				throw new System.ArgumentNullException( "connection" );
+				throw new System.ArgumentNullException( nameof( connection ) );
 			}
 			var command = connection.CreateCommand();
 			command.Transaction = transaction;

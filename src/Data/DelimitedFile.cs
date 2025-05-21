@@ -208,7 +208,7 @@ namespace Icod.Wod.Data {
 		#region methods
 		protected sealed override System.Collections.Generic.IEnumerable<System.Data.DataColumn> BuildColumns( System.IO.StreamReader file ) {
 			if ( file is null ) {
-				throw new System.ArgumentNullException( "file" );
+				throw new System.ArgumentNullException( nameof( file ) );
 			}
 			if ( !this.HasHeader ) {
 				if ( !( this.Columns ?? new ColumnBase[ 0 ] ).Any() ) {
@@ -225,9 +225,9 @@ namespace Icod.Wod.Data {
 		}
 		protected sealed override System.Data.DataRow ReadRecord( System.Data.DataTable table, System.IO.StreamReader file ) {
 			if ( file is null ) {
-				throw new System.ArgumentNullException( "file" );
+				throw new System.ArgumentNullException( nameof( file ) );
 			} else if ( table is null ) {
-				throw new System.ArgumentNullException( "table" );
+				throw new System.ArgumentNullException( nameof( table ) );
 			}
 
 			var row = this.ReadRecord( file );
@@ -237,7 +237,7 @@ namespace Icod.Wod.Data {
 		private System.Collections.Generic.IEnumerable<System.String> ReadHeaderLine( System.IO.StreamReader file ) {
 #if DEBUG
 			if ( file is null ) {
-				throw new System.ArgumentNullException( "file" );
+				throw new System.ArgumentNullException( nameof( file ) );
 			}
 #endif
 			var output = this.ReadRecord( file );
@@ -247,7 +247,7 @@ namespace Icod.Wod.Data {
 		protected sealed override System.Collections.Generic.IEnumerable<System.String> ReadRecord( System.IO.StreamReader file ) {
 #if DEBUG
 			if ( file is null ) {
-				throw new System.ArgumentNullException( "file" );
+				throw new System.ArgumentNullException( nameof( file ) );
 			}
 #endif
 			if ( file.EndOfStream ) {
@@ -287,7 +287,7 @@ namespace Icod.Wod.Data {
 		private System.String ReadColumn( System.IO.StringReader reader, System.Char @break, System.Boolean readNextOnBreak ) {
 #if DEBUG
 			if ( reader is null ) {
-				throw new System.ArgumentNullException( "reader" );
+				throw new System.ArgumentNullException( nameof( reader ) );
 			}
 #endif
 			var sb = new System.Text.StringBuilder( 128 );
@@ -307,7 +307,7 @@ namespace Icod.Wod.Data {
 		private System.Nullable<System.Char> ReadChar( System.IO.StringReader reader, System.Char @break, System.Boolean readNextOnBreak ) {
 #if DEBUG
 			if ( reader is null ) {
-				throw new System.ArgumentNullException( "reader" );
+				throw new System.ArgumentNullException( nameof( reader ) );
 			}
 #endif
 
@@ -334,9 +334,9 @@ namespace Icod.Wod.Data {
 
 		protected sealed override void WriteHeader( System.IO.StreamWriter writer, System.Collections.Generic.IEnumerable<System.Data.DataColumn> dbColumns, System.Collections.Generic.IEnumerable<ColumnBase> fileColumns ) {
 			if ( ( dbColumns is null ) || !dbColumns.Any() ) {
-				throw new System.ArgumentNullException( "dbColumns" );
+				throw new System.ArgumentNullException( nameof( dbColumns ) );
 			} else if ( writer is null ) {
-				throw new System.ArgumentNullException( "writer" );
+				throw new System.ArgumentNullException( nameof( writer ) );
 			}
 			var qcs = this.QuoteCharString;
 			var fss = this.FieldSeparatorString;
@@ -352,11 +352,11 @@ namespace Icod.Wod.Data {
 		}
 		protected sealed override System.String GetRow( System.Collections.Generic.IDictionary<System.Data.DataColumn, ColumnBase> formatMap, System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Data.DataRow row ) {
 			if ( row is null ) {
-				throw new System.ArgumentNullException( "row" );
+				throw new System.ArgumentNullException( nameof( row ) );
 			} else if ( ( columns is null ) || !columns.Any() ) {
-				throw new System.ArgumentNullException( "columns" );
+				throw new System.ArgumentNullException( nameof( columns ) );
 			} else if ( ( formatMap is null ) || !formatMap.Any() ) {
-				throw new System.ArgumentNullException( "formatMap" );
+				throw new System.ArgumentNullException( nameof( formatMap ) );
 			}
 
 			var qcs = this.QuoteCharString;

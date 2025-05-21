@@ -54,7 +54,7 @@ namespace Icod.Wod.File {
 
 		#region methods
 		public sealed override void DoWork( WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
+			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
 			this.Destination.WorkOrder = workOrder;
 			var dest = this.Destination.GetFileHandler( workOrder );
 			var source = this.GetFileHandler( workOrder );
@@ -87,9 +87,9 @@ namespace Icod.Wod.File {
 		private void DoWork( LocalFileHandler source, LocalFileHandler dest ) {
 #if DEBUG
 			if ( dest is null ) {
-				throw new System.ArgumentNullException( "dest" );
+				throw new System.ArgumentNullException( nameof( dest ) );
 			} else if ( source is null ) {
-				throw new System.ArgumentNullException( "source" );
+				throw new System.ArgumentNullException( nameof( source ) );
 			}
 #endif
 			var dfd = dest.FileDescriptor;

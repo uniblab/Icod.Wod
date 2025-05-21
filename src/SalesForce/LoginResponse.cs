@@ -19,7 +19,7 @@ namespace Icod.Wod.SalesForce {
 		}
 		public LoginResponse( dynamic response ) : this() {
 			if ( response is null ) {
-				throw new System.ArgumentNullException( "response" );
+				throw new System.ArgumentNullException( nameof( response ) );
 			};
 			this.AccessToken = (System.String)response.access_token;
 			this.InstanceUrl = (System.String)response.instance_url;

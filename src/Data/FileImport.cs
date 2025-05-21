@@ -60,7 +60,7 @@ namespace Icod.Wod.Data {
 
 		#region methods
 		public void DoWork( Icod.Wod.WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
+			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
 			if ( System.String.IsNullOrEmpty( this.CommandText ) ) {
 				this.WriteRecords( workOrder, this.Source );
 			} else {

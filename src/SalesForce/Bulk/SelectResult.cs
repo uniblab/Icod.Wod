@@ -85,7 +85,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 		}
 		private System.Data.DataTable ReadFile( System.IO.StringReader file, System.Char columDelimiter, System.String lineEnding ) {
 			if ( file is null ) {
-				throw new System.ArgumentNullException( "file" );
+				throw new System.ArgumentNullException( nameof( file ) );
 			}
 
 			var lineNumber = 0;
@@ -110,9 +110,9 @@ namespace Icod.Wod.SalesForce.Bulk {
 		private void BuildTable( System.IO.StringReader file, System.Data.DataTable table, System.Char columDelimiter, System.String lineEnding ) {
 #if DEBUG
 			if ( table is null ) {
-				throw new System.ArgumentNullException( "table" );
+				throw new System.ArgumentNullException( nameof( table ) );
 			} else if ( file is null ) {
-				throw new System.ArgumentNullException( "file" );
+				throw new System.ArgumentNullException( nameof( file ) );
 			}
 #endif
 
@@ -124,7 +124,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 		private System.Collections.Generic.IEnumerable<System.String> ReadRecord( System.IO.StringReader file, System.String lineEnding ) {
 #if DEBUG
 			if ( file is null ) {
-				throw new System.ArgumentNullException( "file" );
+				throw new System.ArgumentNullException( nameof( file ) );
 			}
 #endif
 
@@ -170,7 +170,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 		private System.String ReadPlainTextCell( System.IO.StringReader reader, System.Char fieldSeparator ) {
 			if ( reader is null ) {
-				throw new System.ArgumentNullException( "reader" );
+				throw new System.ArgumentNullException( nameof( reader ) );
 			}
 
 			var cell = new System.Text.StringBuilder();
@@ -192,7 +192,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 		}
 		private System.String ReadQuotedTextCell( System.IO.StringReader reader, System.Char fieldSeparator, System.Char quoteCharacter ) {
 			if ( reader is null ) {
-				throw new System.ArgumentNullException( "reader" );
+				throw new System.ArgumentNullException( nameof( reader ) );
 			}
 
 			var cell = new System.Text.StringBuilder();

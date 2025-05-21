@@ -21,7 +21,7 @@ namespace Icod.Wod.Data {
 		protected sealed override void WriteRecords( WorkOrder workOrder, System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Collections.Generic.IEnumerable<System.Data.DataRow> rows ) {
 #if DEBUG
 			if ( workOrder is null ) {
-				throw new System.ArgumentNullException( "workOrder" );
+				throw new System.ArgumentNullException( nameof( workOrder ) );
 			}
 #endif
 			using ( var set = new System.Data.DataSet() ) {
@@ -52,9 +52,9 @@ namespace Icod.Wod.Data {
 		protected sealed override System.Data.DataTable ReadFile( System.String filePathName, System.IO.StreamReader file ) {
 #if DEBUG
 			if ( file is null ) {
-				throw new System.ArgumentNullException( "file" );
+				throw new System.ArgumentNullException( nameof( file ) );
 			} else if ( System.String.IsNullOrEmpty( filePathName ) ) {
-				throw new System.ArgumentNullException( "filePathName" );
+				throw new System.ArgumentNullException( nameof( filePathName ) );
 			}
 #endif
 			System.Data.DataTable table = null;

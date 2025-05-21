@@ -70,9 +70,9 @@ namespace Icod.Wod.File {
 
 		protected System.Int64 Write( System.IO.Stream source, System.IO.Stream dest ) {
 			if ( source is null ) {
-				throw new System.ArgumentNullException( "source" );
+				throw new System.ArgumentNullException( nameof( source ) );
 			} else if ( dest is null ) {
-				throw new System.ArgumentNullException( "dest" );
+				throw new System.ArgumentNullException( nameof( dest ) );
 			}
 			System.Int64 total = 0;
 

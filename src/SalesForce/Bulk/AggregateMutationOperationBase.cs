@@ -262,11 +262,11 @@ namespace Icod.Wod.SalesForce.Bulk {
 		}
 		protected System.String BuildFile( System.Data.DataTable dataTable, System.Char columnDelimiter, System.String lineEnding, System.Char quoteChar ) {
 			if ( dataTable is null ) {
-				throw new System.ArgumentNullException( "dataTable" );
+				throw new System.ArgumentNullException( nameof( dataTable ) );
 			}
 			var dbColumns = dataTable.Columns.OfType<System.Data.DataColumn>();
 			if ( ( dbColumns is null ) || !dbColumns.Any() ) {
-				throw new System.ArgumentNullException( "dbColumns" );
+				throw new System.ArgumentNullException( nameof( dbColumns ) );
 			}
 			var mapping = ( this.ColumnMapping ?? new Data.ColumnMap[ 0 ] );
 			foreach ( var skip in mapping.Where(
@@ -299,9 +299,9 @@ namespace Icod.Wod.SalesForce.Bulk {
 		}
 		protected System.String GetRow( System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Data.DataRow row, System.Char columnDelimiter, System.Char quoteChar ) {
 			if ( row is null ) {
-				throw new System.ArgumentNullException( "row" );
+				throw new System.ArgumentNullException( nameof( row ) );
 			} else if ( ( columns is null ) || !columns.Any() ) {
-				throw new System.ArgumentNullException( "columns" );
+				throw new System.ArgumentNullException( nameof( columns ) );
 			}
 
 			var qcs = quoteChar.ToString();
@@ -318,7 +318,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 			if ( recordCount <= 0 ) {
 				throw new System.ArgumentOutOfRangeException( "recordCount", "recordCount parameter must be positive." );
 			} else if ( System.String.IsNullOrEmpty( file ) ) {
-				throw new System.ArgumentNullException( "file" );
+				throw new System.ArgumentNullException( nameof( file ) );
 			}
 			var le = LineEndingOption.CRLF.Value;
 			using ( var reader = new System.IO.StringReader( file ) ) {
@@ -344,7 +344,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 		}
 		protected static System.Collections.Generic.IEnumerable<System.String> BreakFile( System.Int32 maxSize, System.String file ) {
 			if ( System.String.IsNullOrEmpty( file ) ) {
-				throw new System.ArgumentNullException( "file" );
+				throw new System.ArgumentNullException( nameof( file ) );
 			} else if ( maxSize <= MinimumMaxFileSize ) {
 				throw new System.ArgumentOutOfRangeException( "maxSize", System.String.Format( "maxSize parameter must be equal to or greater than the MinimumMaxFileSize, {0}.", MinimumMaxFileSize ) );
 			}

@@ -14,9 +14,9 @@ namespace Icod.Wod {
 		#region methods
 		public static System.String PathCombine( System.String path, System.Char pathSeparator, System.String name ) {
 			if ( System.String.IsNullOrEmpty( name ) ) {
-				throw new System.ArgumentNullException( "name" );
+				throw new System.ArgumentNullException( nameof( name ) );
 			} else if ( System.String.IsNullOrEmpty( path ) ) {
-				throw new System.ArgumentNullException( "path" );
+				throw new System.ArgumentNullException( nameof( path ) );
 			}
 			var sep = pathSeparator.ToString();
 			while ( path.EndsWith( sep ) ) {
@@ -30,9 +30,9 @@ namespace Icod.Wod {
 
 		public static System.String ReadLine( this System.IO.TextReader file, System.String recordSeparator, System.Char quoteChar ) {
 			if ( System.String.IsNullOrEmpty( recordSeparator ) ) {
-				throw new System.ArgumentNullException( "recordSeparator" );
+				throw new System.ArgumentNullException( nameof( recordSeparator ) );
 			} else if ( file is null ) {
-				throw new System.ArgumentNullException( "file" );
+				throw new System.ArgumentNullException( nameof( file ) );
 			} else if ( ( 1 == recordSeparator.Length ) && recordSeparator.Equals( quoteChar.ToString() ) ) {
 				throw new System.InvalidOperationException( "Quote character and record separator cannot be the same." );
 			} else if ( EOF == file.Peek() ) {
@@ -83,9 +83,9 @@ namespace Icod.Wod {
 		}
 		public static System.String ReadLine( this System.IO.TextReader file, System.String recordSeparator ) {
 			if ( System.String.IsNullOrEmpty( recordSeparator ) ) {
-				throw new System.ArgumentNullException( "recordSeparator" );
+				throw new System.ArgumentNullException( nameof( recordSeparator ) );
 			} else if ( file is null ) {
-				throw new System.ArgumentNullException( "file" );
+				throw new System.ArgumentNullException( nameof( file ) );
 			} else if ( EOF == file.Peek() ) {
 				return null;
 			}
@@ -120,9 +120,9 @@ namespace Icod.Wod {
 		}
 		public static System.String ReadLine( this System.IO.StreamReader file, System.String recordSeparator, System.Char quoteChar ) {
 			if ( System.String.IsNullOrEmpty( recordSeparator ) ) {
-				throw new System.ArgumentNullException( "recordSeparator" );
+				throw new System.ArgumentNullException( nameof( recordSeparator ) );
 			} else if ( file is null ) {
-				throw new System.ArgumentNullException( "file" );
+				throw new System.ArgumentNullException( nameof( file ) );
 			} else if ( ( 1 == recordSeparator.Length ) && recordSeparator.Equals( quoteChar.ToString() ) ) {
 				throw new System.InvalidOperationException( "Quote character and record separator cannot be the same." );
 			} else if ( EOF == file.Peek() ) {
@@ -173,9 +173,9 @@ namespace Icod.Wod {
 		}
 		public static System.String ReadLine( this System.IO.StreamReader file, System.String recordSeparator ) {
 			if ( System.String.IsNullOrEmpty( recordSeparator ) ) {
-				throw new System.ArgumentNullException( "recordSeparator" );
+				throw new System.ArgumentNullException( nameof( recordSeparator ) );
 			} else if ( file is null ) {
-				throw new System.ArgumentNullException( "file" );
+				throw new System.ArgumentNullException( nameof( file ) );
 			} else if ( EOF == file.Peek() ) {
 				return null;
 			}
@@ -212,7 +212,7 @@ namespace Icod.Wod {
 
 		public static System.Collections.Generic.IEnumerable<System.String> ReadRecord( this System.IO.TextReader file, System.String recordSeparator, System.Char quoteChar, System.Char fieldSeparator ) {
 			if ( file is null ) {
-				throw new System.ArgumentNullException( "file" );
+				throw new System.ArgumentNullException( nameof( file ) );
 			} else if ( System.String.IsNullOrEmpty( recordSeparator ) ) {
 				throw new System.InvalidOperationException();
 			}
@@ -245,7 +245,7 @@ namespace Icod.Wod {
 		}
 		public static System.Collections.Generic.IEnumerable<System.String> ReadRecord( this System.IO.StreamReader file, System.String recordSeparator, System.Char quoteChar, System.Char fieldSeparator ) {
 			if ( file is null ) {
-				throw new System.ArgumentNullException( "file" );
+				throw new System.ArgumentNullException( nameof( file ) );
 			} else if ( file.EndOfStream ) {
 				yield break;
 			} else if ( System.String.IsNullOrEmpty( recordSeparator ) ) {
@@ -281,7 +281,7 @@ namespace Icod.Wod {
 		public static System.String ReadColumn( this System.IO.StringReader reader, System.Char @break, System.Boolean readNextOnBreak ) {
 #if DEBUG
 			if ( reader is null ) {
-				throw new System.ArgumentNullException( "reader" );
+				throw new System.ArgumentNullException( nameof( reader ) );
 			}
 #endif
 			var sb = new System.Text.StringBuilder( 128 );
@@ -301,7 +301,7 @@ namespace Icod.Wod {
 		public static System.Nullable<System.Char> ReadChar( this System.IO.StringReader reader, System.Char @break, System.Boolean readNextOnBreak ) {
 #if DEBUG
 			if ( reader is null ) {
-				throw new System.ArgumentNullException( "reader" );
+				throw new System.ArgumentNullException( nameof( reader ) );
 			}
 #endif
 

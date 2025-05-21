@@ -82,13 +82,13 @@ namespace Icod.Wod.SalesForce.Rest {
 
 		#region methods
 		public void DoWork( WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
+			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
 			var dest = this.Destination ?? throw new System.InvalidOperationException();
 			dest.WriteRecords( workOrder, this );
 		}
 
 		public System.Collections.Generic.IEnumerable<System.Data.DataTable> ReadTables( Icod.Wod.WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
+			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
 			var credential = Credential.GetCredential( this.InstanceName, workOrder );
 			var loginToken = new Login() { WorkOrder = workOrder }.GetLoginResponse( credential, System.Text.Encoding.UTF8 );
 			return this.ReadTables( loginToken );
@@ -155,7 +155,7 @@ namespace Icod.Wod.SalesForce.Rest {
 
 		private System.Net.WebClient BuildClient( LoginResponse token, System.String userAgent ) {
 			if ( token is null ) {
-				throw new System.ArgumentNullException( "token" );
+				throw new System.ArgumentNullException( nameof( token ) );
 			}
 			var client = new System.Net.WebClient {
 				Encoding = System.Text.Encoding.UTF8

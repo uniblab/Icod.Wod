@@ -32,7 +32,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 		private ColumnDelimiterOption( System.Char value, System.String name ) {
 			if ( System.String.IsNullOrEmpty( name ) ) {
-				throw new System.ArgumentNullException( "name" );
+				throw new System.ArgumentNullException( nameof( name ) );
 			}
 			myValue = value;
 			myHashcode = System.Convert.ToInt32( value );
@@ -121,7 +121,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 		public static ColumnDelimiterOption FromName( System.String name ) {
 			name = name.TrimToNull();
 			if ( System.String.IsNullOrEmpty( name ) ) {
-				throw new System.ArgumentNullException( "name" );
+				throw new System.ArgumentNullException( nameof( name ) );
 			}
 			if ( name.Equals( Backquote.Name, System.StringComparison.OrdinalIgnoreCase ) ) {
 				return Backquote;

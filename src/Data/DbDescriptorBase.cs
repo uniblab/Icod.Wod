@@ -111,7 +111,7 @@ namespace Icod.Wod.Data {
 		#region methods
 		public virtual System.Data.Common.DbConnection CreateConnection( Icod.Wod.WorkOrder workOrder ) {
 			if ( workOrder is null ) {
-				throw new System.ArgumentNullException( "workOrder" );
+				throw new System.ArgumentNullException( nameof( workOrder ) );
 			}
 			var cn = this.ConnectionStringName;
 			var here = ( workOrder.ConnectionStrings ?? new Icod.Wod.ConnectionStringEntry[ 0 ] ).FirstOrDefault(
@@ -127,7 +127,7 @@ namespace Icod.Wod.Data {
 		}
 		public virtual System.Data.Common.DbCommand CreateCommand( System.Data.Common.DbConnection connection ) {
 			if ( connection is null ) {
-				throw new System.ArgumentNullException( "connection" );
+				throw new System.ArgumentNullException( nameof( connection ) );
 			}
 			var timeout = this.CommandTimeout;
 			return connection.CreateCommand( null, this.CommandText, this.CommandType, ( -2 == timeout ) ? connection.ConnectionTimeout : timeout );
@@ -135,9 +135,9 @@ namespace Icod.Wod.Data {
 
 		protected virtual System.Data.Common.DbCommandBuilder CreateCommandBuilder( Icod.Wod.WorkOrder workOrder, System.Data.Common.DbDataAdapter adapter ) {
 			if ( adapter is null ) {
-				throw new System.ArgumentNullException( "adapter" );
+				throw new System.ArgumentNullException( nameof( adapter ) );
 			} else if ( workOrder is null ) {
-				throw new System.ArgumentNullException( "workOrder" );
+				throw new System.ArgumentNullException( nameof( workOrder ) );
 			}
 
 			var cn = this.ConnectionStringName;

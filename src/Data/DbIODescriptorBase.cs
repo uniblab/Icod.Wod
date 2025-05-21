@@ -119,9 +119,9 @@ namespace Icod.Wod.Data {
 
 		protected virtual System.Collections.Generic.IEnumerable<System.Data.Common.DataColumnMapping> CreateDataColumnMapping( System.Data.DataTable source, System.Data.DataTable dest ) {
 			if ( dest is null ) {
-				throw new System.ArgumentNullException( "dest" );
+				throw new System.ArgumentNullException( nameof( dest ) );
 			} else if ( source is null ) {
-				throw new System.ArgumentNullException( "source" );
+				throw new System.ArgumentNullException( nameof( source ) );
 			}
 
 			var destNames = dest.Columns.OfType<System.Data.DataColumn>().Select(
@@ -175,18 +175,18 @@ namespace Icod.Wod.Data {
 
 		protected virtual System.Data.Common.DbDataAdapter CreateDataAdapter( System.Data.Common.DbConnection connection, Icod.Wod.WorkOrder workOrder ) {
 			if ( workOrder is null ) {
-				throw new System.ArgumentNullException( "workOrder" );
+				throw new System.ArgumentNullException( nameof( workOrder ) );
 			} else if ( connection is null ) {
-				throw new System.ArgumentNullException( "connection" );
+				throw new System.ArgumentNullException( nameof( connection ) );
 			}
 
 			return this.CreateDataAdapter( connection, workOrder, this.GenerateSchemaQuery() );
 		}
 		protected virtual System.Data.Common.DbDataAdapter CreateDataAdapter( System.Data.Common.DbConnection connection, Icod.Wod.WorkOrder workOrder, System.String schemaQuery ) {
 			if ( workOrder is null ) {
-				throw new System.ArgumentNullException( "workOrder" );
+				throw new System.ArgumentNullException( nameof( workOrder ) );
 			} else if ( connection is null ) {
-				throw new System.ArgumentNullException( "connection" );
+				throw new System.ArgumentNullException( nameof( connection ) );
 			}
 
 			schemaQuery = this.GenerateSchemaQuery();
@@ -206,11 +206,11 @@ namespace Icod.Wod.Data {
 		}
 		protected virtual System.Data.Common.DbDataAdapter CreateDataAdapter( System.Data.Common.DbConnection connection, Icod.Wod.WorkOrder workOrder, System.Data.Common.DbCommand command ) {
 			if ( command is null ) {
-				throw new System.ArgumentNullException( "command" );
+				throw new System.ArgumentNullException( nameof ( command ) );
 			} else if ( workOrder is null ) {
-				throw new System.ArgumentNullException( "workOrder" );
+				throw new System.ArgumentNullException( nameof( workOrder ) );
 			} else if ( connection is null ) {
-				throw new System.ArgumentNullException( "connection" );
+				throw new System.ArgumentNullException( nameof( connection ) );
 			}
 
 			var cn = this.ConnectionStringName;
@@ -230,7 +230,7 @@ namespace Icod.Wod.Data {
 
 		public virtual System.Collections.Generic.IEnumerable<System.Data.DataTable> ReadTables( Icod.Wod.WorkOrder workOrder ) {
 			if ( workOrder is null ) {
-				throw new System.ArgumentNullException( "workOrder" );
+				throw new System.ArgumentNullException( nameof( workOrder ) );
 			}
 
 			using ( var connection = this.CreateConnection( workOrder ) ) {
@@ -246,9 +246,9 @@ namespace Icod.Wod.Data {
 		}
 		public virtual void WriteRecords( Icod.Wod.WorkOrder workOrder, ITableSource source ) {
 			if ( source is null ) {
-				throw new System.ArgumentNullException( "source" );
+				throw new System.ArgumentNullException( nameof( source ) );
 			} else if ( workOrder is null ) {
-				throw new System.ArgumentNullException( "workOrder" );
+				throw new System.ArgumentNullException( nameof( workOrder ) );
 			}
 
 			using ( var cnxn = this.CreateConnection( workOrder ) ) {
@@ -289,18 +289,18 @@ namespace Icod.Wod.Data {
 
 		protected virtual void FillSchema( System.Data.Common.DbDataAdapter adapter, System.Data.DataSet set ) {
 			if ( set is null ) {
-				throw new System.ArgumentNullException( "set" );
+				throw new System.ArgumentNullException( nameof( set ) );
 			} else if ( adapter is null ) {
-				throw new System.ArgumentNullException( "adapter" );
+				throw new System.ArgumentNullException( nameof( adapter ) );
 			}
 
 			_ = adapter.FillSchema( set, System.Data.SchemaType.Source, this.NamespaceTableName );
 		}
 		protected virtual void FillSchema( System.Data.Common.DbDataAdapter adapter, System.Data.DataTable table ) {
 			if ( table is null ) {
-				throw new System.ArgumentNullException( "table" );
+				throw new System.ArgumentNullException( nameof( table ) );
 			} else if ( adapter is null ) {
-				throw new System.ArgumentNullException( "adapter" );
+				throw new System.ArgumentNullException( nameof( adapter ) );
 			}
 
 			_ = adapter.FillSchema( table, System.Data.SchemaType.Source );
@@ -322,16 +322,16 @@ namespace Icod.Wod.Data {
 		}
 		private void ExecuteCommand( System.Data.Common.DbCommand command, System.Data.DataTable source ) {
 			if ( source is null ) {
-				throw new System.ArgumentNullException( "source" );
+				throw new System.ArgumentNullException( nameof( source ) );
 			} else if ( command is null ) {
-				throw new System.ArgumentNullException( "command" );
+				throw new System.ArgumentNullException( nameof( command ) );
 			}
 			this.ExecuteCommand( command, source, this.BuildSourceToParameter( source ) );
 		}
 
 		protected System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<System.Data.DataColumn, DbParameter>> BuildSourceToParameter( System.Data.DataTable source ) {
 			if ( source is null ) {
-				throw new System.ArgumentNullException( "source" );
+				throw new System.ArgumentNullException( nameof( source ) );
 			}
 			var parameters = this.Parameters ?? new DbParameter[ 0 ];
 			if ( !parameters.Any() ) {
@@ -396,11 +396,11 @@ namespace Icod.Wod.Data {
 		}
 		protected void ExecuteCommand( System.Data.Common.DbCommand command, System.Data.DataTable source, System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<System.Data.DataColumn, DbParameter>> columnParameterMap ) {
 			if ( columnParameterMap is null ) {
-				throw new System.ArgumentNullException( "columnParameterMap" );
+				throw new System.ArgumentNullException( nameof( columnParameterMap ) );
 			} else if ( source is null ) {
-				throw new System.ArgumentNullException( "source" );
+				throw new System.ArgumentNullException( nameof( source ) );
 			} else if ( command is null ) {
-				throw new System.ArgumentNullException( "command" );
+				throw new System.ArgumentNullException( nameof( command ) );
 			}
 
 			foreach ( var row in source.Rows.OfType<System.Data.DataRow>() ) {

@@ -217,7 +217,7 @@ namespace Icod.Wod {
 
 		#region methods
 		public void DoWork( Icod.Wod.WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
+			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
 			using ( var msg = new System.Net.Mail.MailMessage() ) {
 				msg.IsBodyHtml = this.BodyIsHtml;
 				msg.BodyEncoding = CodePageHelper.GetCodePage( this.BodyCodePage );

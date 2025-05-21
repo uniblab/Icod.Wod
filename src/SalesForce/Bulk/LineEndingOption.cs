@@ -23,9 +23,9 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 		private LineEndingOption( System.String value, System.String name ) {
 			if ( System.String.IsNullOrEmpty( value ) ) {
-				throw new System.ArgumentNullException( "value" );
+				throw new System.ArgumentNullException( nameof( value ) );
 			} else if ( System.String.IsNullOrEmpty( name ) ) {
-				throw new System.ArgumentNullException( "name" );
+				throw new System.ArgumentNullException( nameof( name ) );
 			}
 			myValue = value;
 			myHashcode = value.GetHashCode();
@@ -100,7 +100,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 		public static LineEndingOption FromName( System.String name ) {
 			name = name.TrimToNull();
 			if ( System.String.IsNullOrEmpty( name ) ) {
-				throw new System.ArgumentNullException( "name" );
+				throw new System.ArgumentNullException( nameof( name ) );
 			}
 			if ( name.Equals( LF.Name, System.StringComparison.OrdinalIgnoreCase ) ) {
 				return LF;

@@ -41,7 +41,7 @@ namespace Icod.Wod.File {
 		#region methods
 		protected abstract System.Collections.Generic.IEnumerable<FileEntry> GetEntries( FileHandlerBase source );
 		public override void DoWork( WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
+			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
 			var source = this.GetFileHandler( workOrder ) ?? throw new System.InvalidOperationException();
 
 			System.Func<FileEntry, System.String> getFileName;

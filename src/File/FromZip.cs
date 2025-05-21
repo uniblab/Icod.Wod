@@ -19,7 +19,7 @@ namespace Icod.Wod.File {
 
 		#region method
 		public sealed override void DoWork( WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
+			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
 			var destD = this.Destination;
 			destD.WorkOrder = workOrder;
 			System.String ePath = destD.ExpandedPath;
