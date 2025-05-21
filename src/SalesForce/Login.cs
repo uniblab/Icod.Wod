@@ -1,4 +1,5 @@
 // Copyright (C) 2025  Timothy J. Bruce
+using System.Data.SqlClient;
 using System.Linq;
 
 namespace Icod.Wod.SalesForce {
@@ -33,16 +34,13 @@ namespace Icod.Wod.SalesForce {
 
 		#region methods
 		public LoginResponse GetLoginResponse( System.String clientId ) {
-			if ( System.String.IsNullOrEmpty( clientId ) ) {
-				throw new System.ArgumentNullException( nameof( clientId ) );
-			}
+			clientId = clientId ?? throw new System.ArgumentNullException( nameof( clientId ) );
 			var credential = Credential.GetCredential( clientId, this.WorkOrder );
 			return this.GetLoginResponse( credential, System.Text.Encoding.UTF8 );
 		}
 		public LoginResponse GetLoginResponse( SalesForce.ICredential credential, System.Text.Encoding encoding ) {
-			if ( credential is null ) {
-				throw new System.ArgumentNullException( nameof( credential ) );
-			} else if (
+			credential = credential ?? throw new System.ArgumentNullException( nameof( credential ) );
+			if (
 				( LoginMode.RefreshToken == credential.LoginMode )
 				&& ( System.String.IsNullOrEmpty( credential.RefreshToken ) || System.String.IsNullOrEmpty( credential.CallbackUrl ) )
 			) {
@@ -60,9 +58,7 @@ namespace Icod.Wod.SalesForce {
 			return this.BuildLogin( credential, encoding );
 		}
 		private LoginResponse BuildLogin( SalesForce.ICredential credential, System.Text.Encoding encoding ) {
-			if ( credential is null ) {
-				throw new System.ArgumentNullException( nameof( credential ) );
-			}
+			credential = credential ?? throw new System.ArgumentNullException( nameof( credential ) );
 
 			var headers = new System.Collections.Generic.Dictionary<System.String, System.String>();
 			headers.Add( "Content-type", "application/x-www-form-urlencoded; charset=" + encoding.WebName );
@@ -75,9 +71,7 @@ namespace Icod.Wod.SalesForce {
 			return this.BuildLogin( credential.SiteUrl, headers, body );
 		}
 		private System.String BuildBody( SalesForce.ICredential credential ) {
-			if ( credential is null ) {
-				throw new System.ArgumentNullException( nameof( credential ) );
-			}
+			credential = credential ?? throw new System.ArgumentNullException( nameof( credential ) );
 
 			var clientId = credential.ClientId;
 			var parameters = new System.Text.StringBuilder();

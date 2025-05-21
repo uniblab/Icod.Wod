@@ -101,8 +101,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 			name = name.TrimToNull();
 			if ( System.String.IsNullOrEmpty( name ) ) {
 				throw new System.ArgumentNullException( nameof( name ) );
-			}
-			if ( name.Equals( LF.Name, System.StringComparison.OrdinalIgnoreCase ) ) {
+			} else if ( name.Equals( LF.Name, System.StringComparison.OrdinalIgnoreCase ) ) {
 				return LF;
 			} else if ( name.Equals( CRLF.Name, System.StringComparison.OrdinalIgnoreCase ) ) {
 				return CRLF;

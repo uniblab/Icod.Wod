@@ -131,10 +131,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 		#region static methods
 		public static StateOption FromName( System.String name ) {
-			name = name.TrimToNull();
-			if ( System.String.IsNullOrEmpty( name ) ) {
-				throw new System.ArgumentNullException( nameof( name ) );
-			}
+			name = name.TrimToNull() ?? throw new System.ArgumentNullException( nameof( name ) );
 			if ( name.Equals( Aborted.Name, System.StringComparison.OrdinalIgnoreCase ) ) {
 				return Aborted;
 			} else if ( name.Equals( Failed.Name, System.StringComparison.OrdinalIgnoreCase ) ) {

@@ -53,11 +53,8 @@ namespace Icod.Wod.SalesForce {
 			}
 		}
 		private void WriteRecordsOverride( Icod.Wod.WorkOrder workOrder, Icod.Wod.Data.ITableSource source ) {
-			if ( source is null ) {
-				throw new System.ArgumentNullException( nameof( source ) );
-			} else if ( workOrder is null ) {
-				throw new System.ArgumentNullException( nameof( workOrder ) );
-			}
+			source = source ?? throw new System.ArgumentNullException( nameof( source ) );
+			workOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
 
 			using ( var cnxn = this.CreateConnection( workOrder ) ) {
 				using ( var adapter = this.CreateDataAdapter( cnxn, workOrder ) ) {

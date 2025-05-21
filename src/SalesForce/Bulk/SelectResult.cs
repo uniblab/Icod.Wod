@@ -84,9 +84,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 			}
 		}
 		private System.Data.DataTable ReadFile( System.IO.StringReader file, System.Char columDelimiter, System.String lineEnding ) {
-			if ( file is null ) {
-				throw new System.ArgumentNullException( nameof( file ) );
-			}
+			file = file ?? throw new System.ArgumentNullException( nameof( file ) );
 
 			var lineNumber = 0;
 			var table = new System.Data.DataTable();
@@ -109,11 +107,8 @@ namespace Icod.Wod.SalesForce.Bulk {
 		}
 		private void BuildTable( System.IO.StringReader file, System.Data.DataTable table, System.Char columDelimiter, System.String lineEnding ) {
 #if DEBUG
-			if ( table is null ) {
-				throw new System.ArgumentNullException( nameof( table ) );
-			} else if ( file is null ) {
-				throw new System.ArgumentNullException( nameof( file ) );
-			}
+			table = table ?? throw new System.ArgumentNullException( nameof( table ) );
+			file = file ?? throw new System.ArgumentNullException( nameof( file ) );
 #endif
 
 			var headerLine = file.ReadLine( lineEnding, DQUOTE );
@@ -123,9 +118,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 		}
 		private System.Collections.Generic.IEnumerable<System.String> ReadRecord( System.IO.StringReader file, System.String lineEnding ) {
 #if DEBUG
-			if ( file is null ) {
-				throw new System.ArgumentNullException( nameof( file ) );
-			}
+			file = file ?? throw new System.ArgumentNullException( nameof( file ) );
 #endif
 
 			System.String line;
@@ -169,9 +162,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 		}
 
 		private System.String ReadPlainTextCell( System.IO.StringReader reader, System.Char fieldSeparator ) {
-			if ( reader is null ) {
-				throw new System.ArgumentNullException( nameof( reader ) );
-			}
+			reader = reader ?? throw new System.ArgumentNullException( nameof( reader ) );
 
 			var cell = new System.Text.StringBuilder();
 			System.Int32 p;
@@ -191,9 +182,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 			return cell.ToString().TrimToNull();
 		}
 		private System.String ReadQuotedTextCell( System.IO.StringReader reader, System.Char fieldSeparator, System.Char quoteCharacter ) {
-			if ( reader is null ) {
-				throw new System.ArgumentNullException( nameof( reader ) );
-			}
+			reader = reader ?? throw new System.ArgumentNullException( nameof( reader ) );
 
 			var cell = new System.Text.StringBuilder();
 			System.Int32 p;

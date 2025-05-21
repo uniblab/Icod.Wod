@@ -1,4 +1,6 @@
 // Copyright (C) 2025  Timothy J. Bruce
+using System.Net;
+
 namespace Icod.Wod.SalesForce {
 
 	[System.Serializable]
@@ -18,9 +20,7 @@ namespace Icod.Wod.SalesForce {
 		public LoginResponse() : base() {
 		}
 		public LoginResponse( dynamic response ) : this() {
-			if ( response is null ) {
-				throw new System.ArgumentNullException( nameof( response ) );
-			};
+			response = response ?? throw new System.ArgumentNullException( nameof( response ) );
 			this.AccessToken = (System.String)response.access_token;
 			this.InstanceUrl = (System.String)response.instance_url;
 			this.Id = (System.String)response.id;

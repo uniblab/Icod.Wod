@@ -154,9 +154,7 @@ namespace Icod.Wod.SalesForce.Rest {
 		}
 
 		private System.Net.WebClient BuildClient( LoginResponse token, System.String userAgent ) {
-			if ( token is null ) {
-				throw new System.ArgumentNullException( nameof( token ) );
-			}
+			token = token ?? throw new System.ArgumentNullException( nameof( token ) );
 			var client = new System.Net.WebClient {
 				Encoding = System.Text.Encoding.UTF8
 			};
