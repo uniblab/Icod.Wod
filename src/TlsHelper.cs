@@ -8,11 +8,9 @@
 #endif
 #if DEBUG
 #pragma warning disable 0618
-			ssl = ssl | System.Net.SecurityProtocolType.Tls11 | System.Net.SecurityProtocolType.Tls | System.Net.SecurityProtocolType.Ssl3;
+			ssl = ssl | System.Net.SecurityProtocolType.Ssl3;
 #pragma warning restore 0618
-#if NET48_OR_GREATER || NETCOREAPP3_0_OR_GREATER || NET5_0_OR_GREATER
-			ssl = ssl | System.Net.SecurityProtocolType.Tls12;
-#endif
+			ssl = ssl | System.Net.SecurityProtocolType.Tls12 | System.Net.SecurityProtocolType.Tls11 | System.Net.SecurityProtocolType.Tls;
 #endif
 			return ssl;
 		}
