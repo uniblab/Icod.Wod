@@ -1,5 +1,8 @@
 // Copyright (C) 2025  Timothy J. Bruce
 
+using System;
+using System.Runtime.CompilerServices;
+
 namespace Icod.Wod.File {
 
 	[System.Serializable]
@@ -10,6 +13,65 @@ namespace Icod.Wod.File {
 	public sealed class DeflateFile : BinaryCompressedFileOperationBase {
 
 		#region .ctor
+		static DeflateFile() {
+			var compressorMap = new System.Collections.Generic.Dictionary<
+				System.IO.Compression.CompressionMode,
+				System.Func<System.IO.Stream, System.IO.Stream>
+			>( 2 );
+			compressorMap.Add(
+				System.IO.Compression.CompressionMode.Compress,
+				x => (System.IO.Stream)System.Activator.CreateInstance(
+					typeof( System.IO.Compression.DeflateStream ), 
+					new System.Object[ 3 ] { x, System.IO.Compression.CompressionMode.Compress, true }
+				)
+			);
+			compressorMap.Add(
+				System.IO.Compression.CompressionMode.Decompress,
+				x => (System.IO.Stream)System.Activator.CreateInstance(
+					typeof( System.IO.Compression.DeflateStream ),
+					new System.Object[ 3 ] { x, System.IO.Compression.CompressionMode.Decompress, true }
+				)
+			);
+			RegisterCompressorMap( typeof( DeflateFile ), compressorMap );
+
+			var fileNameMap = new System.Collections.Generic.Dictionary<
+				System.IO.Compression.CompressionMode,
+				System.Func<System.String, System.String>
+			>( 2 );
+			fileNameMap.Add(
+				System.IO.Compression.CompressionMode.Compress,
+				AddExtension
+			);
+			fileNameMap.Add(
+				System.IO.Compression.CompressionMode.Decompress,
+				PruneExtension
+			);
+			RegisterFileNameMap( typeof( DeflateFile ), fileNameMap );
+
+
+			var actionMap = new System.Collections.Generic.Dictionary<
+				System.IO.Compression.CompressionMode,
+				System.Action<FileHandlerBase, System.String, FileHandlerBase>
+			>( 2 );
+			actionMap.Add(
+				System.IO.Compression.CompressionMode.Compress,
+				( source, sourceFilePathName, dest ) => Compress(
+					source, sourceFilePathName, dest,
+					fileNameMap[ System.IO.Compression.CompressionMode.Compress ]( sourceFilePathName ),
+					compressorMap[ System.IO.Compression.CompressionMode.Compress ]
+				)
+			);
+			actionMap.Add(
+				System.IO.Compression.CompressionMode.Decompress,
+				( source, sourceFilePathName, dest ) => Decompress(
+					source, sourceFilePathName, dest,
+					fileNameMap[ System.IO.Compression.CompressionMode.Decompress ]( sourceFilePathName ),
+					compressorMap[ System.IO.Compression.CompressionMode.Decompress ]
+				)
+			);
+			RegisterActionMap( typeof( DeflateFile ), actionMap );
+		}
+
 		public DeflateFile() : base() {
 		}
 		#endregion .ctor
@@ -17,102 +79,43 @@ namespace Icod.Wod.File {
 
 		#region methods
 		public sealed override void DoWork( Icod.Wod.WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
+			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
 			this.Destination.WorkOrder = workOrder;
 			System.Action<Icod.Wod.File.FileHandlerBase, System.String, Icod.Wod.File.FileHandlerBase> action;
-			switch ( this.CompressionMode ) {
-				case System.IO.Compression.CompressionMode.Decompress:
-					action = this.Decompress;
-					break;
-				case System.IO.Compression.CompressionMode.Compress:
-					action = this.Compress;
-					break;
-				default:
-					throw new System.InvalidOperationException();
+			var cm = this.CompressionMode;
+			try {
+				action = GetActionMap( this.GetType(), cm );
+			} catch ( System.Exception e ) {
+				throw new System.InvalidOperationException(
+					System.String.Format( "The specified compressionMode, {0}, is not supported.", cm ),
+					e
+				);
 			}
 
 			var dest = this.Destination.GetFileHandler( workOrder );
 			var source = this.GetFileHandler( workOrder );
-			System.String file;
 			var files = source.ListFiles();
-			foreach ( var fe in files ) {
-				file = fe.File;
+			System.Threading.Tasks.Parallel.ForEach( files, fe => {
+				var file = fe.File;
 				action( source, file, dest );
-			}
+			} );
 			if ( this.Delete ) {
-				foreach ( var fe in files ) {
+				System.Threading.Tasks.Parallel.ForEach( files, fe => {
 					source.DeleteFile( fe.File );
-				}
+				} );
 			}
-		}
-		private void Decompress( Icod.Wod.File.FileHandlerBase source, System.String sourceFilePathName, Icod.Wod.File.FileHandlerBase dest ) {
-#if DEBUG
-			if ( dest is null ) {
-				throw new System.ArgumentNullException( "dest" );
-			} else if ( source is null ) {
-				throw new System.ArgumentNullException( "source" );
-			}
-#endif
-			if ( System.String.IsNullOrEmpty( sourceFilePathName ) ) {
-				throw new System.ArgumentNullException( "sourceFilePathName" );
-			}
-			var dfd = dest.FileDescriptor;
-			using ( var reader = source.OpenReader( sourceFilePathName ) ) {
-				using ( var worker = new System.IO.Compression.DeflateStream( reader, System.IO.Compression.CompressionMode.Decompress, true ) ) {
-					using ( var buffer = new System.IO.MemoryStream() ) {
-						worker.CopyTo( buffer );
-						buffer.Flush();
-						buffer.Seek( 0, System.IO.SeekOrigin.Begin );
-						var fn = this.GetDestinatonFileName( sourceFilePathName );
-						dest.Overwrite( buffer, dest.PathCombine( dfd.ExpandedPath, fn ) );
-					}
-				}
-			}
-		}
-		private void Compress( Icod.Wod.File.FileHandlerBase source, System.String sourceFilePathName, Icod.Wod.File.FileHandlerBase dest ) {
-#if DEBUG
-			if ( dest is null ) {
-				throw new System.ArgumentNullException( "dest" );
-			} else if ( source is null ) {
-				throw new System.ArgumentNullException( "source" );
-			}
-#endif
-			if ( System.String.IsNullOrEmpty( sourceFilePathName ) ) {
-				throw new System.ArgumentNullException( "sourceFilePathName" );
-			}
-			var dfd = dest.FileDescriptor;
-			using ( var buffer = new System.IO.MemoryStream() ) {
-				using ( var worker = new System.IO.Compression.DeflateStream( buffer, System.IO.Compression.CompressionMode.Compress, true ) ) {
-					using ( var reader = source.OpenReader( sourceFilePathName ) ) {
-						reader.CopyTo( worker );
-						worker.Flush();
-						buffer.Seek( 0, System.IO.SeekOrigin.Begin );
-						var fn = this.GetDestinatonFileName( sourceFilePathName );
-						dest.Overwrite( buffer, dest.PathCombine( dfd.ExpandedPath, fn ) );
-					}
-				}
-			}
-		}
-		private System.String GetDestinatonFileName( System.String source ) {
-#if DEBUG
-			if ( System.String.IsNullOrEmpty( source ) ) {
-				throw new System.ArgumentNullException( "source" );
-			}
-#endif
-			System.String fn;
-			switch ( this.CompressionMode ) {
-				case System.IO.Compression.CompressionMode.Decompress:
-					fn = System.IO.Path.GetFileNameWithoutExtension( source );
-					break;
-				case System.IO.Compression.CompressionMode.Compress:
-					fn = System.IO.Path.GetFileName( source ) + ".gzip";
-					break;
-				default:
-					throw new System.InvalidOperationException();
-			}
-			return fn;
 		}
 		#endregion methods
+
+
+		#region static methods
+		protected static System.String PruneExtension( System.String sourceFileName ) {
+			return System.IO.Path.GetFileNameWithoutExtension( sourceFileName );
+		}
+		protected static System.String AddExtension( System.String sourceFilename ) {
+			return System.IO.Path.GetFileName( sourceFilename ) + ".gzip";
+		}
+		#endregion static methods
 
 	}
 

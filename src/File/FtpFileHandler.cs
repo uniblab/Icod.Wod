@@ -9,6 +9,8 @@ namespace Icod.Wod.File {
 		#region fields
 		private static readonly System.Func<System.Byte[ ], System.String, System.Security.Cryptography.X509Certificates.X509Certificate> theStreamPasswdAuthMethodCtor;
 		private static readonly System.Func<System.Byte[ ], System.String, System.Security.Cryptography.X509Certificates.X509Certificate> theStreamAuthMethodCtor;
+		private const System.Char theSpace = ' ';
+		private static readonly System.Char[] theSpaceSplitArray;
 		#endregion fields
 
 
@@ -16,6 +18,7 @@ namespace Icod.Wod.File {
 		static FtpFileHandler() {
 			theStreamPasswdAuthMethodCtor = ( data, passwd ) => new System.Security.Cryptography.X509Certificates.X509Certificate( data, passwd );
 			theStreamAuthMethodCtor = ( data, passwd ) => new System.Security.Cryptography.X509Certificates.X509Certificate( data );
+			theSpaceSplitArray = new System.Char[ 1 ] { theSpace };
 		}
 
 		public FtpFileHandler() : base() {
@@ -161,7 +164,7 @@ namespace Icod.Wod.File {
 			var list = this.ReadLines( ftp );
 			return list.Select(
 				x => new FileEntry {
-					File = this.PathCombine( fd.ExpandedPath, this.StripNameFromList( x ) ),
+					File = this.PathCombine( fd.ExpandedPath, StripNameFromList( x ) ),
 					FileType = x.StartsWith( "d", System.StringComparison.OrdinalIgnoreCase )
 						? FileType.Directory
 						: FileType.File
@@ -172,10 +175,6 @@ namespace Icod.Wod.File {
 				x => System.String.IsNullOrEmpty( regexPattern )
 					|| System.Text.RegularExpressions.Regex.IsMatch( x.File, regexPattern )
 			);
-		}
-		private System.String StripNameFromList( System.String listLine ) {
-			var q = listLine.Split( new System.Char[ 1 ] { ' ' }, 9, System.StringSplitOptions.RemoveEmptyEntries );
-			return q[ q.Length - 1 ];
 		}
 		public sealed override System.Collections.Generic.IEnumerable<FileEntry> ListFiles() {
 			var fd = this.FileDescriptor;
@@ -191,7 +190,7 @@ namespace Icod.Wod.File {
 			);
 			var list = fileList.Select(
 				x => {
-					var y = x.Split( new System.Char[ 1 ] { ' ' }, 9, System.StringSplitOptions.RemoveEmptyEntries );
+					var y = x.Split( theSpaceSplitArray, 9, System.StringSplitOptions.RemoveEmptyEntries );
 					return y[ y.Length - 1 ];
 				}
 			);
@@ -224,7 +223,7 @@ namespace Icod.Wod.File {
 				x => x.StartsWith( "d", System.StringComparison.OrdinalIgnoreCase )
 			).Select(
 				x => {
-					var y = x.Split( new System.Char[ 1 ] { ' ' }, 9, System.StringSplitOptions.RemoveEmptyEntries );
+					var y = x.Split( theSpaceSplitArray, 9, System.StringSplitOptions.RemoveEmptyEntries );
 					return y[ y.Length - 1 ];
 				}
 			);
@@ -236,7 +235,7 @@ namespace Icod.Wod.File {
 			}
 			return list.Select(
 				x => new FileEntry {
-					File = this.PathCombine( fd.ExpandedPath, this.StripNameFromList( x ) ),
+					File = this.PathCombine( fd.ExpandedPath, StripNameFromList( x ) ),
 					FileType = x.StartsWith( "d", System.StringComparison.OrdinalIgnoreCase )
 						? FileType.Directory
 						: FileType.File
@@ -249,6 +248,14 @@ namespace Icod.Wod.File {
 		}
 		#endregion methods
 
+
+		#region static methods
+		private static System.String StripNameFromList( System.String listLine ) {
+			var q = listLine.Split( theSpaceSplitArray, 9, System.StringSplitOptions.RemoveEmptyEntries );
+			return q[ q.Length - 1 ];
+		}
+
+		#endregion
 	}
 
 }

@@ -20,17 +20,15 @@ namespace Icod.Wod.Data {
 		#region methods
 		protected sealed override void WriteRecords( Icod.Wod.WorkOrder workOrder, System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Collections.Generic.IEnumerable<System.Data.DataRow> rows ) {
 #if DEBUG
-			if ( workOrder is null ) {
-				throw new System.ArgumentNullException( "workOrder" );
-			}
+			workOrder = workOrder?? throw new System.ArgumentNullException( nameof( workOrder ) );
 #endif
-			var cols = ( columns ?? new System.Data.DataColumn[ 0 ] );
+			var cols = ( columns ?? System.Array.Empty<System.Data.DataColumn>() );
 			if ( this.WriteIfEmpty ) {
 				if ( !cols.Any() ) {
-					throw new System.ArgumentNullException( "columns" );
+					throw new System.ArgumentNullException( nameof( columns ) );
 				}
 			} else if (
-				( !( rows ?? new System.Data.DataRow[ 0 ] ).Any() )
+				( !( rows ?? System.Array.Empty<System.Data.DataRow>() ).Any() )
 				|| ( !cols.Any() )
 			) {
 				return;
@@ -52,10 +50,9 @@ namespace Icod.Wod.Data {
 		}
 
 		protected sealed override System.Data.DataTable ReadFile( System.String filePathName, System.IO.StreamReader file ) {
-			if ( file is null ) {
-				throw new System.ArgumentNullException( "file" );
-			} else if ( System.String.IsNullOrEmpty( filePathName ) ) {
-				throw new System.ArgumentNullException( "filePathName" );
+			file = file ?? throw new System.ArgumentNullException( nameof( file ) );
+			if ( System.String.IsNullOrEmpty( filePathName ) ) {
+				throw new System.ArgumentNullException( nameof( filePathName ) );
 			}
 
 			var table = new System.Data.DataTable();
@@ -65,7 +62,7 @@ namespace Icod.Wod.Data {
 					AllowDBNull = true,
 					DataType = typeof( System.String )
 				} );
-				if ( this.Columns.Any() ) {
+				if ( 0 < this.Columns.Length ) {
 					table.Columns[ 0 ].ColumnName = this.Columns.FirstOrDefault().Name;
 				}
 				var record = file.ReadLine( this.RecordSeparator );

@@ -26,12 +26,10 @@ namespace Icod.Wod.File {
 
 		#region methods
 		public void Write( WorkOrder workOrder, System.IO.Stream stream ) {
-			if ( stream is null ) {
-				throw new System.ArgumentNullException( "stream" );
-			} else if ( !stream.CanRead ) {
+			stream = stream ?? throw new System.ArgumentNullException( nameof( stream ) );
+			workOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
+			if ( !stream.CanRead ) {
 				throw new System.InvalidOperationException();
-			} else if ( workOrder is null ) {
-				throw new System.ArgumentNullException( "workOrder" );
 			}
 
 			var handler = this.GetFileHandler( workOrder );

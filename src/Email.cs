@@ -1,4 +1,5 @@
 // Copyright (C) 2025  Timothy J. Bruce
+using Icod.Wod.Data;
 using System.Linq;
 
 namespace Icod.Wod {
@@ -217,13 +218,13 @@ namespace Icod.Wod {
 
 		#region methods
 		public void DoWork( Icod.Wod.WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
+			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
 			using ( var msg = new System.Net.Mail.MailMessage() ) {
 				msg.IsBodyHtml = this.BodyIsHtml;
 				msg.BodyEncoding = CodePageHelper.GetCodePage( this.BodyCodePage );
 				msg.Body = workOrder.ExpandPseudoVariables( this.Body );
 				File.FileHandlerBase handler;
-				foreach ( var a in ( this.Attachments ?? new Icod.Wod.File.FileDescriptor[ 0 ] ) ) {
+				foreach ( var a in ( this.Attachments ?? System.Array.Empty<Icod.Wod.File.FileDescriptor>() ) ) {
 					handler = a.GetFileHandler( workOrder );
 					System.String filePathName;
 					foreach ( var fe in handler.ListFiles() ) {

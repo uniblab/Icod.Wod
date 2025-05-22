@@ -200,7 +200,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 			request.Method = method.ToUpper();
 			request.Headers.Add( "Authorization", "Bearer " + loginResponse.AccessToken );
 #if DEBUG
-			request.Headers.Add( "Accept-Encoding", "identity, gzip, deflate" );
+			request.Headers.Add( "Accept-Encoding", "identity" );
 #else
 			request.Headers.Add( "Accept-Encoding", "gzip, deflate, identity" );
 #endif

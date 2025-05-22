@@ -207,11 +207,9 @@ namespace Icod.Wod.Data {
 
 		#region methods
 		protected sealed override System.Collections.Generic.IEnumerable<System.Data.DataColumn> BuildColumns( System.IO.StreamReader file ) {
-			if ( file is null ) {
-				throw new System.ArgumentNullException( "file" );
-			}
+			file = file ?? throw new System.ArgumentNullException( nameof( file ) );
 			if ( !this.HasHeader ) {
-				if ( !( this.Columns ?? new ColumnBase[ 0 ] ).Any() ) {
+				if ( 0 == ( this.Columns ?? System.Array.Empty<ColumnBase>() ).Length ) {
 					throw new System.InvalidOperationException();
 				}
 				return this.Columns.Select(
@@ -224,11 +222,8 @@ namespace Icod.Wod.Data {
 			}
 		}
 		protected sealed override System.Data.DataRow ReadRecord( System.Data.DataTable table, System.IO.StreamReader file ) {
-			if ( file is null ) {
-				throw new System.ArgumentNullException( "file" );
-			} else if ( table is null ) {
-				throw new System.ArgumentNullException( "table" );
-			}
+			file = file ?? throw new System.ArgumentNullException( nameof( file ) );
+			table = table ?? throw new System.ArgumentNullException( nameof( table ) );
 
 			var row = this.ReadRecord( file );
 			var rowList = row.ToArray();
@@ -236,9 +231,7 @@ namespace Icod.Wod.Data {
 		}
 		private System.Collections.Generic.IEnumerable<System.String> ReadHeaderLine( System.IO.StreamReader file ) {
 #if DEBUG
-			if ( file is null ) {
-				throw new System.ArgumentNullException( "file" );
-			}
+			file = file ?? throw new System.ArgumentNullException( nameof( file ) );
 #endif
 			var output = this.ReadRecord( file );
 			return output;
@@ -246,9 +239,7 @@ namespace Icod.Wod.Data {
 
 		protected sealed override System.Collections.Generic.IEnumerable<System.String> ReadRecord( System.IO.StreamReader file ) {
 #if DEBUG
-			if ( file is null ) {
-				throw new System.ArgumentNullException( "file" );
-			}
+			file = file ?? throw new System.ArgumentNullException( nameof( file ) );
 #endif
 			if ( file.EndOfStream ) {
 				yield break;
@@ -286,15 +277,13 @@ namespace Icod.Wod.Data {
 		}
 		private System.String ReadColumn( System.IO.StringReader reader, System.Char @break, System.Boolean readNextOnBreak ) {
 #if DEBUG
-			if ( reader is null ) {
-				throw new System.ArgumentNullException( "reader" );
-			}
+			reader = reader ?? throw new System.ArgumentNullException( nameof( reader ) );
 #endif
 			var sb = new System.Text.StringBuilder( 128 );
 			System.Nullable<System.Char> ch;
 			var reading = true;
 			do {
-				ch = this.ReadChar( reader, @break, readNextOnBreak );
+				ch = ReadChar( reader, @break, readNextOnBreak );
 				if ( ch.HasValue ) {
 					sb = sb.Append( ch.Value );
 				} else {
@@ -304,11 +293,58 @@ namespace Icod.Wod.Data {
 			} while ( reading );
 			return this.ColumnReader( sb );
 		}
-		private System.Nullable<System.Char> ReadChar( System.IO.StringReader reader, System.Char @break, System.Boolean readNextOnBreak ) {
-#if DEBUG
-			if ( reader is null ) {
-				throw new System.ArgumentNullException( "reader" );
+
+		protected sealed override void WriteHeader( System.IO.StreamWriter writer, System.Collections.Generic.IEnumerable<System.Data.DataColumn> dbColumns, System.Collections.Generic.IEnumerable<ColumnBase> fileColumns ) {
+			writer = writer ?? throw new System.ArgumentNullException( nameof( writer ) );
+			if ( ( dbColumns is null ) || !dbColumns.Any() ) {
+				throw new System.ArgumentNullException( nameof( dbColumns ) );
 			}
+
+			var qcs = this.QuoteCharString;
+			var fss = this.FieldSeparatorString;
+			var columnNameList = dbColumns.Select(
+				x => x.ColumnName.Replace( qcs, qcs + qcs )
+			);
+			var rs = this.RecordSeparator;
+			var list = columnNameList.Select(
+				x => qcs + x + qcs
+			);
+			writer.Write( System.String.Join( fss, list ) );
+			this.EolWriter( writer );
+		}
+		protected sealed override System.String GetRow( System.Collections.Generic.IDictionary<System.Data.DataColumn, ColumnBase> formatMap, System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Data.DataRow row ) {
+			row = row ?? throw new System.ArgumentNullException( nameof( row ) );
+			if ( ( columns is null ) || !columns.Any() ) {
+				throw new System.ArgumentNullException( nameof( columns ) );
+			} else if ( ( formatMap is null ) || !formatMap.Any() ) {
+				throw new System.ArgumentNullException( nameof( formatMap ) );
+			}
+
+			var qcs = this.QuoteCharString;
+			var fss = this.FieldSeparatorString;
+			var valueList = columns.Select(
+				x => this.GetColumn( formatMap[ x ], x, row ).Replace( qcs, qcs + qcs )
+			);
+			var rs = this.RecordSeparator;
+			var list = this.ForceQuote
+				? valueList.Select(
+					x => qcs + x + qcs
+				)
+				: valueList.Select(
+					x => ( x.Contains( qcs ) || x.Contains( fss ) || ( !System.String.IsNullOrEmpty( rs ) && x.Contains( rs ) ) )
+						? qcs + x + qcs
+						: x
+				)
+			;
+			return System.String.Join( fss, list );
+		}
+		#endregion methods
+
+
+		#region static methods
+		private static System.Nullable<System.Char> ReadChar( System.IO.StringReader reader, System.Char @break, System.Boolean readNextOnBreak ) {
+#if DEBUG
+			reader = reader ?? throw new System.ArgumentNullException( nameof( reader ) );
 #endif
 
 			var p = reader.Peek();
@@ -331,53 +367,7 @@ namespace Icod.Wod.Data {
 			}
 			return c;
 		}
-
-		protected sealed override void WriteHeader( System.IO.StreamWriter writer, System.Collections.Generic.IEnumerable<System.Data.DataColumn> dbColumns, System.Collections.Generic.IEnumerable<ColumnBase> fileColumns ) {
-			if ( ( dbColumns is null ) || !dbColumns.Any() ) {
-				throw new System.ArgumentNullException( "dbColumns" );
-			} else if ( writer is null ) {
-				throw new System.ArgumentNullException( "writer" );
-			}
-			var qcs = this.QuoteCharString;
-			var fss = this.FieldSeparatorString;
-			var columnNameList = dbColumns.Select(
-				x => x.ColumnName.Replace( qcs, qcs + qcs )
-			);
-			var rs = this.RecordSeparator;
-			var list = columnNameList.Select(
-				x => qcs + x + qcs
-			);
-			writer.Write( System.String.Join( fss, list ) );
-			this.EolWriter( writer );
-		}
-		protected sealed override System.String GetRow( System.Collections.Generic.IDictionary<System.Data.DataColumn, ColumnBase> formatMap, System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Data.DataRow row ) {
-			if ( row is null ) {
-				throw new System.ArgumentNullException( "row" );
-			} else if ( ( columns is null ) || !columns.Any() ) {
-				throw new System.ArgumentNullException( "columns" );
-			} else if ( ( formatMap is null ) || !formatMap.Any() ) {
-				throw new System.ArgumentNullException( "formatMap" );
-			}
-
-			var qcs = this.QuoteCharString;
-			var fss = this.FieldSeparatorString;
-			var valueList = columns.Select(
-				x => this.GetColumn( formatMap[ x ], x, row ).Replace( qcs, qcs + qcs )
-			);
-			var rs = this.RecordSeparator;
-			var list = this.ForceQuote
-				? valueList.Select(
-					x => qcs + x + qcs
-				)
-				: valueList.Select(
-					x => ( x.Contains( qcs ) || x.Contains( fss ) || ( !System.String.IsNullOrEmpty( rs ) && x.Contains( rs ) ) )
-						? qcs + x + qcs
-						: x
-				)
-			;
-			return System.String.Join( fss, list );
-		}
-		#endregion methods
+		#endregion
 
 	}
 

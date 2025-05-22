@@ -31,7 +31,7 @@ namespace Icod.Wod.File {
 
 		#region methods
 		public sealed override void DoWork( WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
+			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
 			var sourceHandler = this.GetFileHandler( workOrder ) ?? throw new System.InvalidOperationException();
 			var prefix = this.Prefix;
 			if ( System.String.IsNullOrEmpty( prefix ) ) {
@@ -66,24 +66,21 @@ namespace Icod.Wod.File {
 			}
 		}
 		private void PrefixOnce( System.IO.StreamWriter destination, System.IO.StreamReader source, System.String prefix ) {
+			source = source ?? throw new System.ArgumentNullException( nameof( source ) );
+			destination = destination ?? throw new System.ArgumentNullException( nameof( destination ) );
 			if ( System.String.IsNullOrEmpty( prefix ) ) {
-				throw new System.ArgumentException( "prefix" );
-			} else if ( source is null ) {
-				throw new System.ArgumentNullException( "source" );
-			} else if ( destination is null ) {
-				throw new System.ArgumentNullException( "destination" );
+				throw new System.ArgumentNullException( nameof( prefix ) );
 			}
+
 			destination.Write( prefix );
 			destination.Flush();
 			source.BaseStream.CopyTo( destination.BaseStream );
 		}
 		private void PrefixEach( System.IO.StreamWriter destination, System.IO.StreamReader source, System.String prefix ) {
+			source = source ?? throw new System.ArgumentNullException( nameof( source ) );
+			destination = destination ?? throw new System.ArgumentNullException( nameof( destination ) );
 			if ( System.String.IsNullOrEmpty( prefix ) ) {
-				throw new System.ArgumentException( "prefix" );
-			} else if ( source is null ) {
-				throw new System.ArgumentNullException( "source" );
-			} else if ( destination is null ) {
-				throw new System.ArgumentNullException( "destination" );
+				throw new System.ArgumentNullException( nameof( prefix ) );
 			}
 
 			var rs = this.RecordSeparator;

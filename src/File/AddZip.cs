@@ -19,8 +19,8 @@ namespace Icod.Wod.File {
 
 		#region methods
 		public sealed override void DoWork( WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
-			var sources = ( this.Source ?? new FileDescriptor[ 0 ] ).Select(
+			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
+			var sources = ( this.Source ?? System.Array.Empty<FileDescriptor>() ).Select(
 				x => {
 					x.WorkOrder = workOrder;
 					return x;
@@ -33,13 +33,13 @@ namespace Icod.Wod.File {
 			System.String fileName;
 			System.IO.Compression.ZipArchiveEntry entry;
 			var writeIfEmpty = this.WriteIfEmpty;
-			using ( System.IO.Stream buffer = new System.IO.MemoryStream() ) {
+			using ( System.IO.MemoryStream buffer = new System.IO.MemoryStream() ) {
 				using ( var reader = handler.OpenReader( handler.PathCombine( this.ExpandedPath, this.ExpandedName ) ) ) {
 					reader.CopyTo( buffer );
 				}
 				_ = buffer.Seek( 0, System.IO.SeekOrigin.Begin );
 				using ( var zipArchive = this.GetZipArchive( buffer, System.IO.Compression.ZipArchiveMode.Update ) ) {
-					foreach ( var sourceD in sources ?? new FileDescriptor[ 0 ] ) {
+					foreach ( var sourceD in sources ?? System.Array.Empty<FileDescriptor>() ) {
 						sep = sourceD.ExpandedPath;
 						source = sourceD.GetFileHandler( workOrder );
 						foreach ( var file in source.ListFiles().Where(

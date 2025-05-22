@@ -1,4 +1,5 @@
 // Copyright (C) 2025  Timothy J. Bruce
+using System.Data.SqlClient;
 using System.Linq;
 
 namespace Icod.Wod.SalesForce {
@@ -33,16 +34,17 @@ namespace Icod.Wod.SalesForce {
 
 		#region methods
 		public LoginResponse GetLoginResponse( System.String clientId ) {
-			if ( System.String.IsNullOrEmpty( clientId ) ) {
-				throw new System.ArgumentNullException( "clientId" );
-			}
+			clientId = clientId ?? throw new System.ArgumentNullException( nameof( clientId ) );
 			var credential = Credential.GetCredential( clientId, this.WorkOrder );
-			return this.GetLoginResponse( credential, System.Text.Encoding.UTF8 );
+			return GetLoginResponse( credential, System.Text.Encoding.UTF8 );
 		}
-		public LoginResponse GetLoginResponse( SalesForce.ICredential credential, System.Text.Encoding encoding ) {
-			if ( credential is null ) {
-				throw new System.ArgumentNullException( "credential" );
-			} else if (
+		#endregion methods
+
+
+		#region static methods
+		public static LoginResponse GetLoginResponse( SalesForce.ICredential credential, System.Text.Encoding encoding ) {
+			credential = credential ?? throw new System.ArgumentNullException( nameof( credential ) );
+			if (
 				( LoginMode.RefreshToken == credential.LoginMode )
 				&& ( System.String.IsNullOrEmpty( credential.RefreshToken ) || System.String.IsNullOrEmpty( credential.CallbackUrl ) )
 			) {
@@ -57,12 +59,10 @@ namespace Icod.Wod.SalesForce {
 				throw new System.InvalidOperationException( "The specified credential is attempting Password authentication but does not have a username or password configured." );
 			}
 
-			return this.BuildLogin( credential, encoding );
+			return BuildLogin( credential, encoding );
 		}
-		private LoginResponse BuildLogin( SalesForce.ICredential credential, System.Text.Encoding encoding ) {
-			if ( credential is null ) {
-				throw new System.ArgumentNullException( "credential" );
-			}
+		private static LoginResponse BuildLogin( SalesForce.ICredential credential, System.Text.Encoding encoding ) {
+			credential = credential ?? throw new System.ArgumentNullException( nameof( credential ) );
 
 			var headers = new System.Collections.Generic.Dictionary<System.String, System.String>();
 			headers.Add( "Content-type", "application/x-www-form-urlencoded; charset=" + encoding.WebName );
@@ -71,13 +71,31 @@ namespace Icod.Wod.SalesForce {
 #else
 			headers.Add( "Accept-Encoding", "gzip, deflate, identity" );
 #endif
-			var body = this.BuildBody( credential );
-			return this.BuildLogin( credential.SiteUrl, headers, body );
+			var body = BuildBody( credential );
+			return BuildLogin( credential.SiteUrl, headers, body );
 		}
-		private System.String BuildBody( SalesForce.ICredential credential ) {
-			if ( credential is null ) {
-				throw new System.ArgumentNullException( "credential" );
+		private static LoginResponse BuildLogin( System.Uri siteUrl, System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<System.String, System.String>> headers, System.String body ) {
+			System.Net.ServicePointManager.SecurityProtocol = TlsHelper.GetSecurityProtocol();
+
+			using ( var client = new System.Net.WebClient {
+				Encoding = System.Text.Encoding.UTF8
+			} ) {
+				foreach ( var header in headers ) {
+					client.Headers[ header.Key ] = header.Value;
+				}
+				var rawResponse = client.UploadData( siteUrl, "POST", System.Text.Encoding.UTF8.GetBytes( body ) );
+				var json = rawResponse.GetWebString(
+					client.Encoding,
+					client.ResponseHeaders.Keys.OfType<System.String>().Contains( "Content-Encoding" )
+						? client.ResponseHeaders[ "Content-Encoding" ].TrimToNull() ?? "identity"
+						: "identity"
+				);
+				dynamic respObj = Newtonsoft.Json.JsonConvert.DeserializeObject( json );
+				return new LoginResponse( respObj );
 			}
+		}
+		private static System.String BuildBody( SalesForce.ICredential credential ) {
+			credential = credential ?? throw new System.ArgumentNullException( nameof( credential ) );
 
 			var clientId = credential.ClientId;
 			var parameters = new System.Text.StringBuilder();
@@ -111,31 +129,7 @@ namespace Icod.Wod.SalesForce {
 			}
 			return parameters.ToString();
 		}
-		private LoginResponse BuildLogin( System.Uri siteUrl, System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<System.String, System.String>> headers, System.String body ) {
-			var ssl = System.Net.SecurityProtocolType.Tls12;
-#if DEBUG
-			ssl = ssl | System.Net.SecurityProtocolType.Tls11 | System.Net.SecurityProtocolType.Tls | System.Net.SecurityProtocolType.Ssl3;
-#endif
-			System.Net.ServicePointManager.SecurityProtocol = ssl;
-
-			using ( var client = new System.Net.WebClient {
-				Encoding = System.Text.Encoding.UTF8
-			} ) {
-				foreach ( var header in headers ) {
-					client.Headers[ header.Key ] = header.Value;
-				}
-				var rawResponse = client.UploadData( siteUrl, "POST", System.Text.Encoding.UTF8.GetBytes( body ) );
-				var json = rawResponse.GetWebString(
-					client.Encoding,
-					client.ResponseHeaders.Keys.OfType<System.String>().Contains( "Content-Encoding" )
-						? client.ResponseHeaders[ "Content-Encoding" ].TrimToNull() ?? "identity"
-						: "identity"
-				);
-				dynamic respObj = Newtonsoft.Json.JsonConvert.DeserializeObject( json );
-				return new LoginResponse( respObj );
-			}
-		}
-		#endregion methods
+		#endregion
 
 	}
 

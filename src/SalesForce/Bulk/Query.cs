@@ -67,7 +67,10 @@ namespace Icod.Wod.SalesForce.Bulk {
 		}
 
 		public sealed override void PerformWork( Pair<LoginResponse, IStep> jobProcess ) {
-			var step = jobProcess.Second ?? throw new System.ArgumentException();
+			var step = jobProcess.Second ?? throw new System.ArgumentException(
+				System.String.Format( "The {0} is incomplete.", nameof( jobProcess ) ),
+				nameof( jobProcess )
+			);
 			var workOrder = step.WorkOrder;
 			var loginResponse = jobProcess.First;
 

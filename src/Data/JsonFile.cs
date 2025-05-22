@@ -20,17 +20,15 @@ namespace Icod.Wod.Data {
 		#region methods
 		protected sealed override void WriteRecords( Icod.Wod.WorkOrder workOrder, System.Collections.Generic.IEnumerable<System.Data.DataColumn> columns, System.Collections.Generic.IEnumerable<System.Data.DataRow> rows ) {
 #if DEBUG
-			if ( workOrder is null ) {
-				throw new System.ArgumentNullException( "workOrder" );
-			}
+			workOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
 #endif
-			var cols = ( columns ?? new System.Data.DataColumn[ 0 ] );
+			var cols = ( columns ?? System.Array.Empty<System.Data.DataColumn>() );
 			if ( this.WriteIfEmpty ) {
 				if ( !cols.Any() ) {
-					throw new System.ArgumentNullException( "columns" );
+					throw new System.ArgumentNullException( nameof( columns ) );
 				}
 			} else if (
-				( !( rows ?? new System.Data.DataRow[ 0 ] ).Any() )
+				( !( rows ?? System.Array.Empty<System.Data.DataRow>() ).Any() )
 				|| ( !cols.Any() )
 			) {
 				return;
@@ -40,7 +38,7 @@ namespace Icod.Wod.Data {
 			var keys = columns.Select(
 				x => x.ColumnName
 			);
-			System.Collections.Generic.IDictionary<System.String, System.Object> record = null;
+			System.Collections.Generic.Dictionary<System.String, System.Object> record = null;
 			foreach ( var row in rows ) {
 				record = new System.Collections.Generic.Dictionary<System.String, System.Object>( System.StringComparer.OrdinalIgnoreCase );
 				foreach ( var key in keys ) {
@@ -49,7 +47,7 @@ namespace Icod.Wod.Data {
 				collection.Add( record );
 			}
 
-			if ( collection.Any() || this.WriteIfEmpty ) {
+			if ( ( 0 < collection.Count ) || this.WriteIfEmpty ) {
 				using ( var buffer = new System.IO.MemoryStream() ) {
 					using ( var writer = new System.IO.StreamWriter( buffer, this.GetEncoding(), this.BufferLength, true ) ) {
 						new Newtonsoft.Json.JsonSerializer().Serialize( writer, collection, typeof( System.Collections.Generic.IEnumerable<System.Collections.Generic.IDictionary<System.String, System.Object>> ) );
@@ -63,17 +61,16 @@ namespace Icod.Wod.Data {
 		}
 
 		protected sealed override System.Data.DataTable ReadFile( System.String filePathName, System.IO.StreamReader file ) {
-			if ( file is null ) {
-				throw new System.ArgumentNullException( "file" );
-			} else if ( System.String.IsNullOrEmpty( filePathName ) ) {
-				throw new System.ArgumentNullException( "filePathName" );
+			file = file ?? throw new System.ArgumentNullException( nameof( file ) );
+			if ( System.String.IsNullOrEmpty( filePathName ) ) {
+				throw new System.ArgumentNullException( nameof( filePathName ) );
 			}
 
 			System.Data.DataTable table;
 			try {
 				var set = Newtonsoft.Json.JsonConvert.DeserializeObject<System.Data.DataSet>( file.ReadToEnd() );
 				table = set.Tables[ 0 ];
-				this.AddFileColumns( table, filePathName );
+				AddFileColumns( table, filePathName );
 			} catch ( System.Exception e ) {
 				if ( !e.Data.Contains( "%wod:FilePathName%" ) ) {
 					e.Data.Add( "%wod:FilePathName%", filePathName );

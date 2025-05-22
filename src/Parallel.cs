@@ -93,8 +93,8 @@ namespace Icod.Wod {
 
 		#region methods
 		public void DoWork( WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
-			var steps = ( this.Steps ?? new IStep[ 0 ] ).OfType<IStep>();
+			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
+			var steps = ( this.Steps ?? System.Array.Empty<IStep>() ).OfType<IStep>();
 			if ( !steps.Any() ) {
 				return;
 			}
@@ -102,26 +102,15 @@ namespace Icod.Wod {
 				var token = tokenSource.Token;
 				var maxP = this.MaxDegreeOfParallelism;
 				if ( DefaultMaxDegreeOfParallelism == maxP ) {
-					this.DoUnlimitedWork( workOrder, steps, token );
+					DoUnlimitedWork( workOrder, steps, token );
 				} else {
 					this.DoLimitedWork( workOrder, steps, token );
 				}
 			}
 		}
-		private void DoUnlimitedWork( WorkOrder workOrder, System.Collections.Generic.IEnumerable<IStep> steps, System.Threading.CancellationToken token ) {
-			System.Collections.Generic.ICollection<System.Threading.Tasks.Task> tasks = new System.Collections.Generic.List<System.Threading.Tasks.Task>();
-			var factory = new System.Threading.Tasks.TaskFactory( token );
-			foreach ( var step in steps ) {
-				tasks.Add( factory.StartNew(
-					() => step.DoWork( workOrder ),
-					token
-				) );
-			}
-			System.Threading.Tasks.Task.WaitAll( tasks.ToArray(), token );
-		}
 		private void DoLimitedWork( WorkOrder workOrder, System.Collections.Generic.IEnumerable<IStep> steps, System.Threading.CancellationToken token ) {
 			using ( var semaphore = new Semaphore( this.MaxDegreeOfParallelism, this.MaxDegreeOfParallelism ) ) {
-				System.Collections.Generic.ICollection<System.Threading.Tasks.Task> tasks = new System.Collections.Generic.List<System.Threading.Tasks.Task>();
+				System.Collections.Generic.List<System.Threading.Tasks.Task> tasks = new System.Collections.Generic.List<System.Threading.Tasks.Task>();
 				var factory = new System.Threading.Tasks.TaskFactory( token );
 				foreach ( var step in steps ) {
 					tasks.Add( factory.StartNew(
@@ -137,6 +126,21 @@ namespace Icod.Wod {
 			}
 		}
 		#endregion methods
+
+
+		#region static methods
+		private static void DoUnlimitedWork( WorkOrder workOrder, System.Collections.Generic.IEnumerable<IStep> steps, System.Threading.CancellationToken token ) {
+			System.Collections.Generic.List<System.Threading.Tasks.Task> tasks = new System.Collections.Generic.List<System.Threading.Tasks.Task>();
+			var factory = new System.Threading.Tasks.TaskFactory( token );
+			foreach ( var step in steps ) {
+				tasks.Add( factory.StartNew(
+					() => step.DoWork( workOrder ),
+					token
+				) );
+			}
+			System.Threading.Tasks.Task.WaitAll( tasks.ToArray(), token );
+		}
+		#endregion
 
 	}
 

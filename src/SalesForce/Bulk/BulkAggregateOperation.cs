@@ -82,8 +82,8 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 		#region methods
 		public void DoWork( WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
-			var operations = ( this.Operations ?? new System.Object[ 0 ] ).OfType<IAggregateOperation>();
+			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
+			var operations = ( this.Operations ?? System.Array.Empty<System.Object>() ).OfType<IAggregateOperation>();
 			if ( !operations.Any() ) {
 				return;
 			}
@@ -94,7 +94,7 @@ namespace Icod.Wod.SalesForce.Bulk {
 
 			using ( var tokenSource = new System.Threading.CancellationTokenSource() ) {
 				var token = tokenSource.Token;
-				System.Collections.Generic.ICollection<System.Threading.Tasks.Task> tasks = new System.Collections.Generic.List<System.Threading.Tasks.Task>();
+				System.Collections.Generic.List<System.Threading.Tasks.Task> tasks = new System.Collections.Generic.List<System.Threading.Tasks.Task>();
 				var factory = new System.Threading.Tasks.TaskFactory(
 					token,
 					System.Threading.Tasks.TaskCreationOptions.LongRunning,

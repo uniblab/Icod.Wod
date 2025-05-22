@@ -40,7 +40,7 @@ namespace Icod.Wod.File {
 
 		#region methods
 		public sealed override void DoWork( WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
+			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
 			var fh = this.GetFileHandler( workOrder );
 			foreach ( var fe in fh.ListDirectories() ) {
 				fh.RmDir( fe.File, this.Recurse );

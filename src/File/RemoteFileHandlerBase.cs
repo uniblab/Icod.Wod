@@ -25,7 +25,7 @@ namespace Icod.Wod.File {
 
 		#region methods
 		protected virtual System.Collections.Generic.IEnumerable<System.String> ReadLines( System.Net.WebRequest request ) {
-			System.Collections.Generic.ICollection<System.String> output = new System.Collections.Generic.List<System.String>();
+			System.Collections.Generic.List<System.String> output = new System.Collections.Generic.List<System.String>();
 			using ( var response = request.GetResponse() ) {
 				using ( var stream = response.GetResponseStream() ) {
 					using ( var reader = new System.IO.StreamReader( stream ) ) {

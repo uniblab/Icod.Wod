@@ -172,12 +172,11 @@ namespace Icod.Wod.SalesForce {
 
 		#region static methods
 		public static ICredential GetCredential( System.String name, WorkOrder workOrder ) {
-			if ( workOrder is null ) {
-				throw new System.ArgumentNullException( "workOrder" );
-			} else if ( System.String.IsNullOrEmpty( name ) ) {
-				throw new System.ArgumentNullException( "name" );
+			workOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
+			if ( System.String.IsNullOrEmpty( name ) ) {
+				throw new System.ArgumentNullException( nameof( name ) );
 			}
-			ICredential here = ( workOrder.SFCredentials ?? new ICredential[ 0 ] ).FirstOrDefault(
+			ICredential here = ( workOrder.SFCredentials ?? System.Array.Empty<ICredential>() ).FirstOrDefault(
 				x => x.Name.Equals( name, System.StringComparison.Ordinal )
 			);
 			if ( here is object ) {

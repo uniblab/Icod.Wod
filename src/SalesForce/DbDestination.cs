@@ -45,7 +45,7 @@ namespace Icod.Wod.SalesForce {
 
 		#region methods
 		public sealed override void WriteRecords( Icod.Wod.WorkOrder workOrder, Icod.Wod.Data.ITableSource source ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
+			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
 			if ( System.String.IsNullOrEmpty( this.CommandText ) ) {
 				this.WriteRecordsOverride( workOrder, source );
 			} else {
@@ -53,11 +53,8 @@ namespace Icod.Wod.SalesForce {
 			}
 		}
 		private void WriteRecordsOverride( Icod.Wod.WorkOrder workOrder, Icod.Wod.Data.ITableSource source ) {
-			if ( source is null ) {
-				throw new System.ArgumentNullException( "source" );
-			} else if ( workOrder is null ) {
-				throw new System.ArgumentNullException( "workOrder" );
-			}
+			source = source ?? throw new System.ArgumentNullException( nameof( source ) );
+			workOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
 
 			using ( var cnxn = this.CreateConnection( workOrder ) ) {
 				using ( var adapter = this.CreateDataAdapter( cnxn, workOrder ) ) {

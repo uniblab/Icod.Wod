@@ -1,5 +1,7 @@
 // Copyright (C) 2025  Timothy J. Bruce
 
+using System.Security.Cryptography;
+
 namespace Icod.Wod.File {
 
 	[System.Serializable]
@@ -16,9 +18,7 @@ namespace Icod.Wod.File {
 		#region methods
 		private void SetClient( System.Net.HttpWebRequest client, System.String method ) {
 #if DEBUG
-			if ( client is null ) {
-				throw new System.ArgumentNullException( "client" );
-			}
+			client = client ?? throw new System.ArgumentNullException( nameof( client ) );
 #endif
 			var fd = this.FileDescriptor;
 			var uri = new System.Uri( fd.ExpandedPath );
@@ -33,11 +33,7 @@ namespace Icod.Wod.File {
 			client.Method = method;
 			client.AutomaticDecompression = System.Net.DecompressionMethods.None;
 			client.PreAuthenticate = true;
-			var ssl = System.Net.SecurityProtocolType.Tls12;
-#if DEBUG
-			ssl = ssl | System.Net.SecurityProtocolType.Tls11 | System.Net.SecurityProtocolType.Tls | System.Net.SecurityProtocolType.Ssl3;
-#endif
-			System.Net.ServicePointManager.SecurityProtocol = ssl;
+			System.Net.ServicePointManager.SecurityProtocol = TlsHelper.GetSecurityProtocol();
 		}
 
 		public sealed override void TouchFile() {
@@ -129,7 +125,7 @@ namespace Icod.Wod.File {
 				}
 			};
 		}
-		#endregion methods
+#endregion methods
 
 	}
 

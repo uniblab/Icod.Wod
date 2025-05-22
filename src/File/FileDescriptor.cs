@@ -1,4 +1,5 @@
 // Copyright (C) 2025  Timothy J. Bruce
+
 namespace Icod.Wod.File {
 
 	[System.Serializable]
@@ -9,6 +10,8 @@ namespace Icod.Wod.File {
 	public class FileDescriptor : IFile {
 
 		#region fields
+		private static readonly System.Collections.Generic.Dictionary<System.String, System.Func<WorkOrder, FileDescriptor, FileHandlerBase>> theFileHandlerMap;
+
 		private System.String myPath;
 		private System.String myName;
 		private System.String myRegexPattern;
@@ -22,6 +25,41 @@ namespace Icod.Wod.File {
 
 
 		#region .ctor
+		static FileDescriptor() {
+			theFileHandlerMap = new System.Collections.Generic.Dictionary<System.String, System.Func<WorkOrder, FileDescriptor, FileHandlerBase>>( 6 );
+			theFileHandlerMap.Add(
+				System.String.Empty, 
+				( wo, fd ) => (FileHandlerBase)System.Activator.CreateInstance( typeof( LocalFileHandler ), new System.Object[ 2 ] { wo, fd } )
+			);
+			theFileHandlerMap.Add(
+				"file",
+				( wo, fd ) => (FileHandlerBase)System.Activator.CreateInstance( typeof( LocalFileHandler ), new System.Object[ 2 ] { wo, fd } )
+			);
+
+			theFileHandlerMap.Add(
+				"ftp",
+				( wo, fd ) => (FileHandlerBase)System.Activator.CreateInstance( typeof( FtpFileHandler ), new System.Object[ 2 ] { wo, fd } )
+			);
+			theFileHandlerMap.Add(
+				"ftps",
+				( wo, fd ) => (FileHandlerBase)System.Activator.CreateInstance( typeof( FtpFileHandler ), new System.Object[ 2 ] { wo, fd } )
+			);
+
+			theFileHandlerMap.Add(
+				"http",
+				( wo, fd ) => (FileHandlerBase)System.Activator.CreateInstance( typeof( HttpFileHandler ), new System.Object[ 2 ] { wo, fd } )
+			);
+			theFileHandlerMap.Add(
+				"https",
+				( wo, fd ) => (FileHandlerBase)System.Activator.CreateInstance( typeof( HttpFileHandler ), new System.Object[ 2 ] { wo, fd } )
+			);
+
+			theFileHandlerMap.Add(
+				"sftp",
+				( wo, fd ) => (FileHandlerBase)System.Activator.CreateInstance( typeof( SftpFileHandler ), new System.Object[ 2 ] { wo, fd } )
+			);
+		}
+
 		public FileDescriptor() : base() {
 			myUsePassive = true;
 		}
@@ -179,28 +217,20 @@ namespace Icod.Wod.File {
 			FileHandlerBase output;
 
 			this.WorkOrder = workOrder;
-			var ep = this.ExpandedPath;
+			var ep = this.ExpandedPath ?? System.String.Empty;
+
 			if ( System.String.IsNullOrEmpty( ep ) ) {
-				output = new LocalFileHandler( workOrder, this );
+				output = theFileHandlerMap[ ep ]( workOrder, this );
 			} else {
 				var uri = new System.Uri( ep );
-				switch ( uri.Scheme.ToLower() ) {
-					case "file":
-						output = new LocalFileHandler( workOrder, this );
-						break;
-					case "ftp":
-					case "ftps":
-						output = new FtpFileHandler( workOrder, this );
-						break;
-					case "http":
-					case "https":
-						output = new HttpFileHandler( workOrder, this );
-						break;
-					case "sftp":
-						output = new SftpFileHandler( workOrder, this );
-						break;
-					default:
-						throw new System.NotSupportedException();
+				var scheme = uri.Scheme.ToLower();
+				try {
+					output = theFileHandlerMap[ scheme ]( workOrder, this );
+				} catch ( System.Exception e ) {
+					throw new System.InvalidOperationException(
+						System.String.Format( "The specified uri scheme, {0}, is not supported.", scheme ),
+						e
+					);
 				}
 			}
 			return output;
@@ -216,7 +246,7 @@ namespace Icod.Wod.File {
 		}
 		public virtual System.String GetFilePathName( FileHandlerBase handler, System.String alternateName ) {
 			if ( handler is null ) {
-				throw new System.ArgumentNullException( "handler" );
+				throw new System.ArgumentNullException( nameof( handler ) );
 			}
 			return handler.PathCombine( this.ExpandedPath, this.GetFileName( alternateName ) );
 		}

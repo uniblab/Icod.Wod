@@ -31,7 +31,7 @@ namespace Icod.Wod.File {
 
 		#region methods
 		public sealed override void DoWork( WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
+			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
 			var sourceHandler = this.GetFileHandler( workOrder ) ?? throw new System.InvalidOperationException();
 			var preamble = this.Preamble;
 			if ( System.String.IsNullOrEmpty( preamble ) ) {
@@ -60,13 +60,12 @@ namespace Icod.Wod.File {
 			}
 		}
 		private void PrefixOnce( System.IO.StreamWriter destination, System.IO.StreamReader source, System.String preamble ) {
+			source = source ?? throw new System.ArgumentNullException( nameof( source ) );
+			destination = destination ?? throw new System.ArgumentNullException( nameof( destination ) );
 			if ( System.String.IsNullOrEmpty( preamble ) ) {
-				throw new System.ArgumentException( "preamble" );
-			} else if ( source is null ) {
-				throw new System.ArgumentNullException( "source" );
-			} else if ( destination is null ) {
-				throw new System.ArgumentNullException( "destination" );
-			}
+				throw new System.ArgumentNullException( nameof( preamble ) );
+			} else
+
 			destination.Write( preamble );
 			var rs = this.RecordSeparator;
 			if ( !System.String.IsNullOrEmpty( rs ) ) {

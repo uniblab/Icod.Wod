@@ -83,13 +83,13 @@ namespace Icod.Wod.File {
 
 		#region methods
 		public sealed override void DoWork( WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
+			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
 			var handler = this.GetFileHandler( workOrder ) ?? throw new System.InvalidOperationException();
 
 			if ( handler.ListFiles().Any(
 				x => x.FileType.Equals( FileType.File )
 			) ) {
-				var steps = ( this.Steps ?? new System.Object[ 0 ] ).OfType<IStep>().ToArray();
+				var steps = ( this.Steps ?? System.Array.Empty<System.Object>() ).OfType<IStep>().ToArray();
 				foreach ( var s in steps ) {
 					s.DoWork( workOrder );
 				}

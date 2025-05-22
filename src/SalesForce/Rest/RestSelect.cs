@@ -82,19 +82,19 @@ namespace Icod.Wod.SalesForce.Rest {
 
 		#region methods
 		public void DoWork( WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
+			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
 			var dest = this.Destination ?? throw new System.InvalidOperationException();
 			dest.WriteRecords( workOrder, this );
 		}
 
 		public System.Collections.Generic.IEnumerable<System.Data.DataTable> ReadTables( Icod.Wod.WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
+			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
 			var credential = Credential.GetCredential( this.InstanceName, workOrder );
-			var loginToken = new Login() { WorkOrder = workOrder }.GetLoginResponse( credential, System.Text.Encoding.UTF8 );
+			var loginToken = Login.GetLoginResponse( credential, System.Text.Encoding.UTF8 );
 			return this.ReadTables( loginToken );
 		}
 		public System.Collections.Generic.IEnumerable<System.Data.DataTable> ReadTables( LoginResponse loginToken ) {
-			using ( var client = this.BuildClient( loginToken, this.WorkOrder.JobName ) ) {
+			using ( var client = BuildClient( loginToken, this.WorkOrder.JobName ) ) {
 				client.Headers[ "Content-type" ] = "application/x-www-form-urlencoded; charset=utf-8";
 				var instanceUrl = new System.Uri( loginToken.InstanceUrl );
 				var nextRecordsUrl = this.GetServicePath();
@@ -152,32 +152,21 @@ namespace Icod.Wod.SalesForce.Rest {
 		private System.String GetServicePath() {
 			return System.String.Format( "/services/data/v{0:F1}/query/", this.ApiVersion );
 		}
+		#endregion methods
 
-		private System.Net.WebClient BuildClient( LoginResponse token, System.String userAgent ) {
-			if ( token is null ) {
-				throw new System.ArgumentNullException( "token" );
-			}
+
+		#region static methods
+		private static System.Net.WebClient BuildClient( LoginResponse token, System.String userAgent ) {
+			token = token ?? throw new System.ArgumentNullException( nameof( token ) );
 			var client = new System.Net.WebClient {
 				Encoding = System.Text.Encoding.UTF8
 			};
 			client.Headers[ "Authorization" ] = "Bearer " + token.AccessToken;
 			client.Headers[ "User-Agent" ] = userAgent.TrimToNull() ?? System.Reflection.Assembly.GetExecutingAssembly().FullName;
-			System.Net.SecurityProtocolType ssl;
-#if NET48_OR_GREATER || NETCOREAPP3_0_OR_GREATER || NET5_0_OR_GREATER
-			ssl = System.Net.SecurityProtocolType.Tls13;
-#else
-			ssl = System.Net.SecurityProtocolType.Tls12;
-#endif
-#if DEBUG
-			client.Headers[ "Accept-Encoding" ] = "identity, gzip, deflate";
-			ssl = ssl | System.Net.SecurityProtocolType.Tls12 | System.Net.SecurityProtocolType.Tls11 | System.Net.SecurityProtocolType.Tls | System.Net.SecurityProtocolType.Ssl3;
-#else
-			client.Headers[ "Accept-Encoding" ] = "gzip, deflate, identity";
-#endif
-			System.Net.ServicePointManager.SecurityProtocol = ssl;
+			System.Net.ServicePointManager.SecurityProtocol = TlsHelper.GetSecurityProtocol();
 			return client;
 		}
-		#endregion methods
+		#endregion
 
 	}
 

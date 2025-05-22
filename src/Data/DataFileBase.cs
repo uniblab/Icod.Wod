@@ -66,28 +66,16 @@ namespace Icod.Wod.Data {
 
 		#region methods
 		public virtual void WriteRecords( Icod.Wod.WorkOrder workOrder, ITableSource source ) {
-			if ( source is null ) {
-				if ( this.WriteIfEmpty ) {
-					throw new System.ArgumentNullException( "source" );
-				} else {
-					return;
-				}
-			} else if ( workOrder is null ) {
-				throw new System.ArgumentNullException( "workOrder" );
-			}
 			this.WriteRecords( workOrder, source.ReadTables( workOrder ).OfType<System.Data.DataTable>() );
 		}
 		protected virtual void WriteRecords( Icod.Wod.WorkOrder workOrder, System.Collections.Generic.IEnumerable<System.Data.DataTable> source ) {
 			if ( ( source is null ) || !source.Any() ) {
 				if ( this.WriteIfEmpty ) {
-					throw new System.ArgumentNullException( "source" );
+					throw new System.ArgumentNullException( nameof( source ) );
 				} else {
 					return;
 				}
-			} else if ( workOrder is null ) {
-				throw new System.ArgumentNullException( "workOrder" );
 			}
-
 			using ( var table = source.FirstOrDefault() ) {
 				this.WriteRecords( workOrder, table );
 			}
@@ -95,13 +83,12 @@ namespace Icod.Wod.Data {
 		protected virtual void WriteRecords( Icod.Wod.WorkOrder workOrder, System.Data.DataTable source ) {
 			if ( source is null ) {
 				if ( this.WriteIfEmpty ) {
-					throw new System.ArgumentNullException( "source" );
+					throw new System.ArgumentNullException( nameof( source ) );
 				} else {
 					return;
 				}
-			} else if ( workOrder is null ) {
-				throw new System.ArgumentNullException( "workOrder" );
 			}
+			workOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
 
 			this.WriteRecords( workOrder, source.Columns.OfType<System.Data.DataColumn>(), source.Rows.OfType<System.Data.DataRow>() );
 		}
@@ -109,10 +96,10 @@ namespace Icod.Wod.Data {
 
 		protected System.Collections.Generic.IDictionary<System.Data.DataColumn, ColumnBase> BuildFormatMap( System.Collections.Generic.IEnumerable<System.Data.DataColumn> dbColumns ) {
 			if ( ( dbColumns is null ) || !dbColumns.Any() ) {
-				throw new System.ArgumentNullException( "dbColumns" );
+				throw new System.ArgumentNullException( nameof( dbColumns ) );
 			}
 			var output = new System.Collections.Generic.Dictionary<System.Data.DataColumn, ColumnBase>();
-			var cols = this.Columns ?? new ColumnBase[ 0 ];
+			var cols = this.Columns ?? System.Array.Empty<ColumnBase>();
 
 			foreach ( var dbCol in dbColumns ) {
 				output.Add( dbCol, cols.FirstOrDefault(
@@ -127,9 +114,7 @@ namespace Icod.Wod.Data {
 			return output;
 		}
 		protected void WriteFile( System.IO.Stream stream ) {
-			if ( stream is null ) {
-				throw new System.ArgumentNullException( "stream" );
-			}
+			stream = stream ?? throw new System.ArgumentNullException( nameof( stream ) );
 			var handler = this.GetFileHandler( this.WorkOrder );
 			var dfpn = handler.PathCombine( this.ExpandedPath, this.ExpandedName );
 			_ = stream.Seek( 0, System.IO.SeekOrigin.Begin );
@@ -144,16 +129,15 @@ namespace Icod.Wod.Data {
 			return this.GetFileHandler( this.WorkOrder ).ListFiles();
 		}
 		protected System.IO.StreamReader OpenReader( Icod.Wod.File.FileEntry file ) {
-			if ( file is null ) {
-				throw new System.ArgumentNullException( "file" );
-			} else if ( Icod.Wod.File.FileType.Directory == file.FileType ) {
+			file = file ?? throw new System.ArgumentNullException( nameof( file ) );
+			if ( Icod.Wod.File.FileType.Directory == file.FileType ) {
 				throw new System.InvalidOperationException();
 			}
 			return new System.IO.StreamReader( this.GetFileHandler( this.WorkOrder ).OpenReader( file.File ), this.GetEncoding(), true, this.BufferLength );
 		}
 		protected abstract System.Data.DataTable ReadFile( System.String filePathName, System.IO.StreamReader file );
 		public System.Collections.Generic.IEnumerable<System.Data.DataTable> ReadTables( Icod.Wod.WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( "workOrder" );
+			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
 			foreach ( var file in this.GetFiles() ) {
 				using ( var stream = this.OpenReader( file ) ) {
 					using ( var table = this.ReadFile( file.File, stream ) ) {
@@ -162,13 +146,15 @@ namespace Icod.Wod.Data {
 				}
 			}
 		}
+		#endregion
 
-		protected void AddFileColumns( System.Data.DataTable table, System.String filePathName ) {
+		#region static methods
+
+		protected static void AddFileColumns( System.Data.DataTable table, System.String filePathName ) {
 			if ( System.String.IsNullOrEmpty( filePathName ) ) {
-				throw new System.ArgumentNullException( "filePathName" );
-			} else if ( table is null ) {
-				throw new System.ArgumentNullException( "table" );
+				throw new System.ArgumentNullException( nameof( filePathName ) );
 			}
+			table = table ?? throw new System.ArgumentNullException( nameof( table ) );
 
 			var filePathNameColumn = new System.Data.DataColumn( "%wod:FilePathName%", typeof( System.String ) ) {
 				AllowDBNull = false,
@@ -203,7 +189,7 @@ namespace Icod.Wod.Data {
 
 			table.TableName = fileName;
 		}
-		#endregion methods
+		#endregion static methods
 
 	}
 

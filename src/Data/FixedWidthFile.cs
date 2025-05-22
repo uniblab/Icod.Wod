@@ -41,10 +41,9 @@ namespace Icod.Wod.Data {
 			}
 			set {
 				base.ConvertEmptyStringToNull = value;
-				System.String w( System.String a, System.Int32 b, System.Int32 c ) => a.Substring( b, c );
 				var q = ( this.TrimValues )
-					? ( a, b, c ) => w( a, b, c ).TrimToNull()
-					: (System.Func<System.String, System.Int32, System.Int32, System.String>)w
+					? ( a, b, c ) => SubStr( a, b, c ).TrimToNull()
+					: (System.Func<System.String, System.Int32, System.Int32, System.String>)SubStr
 				;
 				this.ColumnReader = ( value )
 					? q
@@ -52,6 +51,7 @@ namespace Icod.Wod.Data {
 				;
 			}
 		}
+
 
 		[System.Xml.Serialization.XmlAttribute(
 			"trimValues",
@@ -64,10 +64,10 @@ namespace Icod.Wod.Data {
 			}
 			set {
 				base.TrimValues = value;
-				System.String w( System.String a, System.Int32 b, System.Int32 c ) => a.Substring( b, c );
+
 				var q = ( value )
-					? ( a, b, c ) => w( a, b, c ).TrimToNull()
-					: (System.Func<System.String, System.Int32, System.Int32, System.String>)w
+					? ( a, b, c ) => SubStr( a, b, c ).TrimToNull()
+					: (System.Func<System.String, System.Int32, System.Int32, System.String>)SubStr
 				;
 				this.ColumnReader = ( this.ConvertEmptyStringToNull )
 					? q
@@ -90,14 +90,13 @@ namespace Icod.Wod.Data {
 
 		#region methods
 		protected sealed override System.Collections.Generic.IEnumerable<System.Data.DataColumn> BuildColumns( System.IO.StreamReader file ) {
-			if ( file is null ) {
-				throw new System.ArgumentNullException( "file" );
-			} else if ( !( this.Columns ?? new ColumnBase[ 0 ] ).Any() ) {
+			file = file ?? throw new System.ArgumentNullException( nameof( file ) );
+			if ( 0 == ( this.Columns ?? System.Array.Empty<ColumnBase>() ).Length ) {
 				throw new System.InvalidOperationException();
 			} else if ( this.Columns.Any(
 				x => ( x.Length < -1 )
 			) ) {
-				throw new System.ArgumentException( "All column lengths must be positive." );
+				throw new System.InvalidOperationException( "All column lengths must be positive." );
 			}
 			return this.Columns.Select(
 				x => new System.Data.DataColumn( x.Name, typeof( System.String ) ) {
@@ -106,17 +105,13 @@ namespace Icod.Wod.Data {
 			);
 		}
 		protected sealed override System.Data.DataRow ReadRecord( System.Data.DataTable table, System.IO.StreamReader file ) {
-			if ( file is null ) {
-				throw new System.ArgumentNullException( "file" );
-			} else if ( table is null ) {
-				throw new System.ArgumentNullException( "table" );
-			}
+			file = file ?? throw new System.ArgumentNullException( nameof( file ) );
+			table = table ?? throw new System.ArgumentNullException( nameof( table ) );
 			return table.Rows.Add( this.ReadRecord( file ).ToArray() );
 		}
 		protected sealed override System.Collections.Generic.IEnumerable<System.String> ReadRecord( System.IO.StreamReader file ) {
-			if ( file is null ) {
-				throw new System.ArgumentNullException( "file" );
-			} else if ( file.EndOfStream ) {
+			file = file ?? throw new System.ArgumentNullException( nameof( file ) );
+			if ( file.EndOfStream ) {
 				yield break;
 			}
 
@@ -143,12 +138,11 @@ namespace Icod.Wod.Data {
 		}
 
 		protected sealed override void WriteHeader( System.IO.StreamWriter writer, System.Collections.Generic.IEnumerable<System.Data.DataColumn> dbColumns, System.Collections.Generic.IEnumerable<ColumnBase> fileColumns ) {
+			writer = writer ?? throw new System.ArgumentNullException( nameof( writer ) );
 			if ( ( fileColumns is null ) || !fileColumns.Any() ) {
-				throw new System.ArgumentNullException( "fileColumns" );
+				throw new System.ArgumentNullException( nameof( fileColumns ) );
 			} else if ( ( dbColumns is null ) || !dbColumns.Any() ) {
-				throw new System.ArgumentNullException( "dbColumns" );
-			} else if ( writer is null ) {
-				throw new System.ArgumentNullException( "writer" );
+				throw new System.ArgumentNullException( nameof( dbColumns ) );
 			}
 
 			var line = dbColumns.Select(
@@ -169,6 +163,12 @@ namespace Icod.Wod.Data {
 		}
 		#endregion  methods
 
+
+		#region static methods
+		private static System.String SubStr( System.String a, System.Int32 b, System.Int32 c ) {
+			return a.Substring( b, c );
+		}
+		#endregion static methods
 	}
 
 }
