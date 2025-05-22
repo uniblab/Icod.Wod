@@ -1,6 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!--
-	Icod.Wod framework, or WoD, is an automation class library.
+	Icod.Wod framework, or the Icod Work on Demand framework, or WoD, is an automation class library.
+	It is primarily intended for automated managed file transfer, database and salesforce import/export,
+	and file management.
 	Copyright (C) 2025 Timothy J. Bruce
 
     This program is free software: you can redistribute it and/or modify
@@ -23,9 +25,9 @@
 		<Copyright>Copyright (C) 2025  Timothy J. Bruce</Copyright>
 		<Product>Icod.Wod</Product>
 		<Description>The Icod Work on Demand framework</Description>
-		<Version>4.0.0.0</Version>
-		<InformationalVersion>4.0.0.0</InformationalVersion>
-		<FileVersion>4.0.0.1</FileVersion>
+		<Version>4.7.2.0</Version>
+		<FileVersion>4.7.2.0</FileVersion>
+		<InformationalVersion>4.7.2.0</InformationalVersion>
 	</PropertyGroup>
 	<PropertyGroup>
 		<RootNamespace>Icod.Wod</RootNamespace>
@@ -98,23 +100,27 @@
 	</ItemGroup>
 	<ItemGroup>
 		<Reference Include="Microsoft.CSharp" />
-		<Reference Include="System.Configuration" Condition=" '$(TargetFramework)' != 'net462' "/>
-		<Reference Include="System.Web" />
-		<!--
 		<Reference Include="System" />
-		<Reference Include="System.ComponentModel.Composition" />
+		<Reference Include="System.Configuration" Condition=" '$(TargetFramework)' != 'net462' "/>
+		<Reference Include="System.Core" />
 		<Reference Include="System.Data" />
-		<Reference Include="System.Data.OracleClient" />
-		<Reference Include="System.DirectoryServices" />
 		<Reference Include="System.Drawing" />
 		<Reference Include="System.IO.Compression.FileSystem" />
+		<Reference Include="System.Numerics" />
+		<Reference Include="System.Runtime.Serialization" />
+		<Reference Include="System.Web" />
+		<Reference Include="System.Xml" />
+		<Reference Include="System.Xml.Linq" />
+		<!--
+		<Reference Include="System.ComponentModel.Composition" />
+		<Reference Include="System.Data.OracleClient" />
+		<Reference Include="System.DirectoryServices" />
 		<Reference Include="System.Runtime.InteropServices" />
 		<Reference Include="System.Net" />
 		<Reference Include="System.Security" />
 		<Reference Include="System.ServiceProcess" />
 		<Reference Include="System.Threading.Thread" />
 		<Reference Include="System.Transactions" />
-		<Reference Include="System.Xml" />
 		<Reference Include="WindowsBase" />
 		-->
 	</ItemGroup>
