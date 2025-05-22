@@ -108,10 +108,10 @@ namespace Icod.Wod.File {
 
 
 		#region static methods
-		protected static System.String PruneExtension( System.String sourceFileName ) {
+		private static System.String PruneExtension( System.String sourceFileName ) {
 			return System.IO.Path.GetFileNameWithoutExtension( sourceFileName );
 		}
-		protected static System.String AddExtension( System.String sourceFilename ) {
+		private static System.String AddExtension( System.String sourceFilename ) {
 			return System.IO.Path.GetFileName( sourceFilename ) + ".gzip";
 		}
 		#endregion static methods
