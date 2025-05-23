@@ -30,7 +30,7 @@ namespace Icod.Wod.File {
 				using ( var stream = response.GetResponseStream() ) {
 					using ( var reader = new System.IO.StreamReader( stream ) ) {
 						System.String line = reader.ReadLine();
-						while ( line is object ) {
+						while ( null != line ) {
 							output.Add( line );
 							line = reader.ReadLine();
 						}

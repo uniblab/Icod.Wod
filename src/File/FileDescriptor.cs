@@ -26,38 +26,36 @@ namespace Icod.Wod.File {
 
 		#region .ctor
 		static FileDescriptor() {
-			theFileHandlerMap = new System.Collections.Generic.Dictionary<System.String, System.Func<WorkOrder, FileDescriptor, FileHandlerBase>>( 6 );
-			theFileHandlerMap.Add(
-				System.String.Empty, 
-				( wo, fd ) => (FileHandlerBase)System.Activator.CreateInstance( typeof( LocalFileHandler ), new System.Object[ 2 ] { wo, fd } )
-			);
-			theFileHandlerMap.Add(
-				"file",
-				( wo, fd ) => (FileHandlerBase)System.Activator.CreateInstance( typeof( LocalFileHandler ), new System.Object[ 2 ] { wo, fd } )
-			);
-
-			theFileHandlerMap.Add(
-				"ftp",
-				( wo, fd ) => (FileHandlerBase)System.Activator.CreateInstance( typeof( FtpFileHandler ), new System.Object[ 2 ] { wo, fd } )
-			);
-			theFileHandlerMap.Add(
-				"ftps",
-				( wo, fd ) => (FileHandlerBase)System.Activator.CreateInstance( typeof( FtpFileHandler ), new System.Object[ 2 ] { wo, fd } )
-			);
-
-			theFileHandlerMap.Add(
-				"http",
-				( wo, fd ) => (FileHandlerBase)System.Activator.CreateInstance( typeof( HttpFileHandler ), new System.Object[ 2 ] { wo, fd } )
-			);
-			theFileHandlerMap.Add(
-				"https",
-				( wo, fd ) => (FileHandlerBase)System.Activator.CreateInstance( typeof( HttpFileHandler ), new System.Object[ 2 ] { wo, fd } )
-			);
-
-			theFileHandlerMap.Add(
-				"sftp",
-				( wo, fd ) => (FileHandlerBase)System.Activator.CreateInstance( typeof( SftpFileHandler ), new System.Object[ 2 ] { wo, fd } )
-			);
+			theFileHandlerMap = new System.Collections.Generic.Dictionary<System.String, System.Func<WorkOrder, FileDescriptor, FileHandlerBase>>( 6 ) {
+				{
+					System.String.Empty,
+					( wo, fd ) => (FileHandlerBase)System.Activator.CreateInstance( typeof( LocalFileHandler ), new System.Object[ 2 ] { wo, fd } )
+				},
+				{
+					"file",
+					( wo, fd ) => (FileHandlerBase)System.Activator.CreateInstance( typeof( LocalFileHandler ), new System.Object[ 2 ] { wo, fd } )
+				},
+				{
+					"ftp",
+					( wo, fd ) => (FileHandlerBase)System.Activator.CreateInstance( typeof( FtpFileHandler ), new System.Object[ 2 ] { wo, fd } )
+				},
+				{
+					"ftps",
+					( wo, fd ) => (FileHandlerBase)System.Activator.CreateInstance( typeof( FtpFileHandler ), new System.Object[ 2 ] { wo, fd } )
+				},
+				{
+					"http",
+					( wo, fd ) => (FileHandlerBase)System.Activator.CreateInstance( typeof( HttpFileHandler ), new System.Object[ 2 ] { wo, fd } )
+				},
+				{
+					"https",
+					( wo, fd ) => (FileHandlerBase)System.Activator.CreateInstance( typeof( HttpFileHandler ), new System.Object[ 2 ] { wo, fd } )
+				},
+				{
+					"sftp",
+					( wo, fd ) => (FileHandlerBase)System.Activator.CreateInstance( typeof( SftpFileHandler ), new System.Object[ 2 ] { wo, fd } )
+				}
+			};
 		}
 
 		public FileDescriptor() : base() {

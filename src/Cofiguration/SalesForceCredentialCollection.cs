@@ -29,7 +29,7 @@ namespace Icod.Wod.Configuration {
 				return (SalesForceCredentialElement)this.BaseGet( index );
 			}
 			set {
-				if ( this.BaseGet( index ) is object ) {
+				if ( null != this.BaseGet( index ) ) {
 					this.BaseRemoveAt( index );
 				}
 				this.BaseAdd( index, value );

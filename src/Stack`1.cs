@@ -70,7 +70,7 @@ namespace Icod.Wod {
 			}
 			internal SingleStack( T value ) : this() {
 				myValue = value;
-				if ( value is object ) {
+				if ( null != value ) {
 					unchecked {
 						myHashCode += value.GetHashCode();
 					}
@@ -148,7 +148,7 @@ namespace Icod.Wod {
 			myCount = 1 + myTail.Count;
 			unchecked {
 				myHashCode += myTail.GetHashCode();
-				if ( value is object ) {
+				if ( null != value ) {
 					myHashCode += value.GetHashCode();
 				}
 			}

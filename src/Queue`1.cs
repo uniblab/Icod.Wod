@@ -74,7 +74,7 @@ namespace Icod.Wod {
 			}
 			internal SingleQueue( T value ) : this() {
 				myValue = value;
-				if ( value is object ) {
+				if ( null != value ) {
 					unchecked {
 						myHashCode += value.GetHashCode();
 					}

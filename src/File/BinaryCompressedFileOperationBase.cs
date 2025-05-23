@@ -1,6 +1,6 @@
 // Copyright (C) 2025  Timothy J. Bruce
 
-using System.Runtime.CompilerServices;
+using System.Linq;
 
 namespace Icod.Wod.File {
 
@@ -103,6 +103,45 @@ namespace Icod.Wod.File {
 		}
 		#endregion properties
 
+
+		#region methods
+		public override void DoWork( Icod.Wod.WorkOrder workOrder ) {
+			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
+			this.Destination.WorkOrder = workOrder;
+			System.Action<Icod.Wod.File.FileHandlerBase, System.String, Icod.Wod.File.FileHandlerBase> action;
+			var cm = this.CompressionMode;
+			try {
+				action = GetActionMap( this.GetType(), cm );
+			} catch ( System.Exception e ) {
+				throw new System.InvalidOperationException(
+					System.String.Format( "The specified compressionMode, {0}, is not supported.", cm ),
+					e
+				);
+			}
+
+			var dest = this.Destination.GetFileHandler( workOrder );
+			var source = this.GetFileHandler( workOrder );
+			var files = source.ListFiles();
+			var actionResult = System.Threading.Tasks.Parallel.ForEach( files.Select(
+				x => x.File
+			), file => {
+				action( source, file, dest );
+			} );
+			if ( !actionResult.IsCompleted ) {
+				throw new System.ApplicationException( "The BinaryCompressedFileOperationBase compressor operation failed during parallel execution." );
+			}
+			if ( this.Delete ) {
+				var deleteResult = System.Threading.Tasks.Parallel.ForEach( files.Select(
+					x => x.File
+				), file => {
+					source.DeleteFile( file );
+				} );
+				if ( !deleteResult.IsCompleted ) {
+					throw new System.ApplicationException( "The BinaryCompressedFileOperationBase delete operation failed during parallel execution." );
+				}
+			}
+		}
+		#endregion methods
 
 		#region static methods
 		private static void RegisterMap<T>(
