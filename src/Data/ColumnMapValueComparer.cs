@@ -1,5 +1,7 @@
 // Copyright (C) 2025  Timothy J. Bruce
 
+using System.Collections.Generic;
+
 namespace Icod.Wod.Data {
 
 	[System.Xml.Serialization.XmlType( IncludeInSchema = false )]
@@ -30,7 +32,17 @@ namespace Icod.Wod.Data {
 
 
 		#region methods
-		public System.Boolean Equals( ColumnMap x, ColumnMap y ) {
+		System.Boolean System.Collections.Generic.IEqualityComparer<ColumnMap>.Equals( ColumnMap x, ColumnMap y ) {
+			return Equals( x, y );
+		}
+		System.Int32 IEqualityComparer<ColumnMap>.GetHashCode( ColumnMap obj ) {
+			return GetHashCode( obj );
+		}
+		#endregion methods
+
+
+		#region static methods
+		public static System.Boolean Equals( ColumnMap x, ColumnMap y ) {
 			if ( ( x is null ) && ( y is null ) ) {
 				return true;
 			} else if ( ( x is null ) || ( y is null ) ) {
@@ -39,15 +51,13 @@ namespace Icod.Wod.Data {
 				return x.Equals( y );
 			}
 		}
-
-		public System.Int32 GetHashCode( ColumnMap obj ) {
-			return ( obj is null ) 
-				? 0 
+		public static System.Int32 GetHashCode( ColumnMap obj ) {
+			return ( obj is null )
+				? 0
 				: obj.GetHashCode()
 			;
 		}
-		#endregion methods
-
+		#endregion static methods
 	}
 
 }

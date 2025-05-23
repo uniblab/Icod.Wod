@@ -132,19 +132,19 @@ namespace Icod.Wod.SalesForce.Bulk {
 					new StateOption[ 3 ] { StateOption.Aborted, StateOption.Failed, StateOption.JobComplete }
 				);
 
-				if ( this.Error is object ) {
+				if ( null != this.Error ) {
 					var error = this.GetResults( workOrder, loginResponse, jobResponse, FailedResults );
 					if ( !System.String.IsNullOrEmpty( error.Body ) ) {
 						this.Error.WriteRecords( workOrder, error );
 					}
 				}
-				if ( this.Success is object ) {
+				if ( null != this.Success ) {
 					var success = this.GetResults( workOrder, loginResponse, jobResponse, SuccessfulResults );
 					if ( !System.String.IsNullOrEmpty( success.Body ) ) {
 						this.Success.WriteRecords( workOrder, success );
 					}
 				}
-				if ( this.Unprocessed is object ) {
+				if ( null != this.Unprocessed ) {
 					var unprocessed = this.GetResults( workOrder, loginResponse, jobResponse, UnprocessedResults );
 					if ( !System.String.IsNullOrEmpty( unprocessed.Body ) ) {
 						this.Unprocessed.WriteRecords( workOrder, unprocessed );

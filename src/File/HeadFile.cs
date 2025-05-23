@@ -59,7 +59,7 @@ namespace Icod.Wod.File {
 					var rs = this.RecordSeparator;
 					line = reader.ReadLine( rs );
 					lineCount++;
-					while ( line is object )  {
+					while ( null != line )  {
 						output = output.Enqueue( line );
 						line = reader.ReadLine( rs );
 						lineCount++;
@@ -78,7 +78,7 @@ namespace Icod.Wod.File {
 				using ( var reader = new System.IO.StreamReader( stream, encoding, true, fileHandler.BufferLength ) ) {
 					var rs = this.RecordSeparator;
 					line = reader.ReadLine( rs );
-					while ( line is object ) {
+					while ( null != line ) {
 						output = output.Push( line );
 						line = reader.ReadLine( rs );
 					}

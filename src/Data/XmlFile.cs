@@ -26,7 +26,7 @@ namespace Icod.Wod.Data {
 				var table = new System.Data.DataTable( "table1" );
 				if ( rows.Any() ) {
 					var r = rows.First();
-					if ( r.Table is object ) {
+					if ( null != r.Table ) {
 						table.TableName = r.Table.TableName.TrimToNull() ?? "table1";
 					}
 				}

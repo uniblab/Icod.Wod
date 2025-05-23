@@ -139,13 +139,13 @@ namespace Icod.Wod.File {
 			};
 
 			var stdErr = this.StdErr;
-			if ( stdErr is object ) {
+			if ( null != stdErr ) {
 				stdErr.WorkOrder = workOrder;
 				si.RedirectStandardError = true;
 				si.StandardErrorEncoding = this.StdErr.GetEncoding();
 			}
 			var stdOut = this.StdOut;
-			if ( stdOut is object ) {
+			if ( null != stdOut ) {
 				stdOut.WorkOrder = workOrder;
 				si.RedirectStandardOutput = true;
 				si.StandardOutputEncoding = this.StdOut.GetEncoding();
@@ -166,11 +166,11 @@ namespace Icod.Wod.File {
 				_ = proc.Start();
 
 				var stdErr = this.StdErr;
-				if ( stdErr is object ) {
+				if ( null != stdErr ) {
 					var pErr = proc.StandardError;
-					if ( pErr is object ) {
+					if ( null != pErr ) {
 						var sErr = pErr.BaseStream;
-						if ( ( sErr is object ) && sErr.CanRead ) {
+						if ( ( null != sErr ) && sErr.CanRead ) {
 							var errH = stdErr.GetFileHandler( this.WorkOrder );
 							errH.Overwrite( pErr.BaseStream, errH.PathCombine( stdErr.ExpandedPath, stdErr.ExpandedName ) );
 						}
@@ -178,11 +178,11 @@ namespace Icod.Wod.File {
 				}
 
 				var stdOut = this.StdOut;
-				if ( stdOut is object ) {
+				if ( null != stdOut ) {
 					var pOut = proc.StandardOutput;
-					if ( pOut is object ) {
+					if ( null != pOut ) {
 						var sOut = pOut.BaseStream;
-						if ( ( sOut is object) && sOut.CanRead ) {
+						if ( ( null != sOut ) && sOut.CanRead ) {
 							var outH = stdOut.GetFileHandler( this.WorkOrder );
 							outH.Overwrite( pOut.BaseStream, outH.PathCombine( stdOut.ExpandedPath, stdOut.ExpandedName ) );
 						}

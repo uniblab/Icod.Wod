@@ -37,7 +37,7 @@ namespace Icod.Wod.File {
 			System.Int32 port = uri.Port;
 			System.Collections.Generic.List<Renci.SshNet.AuthenticationMethod> ama = new System.Collections.Generic.List<Renci.SshNet.AuthenticationMethod>( 2 );
 			var kf = fd.SshKeyFile;
-			if ( kf is object ) {
+			if ( null != kf ) {
 				var wo = fd.WorkOrder;
 				kf.WorkOrder = wo;
 				var kffd = kf.GetFileHandler( wo );

@@ -1,14 +1,13 @@
-# Remove the line below if you want to inherit .editorconfig settings from higher directories
+﻿# Remove the line below if you want to inherit .editorconfig settings from higher directories
 root = true
 
-[*.{cs,vb,xml}]
+
+[*.{cs,xml}]
 # Indentation and spacing
 indent_size = 4
 indent_style = tab
 tab_width = 4
 
-[*.{cs,vb}]
-dotnet_diagnostic.IDE0130.severity = none
 
 # C# files
 [*.cs]

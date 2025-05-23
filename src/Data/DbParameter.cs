@@ -135,7 +135,7 @@ namespace Icod.Wod.Data {
 			command = command ?? throw new System.ArgumentNullException( nameof( command ) );
 
 			var output = command.CreateParameter();
-			if ( output is object ) {
+			if ( null != output ) {
 				output.DbType = this.DbType;
 				output.Direction = this.Direction;
 				output.ParameterName = this.ParameterName;
@@ -143,7 +143,7 @@ namespace Icod.Wod.Data {
 				output.SourceColumn = this.SourceColumn;
 				output.SourceColumnNullMapping = this.SourceColumnNullMapping;
 				var iDbDataParameter = ( output as System.Data.IDbDataParameter );
-				if ( iDbDataParameter is object ) {
+				if ( null != iDbDataParameter ) {
 					iDbDataParameter.Precision = this.Precision;
 					iDbDataParameter.Scale = this.Scale;
 				}

@@ -1,7 +1,5 @@
 // Copyright (C) 2025  Timothy J. Bruce
 
-using System.IO;
-
 namespace Icod.Wod.File {
 
 	[System.Serializable]
@@ -16,95 +14,65 @@ namespace Icod.Wod.File {
 			var compressorMap = new System.Collections.Generic.Dictionary<
 				System.IO.Compression.CompressionMode,
 				System.Func<System.IO.Stream, System.IO.Stream>
-			>( 2 );
-			compressorMap.Add(
-				System.IO.Compression.CompressionMode.Compress,
-				x => (System.IO.Stream)System.Activator.CreateInstance(
-					typeof( System.IO.Compression.GZipStream ),
-					new System.Object[ 3 ] { x, System.IO.Compression.CompressionMode.Compress, true }
-				)
-			);
-			compressorMap.Add(
-				System.IO.Compression.CompressionMode.Decompress,
-				x => (System.IO.Stream)System.Activator.CreateInstance(
-					typeof( System.IO.Compression.GZipStream ),
-					new System.Object[ 3 ] { x, System.IO.Compression.CompressionMode.Decompress, true }
-				)
-			);
+			>( 2 ) {
+				{
+					System.IO.Compression.CompressionMode.Compress,
+					x => (System.IO.Stream)System.Activator.CreateInstance(
+						typeof( System.IO.Compression.GZipStream ),
+						new System.Object[ 3 ] { x, System.IO.Compression.CompressionMode.Compress, true }
+					)
+				},
+				{
+					System.IO.Compression.CompressionMode.Decompress,
+					x => (System.IO.Stream)System.Activator.CreateInstance(
+						typeof( System.IO.Compression.GZipStream ),
+						new System.Object[ 3 ] { x, System.IO.Compression.CompressionMode.Decompress, true }
+					)
+				},
+			};
 			RegisterCompressorMap( typeof( DeflateFile ), compressorMap );
 
 			var fileNameMap = new System.Collections.Generic.Dictionary<
 				System.IO.Compression.CompressionMode,
 				System.Func<System.String, System.String>
-			>( 2 );
-			fileNameMap.Add(
-				System.IO.Compression.CompressionMode.Compress,
-				AddExtension
-			);
-			fileNameMap.Add(
-				System.IO.Compression.CompressionMode.Decompress,
-				PruneExtension
-			);
+			>( 2 ) {
+				{
+					System.IO.Compression.CompressionMode.Compress,
+					AddExtension
+				},
+				{
+					System.IO.Compression.CompressionMode.Decompress,
+					PruneExtension
+				},
+			};
 			RegisterFileNameMap( typeof( DeflateFile ), fileNameMap );
-
-
 			var actionMap = new System.Collections.Generic.Dictionary<
 				System.IO.Compression.CompressionMode,
 				System.Action<FileHandlerBase, System.String, FileHandlerBase>
-			>( 2 );
-			actionMap.Add(
-				System.IO.Compression.CompressionMode.Compress,
-				( source, sourceFilePathName, dest ) => Compress(
-					source, sourceFilePathName, dest,
-					fileNameMap[ System.IO.Compression.CompressionMode.Compress ]( sourceFilePathName ),
-					compressorMap[ System.IO.Compression.CompressionMode.Compress ]
-				)
-			);
-			actionMap.Add(
-				System.IO.Compression.CompressionMode.Decompress,
-				( source, sourceFilePathName, dest ) => Decompress(
-					source, sourceFilePathName, dest,
-					fileNameMap[ System.IO.Compression.CompressionMode.Decompress ]( sourceFilePathName ),
-					compressorMap[ System.IO.Compression.CompressionMode.Decompress ]
-				)
-			);
+			>( 2 ) {
+				{
+					System.IO.Compression.CompressionMode.Compress,
+					( source, sourceFilePathName, dest ) => Compress(
+						source, sourceFilePathName, dest,
+						fileNameMap[ System.IO.Compression.CompressionMode.Compress ]( sourceFilePathName ),
+						compressorMap[ System.IO.Compression.CompressionMode.Compress ]
+					)
+				},
+				{
+					System.IO.Compression.CompressionMode.Decompress,
+					( source, sourceFilePathName, dest ) => Decompress(
+						source, sourceFilePathName, dest,
+						fileNameMap[ System.IO.Compression.CompressionMode.Decompress ]( sourceFilePathName ),
+						compressorMap[ System.IO.Compression.CompressionMode.Decompress ]
+					)
+				},
+			};
 			RegisterActionMap( typeof( DeflateFile ), actionMap );
 		}
 
 		public GZipFile() : base() {
 		}
 		#endregion .ctor
-
-
-		#region methods
-		public sealed override void DoWork( Icod.Wod.WorkOrder workOrder ) {
-			this.WorkOrder = workOrder ?? throw new System.ArgumentNullException( nameof( workOrder ) );
-			this.Destination.WorkOrder = workOrder;
-			System.Action<Icod.Wod.File.FileHandlerBase, System.String, Icod.Wod.File.FileHandlerBase> action;
-			var cm = this.CompressionMode;
-			try {
-				action = GetActionMap( this.GetType(), cm );
-			} catch ( System.Exception e ) {
-				throw new System.InvalidOperationException(
-					System.String.Format( "The specified compressionMode, {0}, is not supported.", cm ),
-					e
-				);
-			}
-
-			var dest = this.Destination.GetFileHandler( workOrder );
-			var source = this.GetFileHandler( workOrder );
-			var files = source.ListFiles();
-			System.Threading.Tasks.Parallel.ForEach( files, fe => {
-				var file = fe.File;
-				action( source, file, dest );
-			} );
-			if ( this.Delete ) {
-				System.Threading.Tasks.Parallel.ForEach( files, fe => {
-					source.DeleteFile( fe.File );
-				} );
-			}
-		}
-		#endregion methods
 
 
 		#region static methods

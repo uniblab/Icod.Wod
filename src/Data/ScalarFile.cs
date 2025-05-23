@@ -38,7 +38,7 @@ namespace Icod.Wod.Data {
 					System.Object record;
 					foreach ( var row in rows ) {
 						record = row[ 0 ];
-						if ( ( record is object ) && !System.DBNull.Value.Equals( record ) ) {
+						if ( ( null != record ) && !System.DBNull.Value.Equals( record ) ) {
 							writer.Write( record );
 						}
 					}

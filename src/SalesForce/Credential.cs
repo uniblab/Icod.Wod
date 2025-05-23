@@ -179,7 +179,7 @@ namespace Icod.Wod.SalesForce {
 			ICredential here = ( workOrder.SFCredentials ?? System.Array.Empty<ICredential>() ).FirstOrDefault(
 				x => x.Name.Equals( name, System.StringComparison.Ordinal )
 			);
-			if ( here is object ) {
+			if ( null != here ) {
 				return here;
 			}
 			var section = (Configuration.SalesForceCredentialSection)Configuration.SalesForceCredentialSection.GetSection() ?? throw new System.Configuration.ConfigurationErrorsException( "The icod.wod.sfCredentials is not defined." );

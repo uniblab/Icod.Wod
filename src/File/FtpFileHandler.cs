@@ -46,7 +46,7 @@ namespace Icod.Wod.File {
 			var fd = this.FileDescriptor;
 			client.UsePassive = fd.UsePassive;
 			var kf = fd.SshKeyFile;
-			if ( kf is object ) {
+			if ( null != kf ) {
 				kf.WorkOrder = fd.WorkOrder;
 				var kffd = kf.GetFileHandler( this.WorkOrder );
 				var kfpasswd = kf.KeyFilePassword.TrimToNull();
@@ -189,10 +189,7 @@ namespace Icod.Wod.File {
 				x => !x.StartsWith( "d", System.StringComparison.OrdinalIgnoreCase )
 			);
 			var list = fileList.Select(
-				x => {
-					var y = x.Split( theSpaceSplitArray, 9, System.StringSplitOptions.RemoveEmptyEntries );
-					return y[ y.Length - 1 ];
-				}
+				x => StripNameFromList( x )
 			);
 			var regexPattern = fd.ExpandedRegexPattern;
 			return ( System.String.IsNullOrEmpty( regexPattern )
@@ -222,10 +219,7 @@ namespace Icod.Wod.File {
 			var list = this.ReadLines( ftp ).Where(
 				x => x.StartsWith( "d", System.StringComparison.OrdinalIgnoreCase )
 			).Select(
-				x => {
-					var y = x.Split( theSpaceSplitArray, 9, System.StringSplitOptions.RemoveEmptyEntries );
-					return y[ y.Length - 1 ];
-				}
+				x => StripNameFromList( x )
 			);
 			System.Func<System.String, System.Boolean> regexMatch = null;
 			if ( System.String.IsNullOrEmpty( regexPattern ) ) {

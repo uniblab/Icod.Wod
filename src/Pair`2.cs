@@ -22,12 +22,12 @@ namespace Icod.Wod {
 			myFirst = first;
 			mySecond = second;
 			myHashCode = theHashCode;
-			if ( myFirst is object ) {
+			if ( null != myFirst ) {
 				unchecked {
 					myHashCode += myFirst.GetHashCode();
 				}
 			}
-			if ( mySecond is object ) {
+			if ( null != mySecond ) {
 				unchecked {
 					myHashCode += mySecond.GetHashCode();
 				}
