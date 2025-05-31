@@ -115,6 +115,7 @@ namespace Icod.Wod.Data {
 				yield break;
 			}
 
+			// TODO: FIX this CA2021
 			var cols = this.Columns.OfType<System.Data.DataColumn>().Where(
 				x => !x.ColumnName.Equals( "%wod:FileName%", System.StringComparison.OrdinalIgnoreCase )
 			);

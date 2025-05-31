@@ -20,6 +20,9 @@
 -->
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	</PropertyGroup>
+	<PropertyGroup>
 		<AssemblyName>Icod.Wod</AssemblyName>
 		<AssemblyTitle>Icod Work on Demand Framework</AssemblyTitle>
 		<Copyright>Copyright (C) 2025  Timothy J. Bruce</Copyright>
@@ -152,18 +155,51 @@
 		<EditorConfigFiles Remove=".editorconfig" />
 	</ItemGroup>
 	<ItemGroup>
-	  <EditorConfigFiles Remove="C:\Users\unibl\Development\Icod\Icod.Wod\src\File\.editorconfig" />
+		<EditorConfigFiles Remove="C:\Users\unibl\Development\Icod\Icod.Wod\src\File\.editorconfig" />
 	</ItemGroup>
 	<ItemGroup>
-	  <EditorConfigFiles Remove="C:\Users\unibl\Development\Icod\Icod.Wod\src\Data\.editorconfig" />
+		<EditorConfigFiles Remove="C:\Users\unibl\Development\Icod\Icod.Wod\src\Data\.editorconfig" />
 	</ItemGroup>
 	<ItemGroup>
-	  <EditorConfigFiles Remove="C:\Users\unibl\Development\Icod\Icod.Wod\src\SalesForce\Bulk\.editorconfig" />
+		<EditorConfigFiles Remove="C:\Users\unibl\Development\Icod\Icod.Wod\src\SalesForce\Bulk\.editorconfig" />
 	</ItemGroup>
 	<ItemGroup>
-	  <EditorConfigFiles Remove="C:\Users\unibl\Development\Icod\Icod.Wod\src\.editorconfig" />
+		<EditorConfigFiles Remove="C:\Users\unibl\Development\Icod\Icod.Wod\src\.editorconfig" />
 	</ItemGroup>
 	<ItemGroup>
-	  <EditorConfigFiles Remove="C:\Users\unibl\Development\Icod\Icod.Wod\src\SalesForce\.editorconfig" />
+		<EditorConfigFiles Remove="C:\Users\unibl\Development\Icod\Icod.Wod\src\SalesForce\.editorconfig" />
 	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="README.md" CopyToOutputDirectory="Always">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</Content>
+		<Content Include="LICENSE" CopyToOutputDirectory="Always">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="doc\Icod.Argh.xml" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Icod" Version="2.0.3" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+		<None Include="icon.png" Pack="true" PackagePath="" />
+	</ItemGroup>
+
+	<Target Name="RmContent" AfterTargets="Clean" Condition=" '$(OutDir)' != '' ">
+		<Delete ContinueOnError="false" Files="$(OutDir)\$(AssemblyName).License.txt" />
+		<Delete ContinueOnError="false" Files="$(OutDir)\$(AssemblyName).ReadMe.md" />
+	</Target>
+	<Target Name="MvContent" AfterTargets="Build" Condition=" '$(OutDir)' != '' ">
+		<Move ContinueOnError="false" SourceFiles="$(OutDir)\LICENSE" DestinationFiles="$(OutDir)\$(AssemblyName).License.txt" />
+		<Move ContinueOnError="false" SourceFiles="$(OutDir)\README.md" DestinationFiles="$(OutDir)\$(AssemblyName).ReadMe.md" />
+	</Target>
 </Project>
