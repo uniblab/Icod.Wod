@@ -39,6 +39,9 @@ namespace Icod.Wod.File {
 		public sealed override void TouchFile() {
 			throw new System.NotSupportedException();
 		}
+		public sealed override void TruncateFile() {
+			throw new System.NotSupportedException();
+		}
 		public sealed override void DeleteFile() {
 			var fd = this.FileDescriptor;
 			var filePathName = this.PathCombine( fd.ExpandedPath, fd.ExpandedName );

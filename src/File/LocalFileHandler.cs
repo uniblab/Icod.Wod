@@ -31,6 +31,12 @@ namespace Icod.Wod.File {
 				System.IO.File.SetLastAccessTime( filePathName, System.DateTime.Now );
 			}
 		}
+		public sealed override void TruncateFile() {
+			var filePathName = this.PathCombine( this.FileDescriptor.ExpandedPath, this.FileDescriptor.ExpandedName );
+			using ( var file = System.IO.File.Open( filePathName, System.IO.FileMode.Truncate, System.IO.FileAccess.Write, System.IO.FileShare.Read ) ) {
+				System.IO.File.SetLastAccessTime( filePathName, System.DateTime.Now );
+			}
+		}
 		public sealed override void DeleteFile() {
 			foreach ( var fe in this.ListFiles() ) {
 				this.DeleteFile( fe.File );

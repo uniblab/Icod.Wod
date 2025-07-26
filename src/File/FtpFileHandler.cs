@@ -88,6 +88,18 @@ namespace Icod.Wod.File {
 			}
 			ftp.GetResponse().Close();
 		}
+		public sealed override void TruncateFile() {
+			var fd = this.FileDescriptor;
+			var filePathName = this.PathCombine( fd.ExpandedPath, fd.ExpandedName );
+			var uri = new System.Uri( filePathName );
+			var ftp = this.GetFtpClient( uri, System.Net.WebRequestMethods.Ftp.UploadFile );
+			ftp.ContentLength = 0;
+			using ( var dummy = ftp.GetRequestStream() ) {
+				dummy.SetLength( 0 );
+				dummy.Flush();
+			}
+			ftp.GetResponse().Close();
+		}
 		public sealed override void DeleteFile() {
 			var fd = this.FileDescriptor;
 			var filePathName = this.PathCombine( fd.ExpandedPath, fd.ExpandedName );

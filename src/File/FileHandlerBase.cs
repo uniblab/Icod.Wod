@@ -61,6 +61,7 @@ namespace Icod.Wod.File {
 
 		#region methods
 		public abstract void TouchFile();
+		public abstract void TruncateFile();
 		public abstract void DeleteFile();
 		public abstract void DeleteFile( System.String filePathName );
 
