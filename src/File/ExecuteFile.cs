@@ -129,22 +129,24 @@ namespace Icod.Wod.File {
 			if ( System.String.IsNullOrEmpty( prog ) ) {
 				throw new System.InvalidOperationException();
 			}
-			var wd = this.ExpandedWorkingDirectory.TrimToNull() ?? System.Environment.CurrentDirectory;
-			var args = this.ExpandedArgs;
-
-			var si = new System.Diagnostics.ProcessStartInfo( prog, args ) {
-				WorkingDirectory = wd,
-				CreateNoWindow = false,
-				UseShellExecute = false
-			};
 
 			var stdErr = this.StdErr;
+			var stdOut = this.StdOut;
+
+			var wd = this.ExpandedWorkingDirectory.TrimToNull() ?? System.Environment.CurrentDirectory;
+			var args = this.ExpandedArgs;
+			var si = new System.Diagnostics.ProcessStartInfo( prog, args ) {
+				CreateNoWindow = false,
+				RedirectStandardError = ( null != stdErr ),
+				RedirectStandardInput = ( null != stdOut ),
+				UseShellExecute = false,
+				WorkingDirectory = wd,
+			};
 			if ( null != stdErr ) {
 				stdErr.WorkOrder = workOrder;
 				si.RedirectStandardError = true;
 				si.StandardErrorEncoding = this.StdErr.GetEncoding();
 			}
-			var stdOut = this.StdOut;
 			if ( null != stdOut ) {
 				stdOut.WorkOrder = workOrder;
 				si.RedirectStandardOutput = true;
