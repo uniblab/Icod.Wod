@@ -7,6 +7,7 @@ namespace Icod.Wod.File {
 	[System.Xml.Serialization.XmlInclude( typeof( MkDir ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( RmDir ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( TouchFile ) )]
+	[System.Xml.Serialization.XmlInclude( typeof( TruncateFile ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( BinaryFileOperationBase ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( ZipOperationBase ) )]
 	[System.Xml.Serialization.XmlType(

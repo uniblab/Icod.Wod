@@ -77,6 +77,16 @@ namespace Icod.Wod.File {
 				client.Open( file, System.IO.FileMode.OpenOrCreate, System.IO.FileAccess.Write ).Dispose();
 			}
 		}
+		public sealed override void TruncateFile() {
+			var fd = this.FileDescriptor;
+			var filePathName = this.PathCombine( fd.ExpandedPath, fd.ExpandedName );
+			var uri = new System.Uri( filePathName );
+			using ( var client = this.GetSftpClient( uri ) ) {
+				var file = uri.AbsolutePath;
+				client.Connect();
+				client.Open( file, System.IO.FileMode.Truncate, System.IO.FileAccess.Read ).Dispose();
+			}
+		}
 		public sealed override void DeleteFile() {
 			var fd = this.FileDescriptor;
 			var filePathName = this.PathCombine( fd.ExpandedPath, fd.ExpandedName );
