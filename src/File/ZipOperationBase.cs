@@ -9,6 +9,7 @@ namespace Icod.Wod.File {
 	[System.Xml.Serialization.XmlInclude( typeof( MkZip ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( RmZip ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( TouchZip ) )]
+	[System.Xml.Serialization.XmlInclude( typeof( TruncateZip ) )]
 	[System.Xml.Serialization.XmlInclude( typeof( BinaryZipOperationBase ) )]
 	[System.Xml.Serialization.XmlType(
 		"zipOperation",

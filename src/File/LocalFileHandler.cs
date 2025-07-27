@@ -28,13 +28,13 @@ namespace Icod.Wod.File {
 		public sealed override void TouchFile() {
 			var filePathName = this.PathCombine( this.FileDescriptor.ExpandedPath, this.FileDescriptor.ExpandedName );
 			using ( var file = System.IO.File.Open( filePathName, System.IO.FileMode.OpenOrCreate, System.IO.FileAccess.Write, System.IO.FileShare.Read | System.IO.FileShare.Write ) ) {
-				System.IO.File.SetLastAccessTime( filePathName, System.DateTime.Now );
+				System.IO.File.SetLastWriteTime( filePathName, System.DateTime.Now );
 			}
 		}
 		public sealed override void TruncateFile() {
 			var filePathName = this.PathCombine( this.FileDescriptor.ExpandedPath, this.FileDescriptor.ExpandedName );
 			using ( var file = System.IO.File.Open( filePathName, System.IO.FileMode.Truncate, System.IO.FileAccess.Write, System.IO.FileShare.Read ) ) {
-				System.IO.File.SetLastAccessTime( filePathName, System.DateTime.Now );
+				System.IO.File.SetLastWriteTime( filePathName, System.DateTime.Now );
 			}
 		}
 		public sealed override void DeleteFile() {
