@@ -1,19 +1,19 @@
-// Copyright (C) 2025  Timothy J. Bruce
+﻿// Copyright (C) 2025  Timothy J. Bruce
 using System.Linq;
 
 namespace Icod.Wod.File {
 
 	[System.Serializable]
 	[System.Xml.Serialization.XmlType(
-		"touchZip",
+		"truncateZip",
 		Namespace = "http://Icod.Wod",
 		IncludeInSchema = true
 	)]
-	public sealed class TouchZip : ZipOperationBase {
+	public sealed class TruncateZip : ZipOperationBase {
 
 
 		#region .ctor
-		public TouchZip() : base() {
+		public TruncateZip() : base() {
 		}
 		#endregion .ctor
 
@@ -25,16 +25,16 @@ namespace Icod.Wod.File {
 			var file = handler.ListFiles().Select(
 				x => x.File
 			).FirstOrDefault();
- 			using ( var buffer = new System.IO.MemoryStream() ) {
-				var zipName = handler.PathCombine( this.ExpandedPath, this.ExpandedName );
-				if ( file is null ) {
+			if ( file is null ) {
+				using ( var buffer = new System.IO.MemoryStream() ) {
 					this.GetZipArchive( buffer, System.IO.Compression.ZipArchiveMode.Create ).Dispose();
 					buffer.Flush();
 					_ = buffer.Seek( 0, System.IO.SeekOrigin.Begin );
+					var zipName = handler.PathCombine( this.ExpandedPath, this.ExpandedName );
 					handler.Overwrite( buffer, zipName );
-				} else {
-					handler.Append( buffer, zipName );
 				}
+			} else {
+				handler.TruncateFile();
 			}
 		}
 		#endregion methods
